@@ -1,0 +1,32 @@
+{
+  "defaultProvider": "mock",
+  "providers": {
+    "mock": {
+      "name": "Mock Commerce",
+      "enabled": true,
+      "useMock": true,
+      "fixtureFile": "products.json",
+      "simulateLatency": true,
+      "latencyRange": [200, 500]
+    },
+    "shopify": {
+      "name": "Shopify",
+      "enabled": false,
+      "baseUrl": "https://{shop}.myshopify.com",
+      "apiVersion": "2024-01",
+      "endpoints": {
+        "products": "/admin/api/{version}/products.json",
+        "cart": "/cart.json",
+        "checkout": "/checkout.json"
+      },
+      "rateLimit": {
+        "requestsPerSecond": 2,
+        "burstLimit": 40
+      },
+      "auth": {
+        "type": "bearer",
+        "tokenHeader": "X-Shopify-Access-Token"
+      }
+    }
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "name": "University Bookstore Demo",
+  "description": "Academic bookstore with textbook rentals, course materials, and bulk orders",
+  "integrations": {
+    "commerce": {
+      "provider": "mock",
+      "enabled": true,
+      "features": [
+        "textbook-catalog",
+        "rental-system",
+        "bulk-orders",
+        "course-materials",
+        "student-discounts"
+      ],
+      "mockData": {
+        "productCount": 200,
+        "categories": ["textbooks", "course-materials", "supplies", "technology", "apparel"]
+      }
+    },
+    "forms": {
+      "provider": "mock",
+      "enabled": true,
+      "features": [
+        "course-material-requests",
+        "bulk-order-form",
+        "textbook-buyback",
+        "instructor-resource-requests"
+      ]
+    },
+    "auth": {
+      "provider": "mock",
+      "enabled": true,
+      "features": [
+        "student-portal-sso",
+        "faculty-login",
+        "student-id-verification",
+        "role-based-access"
+      ],
+      "demoUsers": [
+        {
+          "email": "student@university.edu",
+          "password": "student123",
+          "role": "student"
+        },
+        {
+          "email": "faculty@university.edu",
+          "password": "faculty123",
+          "role": "faculty"
+        },
+        {
+          "email": "admin@university.edu",
+          "password": "admin123",
+          "role": "admin"
+        }
+      ]
+    },
+    "search": {
+      "provider": "mock",
+      "enabled": true,
+      "features": [
+        "course-code-search",
+        "isbn-lookup",
+        "professor-recommendations",
+        "department-filtering"
+      ]
+    }
+  },
+  "contentful": {
+    "siteSettings": {
+      "siteName": "Campus Bookstore",
+      "brandColor": "#003366",
+      "logoUrl": "/university-logo.svg"
+    }
+  },
+  "mockDataSeeds": {
+    "products": 200,
+    "users": 100,
+    "orders": 500,
+    "reviews": 150
+  }
+}

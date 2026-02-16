@@ -1,0 +1,382 @@
+[
+  {
+    "id": "form-support-veterans",
+    "slug": "get-support-veterans",
+    "name": "Form – Get support (Veterans)",
+    "title": "Tell us how we can help",
+    "description": "Support request form for veterans and their families",
+    "introCopy": "Share a few details so we can connect you with the right support as quickly as possible.\n\nEverything you tell us is treated in confidence and helps our teams understand your situation.",
+    "successMessage": "Thank you for getting in touch.\n\nA member of our support team will review your request and aim to contact you within 3–5 working days.\n\nIf you need urgent help, please visit our emergency support page or call the number shown above.",
+    "submitButtonText": "Submit request",
+    "category": "support",
+    "tags": ["veteran", "support", "enquiry"],
+    "fields": [
+      {
+        "id": "connection_type",
+        "type": "radio",
+        "label": "Are you a veteran, serving personnel or family member?",
+        "required": true,
+        "helpText": "This helps us route your request to the right team.",
+        "options": [
+          { "value": "veteran", "label": "Veteran" },
+          { "value": "serving", "label": "Currently serving" },
+          { "value": "family", "label": "Family member / carer" },
+          { "value": "other", "label": "Other" }
+        ],
+        "width": "full"
+      },
+      {
+        "id": "help_topics",
+        "type": "multiselect",
+        "label": "What would you like help with today?",
+        "required": true,
+        "options": [
+          { "value": "finances", "label": "Cost of living and finances" },
+          { "value": "housing", "label": "Housing" },
+          { "value": "employment", "label": "Employment or training" },
+          { "value": "health", "label": "Health and wellbeing" },
+          { "value": "remembrance", "label": "Remembrance and community" },
+          { "value": "other", "label": "Something else" }
+        ],
+        "width": "full"
+      },
+      {
+        "id": "situation_details",
+        "type": "textarea",
+        "label": "Tell us more about your situation",
+        "required": false,
+        "helpText": "Please include any key dates, locations or organisations involved if you can.",
+        "placeholder": "Describe your situation here...",
+        "validation": {
+          "maxLength": 2000
+        },
+        "width": "full"
+      },
+      {
+        "id": "postcode",
+        "type": "text",
+        "label": "Postcode",
+        "required": true,
+        "helpText": "We use this to connect you with local support where possible.",
+        "placeholder": "e.g. SW1A 1AA",
+        "validation": {
+          "pattern": "^[A-Z]{1,2}[0-9][A-Z0-9]? ?[0-9][A-Z]{2}$"
+        },
+        "width": "half"
+      },
+      {
+        "id": "contact_preference",
+        "type": "radio",
+        "label": "Preferred way to hear from us",
+        "required": true,
+        "options": [
+          { "value": "phone", "label": "Phone" },
+          { "value": "email", "label": "Email" },
+          { "value": "letter", "label": "Letter" }
+        ],
+        "width": "full"
+      },
+      {
+        "id": "phone",
+        "type": "phone",
+        "label": "Phone number",
+        "required": false,
+        "placeholder": "e.g. 07700 900000",
+        "conditional": {
+          "field": "contact_preference",
+          "operator": "equals",
+          "value": "phone"
+        },
+        "width": "half"
+      },
+      {
+        "id": "email",
+        "type": "email",
+        "label": "Email address",
+        "required": true,
+        "placeholder": "your.email@example.com",
+        "width": "half"
+      },
+      {
+        "id": "privacy_consent",
+        "type": "consent",
+        "label": "I confirm that I have read and agree to the privacy information for support enquiries.",
+        "required": true,
+        "width": "full"
+      }
+    ],
+    "metadata": {
+      "veteranPanel": "If you're comfortable, you can add service details (unit, dates) in the description. It can help us route you more quickly."
+    }
+  },
+  {
+    "id": "form-donation-poppy",
+    "slug": "poppy-appeal-donation",
+    "name": "Form – Poppy Appeal Donation",
+    "title": "Make a donation",
+    "description": "Donation form for the Poppy Appeal",
+    "introCopy": "Your donation today helps fund advice, crisis grants and community support for veterans, serving personnel and their families. Choose an amount or enter your own.",
+    "successMessage": "Thank you for your donation.\n\nTogether, we're helping veterans, serving personnel and their families feel supported today and in the years to come.",
+    "submitButtonText": "Complete donation",
+    "category": "donation",
+    "tags": ["donation", "poppy-appeal", "fundraising"],
+    "fields": [
+      {
+        "id": "donation_amount",
+        "type": "donation-amount",
+        "label": "Donation amount",
+        "required": true,
+        "options": [
+          { "value": "15", "label": "£15", "description": "could help answer a call from a veteran in urgent need" },
+          { "value": "30", "label": "£30", "description": "could help fund specialist advice for a family in crisis" },
+          { "value": "50", "label": "£50", "description": "could support community activities that tackle isolation" },
+          { "value": "other", "label": "Other", "description": "Enter your own amount" }
+        ],
+        "defaultValue": "30",
+        "width": "full"
+      },
+      {
+        "id": "custom_amount",
+        "type": "number",
+        "label": "Enter amount",
+        "required": false,
+        "placeholder": "£",
+        "validation": {
+          "min": 1,
+          "max": 10000
+        },
+        "conditional": {
+          "field": "donation_amount",
+          "operator": "equals",
+          "value": "other"
+        },
+        "width": "half"
+      },
+      {
+        "id": "donation_frequency",
+        "type": "radio",
+        "label": "How often would you like to give?",
+        "required": true,
+        "options": [
+          { "value": "single", "label": "Single donation" },
+          { "value": "monthly", "label": "Monthly" }
+        ],
+        "defaultValue": "single",
+        "width": "full"
+      },
+      {
+        "id": "gift_type",
+        "type": "radio",
+        "label": "This gift is from",
+        "required": true,
+        "options": [
+          { "value": "individual", "label": "An individual" },
+          { "value": "company", "label": "A company or organisation" },
+          { "value": "fundraising", "label": "A fundraising event" }
+        ],
+        "defaultValue": "individual",
+        "width": "full"
+      },
+      {
+        "id": "donor_details",
+        "type": "field-group",
+        "label": "Your details",
+        "required": true,
+        "fields": [
+          {
+            "id": "first_name",
+            "type": "text",
+            "label": "First name",
+            "required": true,
+            "placeholder": "First name",
+            "width": "half"
+          },
+          {
+            "id": "last_name",
+            "type": "text",
+            "label": "Last name",
+            "required": true,
+            "placeholder": "Last name",
+            "width": "half"
+          },
+          {
+            "id": "email",
+            "type": "email",
+            "label": "Email",
+            "required": true,
+            "placeholder": "your.email@example.com",
+            "width": "half"
+          },
+          {
+            "id": "postcode",
+            "type": "text",
+            "label": "Postcode",
+            "required": true,
+            "placeholder": "e.g. SW1A 1AA",
+            "width": "half"
+          }
+        ],
+        "width": "full"
+      },
+      {
+        "id": "stay_in_touch",
+        "type": "field-group",
+        "label": "Stay in touch",
+        "required": false,
+        "helpText": "We'd love to keep you updated on how your support is making a difference.",
+        "fields": [
+          {
+            "id": "consent_email",
+            "type": "checkbox",
+            "label": "Email",
+            "required": false,
+            "width": "third"
+          },
+          {
+            "id": "consent_post",
+            "type": "checkbox",
+            "label": "Post",
+            "required": false,
+            "width": "third"
+          },
+          {
+            "id": "consent_phone",
+            "type": "checkbox",
+            "label": "Phone",
+            "required": false,
+            "width": "third"
+          }
+        ],
+        "width": "full"
+      }
+    ],
+    "metadata": {
+      "veteranIntroCopy": "As someone who has served, you know how vital support can be. If you're in a position to donate, thank you – your gift helps us stand behind others in the Armed Forces community.",
+      "recommendedAmounts": {
+        "supporter": "30",
+        "veteran": "15"
+      }
+    }
+  },
+  {
+    "id": "form-newsletter-signup",
+    "slug": "newsletter-signup",
+    "name": "Form – Newsletter Signup",
+    "title": "Stay connected",
+    "description": "Newsletter subscription form",
+    "introCopy": "Sign up to receive updates about our work, events, and ways you can support the Armed Forces community.",
+    "successMessage": "Thank you for signing up!\n\nYou'll receive a confirmation email shortly. We look forward to keeping you updated.",
+    "submitButtonText": "Subscribe",
+    "category": "newsletter",
+    "tags": ["newsletter", "subscription", "updates"],
+    "fields": [
+      {
+        "id": "email",
+        "type": "email",
+        "label": "Email address",
+        "required": true,
+        "placeholder": "your.email@example.com",
+        "width": "full"
+      },
+      {
+        "id": "first_name",
+        "type": "text",
+        "label": "First name",
+        "required": false,
+        "placeholder": "First name (optional)",
+        "width": "half"
+      },
+      {
+        "id": "interests",
+        "type": "multiselect",
+        "label": "I'm interested in",
+        "required": false,
+        "options": [
+          { "value": "events", "label": "Events and activities" },
+          { "value": "volunteering", "label": "Volunteering opportunities" },
+          { "value": "fundraising", "label": "Fundraising" },
+          { "value": "news", "label": "News and stories" }
+        ],
+        "width": "full"
+      },
+      {
+        "id": "privacy_consent",
+        "type": "consent",
+        "label": "I agree to receive email communications and understand I can unsubscribe at any time.",
+        "required": true,
+        "width": "full"
+      }
+    ]
+  },
+  {
+    "id": "form-contact-general",
+    "slug": "contact-us",
+    "name": "Form – Contact Us",
+    "title": "Get in touch",
+    "description": "General contact form",
+    "introCopy": "Have a question or feedback? We'd love to hear from you.",
+    "successMessage": "Thank you for your message.\n\nWe'll get back to you as soon as possible.",
+    "submitButtonText": "Send message",
+    "category": "contact",
+    "tags": ["contact", "enquiry", "general"],
+    "fields": [
+      {
+        "id": "name",
+        "type": "text",
+        "label": "Your name",
+        "required": true,
+        "placeholder": "Full name",
+        "width": "full"
+      },
+      {
+        "id": "email",
+        "type": "email",
+        "label": "Email address",
+        "required": true,
+        "placeholder": "your.email@example.com",
+        "width": "half"
+      },
+      {
+        "id": "phone",
+        "type": "phone",
+        "label": "Phone number (optional)",
+        "required": false,
+        "placeholder": "e.g. 07700 900000",
+        "width": "half"
+      },
+      {
+        "id": "subject",
+        "type": "select",
+        "label": "Subject",
+        "required": true,
+        "options": [
+          { "value": "general", "label": "General enquiry" },
+          { "value": "feedback", "label": "Feedback" },
+          { "value": "complaint", "label": "Complaint" },
+          { "value": "media", "label": "Media enquiry" },
+          { "value": "partnership", "label": "Partnership opportunity" }
+        ],
+        "width": "full"
+      },
+      {
+        "id": "message",
+        "type": "textarea",
+        "label": "Your message",
+        "required": true,
+        "placeholder": "How can we help?",
+        "validation": {
+          "minLength": 10,
+          "maxLength": 2000
+        },
+        "width": "full"
+      },
+      {
+        "id": "privacy_consent",
+        "type": "consent",
+        "label": "I agree to the privacy policy and consent to my data being processed.",
+        "required": true,
+        "width": "full"
+      }
+    ]
+  }
+]

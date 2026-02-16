@@ -1,0 +1,42 @@
+{
+  "defaultProvider": "mock",
+  "providers": {
+    "mock": {
+      "name": "Mock Search",
+      "enabled": true,
+      "useMock": true,
+      "simulateLatency": true
+    },
+    "algolia": {
+      "name": "Algolia",
+      "enabled": false,
+      "baseUrl": "https://{appId}-dsn.algolia.net",
+      "endpoints": {
+        "search": "/1/indexes/{indexName}/query",
+        "suggest": "/1/indexes/{indexName}/suggestions"
+      },
+      "credentials": {
+        "appId": "${ALGOLIA_APP_ID}",
+        "apiKey": "${ALGOLIA_API_KEY}",
+        "indexName": "${ALGOLIA_INDEX_NAME}"
+      },
+      "rateLimit": {
+        "requestsPerSecond": 10,
+        "burstLimit": 100
+      }
+    },
+    "elasticsearch": {
+      "name": "Elasticsearch",
+      "enabled": false,
+      "baseUrl": "${ELASTICSEARCH_URL}",
+      "endpoints": {
+        "search": "/{index}/_search",
+        "suggest": "/{index}/_search"
+      },
+      "credentials": {
+        "username": "${ELASTICSEARCH_USERNAME}",
+        "password": "${ELASTICSEARCH_PASSWORD}"
+      }
+    }
+  }
+}

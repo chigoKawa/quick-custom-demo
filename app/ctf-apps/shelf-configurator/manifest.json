@@ -1,0 +1,14 @@
+{
+  "name": "Shelf Configurator",
+  "src": "app/setup/apps/shelf-configurator/page.tsx",
+  "locations": [
+    {
+      "location": "app-config",
+      "src": "app/setup/apps/shelf-configurator/locations/config-screen.tsx"
+    },
+    {
+      "location": "entry-field",
+      "src": "app/setup/apps/shelf-configurator/locations/shelf-config-field.tsx"
+    }
+  ]
+}

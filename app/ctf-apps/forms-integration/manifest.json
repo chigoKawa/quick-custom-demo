@@ -1,0 +1,18 @@
+{
+  "name": "Forms Integration",
+  "src": "app/ctf-apps/forms-integration/page.tsx",
+  "locations": [
+    {
+      "location": "app-config",
+      "src": "app/ctf-apps/forms-integration/locations/config-screen.tsx"
+    },
+    {
+      "location": "entry-field",
+      "src": "app/ctf-apps/forms-integration/locations/form-selector-field.tsx"
+    },
+    {
+      "location": "entry-sidebar",
+      "src": "app/ctf-apps/forms-integration/locations/forms-sidebar.tsx"
+    }
+  ]
+}

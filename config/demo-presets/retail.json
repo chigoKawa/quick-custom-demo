@@ -1,0 +1,78 @@
+{
+  "name": "Retail Bookstore Demo",
+  "description": "Complete retail e-commerce experience with product catalog, cart, and checkout",
+  "integrations": {
+    "commerce": {
+      "provider": "mock",
+      "enabled": true,
+      "features": [
+        "product-catalog",
+        "cart-management",
+        "checkout",
+        "wishlists",
+        "recommendations",
+        "discounts"
+      ],
+      "mockData": {
+        "productCount": 150,
+        "categories": ["fiction", "non-fiction", "textbooks", "reference", "children"]
+      }
+    },
+    "forms": {
+      "provider": "mock",
+      "enabled": true,
+      "features": [
+        "newsletter-signup",
+        "contact-form",
+        "product-reviews",
+        "bulk-order-requests"
+      ]
+    },
+    "auth": {
+      "provider": "mock",
+      "enabled": true,
+      "features": [
+        "login",
+        "registration",
+        "social-auth",
+        "password-reset",
+        "profile-management"
+      ],
+      "demoUsers": [
+        {
+          "email": "customer@example.com",
+          "password": "demo123",
+          "role": "customer"
+        },
+        {
+          "email": "admin@example.com",
+          "password": "admin123",
+          "role": "admin"
+        }
+      ]
+    },
+    "search": {
+      "provider": "mock",
+      "enabled": true,
+      "features": [
+        "product-search",
+        "autocomplete",
+        "faceted-search",
+        "recommendations"
+      ]
+    }
+  },
+  "contentful": {
+    "siteSettings": {
+      "siteName": "University Bookstore",
+      "brandColor": "#e73331",
+      "logoUrl": "/logo.svg"
+    }
+  },
+  "mockDataSeeds": {
+    "products": 150,
+    "users": 50,
+    "orders": 200,
+    "reviews": 300
+  }
+}

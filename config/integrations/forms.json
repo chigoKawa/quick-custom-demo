@@ -1,0 +1,36 @@
+{
+  "defaultProvider": "mock",
+  "providers": {
+    "mock": {
+      "name": "Mock Forms",
+      "enabled": true,
+      "useMock": true,
+      "simulateLatency": true
+    },
+    "hubspot": {
+      "name": "HubSpot",
+      "enabled": false,
+      "baseUrl": "https://api.hubapi.com",
+      "endpoints": {
+        "forms": "/forms/v2/forms",
+        "submissions": "/form-integrations/v1/submissions/forms"
+      },
+      "credentials": {
+        "apiKey": "${HUBSPOT_API_KEY}"
+      }
+    },
+    "salesforce": {
+      "name": "Salesforce",
+      "enabled": false,
+      "baseUrl": "https://{instance}.salesforce.com",
+      "endpoints": {
+        "forms": "/services/data/v58.0/sobjects",
+        "submissions": "/services/data/v58.0/sobjects/Lead"
+      },
+      "credentials": {
+        "clientId": "${SALESFORCE_CLIENT_ID}",
+        "clientSecret": "${SALESFORCE_CLIENT_SECRET}"
+      }
+    }
+  }
+}

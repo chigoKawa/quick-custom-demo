@@ -1,0 +1,22 @@
+{
+  "name": "Newsletter Preview App",
+  "src": "app/ctf-apps/newsletter-preview/page.tsx",
+  "locations": [
+    {
+      "location": "page",
+      "src": "app/ctf-apps/newsletter-preview/locations/app-page.tsx"
+    },
+    {
+      "location": "field",
+      "src": "app/ctf-apps/newsletter-preview/locations/field/newsletter-field.tsx"
+    },
+    {
+      "location": "entry-sidebar",
+      "src": "app/ctf-apps/newsletter-preview/locations/entry-sidebar/stats-sidebar.tsx"
+    },
+    {
+      "location": "entry-editor",
+      "src": "app/ctf-apps/newsletter-preview/locations/editor/newsletter-editor.tsx"
+    }
+  ]
+}

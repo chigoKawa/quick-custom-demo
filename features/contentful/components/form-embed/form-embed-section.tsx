@@ -5,6 +5,7 @@ import { useContentfulInspectorMode } from "@contentful/live-preview/react";
 import { cn } from "@/lib/utils";
 import type { IFormEmbed } from "../../type";
 import type { Form, FormField } from "@/lib/integrations/forms/forms.interface";
+import { useTracking, type MetricEventName } from "@/features/tracking/use-tracking";
 
 interface FormEmbedSectionProps {
   entry: IFormEmbed;
@@ -16,11 +17,15 @@ interface FormEmbedSectionProps {
  */
 export default function FormEmbedSection({ entry }: FormEmbedSectionProps) {
   const inspectorProps = useContentfulInspectorMode({ entryId: entry.sys.id });
+  const { trackMetric } = useTracking();
 
   const title = entry.fields.title;
   const introCopy = entry.fields.introCopy;
   const formData = entry.fields.form as { selectedForm?: Form } | null;
   const selectedForm = formData?.selectedForm;
+  const metricEventName = (entry.fields as unknown as { metricEventName?: string })?.metricEventName as
+    | MetricEventName
+    | undefined;
 
   const [formValues, setFormValues] = useState<Record<string, unknown>>({});
   const [submitted, setSubmitted] = useState(false);
@@ -53,12 +58,20 @@ export default function FormEmbedSection({ entry }: FormEmbedSectionProps) {
       }
 
       setSubmitted(true);
+      try {
+        trackMetric(metricEventName ?? "form_completed", {
+          entryId: entry.sys.id,
+          formId: selectedForm.id,
+        });
+      } catch {
+        // non-fatal
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");
     } finally {
       setSubmitting(false);
     }
-  }, [selectedForm, formValues]);
+  }, [selectedForm, formValues, trackMetric, metricEventName, entry.sys.id]);
 
   if (!selectedForm) {
     return null;

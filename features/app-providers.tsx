@@ -7,6 +7,8 @@ import {
 import { usePathname, useSearchParams } from "next/navigation";
 import { NinetailedInsightsPlugin } from "@ninetailed/experience.js-plugin-insights";
 import { NinetailedPreviewPlugin } from "@ninetailed/experience.js-plugin-preview";
+import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provider-wrapper";
+import { getI18nConfig } from "@/i18n-config";
 import {
   loadPreviewData,
   type PreviewData,
@@ -100,21 +102,69 @@ export default function AppProviders({ children }: Props) {
   }
 
   const [previewPlugin, setPreviewPlugin] = useState<NinetailedPreviewPlugin | null>(null);
+  const [effectiveLocale, setEffectiveLocale] = useState<string>("en-US");
+  const pathname = usePathname();
+
+  // Proactively clear stale profile if clientId/env changed across sessions
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const clientId = process.env.NEXT_PUBLIC_NINETAILED_CLIENT_ID as string | undefined;
+      const environment = process.env.NEXT_PUBLIC_NINETAILED_ENVIRONMENT as string | undefined;
+      const lastClient = localStorage.getItem("ninetailed_last_client") || null;
+      const lastEnv = localStorage.getItem("ninetailed_last_env") || null;
+
+      const changed = (lastClient && clientId && lastClient !== clientId) || (lastEnv && environment && lastEnv !== environment);
+      if (changed) {
+        clearStaleNinetailedProfile();
+        setProviderKey((k) => k + 1);
+      }
+
+      if (clientId) localStorage.setItem("ninetailed_last_client", clientId);
+      if (environment) localStorage.setItem("ninetailed_last_env", environment);
+    } catch {
+      // ignore storage issues
+    }
+  }, []);
+
+  // Derive effective locale from pathname with i18n config fallback
+  useEffect(() => {
+    let mounted = true;
+    const load = async () => {
+      try {
+        const cfg = await getI18nConfig();
+        const seg = (pathname || "").split("/").filter(Boolean)[0] || "";
+        const next = cfg.locales.includes(seg as any) ? seg : cfg.defaultLocale;
+        if (mounted) setEffectiveLocale(next);
+      } catch {
+        if (mounted) setEffectiveLocale("en-US");
+      }
+    };
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, [pathname]);
 
   // Listen for Ninetailed 404 errors and clear stale profile
   useEffect(() => {
     if (typeof window === "undefined") return;
 
+    // Track if we've already cleared to avoid loops
+    let hasCleared = false;
+
     const handleError = (event: ErrorEvent) => {
+      if (hasCleared) return;
       const msg = event.message || "";
       // Detect Ninetailed profile 404 errors
       if (
-        msg.includes("Update Profile request failed") &&
-        msg.includes("404")
+        (msg.includes("Update Profile request failed") || msg.includes("Update Profile")) &&
+        (msg.includes("404") || msg.includes("[404]"))
       ) {
         console.warn(
           "[Ninetailed] Detected stale profile (404). Clearing localStorage and reinitializing..."
         );
+        hasCleared = true;
         clearStaleNinetailedProfile();
         // Force provider remount to create fresh profile
         setProviderKey((k) => k + 1);
@@ -122,11 +172,35 @@ export default function AppProviders({ children }: Props) {
     };
 
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      if (hasCleared) return;
       const reason = String(event.reason || "");
-      if (reason.includes("404") && reason.includes("Profile")) {
+      if (
+        (reason.includes("404") || reason.includes("[404]")) &&
+        (reason.includes("Profile") || reason.includes("Update Profile"))
+      ) {
         console.warn(
           "[Ninetailed] Detected stale profile (404 rejection). Clearing localStorage..."
         );
+        hasCleared = true;
+        clearStaleNinetailedProfile();
+        setProviderKey((k) => k + 1);
+      }
+    };
+
+    // Also intercept console.error to catch SDK errors that don't throw
+    const originalConsoleError = console.error;
+    console.error = (...args: unknown[]) => {
+      originalConsoleError.apply(console, args);
+      if (hasCleared) return;
+      const msg = args.map((a) => String(a)).join(" ");
+      if (
+        (msg.includes("Update Profile request failed") || msg.includes("Update Profile")) &&
+        (msg.includes("404") || msg.includes("[404]"))
+      ) {
+        console.warn(
+          "[Ninetailed] Detected stale profile via console.error. Clearing localStorage..."
+        );
+        hasCleared = true;
         clearStaleNinetailedProfile();
         setProviderKey((k) => k + 1);
       }
@@ -138,6 +212,7 @@ export default function AppProviders({ children }: Props) {
     return () => {
       window.removeEventListener("error", handleError);
       window.removeEventListener("unhandledrejection", handleUnhandledRejection);
+      console.error = originalConsoleError;
     };
   }, []);
 
@@ -254,10 +329,12 @@ export default function AppProviders({ children }: Props) {
       
        
     >
-      <Suspense fallback={null}>
-        <PageEventOnMount />
-      </Suspense>
-      {children}
+      <LivePreviewProviderWrapper locale={effectiveLocale} isPreviewEnabled={!!previewEnabled}>
+        <Suspense fallback={null}>
+          <PageEventOnMount />
+        </Suspense>
+        {children}
+      </LivePreviewProviderWrapper>
     </NinetailedProvider>
   );
 }

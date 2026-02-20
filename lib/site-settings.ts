@@ -97,17 +97,30 @@ export async function getSiteSettings(
   return entries[0] || null;
 }
 
+// Safe field accessor for Contentful entries (handles localized vs resolved fields)
+function getFieldValue<T>(entry: any, fieldName: string, fallback: T): T {
+  if (!entry?.fields) return fallback;
+  const value = entry.fields[fieldName];
+  if (value === undefined || value === null) return fallback;
+  // If it's a localized object, try to get the first value
+  if (typeof value === 'object' && !Array.isArray(value) && !('sys' in value)) {
+    const keys = Object.keys(value);
+    if (keys.length > 0) return value[keys[0]] as T;
+  }
+  return value as T;
+}
+
 /**
  * Helper to resolve nav link URL
  * Priority: target page slug > href
  */
-export function resolveNavLinkUrl(navLink: Entry<NavLinkSkeleton>, locale?: string): string {
-  const fields = navLink.fields;
+export function resolveNavLinkUrl(navLink: Entry<NavLinkSkeleton> | Entry<any>, locale?: string): string {
+  const target = getFieldValue<Entry<any> | null>(navLink, 'target', null);
+  const href = getFieldValue<string>(navLink, 'href', '#');
 
   // If target page is set, use its slug
-  if (fields.target) {
-    const targetFields = fields.target.fields as any;
-    const slug = targetFields.slug || targetFields.url;
+  if (target) {
+    const slug = getFieldValue<string>(target, 'slug', '') || getFieldValue<string>(target, 'url', '');
 
     if (slug) {
       // Prepend locale if not default
@@ -117,7 +130,7 @@ export function resolveNavLinkUrl(navLink: Entry<NavLinkSkeleton>, locale?: stri
   }
 
   // Fall back to href
-  return fields.href || '#';
+  return href;
 }
 
 /**
@@ -146,13 +159,24 @@ export function getIconName(iconKey?: string): string | null {
 /**
  * Get asset URL from Contentful asset
  */
-export function getAssetUrl(asset?: Asset): string | null {
-  if (!asset || !asset.fields || !asset.fields.file) {
+export function getAssetUrl(asset?: Asset | any): string | null {
+  if (!asset || !asset.fields) {
     return null;
   }
 
-  const file = asset.fields.file;
-  const url = typeof file === 'object' && 'url' in file ? file.url : null;
+  // Handle localized file field
+  let file = asset.fields.file;
+  if (!file) return null;
+  
+  // If file is localized, get first locale value
+  if (typeof file === 'object' && !('url' in file)) {
+    const keys = Object.keys(file);
+    if (keys.length > 0) file = file[keys[0]];
+  }
+  
+  if (!file || typeof file !== 'object') return null;
+  
+  const url = 'url' in file ? String(file.url) : null;
 
   return url ? (url.startsWith('//') ? `https:${url}` : url) : null;
 }

@@ -7,6 +7,11 @@ import type { IFormEmbed } from "../../type";
 import FormEmbedSection from "./form-embed-section";
 
 export default function PersonalizedFormEmbed(entry: IFormEmbed) {
+  // Guard against undefined entry or missing sys/fields
+  if (!entry?.sys?.id || !entry?.fields) {
+    return null;
+  }
+
   const experiencesUnknown = (entry.fields.nt_experiences ?? []) as unknown[];
 
   const isExp = ExperienceMapper.isExperienceEntry as (v: unknown) => boolean;
@@ -34,6 +39,7 @@ export default function PersonalizedFormEmbed(entry: IFormEmbed) {
 
   return (
     <Experience
+      key={entry.sys.id}
       id={entry.sys.id}
       component={WrappedComponent}
       experiences={experiencesForProp}

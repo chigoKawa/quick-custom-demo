@@ -19,7 +19,12 @@ function mapButtons(buttons: unknown): Array<{ label: string; href: string }> {
 }
 
 export default function HeroModuleWrapper(entry: IHeroModule) {
-  const title = entry?.fields?.headline ?? "";
+  // Guard against undefined entry or missing sys
+  if (!entry?.sys?.id || !entry?.fields) {
+    return null;
+  }
+
+  const title = entry.fields.headline ?? "";
   const description = entry?.fields?.subCopy;
 
   const imagePlacement = entry?.fields?.imagePlacement;
@@ -48,5 +53,11 @@ export default function HeroModuleWrapper(entry: IHeroModule) {
 
   if (!slide.title) return null;
 
-  return <HeroModule slides={[slide]} entryId={entry?.sys?.id} />;
+  return (
+    <HeroModule
+      slides={[slide]}
+      entryId={entry?.sys?.id}
+      metricEventName={(entry?.fields as unknown as { metricEventName?: string })?.metricEventName as any}
+    />
+  );
 }

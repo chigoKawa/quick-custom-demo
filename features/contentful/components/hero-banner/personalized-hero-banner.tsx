@@ -9,6 +9,11 @@ import { IHeroBanner } from "../../type";
 // and renders the existing Hero Banner wrapper with the selected variation data.
 // Downstream UI stays unchanged.
 export default function PersonalizedHeroBanner(entry: IHeroBanner) {
+  // Guard against undefined entry or missing sys/fields
+  if (!entry?.sys?.id || !entry?.fields) {
+    return null;
+  }
+
   const experiencesUnknown = (entry.fields.nt_experiences ?? []) as unknown[];
 
   const isExp = ExperienceMapper.isExperienceEntry as (v: unknown) => boolean;
@@ -38,6 +43,7 @@ export default function PersonalizedHeroBanner(entry: IHeroBanner) {
   // entry props so the wrapper can render if no decision is made.
   return (
     <Experience
+      key={entry.sys.id}
       id={entry.sys.id}
       component={HerobannerWrapper}
       experiences={experiencesForProp}

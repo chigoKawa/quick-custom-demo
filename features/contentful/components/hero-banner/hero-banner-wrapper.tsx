@@ -8,12 +8,17 @@ import ActionButtonRender from "./action-button-render";
 import { extractContentfulAssetUrl } from "@/lib/utils";
 
 const HerobannerWrapper = (entry: IHeroBanner) => {
-  const headline = entry?.fields?.headline as string;
-  const body = entry?.fields?.body;
-  const heroImage = entry?.fields?.heroImage;
+  // Guard against undefined entry or missing sys
+  if (!entry?.sys?.id || !entry?.fields) {
+    return null;
+  }
+
+  const headline = entry.fields.headline as string;
+  const body = entry.fields.body;
+  const heroImage = entry.fields.heroImage;
   const imageUrl = extractContentfulAssetUrl(heroImage);
-  const buttons = entry?.fields?.actionButtons;
-  const variant = entry?.fields?.variant;
+  const buttons = entry.fields.actionButtons;
+  const variant = entry.fields.variant;
 
   if (variant === "Centered") {
     return (

@@ -6,6 +6,7 @@ import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import { extractUrlFromTarget } from "@/lib/utils";
 import { useContentfulInspectorMode } from "@contentful/live-preview/react";
+import { useTracking, type MetricEventName } from "@/features/tracking/use-tracking";
 
 import _ from "lodash";
 
@@ -17,16 +18,23 @@ const sizeMap = {
 };
 
 // BaseButtonWrapper: A wrapper for rendering buttons dynamically based on Contentful-entry-provided data
-const BaseButtonWrapper = (entry: IBaseButton) => {
+// Accepts optional metricEventName from the parent section for tracking clicks
+const BaseButtonWrapper: React.FC<IBaseButton & { metricEventName?: MetricEventName }> = (entry) => {
+  // Guard against undefined entry or missing sys
+  if (!entry?.sys?.id || !entry?.fields) {
+    return null;
+  }
+
   // Extract fields from the button entry
-  const variant = entry?.fields?.variant; // Defines button style (e.g., primary, secondary)
-  const size = entry?.fields?.size; // Defines button size (Small, Medium, Large)
-  const target = entry?.fields?.target; // Defines the target link
-  const openInNewTab = entry?.fields?.openInNewTab; // Boolean to open in new tab or same tab
-  const label = entry?.fields?.label; // Button label text
+  const variant = entry.fields.variant; // Defines button style (e.g., primary, secondary)
+  const size = entry.fields.size; // Defines button size (Small, Medium, Large)
+  const target = entry.fields.target; // Defines the target link
+  const openInNewTab = entry.fields.openInNewTab; // Boolean to open in new tab or same tab
+  const label = entry.fields.label; // Button label text
   const targetUrl = extractUrlFromTarget(target); // Extract the actual URL from the target field
 
   const inspectorProps = useContentfulInspectorMode({ entryId: entry.sys.id });
+  const { trackMetric } = useTracking();
 
   // Base button styling (additional utility classes for spacing and focus styles)
   const btnClasses =
@@ -53,6 +61,17 @@ const BaseButtonWrapper = (entry: IBaseButton) => {
         href={targetUrl}
         target={openInNewTab ? "_blank" : "_self"}
         className=" w-full h-full "
+        onClick={() => {
+          const evt = entry.metricEventName;
+          if (evt) {
+            trackMetric(evt, {
+              location: "cta-section",
+              entryId: entry?.sys?.id,
+              label,
+              href: targetUrl,
+            });
+          }
+        }}
       >
         {label}
       </Link>

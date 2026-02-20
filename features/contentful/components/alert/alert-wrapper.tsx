@@ -26,9 +26,15 @@ const variantIcons = {
 };
 
 const AlertWrapper = (entry: IAlert) => {
-  const liveEntry = useContentfulLiveUpdates(entry);
-  const inspectorProps = useContentfulInspectorMode({ entryId: liveEntry.sys.id });
+  const liveEntry = useContentfulLiveUpdates(entry) || entry;
   const [isDismissed, setIsDismissed] = useState(false);
+
+  // Guard against undefined entry or missing sys
+  if (!liveEntry?.sys?.id) {
+    return null;
+  }
+
+  const inspectorProps = useContentfulInspectorMode({ entryId: liveEntry.sys.id });
 
   const title = liveEntry.fields.title;
   const content = liveEntry.fields.content;

@@ -7,6 +7,11 @@ import type { IProductCatalog } from "../../type";
 import ProductCatalogSection from "./product-catalog-section";
 
 export default function PersonalizedProductCatalog(entry: IProductCatalog) {
+  // Guard against undefined entry or missing sys/fields
+  if (!entry?.sys?.id || !entry?.fields) {
+    return null;
+  }
+
   const experiencesUnknown = (entry.fields.nt_experiences ?? []) as unknown[];
 
   const isExp = ExperienceMapper.isExperienceEntry as (v: unknown) => boolean;
@@ -35,6 +40,7 @@ export default function PersonalizedProductCatalog(entry: IProductCatalog) {
 
   return (
     <Experience
+      key={entry.sys.id}
       id={entry.sys.id}
       component={WrappedComponent}
       experiences={experiencesForProp}

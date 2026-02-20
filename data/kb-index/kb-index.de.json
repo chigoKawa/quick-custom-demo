@@ -1,0 +1,122 @@
+{
+  "version": 1771351178041,
+  "locale": "de",
+  "docs": [
+    {
+      "id": "6tsie4SHH8sThpdWg5uB91",
+      "slug": "freeze-and-unfreeze-your-card",
+      "title": "Freeze and unfreeze your card",
+      "summary": "Temporarily freeze your card to prevent transactions, then unfreeze anytime.",
+      "body": "Freezing your card stops most new transactions immediately. Use this if you suspect your card details may be compromised or you’ve misplaced the card. When you’re ready, unfreeze the card in settings. Some pending transactions may still complete depending on the merchant.",
+      "categories": [],
+      "groups": [
+        "payments",
+        "security"
+      ],
+      "updatedAt": "2026-02-17T17:40:43.717Z",
+      "locale": "de",
+      "categoriesJoined": "",
+      "groupsJoined": "payments security"
+    },
+    {
+      "id": "3dljGLLbdHBM6cN8cwpze9",
+      "slug": "manage-billing-invoices",
+      "title": "Manage Billing and Invoices",
+      "summary": "Manage billing settings and invoices in your account.",
+      "body": "document",
+      "categories": [],
+      "groups": [
+        "payments"
+      ],
+      "updatedAt": "2026-02-17T17:40:28.428Z",
+      "locale": "de",
+      "categoriesJoined": "",
+      "groupsJoined": "payments"
+    },
+    {
+      "id": "4gOe6pPsTPm5ZiWjU5XPxx",
+      "slug": "why-isnt-my-card-working",
+      "title": "Why isn’t my card working?",
+      "summary": "Common reasons a card payment may fail and how to fix it quickly.",
+      "body": "If your card payment fails, start by checking your balance, payment limits, and whether the merchant supports your card type. Then verify your card isn’t frozen and that your billing address matches what the merchant expects. If the issue persists, try a smaller amount, retry after a few minutes, and confirm there are no security blocks on your account.",
+      "categories": [],
+      "groups": [
+        "payments",
+        "security"
+      ],
+      "updatedAt": "2026-02-17T17:40:08.954Z",
+      "locale": "de",
+      "categoriesJoined": "",
+      "groupsJoined": "payments security"
+    },
+    {
+      "id": "1ChapOs4CK8erH92PCN7YO",
+      "slug": "getting-started-overview",
+      "title": "Getting Started Overview",
+      "summary": "Learn how to get started quickly.",
+      "body": "This article walks you through the basics of getting started.",
+      "categories": [
+        "getting-started"
+      ],
+      "groups": [
+        "products"
+      ],
+      "updatedAt": "2026-02-17T17:39:51.138Z",
+      "locale": "de",
+      "categoriesJoined": "getting-started",
+      "groupsJoined": "products"
+    },
+    {
+      "id": "7FYb79TnrOGlB55n9K3xa5",
+      "slug": "update-your-profile-information",
+      "title": "Update your profile information",
+      "summary": "Change your name, contact details, and preferences from your account settings.",
+      "body": "Open Account settings to update your personal details. Some fields may require re-verification for security reasons. After saving changes, confirm they appear correctly across your profile and notifications.",
+      "categories": [
+        "getting-started"
+      ],
+      "groups": [
+        "security"
+      ],
+      "updatedAt": "2026-02-17T17:36:13.412Z",
+      "locale": "de",
+      "categoriesJoined": "getting-started",
+      "groupsJoined": "security"
+    },
+    {
+      "id": "5atsbC9RGcxuPrK5HoaeJt",
+      "slug": "getting-started-overview-2",
+      "title": "Getting started overview",
+      "summary": "A quick checklist to get set up and ready to go.",
+      "body": "",
+      "categories": [
+        "getting-started"
+      ],
+      "groups": [
+        "payments"
+      ],
+      "updatedAt": "2026-02-17T17:35:47.455Z",
+      "locale": "de",
+      "categoriesJoined": "getting-started",
+      "groupsJoined": "payments"
+    },
+    {
+      "id": "4xOOnBhwzuoZC5W7NSLIMA",
+      "slug": "resetting-your-password",
+      "title": "Resetting your password",
+      "summary": "Steps to reset your password and regain access to your account.",
+      "body": "document",
+      "categories": [
+        "getting-started"
+      ],
+      "groups": [
+        "payments",
+        "security"
+      ],
+      "updatedAt": "2026-02-17T17:35:29.943Z",
+      "locale": "de",
+      "categoriesJoined": "getting-started",
+      "groupsJoined": "payments security"
+    }
+  ]
+}

@@ -7,6 +7,11 @@ import AlertWrapper from "./alert-wrapper";
 import { IAlert } from "../../type";
 
 export default function PersonalizedAlert(entry: IAlert) {
+  // Guard against undefined entry or missing sys/fields
+  if (!entry?.sys?.id || !entry?.fields) {
+    return null;
+  }
+
   const experiencesUnknown = (entry.fields.nt_experiences ?? []) as unknown[];
 
   const isExp = ExperienceMapper.isExperienceEntry as (v: unknown) => boolean;
@@ -34,6 +39,7 @@ export default function PersonalizedAlert(entry: IAlert) {
   // to the provided component (AlertWrapper).
   return (
     <Experience
+      key={entry.sys.id}
       id={entry.sys.id}
       component={AlertWrapper}
       experiences={experiencesForProp}

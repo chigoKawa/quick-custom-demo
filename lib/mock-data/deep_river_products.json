@@ -1,0 +1,155 @@
+[
+  {
+    "id": "drs-slot-book-of-river-001",
+    "title": "Book of River – High-Volatility Slot",
+    "slug": "book-of-river-high-volatility-slot",
+    "description": "Egyptian-themed high-volatility slot designed for VIP casino players, with configurable RTP bands and jackpot hooks.",
+    "price": 0,
+    "currency": "EUR",
+    "images": ["https://images.ctfassets.net/ace0ba6p9v98/4jn6lk3i6Ix3szoPZ6pdoS/89deac543360d23f0e0501d476e567ce/Gemini_Generated_Image_ao4bpiao4bpiao4b.png"],
+    "category": "casino-slot",
+    "tags": ["slot", "high-volatility", "vip", "jackpot-ready", "casino"],
+    "stock": 999999,
+    "rating": 4.6,
+    "reviewCount": 1243,
+    "metadata": {
+      "rgsProvider": "Internal",
+      "volatility": "High",
+      "rtpPercent": 96.2,
+      "minStake": 0.1,
+      "maxStake": 100,
+      "markets": ["DE", "PL", "EEA"],
+      "supportsBonusBuy": true
+    }
+  },
+  {
+    "id": "drs-slot-river-jackpots-002",
+    "title": "Deep River Jackpots",
+    "slug": "deep-river-jackpots",
+    "description": "Progressive jackpot slot lobby entry, aggregating multiple jackpot-enabled titles into a single VIP destination.",
+    "price": 0,
+    "currency": "EUR",
+    "images": ["https://images.ctfassets.net/ace0ba6p9v98/7urypCygNljjAM6ZUJ6041/adc716f2408bb216a507fd24a4738e75/image.png"],
+    "category": "casino-slot",
+    "tags": ["slot", "jackpot", "lobby-entry", "vip", "casino"],
+    "stock": 999999,
+    "rating": 4.7,
+    "reviewCount": 986,
+    "metadata": {
+      "rgsProvider": "Multi-provider",
+      "volatility": "Medium-High",
+      "rtpPercent": 95.5,
+      "minStake": 0.2,
+      "maxStake": 200,
+      "markets": ["DE", "PL", "ROW"],
+      "jackpotPools": ["Mini", "Major", "Mega"]
+    }
+  },
+  {
+    "id": "drs-sports-accas-boost-003",
+    "title": "Weekend Acca Boost – Football",
+    "slug": "weekend-acca-boost-football",
+    "description": "Pre-built football accumulator template with configurable odds boosts for VIP sports bettors on top European leagues.",
+    "price": 0,
+    "currency": "EUR",
+    "images": ["https://images.ctfassets.net/ace0ba6p9v98/4xfX30znjWKGCEnt5pQelL/00b5af678903d2c2efbcc5c9a618d699/image.png"],
+    "category": "sportsbook-offer",
+    "tags": ["sportsbook", "football", "acca", "boost", "vip"],
+    "stock": 999999,
+    "rating": 4.4,
+    "reviewCount": 642,
+    "metadata": {
+      "sport": "Football",
+      "markets": ["1X2", "Over/Under", "Both Teams To Score"],
+      "eligibleLeagues": ["Bundesliga", "Ekstraklasa", "Premier League"],
+      "minSelections": 3,
+      "maxSelections": 12,
+      "maxBoostPercent": 50,
+      "marketsAllowed": ["DE", "PL"]
+    }
+  },
+  {
+    "id": "drs-sports-inplay-hub-004",
+    "title": "In-Play Multi-Sport Hub",
+    "slug": "in-play-multi-sport-hub",
+    "description": "Live betting hub combining football and basketball in-play markets with fast-refresh odds for high-engagement users.",
+    "price": 0,
+    "currency": "EUR",
+    "images": ["https://images.ctfassets.net/ace0ba6p9v98/18RsEpL6iKTpVxwatLc6Ha/7162f0041e8e2c19476c93122b678bb5/image.png"],
+    "category": "sportsbook-lobby",
+    "tags": ["sportsbook", "in-play", "live-betting", "high-engagement"],
+    "stock": 999999,
+    "rating": 4.5,
+    "reviewCount": 521,
+    "metadata": {
+      "sports": ["Football", "Basketball"],
+      "refreshIntervalMs": 3000,
+      "supportsCashout": true,
+      "supportsBetBuilder": true,
+      "markets": ["EU", "ROW"]
+    }
+  },
+  {
+    "id": "drs-rg-uk-safe-play-005",
+    "title": "UK Safer Play Lobby",
+    "slug": "uk-safer-play-lobby",
+    "description": "UK-compliant lobby view that filters out restricted bonuses and highlights safer-gambling tools and UK-approved games.",
+    "price": 0,
+    "currency": "GBP",
+    "images": ["https://images.ctfassets.net/ace0ba6p9v98/19N5DZrrCpKkmBPb8S8Y2N/8f334d62b5bc744077b8250bc5bc448a/image.png"],
+    "category": "regulated-experience",
+    "tags": ["uk", "compliance", "safer-gambling", "filtered-bonuses"],
+    "stock": 999999,
+    "rating": 4.9,
+    "reviewCount": 312,
+    "metadata": {
+      "jurisdiction": "UKGC",
+      "showBonuses": false,
+      "showRGLimitsFirst": true,
+      "rgLinks": ["/safer-gambling", "/safer-gambling/tools"],
+      "ageVerificationRequired": true
+    }
+  },
+  {
+    "id": "drs-vip-mixed-lobby-006",
+    "title": "VIP Mixed Lobby – Casino & Sports",
+    "slug": "vip-mixed-lobby-casino-sports",
+    "description": "Combined VIP lobby that surfaces both casino and sports content based on the player’s dominant behaviour over the last 30 days.",
+    "price": 0,
+    "currency": "EUR",
+    "images": ["https://images.ctfassets.net/ace0ba6p9v98/44DmtUIOQ9facC855TW2sC/04e046bef60c56cb6c8f493c279446b7/image.png"],
+    "category": "vip-experience",
+    "tags": ["vip", "personalized", "casino", "sports", "lobby"],
+    "stock": 999999,
+    "rating": 4.8,
+    "reviewCount": 874,
+    "metadata": {
+      "behaviourLookbackDays": 30,
+      "minVipScore": 80,
+      "casinoVsSportsSplitThreshold": 0.6,
+      "supportsPersonalizedCarousels": true,
+      "markets": ["DE", "PL", "ROW"]
+    }
+  },
+  {
+    "id": "drs-onboarding-new-player-007",
+    "title": "New Player Onboarding Journey",
+    "slug": "new-player-onboarding-journey",
+    "description": "Guided experience that introduces new players to casino and sports with low-risk games, tutorials, and responsible play nudges.",
+    "price": 0,
+    "currency": "EUR",
+    "images": ["https://images.ctfassets.net/ace0ba6p9v98/6WEIYIXatW59Hfu22R77M5/3bca281d3d0a1289c0c54ee0274bee01/image.png"],
+    "category": "onboarding",
+    "tags": ["new-player", "tutorial", "low-risk", "responsible-gaming"],
+    "stock": 999999,
+    "rating": 4.3,
+    "reviewCount": 459,
+    "metadata": {
+      "steps": 4,
+      "includesDemoMode": true,
+      "maxStakeDuringJourney": 1,
+      "showRGToolsEveryStep": true,
+      "targetSegments": ["new", "returning-low-activity"]
+    }
+  }
+]

@@ -14,12 +14,31 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { usePathname } from "next/navigation";
 import { getI18nConfig } from "@/i18n-config";
-import type { MicrocopyMap } from "@/lib/microcopy";
+import type { MicrocopyDataMap } from "@/lib/microcopy";
+import { createMicrocopyHelper } from "@/hooks/use-microcopy";
 import { Skeleton } from "./ui/skeleton";
 import type { Entry } from "contentful";
 import type { SiteSettingsSkeleton, NavLinkSkeleton, HeaderNavigationSkeleton } from "@/lib/site-settings";
 import { resolveNavLinkUrl, getAssetUrl } from "@/lib/site-settings";
 import { useContentfulInspectorMode, useContentfulLiveUpdates } from "@contentful/live-preview/react";
+
+// Safe field accessor for Contentful entries (handles localized vs resolved fields)
+function getField<T>(entry: any, fieldName: string, fallback: T): T {
+  if (!entry?.fields) return fallback;
+  const value = entry.fields[fieldName];
+  if (value === undefined || value === null) return fallback;
+  // If it's a localized object (not an array, not an entry with sys), get first locale value
+  if (typeof value === 'object' && !Array.isArray(value) && !('sys' in value)) {
+    const keys = Object.keys(value);
+    if (keys.length > 0) return value[keys[0]] as T;
+  }
+  return value as T;
+}
+
+function getFieldArray<T>(entry: any, fieldName: string): T[] {
+  const value = getField(entry, fieldName, []);
+  return Array.isArray(value) ? value : [];
+}
 
 interface HeaderProps {
   siteSettings: Entry<SiteSettingsSkeleton> | null;
@@ -29,7 +48,7 @@ export function Header({ siteSettings }: HeaderProps) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [locales, setLocales] = useState<string[]>([]);
   const [defaultLocale, setDefaultLocale] = useState<string>("en-US");
-  const [microcopy, setMicrocopy] = useState<MicrocopyMap | null>(null);
+  const [microcopy, setMicrocopy] = useState<MicrocopyDataMap | null>(null);
   const [microcopyLoading, setMicrocopyLoading] = useState(true);
   const pathname = usePathname();
 
@@ -39,10 +58,13 @@ export function Header({ siteSettings }: HeaderProps) {
     entryId: liveSiteSettings?.sys.id
   });
 
+  // Helper to get microcopy with inspector props
+  const mc = createMicrocopyHelper(microcopy);
+  
   // Helper to get microcopy value - returns null while loading to show skeleton
   const t = (key: string): string | null => {
     if (microcopyLoading || microcopy === null) return null;
-    return microcopy[key] ?? null;
+    return mc(key).value || null;
   };
 
   useEffect(() => {
@@ -59,10 +81,10 @@ export function Header({ siteSettings }: HeaderProps) {
       // Fetch microcopy
       setMicrocopyLoading(true);
       const mcRes = await fetch(
-        `/api/microcopy?locale=${encodeURIComponent(effectiveLocale)}`,
+        `/api/microcopy?locale=${encodeURIComponent(effectiveLocale)}&withIds=true`,
       );
       if (mcRes.ok) {
-        const mcData = (await mcRes.json()) as { microcopy?: MicrocopyMap };
+        const mcData = (await mcRes.json()) as { microcopy?: MicrocopyDataMap };
         setMicrocopy(mcData?.microcopy ?? {});
       }
       setMicrocopyLoading(false);
@@ -71,36 +93,42 @@ export function Header({ siteSettings }: HeaderProps) {
     return () => {};
   }, [pathname]);
 
+  // Get main navigation entry and apply live updates
+  const navEntry = getField<Entry<any> | null>(liveSiteSettings, 'headerMainNavigation', null);
+  const liveNavEntry = useContentfulLiveUpdates(navEntry);
+  
   // Get main navigation links from headerMainNavigation
   const mainNavLinks = useMemo(() => {
-    if (!liveSiteSettings?.fields.headerMainNavigation) return [];
+    if (!liveNavEntry) return [];
     
-    const navEntry = liveSiteSettings.fields.headerMainNavigation as Entry<HeaderNavigationSkeleton>;
-    const menuItems = navEntry.fields?.menuItems;
+    const menuItems = getFieldArray<Entry<any>>(liveNavEntry, 'menuItems');
     
-    if (!Array.isArray(menuItems)) return [];
-    
-    return menuItems.map((item) => {
-      const link = item as Entry<NavLinkSkeleton>;
-      return {
-        label: link.fields.label,
-        href: resolveNavLinkUrl(link),
-        entryId: link.sys.id,
-        openInNewTab: link.fields.openInNewTab,
-        rel: link.fields.rel,
-      };
-    });
-  }, [liveSiteSettings]);
+    return menuItems
+      .filter((item) => item?.fields) // Filter out unresolved links
+      .map((item) => {
+        const label = getField(item, 'label', '');
+        const openInNewTab = getField(item, 'openInNewTab', false);
+        const rel = getField(item, 'rel', '');
+        return {
+          label,
+          href: resolveNavLinkUrl(item),
+          entryId: item.sys?.id,
+          openInNewTab,
+          rel,
+        };
+      });
+  }, [liveNavEntry]);
 
-  // Extract site settings fields
-  const logoUrl = liveSiteSettings ? getAssetUrl(liveSiteSettings.fields.logo) : null;
-  const logoAlt = liveSiteSettings?.fields.logoAlt || "Logo";
-  const logoLink = liveSiteSettings?.fields.logoLink || "/";
+  // Extract site settings fields with safe accessors
+  const logoAsset = getField<any>(liveSiteSettings, 'logo', null);
+  const logoUrl = logoAsset ? getAssetUrl(logoAsset) : null;
+  const logoAlt = getField(liveSiteSettings, 'logoAlt', 'Logo');
+  const logoLink = getField(liveSiteSettings, 'logoLink', '/');
 
   // Get top links
-  const headerTopLinks = liveSiteSettings?.fields.headerTopLinks || [];
-  const headerAccountLinks = liveSiteSettings?.fields.headerAccountLinks || [];
-  const headerPromoLink = liveSiteSettings?.fields.headerPromoLink;
+  const headerTopLinks = getFieldArray<Entry<any>>(liveSiteSettings, 'headerTopLinks');
+  const headerAccountLinks = getFieldArray<Entry<any>>(liveSiteSettings, 'headerAccountLinks');
+  const headerPromoLink = getField<Entry<any> | null>(liveSiteSettings, 'headerPromoLink', null);
 
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
@@ -115,17 +143,18 @@ export function Header({ siteSettings }: HeaderProps) {
             )}
             <div className="hidden md:flex items-center gap-6">
               {headerTopLinks.map((linkEntry, idx) => {
-                const link = linkEntry as Entry<NavLinkSkeleton>;
-                const href = resolveNavLinkUrl(link);
-                const label = link.fields.label;
+                const href = resolveNavLinkUrl(linkEntry);
+                const label = getField(linkEntry, 'label', '');
+                const openInNewTab = getField(linkEntry, 'openInNewTab', false);
+                const rel = getField(linkEntry, 'rel', '');
                 return (
                   <a
-                    key={idx}
+                    key={linkEntry.sys?.id || idx}
                     href={href}
                     className="hover:text-foreground transition-colors"
-                    target={link.fields.openInNewTab ? "_blank" : undefined}
-                    rel={link.fields.rel}
-                    data-contentful-entry-id={link.sys.id}
+                    target={openInNewTab ? "_blank" : undefined}
+                    rel={rel || undefined}
+                    data-contentful-entry-id={linkEntry.sys?.id}
                     data-contentful-field-id="label"
                   >
                     {label}
@@ -219,14 +248,13 @@ export function Header({ siteSettings }: HeaderProps) {
                 <DropdownMenuContent align="end">
                   {headerAccountLinks.length > 0 ? (
                     headerAccountLinks.map((linkEntry, idx) => {
-                      const link = linkEntry as Entry<NavLinkSkeleton>;
-                      const href = resolveNavLinkUrl(link);
-                      const label = link.fields.label;
+                      const href = resolveNavLinkUrl(linkEntry);
+                      const label = getField(linkEntry, 'label', '');
                       return (
-                        <DropdownMenuItem key={idx} asChild>
+                        <DropdownMenuItem key={linkEntry.sys?.id || idx} asChild>
                           <a
                             href={href}
-                            data-contentful-entry-id={link.sys.id}
+                            data-contentful-entry-id={linkEntry.sys?.id}
                             data-contentful-field-id="label"
                           >
                             {label}
@@ -292,12 +320,12 @@ export function Header({ siteSettings }: HeaderProps) {
             ))}
             {headerPromoLink && (
               <a
-                href={resolveNavLinkUrl(headerPromoLink as Entry<NavLinkSkeleton>)}
+                href={resolveNavLinkUrl(headerPromoLink)}
                 className="text-sm font-medium text-accent hover:text-accent/80 transition-colors"
-                data-contentful-entry-id={(headerPromoLink as Entry<NavLinkSkeleton>).sys.id}
+                data-contentful-entry-id={headerPromoLink.sys?.id}
                 data-contentful-field-id="label"
               >
-                {(headerPromoLink as Entry<NavLinkSkeleton>).fields.label}
+                {getField(headerPromoLink, 'label', '')}
               </a>
             )}
           </div>

@@ -1,5 +1,6 @@
 "use client";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect, useMemo } from "react";
+import { ContentfulLivePreview } from "@contentful/live-preview";
 import { ContentfulLivePreviewProvider } from "@contentful/live-preview/react";
 
 const LivePreviewProviderWrapper = ({
@@ -11,8 +12,26 @@ const LivePreviewProviderWrapper = ({
   locale: string;
   isPreviewEnabled: boolean;
 }) => {
+  useEffect(() => {
+    if (!isPreviewEnabled) return;
+    try {
+      ContentfulLivePreview.init({
+        locale,
+        enableInspectorMode: true,
+        enableLiveUpdates: true,
+      });
+    } catch {
+      // non-fatal
+    }
+  }, [isPreviewEnabled, locale]);
+
+  const providerKey = useMemo(() => `${locale}:${isPreviewEnabled ? "preview" : "no-preview"}`,
+    [locale, isPreviewEnabled]
+  );
+
   return (
     <ContentfulLivePreviewProvider
+      key={providerKey}
       locale={locale}
       enableInspectorMode={isPreviewEnabled}
       enableLiveUpdates={isPreviewEnabled}

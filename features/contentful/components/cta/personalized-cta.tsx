@@ -7,6 +7,11 @@ import type { ICta } from "../../type";
 import CtaWrapper from "./cta-wrapper";
 
 export default function PersonalizedCta(entry: ICta) {
+  // Guard against undefined entry or missing sys/fields
+  if (!entry?.sys?.id || !entry?.fields) {
+    return null;
+  }
+
   const experiencesUnknown = (entry.fields.nt_experiences ?? []) as unknown[];
 
   const isExp = ExperienceMapper.isExperienceEntry as (v: unknown) => boolean;
@@ -30,6 +35,7 @@ export default function PersonalizedCta(entry: ICta) {
 
   return (
     <Experience
+      key={entry.sys.id}
       id={entry.sys.id}
       component={CtaWrapper}
       experiences={experiencesForProp}

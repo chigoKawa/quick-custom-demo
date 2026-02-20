@@ -71,6 +71,7 @@ export interface ICta extends Entry {
     variant: EntryFields.Symbol<"Simple" | "Smooth">;
     imagePlacement?: EntryFields.Symbol<"Left" | "Right">;
     nt_experiences?: Entry<EntrySkeletonType>[];
+    metricEventName?: EntryFields.Symbol;
   };
 }
 
@@ -115,6 +116,7 @@ export interface IHeroModule extends Entry {
     buttons?: EntryFields.Array<IBaseButton>;
     trackingName: EntryFields.Symbol;
     nt_experiences?: Entry<EntrySkeletonType>[];
+    metricEventName?: EntryFields.Symbol;
   };
 }
 
@@ -150,7 +152,16 @@ export interface ILandingPage extends Entry {
     title: EntryFields.Symbol;
     slug: EntryFields.Symbol;
     sections?: EntryFields.Array<
-      EntryFields.EntryLink<CtaSkeleton | HeroModuleSkeleton | ShelfModuleSkeleton | AlertSkeleton | ProductCatalogSkeleton>
+      EntryFields.EntryLink<
+        | CtaSkeleton
+        | HeroModuleSkeleton
+        | ShelfModuleSkeleton
+        | AlertSkeleton
+        | ProductCatalogSkeleton
+        | FormEmbedSkeleton
+        | CalloutSkeleton
+        | KbGroupSkeleton
+      >
     >;
     seoMetadata?: ISeo;
   };
@@ -384,4 +395,17 @@ export interface IFormEmbed extends Entry {
 export type FormEmbedSkeleton = {
   contentTypeId: "formEmbed";
   fields: IFormEmbed["fields"];
+};
+
+export interface IKbGroup extends Entry {
+  fields: {
+    name: EntryFields.Symbol;
+    slug: EntryFields.Symbol;
+    description?: EntryFields.Text;
+  };
+}
+
+export type KbGroupSkeleton = {
+  contentTypeId: "kbGroup";
+  fields: IKbGroup["fields"];
 };

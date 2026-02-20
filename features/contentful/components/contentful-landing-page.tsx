@@ -43,7 +43,7 @@ const ContentfulLandingPage: FC<IProps> = ({ entry: publishedEntry }) => {
               return null;
             }
 
-            return <Component key={`${contentTypeId ?? "section"}-${index}`} {...sectionEntry} />;
+            return <Component key={sectionEntry?.sys?.id ?? `section-${index}`} {...sectionEntry} />;
           })
         : null}
     </div>

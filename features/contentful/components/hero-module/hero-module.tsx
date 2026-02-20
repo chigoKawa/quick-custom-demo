@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useContentfulInspectorMode } from "@contentful/live-preview/react";
-import { useNinetailed } from "@ninetailed/experience.js-react";
+import { useTracking, type MetricEventName } from "@/features/tracking/use-tracking";
 
 export type HeroModuleSlide = {
   title: string;
@@ -22,13 +22,14 @@ export type HeroModuleSlide = {
 type Props = {
   slides: HeroModuleSlide[];
   entryId?: string;
+  metricEventName?: MetricEventName;
 };
 
-export default function HeroModule({ slides, entryId }: Props) {
+export default function HeroModule({ slides, entryId, metricEventName }: Props) {
   const safeSlides = Array.isArray(slides) ? slides.filter((s) => s && s.title) : [];
   const [current, setCurrent] = useState(0);
   const inspectorProps = useContentfulInspectorMode({ entryId: entryId || "" });
-  const { track } = useNinetailed();
+  const { trackMetric } = useTracking();
 
   useEffect(() => {
     if (safeSlides.length <= 1) return;
@@ -50,7 +51,8 @@ export default function HeroModule({ slides, entryId }: Props) {
     ctaHref: string;
   }) => {
     try {
-      void track?.("hero_cta_clicked", {
+      const evt: MetricEventName = (metricEventName as MetricEventName) || "hero_cta_clicked";
+      trackMetric(evt, {
         slideTitle: slide.title,
         location: "hero-module",
         entryId: entryId || "",

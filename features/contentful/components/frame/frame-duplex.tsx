@@ -28,6 +28,12 @@ interface FrameDuplexProps {
 
 function FrameDuplexRender({ frame }: FrameDuplexProps) {
   const liveFrame = useContentfulLiveUpdates(frame) || frame;
+  
+  // Guard against undefined frame or missing sys
+  if (!liveFrame?.sys?.id) {
+    return null;
+  }
+
   const inspectorProps = useContentfulInspectorMode({
     entryId: liveFrame.sys.id,
   });
@@ -340,6 +346,11 @@ function FrameDuplexRender({ frame }: FrameDuplexProps) {
 }
 
 export default function FrameDuplex({ frame }: FrameDuplexProps) {
+  // Guard against undefined frame or missing sys
+  if (!frame?.sys?.id) {
+    return null;
+  }
+
   const experiences = ((frame as any).fields?.nt_experiences ?? []) as unknown[];
   const isExp = ExperienceMapper.isExperienceEntry as (v: unknown) => boolean;
   const mapExp = ExperienceMapper.mapExperience as (v: unknown) => unknown;
@@ -355,6 +366,7 @@ export default function FrameDuplex({ frame }: FrameDuplexProps) {
   if (mappedUnknown.length > 0) {
     return (
       <Experience
+        key={frame.sys.id}
         id={frame.sys.id}
         component={FrameDuplexRender}
         experiences={experiencesForProp}

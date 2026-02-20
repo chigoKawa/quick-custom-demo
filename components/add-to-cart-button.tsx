@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useNinetailed } from "@ninetailed/experience.js-react";
+import { useTracking } from "@/features/tracking/use-tracking";
 
 type Props = {
   label?: string;
@@ -11,7 +11,7 @@ type Props = {
 
 export default function AddToCartButton({ label = "Add to cart", book }: Props) {
   const [isLoading, setIsLoading] = useState(false);
-  const { track } = useNinetailed();
+  const { trackMetric } = useTracking();
 
   return (
     <Button
@@ -21,14 +21,13 @@ export default function AddToCartButton({ label = "Add to cart", book }: Props) 
       onClick={() => {
         setIsLoading(true);
         try {
-          void track?.("add_to_cart", {
+          trackMetric("add_to_cart", {
             location: `${label} button`,
             value: 1,
             title: book?.title,
             price: book?.price?.formatted,
             olid: book?.olid,
             isbn13: book?.isbn13,
-            
           });
         } catch {
           // ignore

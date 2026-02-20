@@ -47,6 +47,12 @@ export default function Thing({
   display?: ThingDisplay;
 }) {
   const liveEntry = useContentfulLiveUpdates(entry) || entry;
+
+  // Guard against undefined entry or missing sys
+  if (!liveEntry?.sys?.id) {
+    return null;
+  }
+
   const experiences = (liveEntry as any)?.fields?.nt_experiences ?? [];
 
   const mapped = Array.isArray(experiences)
@@ -58,6 +64,7 @@ export default function Thing({
   if (mapped.length > 0) {
     return (
       <Experience
+        key={liveEntry.sys.id}
         loadingComponent={() => (
           <ThingView entry={liveEntry as ThingEntry} display={display} />
         )}

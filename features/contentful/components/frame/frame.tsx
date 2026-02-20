@@ -29,6 +29,12 @@ import type {
 
 export default function Frame(frame: IFrame) {
   const liveFrame = useContentfulLiveUpdates(frame) || frame;
+  
+  // Guard against undefined frame or missing sys
+  if (!liveFrame?.sys?.id) {
+    return null;
+  }
+
   const inspectorProps = useContentfulInspectorMode({
     entryId: liveFrame.sys.id,
   });

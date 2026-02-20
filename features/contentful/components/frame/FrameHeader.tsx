@@ -10,6 +10,12 @@ import { ExperienceMapper } from "@ninetailed/experience.js-utils-contentful";
 
 function HeaderRender(entry: IFrameHeader) {
   const liveHeader = (useContentfulLiveUpdates(entry) as IFrameHeader) || entry;
+  
+  // Guard against undefined entry or missing sys
+  if (!liveHeader?.sys?.id) {
+    return null;
+  }
+
   const inspectorProps = useContentfulInspectorMode({ entryId: liveHeader.sys.id });
   const f = liveHeader.fields;
   const eyebrow = f.eyebrow as string | undefined;
@@ -48,7 +54,7 @@ function HeaderRender(entry: IFrameHeader) {
 
 export default function FrameHeader({ frame }: { frame: IFrame }) {
   const headerEntry = frame.fields?.frameHeader as unknown as IFrameHeader | undefined;
-  if (!headerEntry) return null;
+  if (!headerEntry?.sys?.id) return null;
 
   const experiences = (headerEntry.fields?.nt_experiences ?? []) as unknown[];
   const isExp = ExperienceMapper.isExperienceEntry as (v: unknown) => boolean;
@@ -65,6 +71,7 @@ export default function FrameHeader({ frame }: { frame: IFrame }) {
     const HeaderComponent: React.ComponentType<IFrameHeader> = HeaderRender;
     return (
       <Experience
+        key={headerEntry.sys.id}
         id={headerEntry.sys.id}
         component={HeaderComponent}
         experiences={experiencesForProp}

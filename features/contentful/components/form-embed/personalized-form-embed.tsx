@@ -6,6 +6,14 @@ import { ExperienceMapper } from "@ninetailed/experience.js-utils-contentful";
 import type { IFormEmbed } from "../../type";
 import FormEmbedSection from "./form-embed-section";
 
+// Stable wrapper — must be defined outside the render function so
+// <Experience> receives the same component reference across renders.
+// Otherwise React unmounts/remounts the tree on every profile change,
+// causing images to flash.
+const FormEmbedExperienceComponent = (props: IFormEmbed) => (
+  <FormEmbedSection entry={props} />
+);
+
 export default function PersonalizedFormEmbed(entry: IFormEmbed) {
   // Guard against undefined entry or missing sys/fields
   if (!entry?.sys?.id || !entry?.fields) {
@@ -33,15 +41,11 @@ export default function PersonalizedFormEmbed(entry: IFormEmbed) {
   >;
   const experiencesForProp = mappedExperiencesUnknown as unknown as ExperiencesProp;
 
-  const WrappedComponent = (props: IFormEmbed) => (
-    <FormEmbedSection entry={props} />
-  );
-
   return (
     <Experience
       key={entry.sys.id}
       id={entry.sys.id}
-      component={WrappedComponent}
+      component={FormEmbedExperienceComponent}
       experiences={experiencesForProp}
       {...entry}
     />

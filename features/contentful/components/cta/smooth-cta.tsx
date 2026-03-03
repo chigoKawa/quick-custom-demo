@@ -2,8 +2,7 @@ import React, { FC, ReactNode } from "react";
 import { useContentfulInspectorMode } from "@contentful/live-preview/react";
 import { cn } from "@/lib/utils";
 
-const bgImage =
-  "https://images.ctfassets.net/m5vihs7hhhu6/6vGMEoaebHzVLnYQKWzP8r/6b240e791691ca51d7740da012efb8c8/pexels-roman-odintsov-4869223.jpg?w=1920&h=1080&fit=fill";
+type BackgroundColor = "Default" | "Primary" | "Secondary" | "None";
 
 interface IProps {
   entryId: string; // Unique entry ID for live preview inspector mode
@@ -12,15 +11,24 @@ interface IProps {
   images: string[]; // Array of image URLs
   buttons: ReactNode; // Buttons passed as children
   imagePlacement?: "Left" | "Right";
+  backgroundColor?: BackgroundColor;
 }
 
-const SmoothCta: FC<IProps> = ({ title, body, images, buttons, entryId, imagePlacement }) => {
+const bgColorClasses: Record<BackgroundColor, string> = {
+  Default: "bg-muted/50",
+  Primary: "bg-primary/10",
+  Secondary: "bg-secondary",
+  None: "bg-transparent",
+};
+
+const SmoothCta: FC<IProps> = ({ title, body, images, buttons, entryId, imagePlacement, backgroundColor = "Default" }) => {
   const inspectorProps = useContentfulInspectorMode({ entryId });
   const placement = imagePlacement === "Left" ? "Left" : "Right";
+  const bgClass = bgColorClasses[backgroundColor] || bgColorClasses.Default;
 
   return (
-    <section className="relative overflow-hidden">
-      <div className="container mx-auto px-4 py-12 md:py-20">
+    <section className={cn("relative overflow-hidden", bgClass)}>
+      <div className="max-w-7xl mx-auto px-4 py-12 md:py-20">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Text Section */}
           <div className={placement === "Left" ? "order-2 lg:order-2" : "order-2 lg:order-1"}>
@@ -56,12 +64,12 @@ const SmoothCta: FC<IProps> = ({ title, body, images, buttons, entryId, imagePla
               )}
             >
               {Array.isArray(images) &&
-                images.map((image, index) => (
+                images.filter(Boolean).map((image, index, filtered) => (
                   <div
                     key={`key-${index}`}
                     className={cn(
                       "aspect-[4/3] rounded-2xl overflow-hidden bg-secondary",
-                      images.length === 3 && index === 2 && "col-span-2" // Third image in a 3-image set spans full width
+                      filtered.length === 3 && index === 2 && "col-span-2" // Third image in a 3-image set spans full width
                     )}
                   >
                     <img

@@ -1,0 +1,13 @@
+{
+  "name": "Compliance Review",
+  "functions": [
+    {
+      "id": "complianceReviewHandler",
+      "name": "Compliance Review Handler",
+      "description": "Handles compliance review requests",
+      "path": "functions/compliance-review-handler.js",
+      "entryFile": "functions/compliance-review-handler.ts",
+      "accepts": ["appaction.call"]
+    }
+  ]
+}

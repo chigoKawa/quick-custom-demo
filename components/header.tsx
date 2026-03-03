@@ -134,7 +134,8 @@ export function Header({ siteSettings }: HeaderProps) {
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       {/* Top bar */}
       <div className="border-b border-border/50">
-        <div className="container mx-auto px-4 py-2">
+        <div className="container max-w-7xl mx-auto px-4 py-2">
+          more
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             {t("nav.shippingNote") ? (
               <p>{t("nav.shippingNote")}</p>
@@ -167,8 +168,8 @@ export function Header({ siteSettings }: HeaderProps) {
       </div>
 
       {/* Main header */}
-      <div className="border-b border-border/50">
-        <div className="container mx-auto px-4 py-4">
+      <div className="border-b border-border/50 ">
+        <div className="containerx  max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between gap-4">
             {/* Mobile menu */}
             <Sheet>
@@ -302,8 +303,8 @@ export function Header({ siteSettings }: HeaderProps) {
       </div>
 
       {/* Navigation */}
-      <nav className="hidden md:block border-b border-border/50">
-        <div className="container mx-auto px-4">
+      <nav className="hidden md:block border-b border-border/50 ">
+        <div className="containerx max-w-7xl mx-auto px-4">
           <div className="flex items-center gap-8 py-3">
             {mainNavLinks.map((link) => (
               <a

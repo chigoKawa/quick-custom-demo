@@ -71,6 +71,7 @@ export default function HeroModule({ slides, entryId, metricEventName }: Props) 
 
   return (
     <section className="relative overflow-hidden">
+      
       <div className="container mx-auto px-4 py-12 md:py-20">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           <div
@@ -145,12 +146,14 @@ export default function HeroModule({ slides, entryId, metricEventName }: Props) 
               className="aspect-[4/3] rounded-2xl overflow-hidden bg-secondary"
               {...(slide.imageEntryId ? imageInspectorProps({ fieldId: "image" }) : {})}
             >
-              <img
-                src={slide.imageUrl || "/placeholder.svg"}
-                alt={slide.imageAlt || slide.title}
-                className="w-full h-full object-cover"
-                style={{ objectPosition: slide.imageObjectPosition || "center center" }}
-              />
+              {slide.imageUrl ? (
+                <img
+                  src={slide.imageUrl}
+                  alt={slide.imageAlt || slide.title}
+                  className="w-full h-full object-cover"
+                  style={{ objectPosition: slide.imageObjectPosition || "center center" }}
+                />
+              ) : null}
             </div>
             <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-accent/20 rounded-full blur-2xl" />
           </div>

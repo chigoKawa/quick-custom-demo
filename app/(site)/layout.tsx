@@ -29,6 +29,7 @@ export default async function Layout({
       <DemoPanel />
       {/* <NavBar /> */}
       <Header siteSettings={siteSettings} />
+
       {children}
       <Footer siteSettings={siteSettings} />
     </AppProviders>

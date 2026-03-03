@@ -21,7 +21,8 @@ const ContentfulLandingPage: FC<IProps> = ({ entry: publishedEntry }) => {
   const sections = entry?.fields?.sections as unknown as Array<any> | undefined;
 
   return (
-    <div className="w-full overflow-hidden">
+    <div className="w-full overflow-hidden max-w-7xlx mx-auto">
+      
       {/* New: render Frames if present */}
       {Array.isArray(sections)
         ? sections.map((sectionEntry, index) => {

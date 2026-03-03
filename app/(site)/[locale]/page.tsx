@@ -86,7 +86,7 @@ export async function generateMetadata(
     pageEntry?.fields?.seoMetadata?.fields?.ogImage || null
   );
 
-  const fullImageUrl = seoOgImage ? `https:${seoOgImage}?w=1200&h=630` : null;
+  const fullImageUrl = seoOgImage ? `${seoOgImage}?w=1200&h=630` : null;
 
   const images = fullImageUrl
     ? [fullImageUrl, ...previousImages]

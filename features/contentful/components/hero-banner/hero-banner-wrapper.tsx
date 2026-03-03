@@ -15,10 +15,12 @@ const HerobannerWrapper = (entry: IHeroBanner) => {
 
   const headline = entry.fields.headline as string;
   const body = entry.fields.body;
-  const heroImage = entry.fields.heroImage;
+  const heroImage = entry.fields.heroImage ?? null;
   const imageUrl = extractContentfulAssetUrl(heroImage);
   const buttons = entry.fields.actionButtons;
   const variant = entry.fields.variant;
+
+
 
   if (variant === "Centered") {
     return (

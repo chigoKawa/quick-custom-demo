@@ -77,7 +77,7 @@ export default function ProductCatalogSection({ entry }: ProductCatalogSectionPr
           <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
         </div>
         
-        <div className="container mx-auto px-4 py-16 md:py-24 relative">
+        <div className="max-w-7xl mx-auto px-4 py-16 md:py-24 relative">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             {/* Product Image */}
             <div className="order-1 lg:order-1 relative group">
@@ -180,7 +180,7 @@ export default function ProductCatalogSection({ entry }: ProductCatalogSectionPr
   // Multiple products: Grid layout
   return (
     <section className="py-16 md:py-24 bg-gradient-to-b from-muted/30 to-background">
-      <div className="container mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-14">
           <h2

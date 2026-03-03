@@ -6,6 +6,12 @@ import { ExperienceMapper } from "@ninetailed/experience.js-utils-contentful";
 import type { IProductCatalog } from "../../type";
 import ProductCatalogSection from "./product-catalog-section";
 
+// Stable wrapper — must be defined outside the render function so
+// <Experience> receives the same component reference across renders.
+const ProductCatalogExperienceComponent = (props: IProductCatalog) => (
+  <ProductCatalogSection entry={props} />
+);
+
 export default function PersonalizedProductCatalog(entry: IProductCatalog) {
   // Guard against undefined entry or missing sys/fields
   if (!entry?.sys?.id || !entry?.fields) {
@@ -33,16 +39,11 @@ export default function PersonalizedProductCatalog(entry: IProductCatalog) {
   >;
   const experiencesForProp = mappedExperiencesUnknown as unknown as ExperiencesProp;
 
-  // Wrapper component that accepts entry prop
-  const WrappedComponent = (props: IProductCatalog) => (
-    <ProductCatalogSection entry={props} />
-  );
-
   return (
     <Experience
       key={entry.sys.id}
       id={entry.sys.id}
-      component={WrappedComponent}
+      component={ProductCatalogExperienceComponent}
       experiences={experiencesForProp}
       {...entry}
     />

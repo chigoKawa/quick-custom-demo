@@ -44,6 +44,7 @@ export default function FormEmbedSection({ entry }: FormEmbedSectionProps) {
     setError(null);
 
     try {
+     
       const response = await fetch("/api/integrations/forms", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -63,6 +64,13 @@ export default function FormEmbedSection({ entry }: FormEmbedSectionProps) {
           entryId: entry.sys.id,
           formId: selectedForm.id,
         });
+
+         trackMetric("newsletter_signup", {
+        slideTitle: selectedForm.id,
+        location: "form",
+        entryId: selectedForm.id || "",
+
+      });
       } catch {
         // non-fatal
       }
@@ -87,7 +95,7 @@ export default function FormEmbedSection({ entry }: FormEmbedSectionProps) {
             {selectedForm.successMessage?.split("\n")[0] || "Thank you!"}
           </h2>
           <p className="text-muted-foreground whitespace-pre-line">
-            {selectedForm.successMessage?.split("\n").slice(1).join("\n") || 
+            {selectedForm.successMessage?.split("\n").slice(1).join("\n") ||
               "Your submission has been received."}
           </p>
         </div>
@@ -164,7 +172,7 @@ function FormFieldRenderer({ field, value, onChange, allValues }: FormFieldRende
   if (field.conditional) {
     const conditionValue = allValues[field.conditional.field];
     const { operator, value: expectedValue } = field.conditional;
-    
+
     let visible = false;
     switch (operator) {
       case "equals":
@@ -180,7 +188,7 @@ function FormFieldRenderer({ field, value, onChange, allValues }: FormFieldRende
         visible = Array.isArray(conditionValue) && conditionValue.includes(expectedValue);
         break;
     }
-    
+
     if (!visible) return null;
   }
 

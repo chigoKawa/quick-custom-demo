@@ -49,11 +49,13 @@ const VariantPrimary: FC<IProps> = ({
           {/* Image */}
           <div className={cn("order-1 lg:order-2 relative", alignRight ? "lg:order-1" : "")}>
             <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-secondary">
-              <img
-                src={image.url}
-                alt={image.alt || title}
-                className="w-full h-full object-cover"
-              />
+              {image.url ? (
+                <img
+                  src={image.url}
+                  alt={image.alt || title}
+                  className="w-full h-full object-cover"
+                />
+              ) : null}
             </div>
             {/* Decorative element */}
             <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-accent/20 rounded-full blur-2xl" />

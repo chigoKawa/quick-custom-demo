@@ -1,0 +1,14 @@
+{
+  "name": "Locale Scheduler",
+  "src": "app/ctf-apps/sidebar-scheduler/page.tsx",
+  "locations": [
+    {
+      "location": "app-config",
+      "src": "app/ctf-apps/sidebar-scheduler/locations/config-screen.tsx"
+    },
+    {
+      "location": "entry-sidebar",
+      "src": "app/ctf-apps/sidebar-scheduler/locations/sidebar.tsx"
+    }
+  ]
+}

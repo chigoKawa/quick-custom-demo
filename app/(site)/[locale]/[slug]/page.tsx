@@ -61,6 +61,7 @@ export default async function IndexPage({ params, searchParams }: Props) {
         locale={locale}
         isPreviewEnabled={!!isPreviewEnabledFlag}
       >
+        
         <ContentfulLandingPage entry={pageData} />
       </LivePreviewProviderWrapper>
     </div>
@@ -99,7 +100,7 @@ export async function generateMetadata(
   const ogAsset = (pageEntry?.fields?.seoMetadata?.fields?.ogImage ?? null) as Asset | null;
   const seoOgImage = extractContentfulAssetUrl(ogAsset);
 
-  const fullImageUrl = seoOgImage ? `https:${seoOgImage}?w=1200&h=630` : null;
+  const fullImageUrl = seoOgImage ? `${seoOgImage}?w=1200&h=630` : null;
 
   const images = fullImageUrl
     ? [fullImageUrl, ...previousImages]

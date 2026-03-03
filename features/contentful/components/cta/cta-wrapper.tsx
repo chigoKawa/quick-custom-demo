@@ -23,6 +23,7 @@ const CtaWrapper = (entry: ICta) => {
   const buttons = entry?.fields?.actionButtons;
   const variant = entry?.fields?.variant;
   const imagePlacement = entry?.fields?.imagePlacement;
+  const backgroundColor = entry?.fields?.backgroundColor ?? "Default";
 
   const metricEventName = (entry?.fields as any)?.metricEventName as string | undefined;
 
@@ -34,20 +35,22 @@ const CtaWrapper = (entry: ICta) => {
         body={body}
         images={Array.isArray(extractedImageUrls) ? extractedImageUrls : []}
         imagePlacement={imagePlacement === "Left" ? "Left" : "Right"}
+        backgroundColor={backgroundColor}
         buttons={buttons ? <ActionButtonRender buttons={buttons} metricEventName={metricEventName as any} /> : <></>}
       />
     );
   }
 
   return (
-    <div className="relative">
+    <div className="relative ">
+      
       <SimpleCta
-        // alignRight={variant === "Right Aligned"}
         entryId={entry.sys.id}
         title={title}
         body={body}
         images={Array.isArray(extractedImageUrls) ? extractedImageUrls : []}
         imagePlacement={imagePlacement === "Left" ? "Left" : "Right"}
+        backgroundColor={backgroundColor}
         buttons={buttons ? <ActionButtonRender buttons={buttons} metricEventName={metricEventName as any} /> : <></>}
       />
     </div>

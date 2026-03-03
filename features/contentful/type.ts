@@ -161,6 +161,7 @@ export interface ILandingPage extends Entry {
         | FormEmbedSkeleton
         | CalloutSkeleton
         | KbGroupSkeleton
+        | MultiItemModuleSkeleton
       >
     >;
     seoMetadata?: ISeo;
@@ -408,4 +409,44 @@ export interface IKbGroup extends Entry {
 export type KbGroupSkeleton = {
   contentTypeId: "kbGroup";
   fields: IKbGroup["fields"];
+};
+
+export interface ILogo extends Entry {
+  fields: {
+    internalName: EntryFields.Symbol;
+    name?: EntryFields.Symbol;
+    image: Asset;
+    link?: IExternalUrl;
+  };
+}
+
+export type LogoSkeleton = {
+  contentTypeId: "logo";
+  fields: ILogo["fields"];
+};
+
+export interface IMultiItemModule extends Entry {
+  fields: {
+    internalName: EntryFields.Symbol;
+    title?: EntryFields.Symbol;
+    subtitle?: EntryFields.Symbol;
+    items: EntryFields.Array<
+      EntryFields.EntryLink<
+        HeroModuleSkeleton | BlogPostPageSkeleton | LandingPageSkeleton | LogoSkeleton
+      >
+    >;
+    layout: EntryFields.Symbol<"carousel" | "grid" | "strip" | "list">;
+    columns?: EntryFields.Integer;
+    autoplay?: EntryFields.Boolean;
+    autoplayDelayMs?: EntryFields.Integer;
+    showArrows?: EntryFields.Boolean;
+    showDots?: EntryFields.Boolean;
+    backgroundTheme?: EntryFields.Symbol<"default" | "brand" | "alt" | "none">;
+    nt_experiences?: Entry<EntrySkeletonType>[];
+  };
+}
+
+export type MultiItemModuleSkeleton = {
+  contentTypeId: "multiItemModule";
+  fields: IMultiItemModule["fields"];
 };

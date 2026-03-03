@@ -12,10 +12,11 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const extractContentfulAssetUrl = (image: Asset | null): string => {
-  const url: string = image?.fields?.file?.url?.toString() || "";
-  if (url) return url;
-  return "";
+export const extractContentfulAssetUrl = (image: Asset | null | undefined): string => {
+  const raw: string = image?.fields?.file?.url?.toString() || "";
+  if (!raw) return "";
+  // Contentful returns protocol-relative URLs (//images.ctfassets.net/…)
+  return raw.startsWith("//") ? `https:${raw}` : raw;
 };
 
 export function isPreviewEnabled(

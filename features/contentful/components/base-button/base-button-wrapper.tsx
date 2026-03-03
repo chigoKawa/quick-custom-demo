@@ -21,7 +21,19 @@ const sizeMap = {
 // Accepts optional metricEventName from the parent section for tracking clicks
 const BaseButtonWrapper: React.FC<IBaseButton & { metricEventName?: MetricEventName }> = (entry) => {
   // Guard against undefined entry or missing sys
-  if (!entry?.sys?.id || !entry?.fields) {
+  if (!entry?.sys?.id) {
+    return null;
+  }
+
+  // When Contentful's include depth is too shallow, linked entries arrive
+  // as { sys: { type: "Link", … } } without a `fields` property.
+  // Warn in dev so it's easy to diagnose, and render nothing rather than crash.
+  if (!entry.fields) {
+    if (process.env.NODE_ENV === "development") {
+      console.warn(
+        `[BaseButton] Entry ${entry.sys.id} has no fields — likely an unresolved link. Increase the "include" depth in your Contentful query.`
+      );
+    }
     return null;
   }
 
@@ -31,6 +43,10 @@ const BaseButtonWrapper: React.FC<IBaseButton & { metricEventName?: MetricEventN
   const target = entry.fields.target; // Defines the target link
   const openInNewTab = entry.fields.openInNewTab; // Boolean to open in new tab or same tab
   const label = entry.fields.label; // Button label text
+
+  // If label is missing the button is not renderable
+  if (!label) return null;
+
   const targetUrl = extractUrlFromTarget(target); // Extract the actual URL from the target field
 
   const inspectorProps = useContentfulInspectorMode({ entryId: entry.sys.id });

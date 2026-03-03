@@ -41,11 +41,13 @@ const VariantCentered: FC<IProps> = ({ title, body, buttons, entryId, image }) =
           {image && (
             <div className="order-1 lg:order-2 relative lg:col-span-2">
               <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-secondary max-w-2xl mx-auto">
-                <img
-                  src={image.url}
-                  alt={image.alt || title}
-                  className="w-full h-full object-cover"
-                />
+                {image.url ? (
+                  <img
+                    src={image.url}
+                    alt={image.alt || title}
+                    className="w-full h-full object-cover"
+                  />
+                ) : null}
               </div>
               {/* Decorative element */}
               <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-accent/20 rounded-full blur-2xl" />

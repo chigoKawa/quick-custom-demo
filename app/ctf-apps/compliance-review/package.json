@@ -1,0 +1,25 @@
+{
+  "name": "compliance-review",
+  "version": "1.0.0",
+  "description": "Automated compliance review for `topicDefinition` entries using a third-party scoring API.",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+     "build": "npm run build:functions",
+    "build:functions": "contentful-app-scripts build-functions --ci",
+    "upload": "contentful-app-scripts upload"
+  },
+  "devDependencies": {
+    "@contentful/app-scripts": "^2.5.9",
+    "@tsconfig/recommended": "^1.0.13",
+    "@types/node": "^25.3.0",
+    "contentful-management": "^11.72.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@contentful/node-apps-toolkit": "^3.16.0"
+  }
+}

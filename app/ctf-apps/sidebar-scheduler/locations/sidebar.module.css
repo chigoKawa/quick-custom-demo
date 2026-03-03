@@ -1,0 +1,394 @@
+.container {
+  padding: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-size: 13px;
+  color: #1e2329;
+}
+
+/* Header */
+.header {
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e2329;
+  margin: 0 0 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: #8492a6;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Schedule list */
+.scheduleList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.scheduleCard {
+  background: #fff;
+  border: 1px solid #e5eaef;
+  border-radius: 8px;
+  padding: 12px;
+  position: relative;
+}
+
+.scheduleCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.scheduleAction {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.actionPublish {
+  background: #e6f7e9;
+  color: #389e0d;
+}
+
+.actionUnpublish {
+  background: #fff2e8;
+  color: #d46b08;
+}
+
+.scheduleLocales {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.localeBadge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: #f0f5ff;
+  color: #2f54eb;
+}
+
+.scheduleTime {
+  font-size: 12px;
+  color: #5a6872;
+  margin-bottom: 6px;
+}
+
+.scheduleStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.statusPending {
+  background: #fff7e6;
+  color: #d48806;
+}
+
+.statusRunning {
+  background: #e6f7ff;
+  color: #096dd9;
+}
+
+.statusSucceeded {
+  background: #f6ffed;
+  color: #389e0d;
+}
+
+.statusFailed {
+  background: #fff2f0;
+  color: #cf1322;
+}
+
+.statusCanceled {
+  background: #f5f5f5;
+  color: #8c8c8c;
+}
+
+.scheduleError {
+  font-size: 11px;
+  color: #cf1322;
+  margin-top: 6px;
+  padding: 6px 8px;
+  background: #fff2f0;
+  border-radius: 4px;
+  word-break: break-word;
+}
+
+.cancelBtn {
+  font-size: 11px;
+  color: #cf1322;
+  background: none;
+  border: 1px solid #ffa39e;
+  border-radius: 4px;
+  padding: 2px 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.cancelBtn:hover {
+  background: #fff2f0;
+}
+
+/* Empty state */
+.emptyState {
+  text-align: center;
+  padding: 24px 12px;
+  color: #8492a6;
+}
+
+.emptyIcon {
+  font-size: 32px;
+  margin-bottom: 8px;
+  opacity: 0.5;
+}
+
+.emptyText {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* Create form */
+.formSection {
+  border: 1px solid #e5eaef;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  background: #fafbfc;
+}
+
+.formTitle {
+  font-size: 13px;
+  font-weight: 700;
+  margin: 0 0 12px;
+  color: #1e2329;
+}
+
+.formGroup {
+  margin-bottom: 10px;
+}
+
+.formLabel {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #5a6872;
+  margin-bottom: 4px;
+}
+
+.formSelect,
+.formInput {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #cfd9e0;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #1e2329;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.formSelect:focus,
+.formInput:focus {
+  outline: none;
+  border-color: #0066cc;
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.15);
+}
+
+.localeCheckboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.localeCheckbox {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.localeCheckbox input {
+  margin: 0;
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.checkboxRow input {
+  margin: 0;
+}
+
+/* Buttons */
+.btnPrimary {
+  width: 100%;
+  padding: 8px;
+  background: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btnPrimary:hover {
+  background: #0052a3;
+}
+
+.btnPrimary:disabled {
+  background: #cfd9e0;
+  cursor: not-allowed;
+}
+
+.btnSecondary {
+  width: 100%;
+  padding: 8px;
+  background: #fff;
+  color: #0066cc;
+  border: 1px solid #0066cc;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btnSecondary:hover {
+  background: #e6f0ff;
+}
+
+.btnSecondary:disabled {
+  color: #cfd9e0;
+  border-color: #cfd9e0;
+  cursor: not-allowed;
+}
+
+.btnRow {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.btnRow > * {
+  flex: 1;
+}
+
+/* Worker section */
+.workerSection {
+  border-top: 1px solid #e5eaef;
+  padding-top: 12px;
+  margin-top: 12px;
+}
+
+.workerBtn {
+  width: 100%;
+  padding: 8px;
+  background: #722ed1;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.workerBtn:hover {
+  background: #531dab;
+}
+
+.workerBtn:disabled {
+  background: #cfd9e0;
+  cursor: not-allowed;
+}
+
+.workerResult {
+  margin-top: 8px;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.workerResultOk {
+  background: #f6ffed;
+  border: 1px solid #b7eb8f;
+  color: #389e0d;
+}
+
+.workerResultFail {
+  background: #fff2f0;
+  border: 1px solid #ffa39e;
+  color: #cf1322;
+}
+
+/* Loading */
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Tip box */
+.tipBox {
+  background: #e6f7ff;
+  border-left: 3px solid #1890ff;
+  border-radius: 4px;
+  padding: 10px;
+  margin-top: 12px;
+}
+
+.tipBox p {
+  margin: 0;
+  font-size: 11px;
+  color: #0050b3;
+  line-height: 1.5;
+}

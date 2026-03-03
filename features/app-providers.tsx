@@ -21,31 +21,81 @@ type Props = { children: ReactNode };
 const NT_STORAGE_KEY = "ninetailed_profile";
 
 /**
- * Clear stale Ninetailed profile from localStorage.
- * This helps recover from 404 errors when the profile was deleted/aliased on Ninetailed's side.
+ * Wipe Ninetailed profile data from browser storage so the SDK
+ * creates a fresh anonymous profile on next mount.
+ *
+ * @param force  When true, clears even if the profile looks identified.
+ *               Use sparingly — this loses the user's identity link.
  */
-function clearStaleNinetailedProfile() {
+function clearNinetailedStorage(force = false) {
   if (typeof window === "undefined") return;
   try {
-    // Clear the main profile key
-    localStorage.removeItem(NT_STORAGE_KEY);
-    // Also clear any other ninetailed-related keys
-    Object.keys(localStorage).forEach((key) => {
-      if (key.startsWith("ninetailed")) {
-        localStorage.removeItem(key);
+    if (!force) {
+      const stored = localStorage.getItem(NT_STORAGE_KEY);
+      if (stored) {
+        const profile = JSON.parse(stored);
+        // Identified = has traits or a non-anonymous ID (anonymous IDs are 64-char hex SHA-256)
+        const isIdentified =
+          (profile?.traits && Object.keys(profile.traits).length > 0) ||
+          (profile?.id && !/^[a-f0-9]{64}$/.test(profile.id));
+        if (isIdentified) {
+          console.info("[Ninetailed] Skipping storage clear — profile is identified.");
+          return;
+        }
       }
+    }
+    // Remove all ninetailed / nt_ keys from both storages
+    [localStorage, sessionStorage].forEach((storage) => {
+      Object.keys(storage).forEach((key) => {
+        if (key.startsWith("ninetailed") || key.startsWith("nt_")) {
+          storage.removeItem(key);
+        }
+      });
     });
-    console.info("[Ninetailed] Cleared stale profile data from localStorage");
+    console.info("[Ninetailed] Cleared profile storage.");
   } catch {
-    // localStorage may be unavailable in some contexts
+    // storage may be unavailable
   }
 }
 
+/**
+ * Uses the SDK's reset() to properly clear the profile when a 404 or
+ * similar fatal error is detected. Unlike raw localStorage deletion,
+ * reset() lets the SDK tear down cleanly and re-initialize.
+ */
+function ProfileErrorRecovery({ onReset }: { onReset: () => void }) {
+  const { reset } = useNinetailed();
+  const hasReset = useRef(false);
+
+  // Expose a one-shot reset that the parent can trigger via onError
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    // Stash reset function on window so the onError callback can reach it
+    (window as any).__nt_reset = async () => {
+      if (hasReset.current) return;
+      hasReset.current = true;
+      console.warn("[Ninetailed] Resetting profile via SDK reset()…");
+      try {
+        await reset();
+      } catch {
+        // If reset() itself fails, fall back to manual storage wipe
+        clearNinetailedStorage(true);
+      }
+      // Trigger provider remount so a fresh profile is created
+      setTimeout(onReset, 150);
+    };
+    return () => {
+      delete (window as any).__nt_reset;
+    };
+  }, [reset, onReset]);
+
+  return null;
+}
+
 function PageEventOnMount() {
-  const { page, debug, identify } = useNinetailed();
+  const { page, debug } = useNinetailed();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [hasFiredInitial, setHasFiredInitial] = useState(false);
 
   // Enable debug mode in development
   useEffect(() => {
@@ -57,29 +107,15 @@ function PageEventOnMount() {
     }
   }, [debug]);
 
-  // Fire page event immediately on mount and on route changes
+  // Fire page event once per route change.
+  // The SDK is already initialised by the time this component mounts
+  // inside <NinetailedProvider>, so a single call per navigation is enough.
   useEffect(() => {
     if (!page) return;
-
-    // Fire page event immediately - this is critical to avoid the 5000ms timeout
-    const firePageEvent = () => {
-      try {
-        page();
-        if (!hasFiredInitial) {
-          setHasFiredInitial(true);
-        }
-      } catch (err) {
-        console.warn("[Ninetailed] Failed to fire page event:", err);
-      }
-    };
-
-    // Fire immediately
-    firePageEvent();
-
-    // Also fire after a short delay to ensure SDK is fully initialized
-    if (!hasFiredInitial) {
-      const timer = setTimeout(firePageEvent, 100);
-      return () => clearTimeout(timer);
+    try {
+      page();
+    } catch (err) {
+      console.warn("[Ninetailed] page() failed:", err);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, pathname, searchParams?.toString()]);
@@ -114,9 +150,13 @@ export default function AppProviders({ children }: Props) {
       const lastClient = localStorage.getItem("ninetailed_last_client") || null;
       const lastEnv = localStorage.getItem("ninetailed_last_env") || null;
 
-      const changed = (lastClient && clientId && lastClient !== clientId) || (lastEnv && environment && lastEnv !== environment);
-      if (changed) {
-        clearStaleNinetailedProfile();
+      const envChanged =
+        (lastClient && clientId && lastClient !== clientId) ||
+        (lastEnv && environment && lastEnv !== environment);
+
+      if (envChanged) {
+        console.info("[Ninetailed] Environment changed — force-clearing profile.");
+        clearNinetailedStorage(true);
         setProviderKey((k) => k + 1);
       }
 
@@ -146,74 +186,39 @@ export default function AppProviders({ children }: Props) {
     };
   }, [pathname]);
 
-  // Listen for Ninetailed 404 errors and clear stale profile
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+  // SDK-level error handler: passed to <NinetailedProvider onError>.
+  // When the Experience API returns a 404 (stale profile), we call
+  // reset() via the ProfileErrorRecovery child to get a fresh profile.
+  const handleNinetailedError = useCallback(
+    (error: string | Error, ...args: unknown[]) => {
+      const msg = [String(error), ...args.map(String)].join(" ");
+      console.warn("[Ninetailed] SDK error:", msg);
 
-    // Track if we've already cleared to avoid loops
-    let hasCleared = false;
+      const is404 =
+        msg.includes("404") || msg.includes("[404]") || msg.includes("not retryable");
+      const isProfileIssue =
+        msg.includes("Update Profile") ||
+        msg.includes("Profile request failed") ||
+        msg.includes("request failed");
 
-    const handleError = (event: ErrorEvent) => {
-      if (hasCleared) return;
-      const msg = event.message || "";
-      // Detect Ninetailed profile 404 errors
-      if (
-        (msg.includes("Update Profile request failed") || msg.includes("Update Profile")) &&
-        (msg.includes("404") || msg.includes("[404]"))
-      ) {
-        console.warn(
-          "[Ninetailed] Detected stale profile (404). Clearing localStorage and reinitializing..."
-        );
-        hasCleared = true;
-        clearStaleNinetailedProfile();
-        // Force provider remount to create fresh profile
-        setProviderKey((k) => k + 1);
+      if (is404 && isProfileIssue) {
+        // Try SDK reset() first (set up by ProfileErrorRecovery)
+        const sdkReset = (window as any).__nt_reset;
+        if (typeof sdkReset === "function") {
+          sdkReset();
+        } else {
+          // Fallback: manual wipe + remount
+          clearNinetailedStorage();
+          setTimeout(() => setProviderKey((k) => k + 1), 150);
+        }
       }
-    };
+    },
+    []
+  );
 
-    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
-      if (hasCleared) return;
-      const reason = String(event.reason || "");
-      if (
-        (reason.includes("404") || reason.includes("[404]")) &&
-        (reason.includes("Profile") || reason.includes("Update Profile"))
-      ) {
-        console.warn(
-          "[Ninetailed] Detected stale profile (404 rejection). Clearing localStorage..."
-        );
-        hasCleared = true;
-        clearStaleNinetailedProfile();
-        setProviderKey((k) => k + 1);
-      }
-    };
-
-    // Also intercept console.error to catch SDK errors that don't throw
-    const originalConsoleError = console.error;
-    console.error = (...args: unknown[]) => {
-      originalConsoleError.apply(console, args);
-      if (hasCleared) return;
-      const msg = args.map((a) => String(a)).join(" ");
-      if (
-        (msg.includes("Update Profile request failed") || msg.includes("Update Profile")) &&
-        (msg.includes("404") || msg.includes("[404]"))
-      ) {
-        console.warn(
-          "[Ninetailed] Detected stale profile via console.error. Clearing localStorage..."
-        );
-        hasCleared = true;
-        clearStaleNinetailedProfile();
-        setProviderKey((k) => k + 1);
-      }
-    };
-
-    window.addEventListener("error", handleError);
-    window.addEventListener("unhandledrejection", handleUnhandledRejection);
-
-    return () => {
-      window.removeEventListener("error", handleError);
-      window.removeEventListener("unhandledrejection", handleUnhandledRejection);
-      console.error = originalConsoleError;
-    };
+  // Stable callback for ProfileErrorRecovery
+  const handleProfileReset = useCallback(() => {
+    setProviderKey((k) => k + 1);
   }, []);
 
   useEffect(() => {
@@ -322,15 +327,21 @@ export default function AppProviders({ children }: Props) {
       key={combinedKey}
       clientId={process.env.NEXT_PUBLIC_NINETAILED_CLIENT_ID as string}
       environment={process.env.NEXT_PUBLIC_NINETAILED_ENVIRONMENT}
-      // @ts-expect-error The provider's plugin prop types vary by package version; this array is correct at runtime.
-      plugins={plugins}
+      plugins={plugins as any[]}
       componentViewTrackingThreshold={2000}
       useSDKEvaluation={true}
+      onError={handleNinetailedError}
+      onLog={(...args: unknown[]) => {
+        if (process.env.NODE_ENV === "development") {
+          console.debug("[Ninetailed]", ...args);
+        }
+      }}
       
        
     >
       <LivePreviewProviderWrapper locale={effectiveLocale} isPreviewEnabled={!!previewEnabled}>
         <Suspense fallback={null}>
+          <ProfileErrorRecovery onReset={handleProfileReset} />
           <PageEventOnMount />
         </Suspense>
         {children}

@@ -31,11 +31,11 @@ export default function HeroModuleWrapper(entry: IHeroModule) {
 
   // Extract image with focal point support
   const imageEntry = entry?.fields?.image;
-  const { 
-    url: imageUrl, 
-    alt: imageAlt, 
+  const {
+    url: imageUrl,
+    alt: imageAlt,
     objectPosition,
-    entryId: imageEntryId 
+    entryId: imageEntryId
   } = extractImageWithFocalPoint(imageEntry);
 
   const buttons = mapButtons(entry?.fields?.buttons);
@@ -54,10 +54,12 @@ export default function HeroModuleWrapper(entry: IHeroModule) {
   if (!slide.title) return null;
 
   return (
-    <HeroModule
-      slides={[slide]}
-      entryId={entry?.sys?.id}
-      metricEventName={(entry?.fields as unknown as { metricEventName?: string })?.metricEventName as any}
-    />
+    <div className="max-w-7xl mx-auto">
+      <HeroModule
+        slides={[slide]}
+        entryId={entry?.sys?.id}
+        metricEventName={(entry?.fields as unknown as { metricEventName?: string })?.metricEventName as any}
+      />
+    </div>
   );
 }

@@ -9,12 +9,19 @@ interface IProps {
 }
 
 const ActionButtonRender: FC<IProps> = ({ buttons, metricEventName }) => {
+  if (!Array.isArray(buttons) || buttons.length === 0) return null;
+
   return (
     <div className="flex flex-col md:flex-row gap-6 ">
-      {/* Loop through the buttons array and render each button using BaseButtonWrapper */}
-      {buttons?.map((button, index) => (
-        <BaseButtonWrapper key={`key-${index}`} {...button} metricEventName={metricEventName} />
-      ))}
+      {buttons
+        .filter((b): b is IBaseButton => Boolean(b?.sys?.id))
+        .map((button, index) => (
+          <BaseButtonWrapper
+            key={`btn-${button.sys.id}-${index}`}
+            {...button}
+            metricEventName={metricEventName}
+          />
+        ))}
     </div>
   );
 };

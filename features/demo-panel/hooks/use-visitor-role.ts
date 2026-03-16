@@ -27,7 +27,7 @@ export function useVisitorRole() {
         const role = stored as VisitorRole;
         setSelectedRole(role);
         // Re-apply the role to Ninetailed
-        identify("", { role }).catch((err) => {
+        identify("", { role }).catch((err: unknown) => {
           console.warn("[DemoPanel] Failed to re-apply persisted role:", err);
         });
       }

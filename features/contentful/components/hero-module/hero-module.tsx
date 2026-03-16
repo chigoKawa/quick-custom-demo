@@ -143,14 +143,14 @@ export default function HeroModule({ slides, entryId, metricEventName }: Props) 
             }
           >
             <div 
-              className="aspect-[4/3] rounded-2xl overflow-hidden bg-secondary"
+              className="rounded-2xl overflow-hidden bg-secondary flex items-center justify-center min-h-[280px] md:min-h-[360px] p-4"
               {...(slide.imageEntryId ? imageInspectorProps({ fieldId: "image" }) : {})}
             >
               {slide.imageUrl ? (
                 <img
                   src={slide.imageUrl}
                   alt={slide.imageAlt || slide.title}
-                  className="w-full h-full object-cover"
+                  className="max-w-full max-h-[420px] w-auto h-auto object-contain rounded-xl"
                   style={{ objectPosition: slide.imageObjectPosition || "center center" }}
                 />
               ) : null}

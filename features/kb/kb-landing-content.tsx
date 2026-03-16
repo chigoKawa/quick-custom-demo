@@ -93,7 +93,7 @@ export default function KbLandingContent({ locale, landingEntry, topicCountsData
   return (
     <div className="flex flex-col">
       <KbHeroSection locale={locale} microcopy={microcopy} />
-      <KbTopicsSection locale={locale} topics={topics} />
+      <KbTopicsSection locale={locale} topics={topics} microcopy={microcopy} />
       
       {/* Render non-kbGroup sections from Contentful */}
       {nonKbGroupSections.length > 0 && (

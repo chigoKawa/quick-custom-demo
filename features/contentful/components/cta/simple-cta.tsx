@@ -69,14 +69,14 @@ const SimpleCta: FC<IProps> = ({ title, body, images, buttons, entryId, imagePla
                   <div
                     key={`key-${index}`}
                     className={cn(
-                      "aspect-[4/3] rounded-2xl overflow-hidden bg-secondary",
-                      filtered.length === 3 && index === 2 && "col-span-2" // Third image in a 3-image set spans full width
+                      "rounded-2xl overflow-hidden bg-secondary flex items-center justify-center min-h-[200px] md:min-h-[280px] p-4",
+                      filtered.length === 3 && index === 2 && "col-span-2"
                     )}
                   >
                     <img
                       alt=""
                       src={image}
-                      className="w-full h-full object-cover"
+                      className="max-w-full max-h-[380px] w-auto h-auto object-contain rounded-xl"
                     />
                   </div>
                 ))}

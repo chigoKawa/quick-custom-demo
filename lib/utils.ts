@@ -6,6 +6,7 @@ import {
   IExternalUrl,
   IBlogPostPage,
   ICategoryPage,
+  IProductStory,
 } from "@/features/contentful/type";
 
 export function cn(...inputs: ClassValue[]) {
@@ -27,7 +28,7 @@ export function isPreviewEnabled(
 }
 
 export const extractUrlFromTarget = (
-  target: IExternalUrl | ILandingPage | IBlogPostPage | ICategoryPage
+  target: IExternalUrl | ILandingPage | IBlogPostPage | ICategoryPage | IProductStory
 ) => {
   const contentType = target?.sys?.contentType?.sys?.id;
   if (contentType === "landingPage") {
@@ -49,6 +50,12 @@ export const extractUrlFromTarget = (
     const entry = target as ICategoryPage;
     const slug = entry?.fields?.slug;
     return slug ? `/category/${slug}` : "";
+  }
+
+  if (contentType === "productStory") {
+    const entry = target as IProductStory;
+    const slug = entry?.fields?.slug;
+    return slug ? `/stories/${slug}` : "";
   }
 
   if (contentType === "externalLink") {

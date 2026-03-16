@@ -308,7 +308,7 @@ export default function ConfigScreen() {
           <div className={styles.infoBox}>
             <p>
               <strong>💡 Tip:</strong> Your credentials are stored securely in Contentful and never
-              exposed in your frontend code. They're only used server-side for API calls.
+              exposed in your frontend code. They&apos;re only used server-side for API calls.
             </p>
           </div>
         </div>

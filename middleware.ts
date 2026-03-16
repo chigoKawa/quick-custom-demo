@@ -82,6 +82,6 @@ export async function middleware(request: NextRequest) {
 export const config = {
   // Ignore API routes and Next.js static assets
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|setup|ctf-apps|.*\\..*).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|setup|ctf-apps|platform|.*\\..*).*)",
   ],
 };

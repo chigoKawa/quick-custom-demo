@@ -121,6 +121,7 @@ export default function KbHeroSection({ locale, onSearchActive, microcopy }: Pro
                 placeholder={getText("kb.hero.searchPlaceholder").value}
                 className="w-full rounded-lg border-0 bg-white text-foreground pl-12 pr-12 py-4 text-base shadow-lg focus:outline-none focus:ring-2 focus:ring-white/50 placeholder:text-muted-foreground"
                 aria-label="Search knowledge base"
+                {...getText("kb.hero.searchPlaceholder").inspectorProps}
               />
               {q && (
                 <button

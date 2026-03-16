@@ -135,7 +135,7 @@ export function Header({ siteSettings }: HeaderProps) {
       {/* Top bar */}
       <div className="border-b border-border/50">
         <div className="container max-w-7xl mx-auto px-4 py-2">
-          more
+          
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             {t("nav.shippingNote") ? (
               <p>{t("nav.shippingNote")}</p>

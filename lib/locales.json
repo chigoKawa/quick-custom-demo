@@ -53,5 +53,38 @@
       "type": "Locale",
       "version": 1
     }
+  },
+  {
+    "code": "fi",
+    "name": "Finnish",
+    "default": false,
+    "fallbackCode": "en-US",
+    "sys": {
+      "id": "032v9DMXAkDxYL3ANzt0xj",
+      "type": "Locale",
+      "version": 1
+    }
+  },
+  {
+    "code": "sv",
+    "name": "Swedish",
+    "default": false,
+    "fallbackCode": "fi",
+    "sys": {
+      "id": "032v9ExRC6oqMAYd7vc9cM",
+      "type": "Locale",
+      "version": 1
+    }
+  },
+  {
+    "code": "es-MX",
+    "name": "Spanish (Mexico)",
+    "default": false,
+    "fallbackCode": "es",
+    "sys": {
+      "id": "032vbds7gkGjRP1l1WVlYF",
+      "type": "Locale",
+      "version": 1
+    }
   }
 ]

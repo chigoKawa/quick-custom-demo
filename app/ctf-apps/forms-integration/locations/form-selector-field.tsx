@@ -109,7 +109,7 @@ export default function FormSelectorField() {
       shouldCloseOnEscapePress: true,
       parameters: {
         selectedForm: config.selectedForm,
-      },
+      } as unknown as Record<string, string>,
     });
 
     if (result && typeof result === 'object' && 'selectedForm' in result) {

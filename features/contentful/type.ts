@@ -35,7 +35,7 @@ export interface IBaseButton extends Entry {
   fields: {
     internalTitle: EntryFields.Symbol;
     label: EntryFields.Symbol;
-    target: IExternalUrl;
+    target: IExternalUrl | ILandingPage | IBlogPostPage | ICategoryPage | IProductStory;
     openInNewTab?: EntryFields.Boolean;
     color: EntryFields.Symbol<
       "Default" | "Primary" | "Secondary" | "Success" | "Danger" | "Warning"
@@ -449,4 +449,41 @@ export interface IMultiItemModule extends Entry {
 export type MultiItemModuleSkeleton = {
   contentTypeId: "multiItemModule";
   fields: IMultiItemModule["fields"];
+};
+
+// -----------------------------
+// Product Story content type
+// -----------------------------
+
+export interface IProductStory extends Entry {
+  fields: {
+    internalName: EntryFields.Symbol;
+    slug: EntryFields.Symbol;
+    primaryProduct: EntryFields.Object<JsonObject>;
+    additionalProducts?: EntryFields.Object<JsonObject>;
+    heroModule?: EntryFields.EntryLink<
+      HeroBannerSkeleton | HeroModuleSkeleton
+    >;
+    sections?: EntryFields.Array<
+      EntryFields.EntryLink<
+        | CtaSkeleton
+        | HeroModuleSkeleton
+        | ShelfModuleSkeleton
+        | AlertSkeleton
+        | ProductCatalogSkeleton
+        | FormEmbedSkeleton
+        | CalloutSkeleton
+        | KbGroupSkeleton
+        | MultiItemModuleSkeleton
+      >
+    >;
+    storyAngle?: EntryFields.Array<EntryFields.Symbol>;
+    seoMetadata?: ISeo;
+    nt_experiences?: Entry<EntrySkeletonType>[];
+  };
+}
+
+export type ProductStorySkeleton = {
+  contentTypeId: "productStory";
+  fields: IProductStory["fields"];
 };

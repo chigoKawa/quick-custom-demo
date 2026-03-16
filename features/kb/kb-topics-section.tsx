@@ -3,6 +3,8 @@
 import React from "react";
 import Link from "next/link";
 import { BookOpen, CreditCard, Shield, User, Settings, HelpCircle } from "lucide-react";
+ import type { MicrocopyDataMap } from "@/lib/microcopy";
+ import { useMicrocopyHelper } from "@/hooks/use-microcopy";
 
 type TopicCardProps = {
   slug: string;
@@ -44,16 +46,24 @@ function TopicCard({ slug, name, articleCount, locale, icon }: TopicCardProps) {
 type Props = {
   locale: string;
   topics: Array<{ slug: string; name: string; articleCount: number }>;
+  microcopy?: MicrocopyDataMap;
 };
 
-export default function KbTopicsSection({ locale, topics }: Props) {
+const DEFAULT_COPY: Record<string, string> = {
+  "kb.topics.intro": "Choose one of the main topics listed below to get started.",
+};
+
+export default function KbTopicsSection({ locale, topics, microcopy }: Props) {
   if (!topics.length) return null;
+
+  const t = useMicrocopyHelper(microcopy);
+  const getText = (key: string) => t(key, DEFAULT_COPY[key] || key);
 
   return (
     <section className="py-16 md:py-20">
       <div className="container mx-auto px-4">
-        <p className="text-center text-muted-foreground mb-10">
-          Choose one of the main topics listed below to get started.
+        <p className="text-center text-muted-foreground mb-10" {...getText("kb.topics.intro").inspectorProps}>
+          {getText("kb.topics.intro").value}
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">

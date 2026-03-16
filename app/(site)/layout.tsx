@@ -1,7 +1,7 @@
-import Footer from "@/features/layout/footer";
 import AppProviders from "@/features/app-providers";
-import { Header } from "@/components/header";
 import { DemoPanel } from "@/features/demo-panel";
+import PersonalizedSiteSettings from "@/features/personalization/personalized-site-settings";
+import CouponAlert from "@/features/personalization/coupon-alert";
 import { getSiteSettings } from "@/lib/site-settings";
 import { draftMode } from "next/headers";
 
@@ -27,11 +27,10 @@ export default async function Layout({
   return (
     <AppProviders>
       <DemoPanel />
-      {/* <NavBar /> */}
-      <Header siteSettings={siteSettings} />
-
-      {children}
-      <Footer siteSettings={siteSettings} />
+      <PersonalizedSiteSettings siteSettings={siteSettings}>
+        <CouponAlert />
+        {children}
+      </PersonalizedSiteSettings>
     </AppProviders>
   );
 }

@@ -1,5 +1,5 @@
 import { getEntries } from "./contentful";
-import type { Entry, Asset } from "contentful";
+import type { Entry, Asset, EntrySkeletonType } from "contentful";
 
 // Type definitions for site settings
 export interface SiteSettingsSkeleton {
@@ -23,6 +23,7 @@ export interface SiteSettingsSkeleton {
     themeForeground?: string;
     themeSecondary?: string;
     themeAccent?: string;
+    nt_experiences?: Entry<EntrySkeletonType>[];
   };
 }
 
@@ -87,14 +88,24 @@ export async function getSiteSettings(
   const entries = await getEntries<SiteSettingsSkeleton>(
     {
       content_type: "siteSettings",
-      limit: 1,
       locale,
       include: 5, // Deep include to get all nested references
+      order: "sys.createdAt", // Oldest first — baseline before variants
     },
     preview || false
   );
 
-  return entries[0] || null;
+  // With personalization variants there may be multiple siteSettings entries.
+  // The baseline (original) is the one that has nt_experiences linked;
+  // variant entries created by Ninetailed won't have that field populated.
+  // Fall back to the first (oldest) entry if none have experiences.
+  const baseline = entries.find(
+    (e) =>
+      Array.isArray((e.fields as Record<string, unknown>).nt_experiences) &&
+      ((e.fields as Record<string, unknown>).nt_experiences as unknown[]).length > 0
+  );
+
+  return baseline || entries[0] || null;
 }
 
 // Safe field accessor for Contentful entries (handles localized vs resolved fields)

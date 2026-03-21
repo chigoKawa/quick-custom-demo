@@ -1,130 +1,156 @@
 [
   {
-    "id": "poppy-pin-classic-001",
-    "title": "Classic Enamel Poppy Pin",
-    "slug": "classic-enamel-poppy-pin",
-    "description": "The iconic enamel poppy lapel pin to show your support for the Armed Forces community.",
-    "price": 4.99,
-    "currency": "GBP",
-    "images": ["https://tse2.mm.bing.net/th/id/OIP.N8lgZRHeUqPb-XQ-ELnVbQHaHQ?rs=1&pid=ImgDetMain&o=7&rm=3"],
-    "category": "pins-and-brooches",
-    "tags": ["poppy", "lapel-pin", "remembrance", "unisex"],
-    "stock": 120,
-    "rating": 4.8,
-    "reviewCount": 274,
-    "metadata": {
-      "material": "Enamel on metal",
-      "finish": "Gold-tone",
-      "dimensionsMm": "22 x 22",
-      "year": 2026,
-      "range": "Core Poppy"
-    }
-  },
-  {
-    "id": "poppy-pin-dated-2026-002",
-    "title": "2026 Dated Poppy Lapel Pin",
-    "slug": "2026-dated-poppy-lapel-pin",
-    "description": "Limited-edition 2026 dated poppy pin to mark this year’s Poppy Appeal.",
-    "price": 5.0,
-    "currency": "GBP",
-    "images": ["https://www.poppyshop.org.uk/cdn/shop/files/JW4877_2025_Dated_Poppy_Lapel_Pin__3_new_3_baa18d60-10cf-4612-849e-770e9c46850c.jpg?crop=center&height=900&v=1737626161&width=900"],
-    "category": "pins-and-brooches",
-    "tags": ["poppy", "limited-edition", "dated-2026", "collector"],
-    "stock": 80,
-    "rating": 4.7,
-    "reviewCount": 139,
-    "metadata": {
-      "material": "Enamel on zinc alloy",
-      "finish": "Antique gold",
-      "dimensionsMm": "24 x 24",
-      "year": 2026,
-      "range": "Dated Collection"
-    }
-  },
-  {
-    "id": "poppy-brooch-beaded-003",
-    "title": "Beaded Poppy Brooch",
-    "slug": "beaded-poppy-brooch",
-    "description": "A hand-finished beaded poppy brooch that adds a touch of sparkle to coats, scarves and bags.",
-    "price": 10.0,
-    "currency": "GBP",
-    "images": ["https://tse1.mm.bing.net/th/id/OIP.voW9y4xYTcZApZz6ub5xzQHaF7?rs=1&pid=ImgDetMain&o=7&rm=3"],
-    "category": "pins-and-brooches",
-    "tags": ["poppy", "brooch", "beaded", "statement"],
-    "stock": 52,
+    "id": "elon-electrolux-ep71ub14db-121020",
+    "title": "Sladdlös dammsugare Electrolux EP71UB14DB",
+    "slug": "electrolux-ep71ub14db",
+    "description": "Kompakt och kraftfull skaftdammsugare utan sladd – den ultimata lösningen för ditt hem.",
+    "price": 3990,
+    "currency": "SEK",
+    "images": [
+      "https://images.ctfassets.net/ace0ba6p9v98/1MqbYZ86gLDU4BIgfgVo3y/105fbba9be53e61cdef7c57f8096e181/electrolux-ep71ub14db-121020-1.jpeg"
+    ],
+    "category": "vacuum-cleaners",
+    "tags": ["electrolux", "skaftdammsugare", "sladdlos", "stadsprodukter"],
+    "stock": 40,
     "rating": 4.6,
-    "reviewCount": 88,
+    "reviewCount": 112,
     "metadata": {
-      "material": "Glass beads, felt backing",
-      "closure": "Pin with safety clasp",
-      "dimensionsMm": "40 x 40",
-      "range": "Occasion Wear",
-      "care": "Spot clean only"
+      "brand": "Electrolux",
+      "model": "EP71UB14DB",
+      "articleNumber": "121020",
+      "type": "Sladdlös dammsugare"
     }
   },
   {
-    "id": "scarf-navy-magnetic-004",
-    "title": "Navy Magnetic Neck Poppy Scarf",
-    "slug": "navy-magnetic-neck-poppy-scarf",
-    "description": "A soft navy scarf with an all-over poppy print and an easy magnetic neck fastening for secure wear.",
-    "price": 14.99,
-    "currency": "GBP",
-    "images": ["https://www.rafatrad.co.uk/cdn/shop/products/TS19042NavyStemPoppyScarf1WEB.jpg?v=1635430159"],
-    "category": "accessories",
-    "tags": ["scarf", "poppy", "accessory", "magnetic-fastening"],
-    "stock": 67,
+    "id": "elon-elvita-ctm3714vn-147066",
+    "title": "Tvättmaskin Elvita CTM3714VN",
+    "slug": "elvita-ctm3714vn",
+    "description": "Praktisk och kompakt tvättmaskin – ett kraftpaket med ångfunktion.",
+    "price": 5990,
+    "currency": "SEK",
+    "images": [
+      "https://images.ctfassets.net/ace0ba6p9v98/6mu4JUBmhAxnCw2EycsJOH/3d3c5c40e9326bbe82014b6b002ab370/elvita-ctm3714vn-147066-1.jpeg"
+    ],
+    "category": "washing-machines",
+    "tags": ["elvita", "tvattmaskin", "vitvaror", "kompakt"],
+    "stock": 25,
     "rating": 4.4,
-    "reviewCount": 63,
+    "reviewCount": 58,
     "metadata": {
-      "material": "100% polyester",
-      "dimensionsCm": "180 x 70",
-      "colour": "Navy with red poppies",
-      "fastening": "Concealed magnetic clasp",
-      "range": "Poppy Fashion"
+      "brand": "Elvita",
+      "model": "CTM3714VN",
+      "articleNumber": "147066",
+      "type": "Tvättmaskin"
     }
   },
   {
-    "id": "umbrella-poppy-heart-005",
-    "title": "Poppy and Heart RPET Umbrella",
-    "slug": "poppy-and-heart-rpet-umbrella",
-    "description": "A compact, eco-conscious umbrella made from recycled RPET fabric with a poppy and heart print.",
-    "price": 5.99,
-    "currency": "GBP",
-    "images": ["https://tse1.mm.bing.net/th/id/OIP._iUHcBlN7y38St411rIOSgHaHa?rs=1&pid=ImgDetMain&o=7&rm=3"],
-    "category": "accessories",
-    "tags": ["umbrella", "poppy", "rpet", "sustainable"],
-    "stock": 90,
-    "rating": 4.3,
-    "reviewCount": 41,
+    "id": "elon-lg-oled55b56la-150025",
+    "title": "TV LG 55\" - OLED55B56LA",
+    "slug": "lg-oled55b56la-55",
+    "description": "55\" OLED – gör soffan till din favoritplats.",
+    "price": 9990,
+    "currency": "SEK",
+    "images": [
+      "https://images.ctfassets.net/ace0ba6p9v98/4UZ3fuUkSrKJpHD0Fgl3FU/0e5b7de8b2ca9f9ee5fe60bee1f81b09/lg-oled55b56la-150025-1.jpeg"
+    ],
+    "category": "tv",
+    "tags": ["lg", "oled", "4k", "smart-tv"],
+    "stock": 12,
+    "rating": 4.7,
+    "reviewCount": 96,
     "metadata": {
-      "material": "RPET canopy, metal frame",
-      "mechanism": "Manual open/close",
-      "foldedLengthCm": 25,
-      "canopyDiameterCm": 95,
-      "range": "Sustainable Collection"
+      "brand": "LG",
+      "model": "OLED55B56LA",
+      "articleNumber": "150025",
+      "type": "TV"
     }
   },
-
   {
-    "id": "decoration-christmas-wreath-007",
-    "title": "Christmas Poppy Wreath Decoration",
-    "slug": "christmas-poppy-wreath-decoration",
-    "description": "A festive hanging wreath decoration combining traditional Christmas greenery with poppy accents.",
-    "price": 10.0,
-    "currency": "GBP",
-    "images": ["https://m.media-amazon.com/images/I/814b7M+LDcL._AC_SL1500_.jpg"],
-    "category": "home",
-    "tags": ["christmas", "wreath", "poppy", "decoration"],
-    "stock": 38,
+    "id": "elon-roborock-q10-vf-black-151057",
+    "title": "Robotdammsugare RoboRock Q10 VF+ Black",
+    "slug": "roborock-q10-vf-black",
+    "description": "Kraftfull 2-i-1 robot med självrengörande docka för helt automatiserad städning.",
+    "price": 5488,
+    "currency": "SEK",
+    "images": [
+      "https://images.ctfassets.net/ace0ba6p9v98/5FtxblJoYqf0jloXiC4RUr/ca4b6e9e22cc6527e12dfe363b3acf56/roborock-q10-vf-black-151057-1.jpeg"
+    ],
+    "category": "robot-vacuums",
+    "tags": ["roborock", "robotdammsugare", "stadsprodukter", "smart-home"],
+    "stock": 18,
+    "rating": 4.5,
+    "reviewCount": 74,
+    "metadata": {
+      "brand": "RoboRock",
+      "model": "Q10 VF+ Black",
+      "articleNumber": "151057",
+      "type": "Robotdammsugare"
+    }
+  },
+  {
+    "id": "elon-siemens-tp515r01-149060",
+    "title": "Helautomatisk kaffemaskin Siemens TP515R01",
+    "slug": "siemens-tp515r01",
+    "description": "Helautomatisk kaffemaskin – starta dagen med cafékänsla hemma.",
+    "price": 8990,
+    "currency": "SEK",
+    "images": [
+      "https://images.ctfassets.net/ace0ba6p9v98/3lKcxjfyYIODZxk0CiMJl9/c3a5524b92d7a9f0bdbb321ef4d54423/siemens-tp515r01-149060-1.jpeg"
+    ],
+    "category": "coffee-machines",
+    "tags": ["siemens", "kaffemaskin", "espresso", "home"],
+    "stock": 14,
     "rating": 4.6,
-    "reviewCount": 32,
+    "reviewCount": 39,
     "metadata": {
-      "material": "Mixed artificial foliage, ribbon",
-      "diameterCm": 28,
-      "display": "Indoor use recommended",
-      "range": "Christmas Collection",
-      "packaging": "Gift box included"
+      "brand": "Siemens",
+      "model": "TP515R01",
+      "articleNumber": "149060",
+      "type": "Helautomatisk kaffemaskin"
+    }
+  },
+  {
+    "id": "elon-electrolux-eaf7b-124264",
+    "title": "Airfryer Electrolux EAF7B",
+    "slug": "electrolux-eaf7b",
+    "description": "Smart och mångsidig airfryer för hälsosam matlagning på ett enkelt sätt.",
+    "price": 1990,
+    "currency": "SEK",
+    "images": [
+      "https://images.ctfassets.net/ace0ba6p9v98/2mGGKDAWYG8UUrjGYl1bmH/deb65231450260f2f86860a45f1d7a72/electrolux-eaf7b-124264-1.jpeg"
+    ],
+    "category": "airfryers",
+    "tags": ["electrolux", "airfryer", "koksapparater", "healthy"],
+    "stock": 22,
+    "rating": 4.5,
+    "reviewCount": 51,
+    "metadata": {
+      "brand": "Electrolux",
+      "model": "EAF7B",
+      "articleNumber": "124264",
+      "type": "Airfryer"
+    }
+  },
+  {
+    "id": "elon-siemens-sr63hx75me-151619",
+    "title": "Integrerad diskmaskin Siemens SR63HX75ME",
+    "slug": "siemens-sr63hx75me",
+    "description": "Integrerad diskmaskin med smarta funktioner och Home Connect.",
+    "price": 12999,
+    "currency": "SEK",
+    "images": [
+      "https://images.ctfassets.net/ace0ba6p9v98/5z3hBoj66doiNcYAUtzhep/dc92183fd36e9b4c0890675f871d4b4e/siemens-sr63hx75me-151619-1.jpeg"
+    ],
+    "category": "dishwashers",
+    "tags": ["siemens", "diskmaskin", "integrerad", "home-connect"],
+    "stock": 10,
+    "rating": 4.4,
+    "reviewCount": 27,
+    "metadata": {
+      "brand": "Siemens",
+      "model": "SR63HX75ME",
+      "articleNumber": "151619",
+      "type": "Integrerad diskmaskin"
     }
   }
-
 ]

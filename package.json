@@ -16,11 +16,12 @@
   "dependencies": {
     "@contentful/experiences-sdk-react": "^3.6.2",
     "@contentful/f36-components": "^5.9.0",
-    "@contentful/live-preview": "^4.6.11",
+    "@contentful/live-preview": "^4.9.10",
     "@contentful/node-apps-toolkit": "^3.16.0",
     "@contentful/react-apps-toolkit": "^1.2.16",
     "@contentful/rich-text-react-renderer": "^16.0.1",
     "@contentful/rich-text-types": "^17.0.0",
+    "@contentful/timeline-preview": "^1.1.1",
     "@formatjs/intl-localematcher": "^0.6.0",
     "@hookform/resolvers": "^5.0.1",
     "@ninetailed/experience.js-next": "^7.21.1",

@@ -68,7 +68,7 @@ const SmoothCta: FC<IProps> = ({ title, body, images, buttons, entryId, imagePla
                   <div
                     key={`key-${index}`}
                     className={cn(
-                      "rounded-2xl overflow-hidden bg-secondary flex items-center justify-center min-h-[200px] md:min-h-[280px] p-4",
+                      "flex items-center justify-center",
                       filtered.length === 3 && index === 2 && "col-span-2"
                     )}
                   >
@@ -76,12 +76,11 @@ const SmoothCta: FC<IProps> = ({ title, body, images, buttons, entryId, imagePla
                       alt=""
                       src={image}
                       className="max-w-full max-h-[380px] w-auto h-auto object-contain rounded-xl"
+                      style={{ filter: "drop-shadow(0 10px 30px rgba(0,0,0,0.08))" }}
                     />
                   </div>
                 ))}
             </div>
-            {/* Decorative element */}
-            <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-accent/20 rounded-full blur-2xl" />
           </div>
         </div>
       </div>

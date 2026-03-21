@@ -16,7 +16,8 @@ export type MicrocopyDataMap = Record<string, MicrocopyEntry>;
  */
 export async function getMicrocopy(
   locale: string,
-  isPreview: boolean = false
+  isPreview: boolean = false,
+  timelineToken?: string | null
 ): Promise<MicrocopyMap> {
   const entries = await getEntries<MicrocopySkeleton>(
     {
@@ -24,7 +25,8 @@ export async function getMicrocopy(
       locale,
       limit: 1000,
     },
-    isPreview
+    isPreview,
+    timelineToken
   );
 
   const map: MicrocopyMap = {};
@@ -48,7 +50,8 @@ export async function getMicrocopy(
  */
 export async function getMicrocopyWithIds(
   locale: string,
-  isPreview: boolean = false
+  isPreview: boolean = false,
+  timelineToken?: string | null
 ): Promise<MicrocopyDataMap> {
   const entries = await getEntries<MicrocopySkeleton>(
     {
@@ -56,7 +59,8 @@ export async function getMicrocopyWithIds(
       locale,
       limit: 1000,
     },
-    isPreview
+    isPreview,
+    timelineToken
   );
 
   const map: MicrocopyDataMap = {};

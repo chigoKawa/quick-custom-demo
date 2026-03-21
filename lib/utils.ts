@@ -27,6 +27,22 @@ export function isPreviewEnabled(
   return "preview" in (searchParams as Record<string, unknown>);
 }
 
+/**
+ * Extract the Contentful Timeline preview token from search params.
+ * Returns the raw token string or null when absent.
+ *
+ * Expected URL shape: ?timeline={token}&preview=true
+ */
+export function getTimelineToken(
+  searchParams: Record<string, string | string[] | undefined> | null | undefined
+): string | null {
+  if (!searchParams || typeof searchParams !== "object") return null;
+  const raw = searchParams.timeline;
+  if (typeof raw === "string" && raw.length > 0) return raw;
+  if (Array.isArray(raw) && typeof raw[0] === "string" && raw[0].length > 0) return raw[0];
+  return null;
+}
+
 export const extractUrlFromTarget = (
   target: IExternalUrl | ILandingPage | IBlogPostPage | ICategoryPage | IProductStory
 ) => {

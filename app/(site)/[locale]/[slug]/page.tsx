@@ -5,7 +5,7 @@ import { ILandingPage, LandingPageSkeleton } from "@/features/contentful/type"; 
 import type { Asset } from "contentful";
 import type { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
-import { extractContentfulAssetUrl, isPreviewEnabled } from "@/lib/utils";
+import { extractContentfulAssetUrl, isPreviewEnabled, getTimelineToken } from "@/lib/utils";
 import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provider-wrapper";
 import { mapLandingPageToProps } from "@/lib/contentful-mappers";
 
@@ -26,7 +26,9 @@ type Props = {
 
 export default async function IndexPage({ params, searchParams }: Props) {
   // App Router: treat presence of ?preview as enabled
-  const isPreviewEnabledFlag = isPreviewEnabled(await searchParams);
+  const resolvedSearchParams = await searchParams;
+  const isPreviewEnabledFlag = isPreviewEnabled(resolvedSearchParams);
+  const timelineToken = getTimelineToken(resolvedSearchParams);
 
   const { locale, slug } = await params;
 
@@ -39,7 +41,8 @@ export default async function IndexPage({ params, searchParams }: Props) {
         include: INCLUDES_COUNT,
         locale,
       },
-      !!isPreviewEnabledFlag
+      !!isPreviewEnabledFlag,
+      timelineToken
     );
     pageEntry = entries[0] as ILandingPage | undefined;
   } catch (err) {
@@ -73,7 +76,9 @@ export async function generateMetadata(
   { params, searchParams }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const isPreviewEnabledFlag = isPreviewEnabled(await searchParams);
+  const resolvedSp = await searchParams;
+  const isPreviewEnabledFlag = isPreviewEnabled(resolvedSp);
+  const timelineToken = getTimelineToken(resolvedSp);
   const { locale, slug } = await params;
 
   let pageEntry: ILandingPage | undefined;
@@ -85,7 +90,8 @@ export async function generateMetadata(
         include: INCLUDES_COUNT,
         locale,
       },
-      !!isPreviewEnabledFlag
+      !!isPreviewEnabledFlag,
+      timelineToken
     );
     pageEntry = entries[0] as ILandingPage | undefined;
   } catch (err) {

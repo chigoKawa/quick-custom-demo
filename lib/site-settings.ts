@@ -83,7 +83,8 @@ export interface HeaderNavigationSkeleton {
  */
 export async function getSiteSettings(
   locale?: string,
-  preview?: boolean
+  preview?: boolean,
+  timelineToken?: string | null
 ): Promise<Entry<SiteSettingsSkeleton> | null> {
   const entries = await getEntries<SiteSettingsSkeleton>(
     {
@@ -92,7 +93,8 @@ export async function getSiteSettings(
       include: 5, // Deep include to get all nested references
       order: "sys.createdAt", // Oldest first — baseline before variants
     },
-    preview || false
+    preview || false,
+    timelineToken
   );
 
   // With personalization variants there may be multiple siteSettings entries.

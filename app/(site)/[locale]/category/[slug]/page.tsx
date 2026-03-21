@@ -5,7 +5,7 @@ import type { Metadata, ResolvingMetadata } from "next";
 
 import { getI18nConfig, type Locale } from "@/i18n-config";
 import { getEntries } from "@/lib/contentful";
-import { extractContentfulAssetUrl, isPreviewEnabled } from "@/lib/utils";
+import { extractContentfulAssetUrl, isPreviewEnabled, getTimelineToken } from "@/lib/utils";
 import type {
   ICategoryPage,
   CategoryPageSkeleton,
@@ -30,7 +30,9 @@ type Props = {
 
 export default async function CategoryPage({ params, searchParams }: Props) {
   const { locale, slug } = await params;
-  const isPreviewEnabledFlag = isPreviewEnabled(await searchParams);
+  const resolvedSearchParams = await searchParams;
+  const isPreviewEnabledFlag = isPreviewEnabled(resolvedSearchParams);
+  const timelineToken = getTimelineToken(resolvedSearchParams);
 
   const entries = await getEntries<CategoryPageSkeleton>(
     {
@@ -39,7 +41,8 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       include: INCLUDES_COUNT,
       locale,
     },
-    !!isPreviewEnabledFlag
+    !!isPreviewEnabledFlag,
+    timelineToken
   );
 
   const entry = entries[0] as unknown as ICategoryPage | undefined;
@@ -93,7 +96,9 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { locale, slug } = await params;
-  const isPreviewEnabledFlag = isPreviewEnabled(await searchParams);
+  const resolvedSp = await searchParams;
+  const isPreviewEnabledFlag = isPreviewEnabled(resolvedSp);
+  const timelineToken = getTimelineToken(resolvedSp);
 
   const entries = await getEntries<CategoryPageSkeleton>(
     {
@@ -102,7 +107,8 @@ export async function generateMetadata(
       include: 2,
       locale,
     },
-    !!isPreviewEnabledFlag
+    !!isPreviewEnabledFlag,
+    timelineToken
   );
   const entry = entries[0] as unknown as ICategoryPage | undefined;
   if (!entry) return {};

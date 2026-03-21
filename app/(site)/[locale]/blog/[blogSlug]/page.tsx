@@ -7,7 +7,7 @@ import {
   BlogPostPageSkeleton,
 } from "@/features/contentful/type";
 import ContentfulBlogPage from "@/features/contentful/components/contentful-blog-page";
-import { extractContentfulAssetUrl, isPreviewEnabled } from "@/lib/utils";
+import { extractContentfulAssetUrl, isPreviewEnabled, getTimelineToken } from "@/lib/utils";
 import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provider-wrapper";
 
 const INCLUDES_COUNT = 6;
@@ -21,7 +21,9 @@ type Props = {
 
 export default async function IndexPage({ params, searchParams }: Props) {
   // preview search param is used to enable preview mode e.g localhost:3000/de/home?preview=true
-  const isPreviewEnabledFlag = isPreviewEnabled(await searchParams);
+  const resolvedSearchParams = await searchParams;
+  const isPreviewEnabledFlag = isPreviewEnabled(resolvedSearchParams);
+  const timelineToken = getTimelineToken(resolvedSearchParams);
   const { locale, blogSlug } = await params;
 
   // Fetch landing page data from Contentful based on the slug and locale
@@ -32,7 +34,8 @@ export default async function IndexPage({ params, searchParams }: Props) {
       include: INCLUDES_COUNT,
       locale,
     },
-    !!isPreviewEnabledFlag
+    !!isPreviewEnabledFlag,
+    timelineToken
   );
 
   // Get the first entry and cast it to ILandingPage type
@@ -60,7 +63,9 @@ export async function generateMetadata(
   { params, searchParams }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const isPreviewEnabledFlag = isPreviewEnabled(await searchParams);
+  const resolvedSp = await searchParams;
+  const isPreviewEnabledFlag = isPreviewEnabled(resolvedSp);
+  const timelineToken = getTimelineToken(resolvedSp);
   const { locale, blogSlug } = await params;
 
   // Fetch landing page data from Contentful based on the slug and locale
@@ -71,7 +76,8 @@ export async function generateMetadata(
       include: INCLUDES_COUNT,
       locale,
     },
-    !!isPreviewEnabledFlag
+    !!isPreviewEnabledFlag,
+    timelineToken
   );
 
   // Get the first entry and cast it to ILandingPage type

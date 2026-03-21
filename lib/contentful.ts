@@ -1,5 +1,6 @@
 import { createClient } from "contentful";
 import type { EntryCollection, EntrySkeletonType, Entry } from "contentful";
+import { parseTimelinePreviewToken } from "@contentful/timeline-preview";
 
 const client = createClient({
   space: process.env.NEXT_PUBLIC_CTF_SPACE_ID!,
@@ -17,6 +18,40 @@ const previewClient = createClient({
 
 const deliveryClientByEnv = new Map<string, ReturnType<typeof createClient>>();
 const previewClientByEnv = new Map<string, ReturnType<typeof createClient>>();
+
+/**
+ * Build a Contentful Preview client with Timeline support.
+ * Returns the standard preview client when no token is provided.
+ */
+function getPreviewClient(
+  timelineToken?: string | null
+): ReturnType<typeof createClient> {
+  if (!timelineToken) return previewClient;
+
+  try {
+    const { releaseId, timestamp } = parseTimelinePreviewToken(timelineToken);
+
+    const timelinePreview: Record<string, unknown> = {};
+    if (releaseId) timelinePreview.release = { lte: releaseId };
+    if (timestamp) timelinePreview.timestamp = { lte: timestamp };
+
+    if (!releaseId && !timestamp) {
+      console.warn("[Contentful] Timeline token parsed but contained no releaseId or timestamp. Falling back to standard preview.");
+      return previewClient;
+    }
+
+    return createClient({
+      space: process.env.NEXT_PUBLIC_CTF_SPACE_ID!,
+      accessToken: process.env.NEXT_PUBLIC_CTF_PREVIEW_TOKEN!,
+      host: "preview.contentful.com",
+      environment: process.env.NEXT_PUBLIC_CTF_ENVIRONMENT || "master",
+      timelinePreview: timelinePreview as any,
+    });
+  } catch (error) {
+    console.error("[Contentful] Failed to parse timeline token. Falling back to standard preview.", error);
+    return previewClient;
+  }
+}
 
 function getClientForEnvironment(params: {
   environment: string;
@@ -41,7 +76,8 @@ function getClientForEnvironment(params: {
 
 export const getEntries = async <T extends EntrySkeletonType>(
   options: unknown,
-  isPreviewEnabled: boolean = false
+  isPreviewEnabled: boolean = false,
+  timelineToken?: string | null
 ): Promise<Entry<T>[]> => {
   try {
     const isPlainObject =
@@ -57,12 +93,35 @@ export const getEntries = async <T extends EntrySkeletonType>(
       });
       return [];
     }
-    const clientInstance = isPreviewEnabled ? previewClient : client;
+    const clientInstance = isPreviewEnabled
+      ? getPreviewClient(timelineToken)
+      : client;
     const entries: EntryCollection<T> = await clientInstance.getEntries<T>(
       options as Record<string, unknown>
     );
     return entries.items;
   } catch (error) {
+    // When timeline preview fails (e.g. release not scheduled, 404), fall back
+    // to standard preview so the page still renders content instead of a 404.
+    if (timelineToken && isPreviewEnabled) {
+      console.warn(
+        "[Contentful] Timeline preview request failed. Falling back to standard preview.",
+        error instanceof Error ? error.message : error
+      );
+      try {
+        const fallbackEntries: EntryCollection<T> =
+          await previewClient.getEntries<T>(
+            options as Record<string, unknown>
+          );
+        return fallbackEntries.items;
+      } catch (fallbackError) {
+        console.error(
+          "[Contentful] Standard preview fallback also failed:",
+          fallbackError
+        );
+        return [];
+      }
+    }
     console.error("Error fetching entries from Contentful:", error);
     return [];
   }
@@ -126,11 +185,14 @@ export const getLocales = async () => {
 
 export const getAllPageSlugs = async <T extends EntrySkeletonType>(
   options: Record<string, unknown>,
-  isPreviewEnabled: boolean = false
+  isPreviewEnabled: boolean = false,
+  timelineToken?: string | null
 ): Promise<string[]> => {
   try {
     const allSlugs: string[] = [];
-    const clientInstance = isPreviewEnabled ? previewClient : client;
+    const clientInstance = isPreviewEnabled
+      ? getPreviewClient(timelineToken)
+      : client;
 
     const isPlainObject =
       !!options &&

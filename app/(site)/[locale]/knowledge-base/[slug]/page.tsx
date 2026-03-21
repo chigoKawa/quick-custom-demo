@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { getEntries } from "@/lib/contentful";
 import Link from "next/link";
-import { isPreviewEnabled } from "@/lib/utils";
+import { isPreviewEnabled, getTimelineToken } from "@/lib/utils";
 import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provider-wrapper";
 import KbArticleClient from "@/features/kb/kb-article-client";
 import KbArticleFeedback from "@/features/kb/kb-article-feedback";
@@ -28,7 +28,9 @@ export default async function KbArticlePage({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const { locale = "en-US", slug = "" } = await params;
-  const isPreviewEnabledFlag = isPreviewEnabled(await searchParams);
+  const resolvedSearchParams = await searchParams;
+  const isPreviewEnabledFlag = isPreviewEnabled(resolvedSearchParams);
+  const timelineToken = getTimelineToken(resolvedSearchParams);
   const [entry] = await Promise.all([
     getEntries<any>(
       {
@@ -38,7 +40,8 @@ export default async function KbArticlePage({
         limit: 1,
         include: INCLUDES_COUNT,
       },
-      !!isPreviewEnabledFlag
+      !!isPreviewEnabledFlag,
+      timelineToken
     ).then((items) => items?.[0] ?? null),
   ]);
   if (!entry) return notFound();

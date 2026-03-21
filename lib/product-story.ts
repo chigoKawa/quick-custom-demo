@@ -13,7 +13,8 @@ const INCLUDES_COUNT = 6;
 export async function getProductStoryBySlug(
   slug: string,
   locale?: string,
-  preview = false
+  preview = false,
+  timelineToken?: string | null
 ): Promise<IProductStory | null> {
   try {
     const entries = await getEntries<ProductStorySkeleton>(
@@ -24,7 +25,8 @@ export async function getProductStoryBySlug(
         include: INCLUDES_COUNT,
         ...(locale ? { locale } : {}),
       },
-      preview
+      preview,
+      timelineToken
     );
     return (entries[0] as IProductStory | undefined) ?? null;
   } catch (err) {

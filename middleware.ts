@@ -34,6 +34,13 @@ async function getLocale(request: NextRequest) {
   return matchedLocale || defaultLocale;
 }
 
+/** Response headers that prevent browser/proxy caching for preview requests. */
+const PREVIEW_NO_CACHE_HEADERS: HeadersInit = {
+  "Cache-Control": "no-store, no-cache, must-revalidate",
+  Pragma: "no-cache",
+  Expires: "0",
+};
+
 export async function middleware(request: NextRequest) {
   const { locales, defaultLocale } = await getI18nConfig();
   const { pathname } = request.nextUrl;
@@ -59,6 +66,15 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(url);
       }
     }
+    // Preview/timeline: prevent browser from caching the iframe response
+    // so switching releases always triggers a fresh server render.
+    if (isPreview) {
+      const res = NextResponse.next();
+      for (const [k, v] of Object.entries(PREVIEW_NO_CACHE_HEADERS)) {
+        res.headers.set(k, v);
+      }
+      return res;
+    }
     // Non-default locales: let the request continue
     return;
   }
@@ -70,7 +86,14 @@ export async function middleware(request: NextRequest) {
   if (best === defaultLocale) {
     const url = request.nextUrl.clone();
     url.pathname = `/${defaultLocale}${pathname}`;
-    return NextResponse.rewrite(url);
+    const res = NextResponse.rewrite(url);
+    // Bust cache for preview/timeline requests
+    if (isPreview) {
+      for (const [k, v] of Object.entries(PREVIEW_NO_CACHE_HEADERS)) {
+        res.headers.set(k, v);
+      }
+    }
+    return res;
   }
 
   // For non-default best matches: redirect to locale-prefixed URL

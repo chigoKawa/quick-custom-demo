@@ -1,156 +1,232 @@
 [
   {
-    "id": "elon-electrolux-ep71ub14db-121020",
-    "title": "Sladdlös dammsugare Electrolux EP71UB14DB",
-    "slug": "electrolux-ep71ub14db",
-    "description": "Kompakt och kraftfull skaftdammsugare utan sladd – den ultimata lösningen för ditt hem.",
-    "price": 3990,
-    "currency": "SEK",
+    "id": "wb-vestiaire-midi-corset-silk-dress",
+    "title": "Midi Corset Silk Dress",
+    "slug": "all-about-eve-silk-dress",
+    "description": "Midi dress crafted in white silk, featuring a sculpting corset bodice, puff-sleeves with elasticated cuffs, midi length, back slit, high collar, and concealed zip closure at the back.",
+    "price": 395,
+    "currency": "GBP",
     "images": [
-      "https://images.ctfassets.net/ace0ba6p9v98/1MqbYZ86gLDU4BIgfgVo3y/105fbba9be53e61cdef7c57f8096e181/electrolux-ep71ub14db-121020-1.jpeg"
+      "https://images.ctfassets.net/ace0ba6p9v98/5ICIis3c4dYBOzqMFeVpMg/e991427757434916f1531f1117236b78/wb-midi-corset-silk-dress.jpeg"
     ],
-    "category": "vacuum-cleaners",
-    "tags": ["electrolux", "skaftdammsugare", "sladdlos", "stadsprodukter"],
-    "stock": 40,
-    "rating": 4.6,
-    "reviewCount": 112,
+    "category": "dresses",
+    "tags": ["silk", "midi", "corset", "bridal", "occasion", "womenswear"],
+    "stock": 8,
+    "rating": 4.8,
+    "reviewCount": 14,
     "metadata": {
-      "brand": "Electrolux",
-      "model": "EP71UB14DB",
-      "articleNumber": "121020",
-      "type": "Sladdlös dammsugare"
+      "brand": "Vestiaire d'un Oiseau Libre",
+      "model": "All About Eve",
+      "articleNumber": "VOL-001",
+      "type": "Midi Dress",
+      "madeIn": "Romania"
     }
   },
   {
-    "id": "elon-elvita-ctm3714vn-147066",
-    "title": "Tvättmaskin Elvita CTM3714VN",
-    "slug": "elvita-ctm3714vn",
-    "description": "Praktisk och kompakt tvättmaskin – ett kraftpaket med ångfunktion.",
-    "price": 5990,
-    "currency": "SEK",
+    "id": "wb-avenue8-lace-detailed-midi-dress",
+    "title": "Lace Detailed Midi Dress — White",
+    "slug": "lace-detailed-midi-dress",
+    "description": "Minimalist at the front, romantic at the back. Adjustable straps, silky-smooth silk fabric, a graceful side slit, and delicate lace paneling at the back. Perfect for bridal prep, cocktail events, or intimate celebrations.",
+    "price": 265,
+    "currency": "GBP",
     "images": [
-      "https://images.ctfassets.net/ace0ba6p9v98/6mu4JUBmhAxnCw2EycsJOH/3d3c5c40e9326bbe82014b6b002ab370/elvita-ctm3714vn-147066-1.jpeg"
+      "https://images.ctfassets.net/ace0ba6p9v98/4elfMoNJfxdNbXnmmKsbHU/401e76eb5c2e510e082bfb47cff87fa2/wb-lace-detailed-midi-dress.jpeg"
     ],
-    "category": "washing-machines",
-    "tags": ["elvita", "tvattmaskin", "vitvaror", "kompakt"],
-    "stock": 25,
-    "rating": 4.4,
-    "reviewCount": 58,
-    "metadata": {
-      "brand": "Elvita",
-      "model": "CTM3714VN",
-      "articleNumber": "147066",
-      "type": "Tvättmaskin"
-    }
-  },
-  {
-    "id": "elon-lg-oled55b56la-150025",
-    "title": "TV LG 55\" - OLED55B56LA",
-    "slug": "lg-oled55b56la-55",
-    "description": "55\" OLED – gör soffan till din favoritplats.",
-    "price": 9990,
-    "currency": "SEK",
-    "images": [
-      "https://images.ctfassets.net/ace0ba6p9v98/4UZ3fuUkSrKJpHD0Fgl3FU/0e5b7de8b2ca9f9ee5fe60bee1f81b09/lg-oled55b56la-150025-1.jpeg"
-    ],
-    "category": "tv",
-    "tags": ["lg", "oled", "4k", "smart-tv"],
+    "category": "dresses",
+    "tags": ["silk", "lace", "midi", "bridal", "cocktail", "womenswear"],
     "stock": 12,
+    "rating": 4.9,
+    "reviewCount": 22,
+    "metadata": {
+      "brand": "Avenue 8",
+      "model": "Lace Detailed Midi",
+      "articleNumber": "AV8-002",
+      "type": "Midi Dress",
+      "madeIn": "Turkey"
+    }
+  },
+  {
+    "id": "wb-hides-classic-leather-briefcase",
+    "title": "Classic Leather Briefcase — Handmade Crossbody Work & Travel Bag",
+    "slug": "classic-leather-briefcase-handmade-crossbody-work-travel-bag",
+    "description": "The Adam Messenger Bag 2.0 balances iconic style and everyday function. Built from natural vegetable-tanned leather and finished with antique brass hardware, it includes a laptop sleeve, phone pocket, pen holders, and dedicated slots for documents. Lifetime guarantee.",
+    "price": 295,
+    "currency": "GBP",
+    "images": [
+      "https://images.ctfassets.net/ace0ba6p9v98/4cmgwA4Y6ltoixL1YPwhWk/80ddca1b888068a88f97ae517539ab2e/wb-classic-leather-briefcase.jpeg"
+    ],
+    "category": "bags",
+    "tags": ["leather", "briefcase", "crossbody", "handmade", "travel", "menswear"],
+    "stock": 15,
     "rating": 4.7,
-    "reviewCount": 96,
+    "reviewCount": 6,
     "metadata": {
-      "brand": "LG",
-      "model": "OLED55B56LA",
-      "articleNumber": "150025",
-      "type": "TV"
+      "brand": "Hides Leather Co.",
+      "model": "Adam Messenger 2.0",
+      "articleNumber": "HLC-003",
+      "type": "Briefcase",
+      "madeIn": "Canada"
     }
   },
   {
-    "id": "elon-roborock-q10-vf-black-151057",
-    "title": "Robotdammsugare RoboRock Q10 VF+ Black",
-    "slug": "roborock-q10-vf-black",
-    "description": "Kraftfull 2-i-1 robot med självrengörande docka för helt automatiserad städning.",
-    "price": 5488,
-    "currency": "SEK",
+    "id": "wb-ingmarson-checked-wool-cashmere-scarf",
+    "title": "Checked Wool & Cashmere Scarf",
+    "slug": "checked-wool-cashmere-scarf",
+    "description": "Designed and knitted in North London with zero waste from ethically sourced Italian yarns. A luxurious blend of 90% wool and 10% cashmere with an incredibly soft feel. The checkered pattern adds a stylish flair, making it a bold fashion statement.",
+    "price": 85,
+    "currency": "GBP",
     "images": [
-      "https://images.ctfassets.net/ace0ba6p9v98/5FtxblJoYqf0jloXiC4RUr/ca4b6e9e22cc6527e12dfe363b3acf56/roborock-q10-vf-black-151057-1.jpeg"
+      "https://images.ctfassets.net/ace0ba6p9v98/5ZFK1P7KuF9Jzu0FSWXOXx/1aef93cefbc52fe85016d836550518a8/wb-checked-wool-cashmere-scarf.jpeg"
     ],
-    "category": "robot-vacuums",
-    "tags": ["roborock", "robotdammsugare", "stadsprodukter", "smart-home"],
-    "stock": 18,
-    "rating": 4.5,
-    "reviewCount": 74,
-    "metadata": {
-      "brand": "RoboRock",
-      "model": "Q10 VF+ Black",
-      "articleNumber": "151057",
-      "type": "Robotdammsugare"
-    }
-  },
-  {
-    "id": "elon-siemens-tp515r01-149060",
-    "title": "Helautomatisk kaffemaskin Siemens TP515R01",
-    "slug": "siemens-tp515r01",
-    "description": "Helautomatisk kaffemaskin – starta dagen med cafékänsla hemma.",
-    "price": 8990,
-    "currency": "SEK",
-    "images": [
-      "https://images.ctfassets.net/ace0ba6p9v98/3lKcxjfyYIODZxk0CiMJl9/c3a5524b92d7a9f0bdbb321ef4d54423/siemens-tp515r01-149060-1.jpeg"
-    ],
-    "category": "coffee-machines",
-    "tags": ["siemens", "kaffemaskin", "espresso", "home"],
-    "stock": 14,
+    "category": "scarves",
+    "tags": ["wool", "cashmere", "scarf", "sustainable", "knitwear", "accessories"],
+    "stock": 30,
     "rating": 4.6,
-    "reviewCount": 39,
+    "reviewCount": 38,
     "metadata": {
-      "brand": "Siemens",
-      "model": "TP515R01",
-      "articleNumber": "149060",
-      "type": "Helautomatisk kaffemaskin"
+      "brand": "INGMARSON",
+      "model": "Checked Scarf",
+      "articleNumber": "ING-004",
+      "type": "Scarf",
+      "madeIn": "United Kingdom"
     }
   },
   {
-    "id": "elon-electrolux-eaf7b-124264",
-    "title": "Airfryer Electrolux EAF7B",
-    "slug": "electrolux-eaf7b",
-    "description": "Smart och mångsidig airfryer för hälsosam matlagning på ett enkelt sätt.",
-    "price": 1990,
-    "currency": "SEK",
+    "id": "wb-loop-cashmere-lofty-blanket-scarf",
+    "title": "Cashmere Lofty Blanket Scarf — Siberian Lilac",
+    "slug": "cashmere-lofty-blanket-scarf-in-siberian-lilac",
+    "description": "This lofty blanket wrap does everything. Worn as a chic shawl in warmer months, cocooned as a neck scarf on chillier days, or draped as a blanket while lounging. 100% supremely soft Inner Mongolian cashmere, 7 gauge for warmth and comfort.",
+    "price": 195,
+    "currency": "GBP",
     "images": [
-      "https://images.ctfassets.net/ace0ba6p9v98/2mGGKDAWYG8UUrjGYl1bmH/deb65231450260f2f86860a45f1d7a72/electrolux-eaf7b-124264-1.jpeg"
+      "https://images.ctfassets.net/ace0ba6p9v98/1Wqs6e6ItQpJShFZhZZ3Ke/b28271d665537cf5032964bd517197b0/wb-cashmere-blanket-scarf.jpeg"
     ],
-    "category": "airfryers",
-    "tags": ["electrolux", "airfryer", "koksapparater", "healthy"],
-    "stock": 22,
-    "rating": 4.5,
+    "category": "scarves",
+    "tags": ["cashmere", "blanket-scarf", "luxury", "mongolian", "womenswear"],
+    "stock": 18,
+    "rating": 4.9,
     "reviewCount": 51,
     "metadata": {
-      "brand": "Electrolux",
-      "model": "EAF7B",
-      "articleNumber": "124264",
-      "type": "Airfryer"
+      "brand": "Loop Cashmere",
+      "model": "Lofty Blanket Scarf",
+      "articleNumber": "LC-005",
+      "type": "Blanket Scarf",
+      "madeIn": "Mongolia"
     }
   },
   {
-    "id": "elon-siemens-sr63hx75me-151619",
-    "title": "Integrerad diskmaskin Siemens SR63HX75ME",
-    "slug": "siemens-sr63hx75me",
-    "description": "Integrerad diskmaskin med smarta funktioner och Home Connect.",
-    "price": 12999,
-    "currency": "SEK",
+    "id": "wb-latelita-zodiac-talisman-necklace",
+    "title": "Zodiac Birthstone Talisman Necklace — Virgo",
+    "slug": "zodiac-birthstone-talisman-necklace-virgo",
+    "description": "A celestial birthstone necklace featuring the Virgo zodiac sign with a sapphire stone. Gold-plated sterling silver with a delicate chain. Beautifully packaged — an ideal personalised gift.",
+    "price": 89,
+    "currency": "GBP",
     "images": [
-      "https://images.ctfassets.net/ace0ba6p9v98/5z3hBoj66doiNcYAUtzhep/dc92183fd36e9b4c0890675f871d4b4e/siemens-sr63hx75me-151619-1.jpeg"
+      "https://images.ctfassets.net/ace0ba6p9v98/127fIPExBf4FwxzNbnIIzB/d24a23f61f76eb58a7fa925fc1455c91/wb-zodiac-talisman-necklace.jpeg"
     ],
-    "category": "dishwashers",
-    "tags": ["siemens", "diskmaskin", "integrerad", "home-connect"],
-    "stock": 10,
-    "rating": 4.4,
-    "reviewCount": 27,
+    "category": "necklaces",
+    "tags": ["gold-plated", "zodiac", "birthstone", "sterling-silver", "jewellery", "gift"],
+    "stock": 45,
+    "rating": 4.7,
+    "reviewCount": 67,
     "metadata": {
-      "brand": "Siemens",
-      "model": "SR63HX75ME",
-      "articleNumber": "151619",
-      "type": "Integrerad diskmaskin"
+      "brand": "LÁTELITA London",
+      "model": "Zodiac Talisman",
+      "articleNumber": "LAT-006",
+      "type": "Necklace",
+      "madeIn": "United Kingdom"
+    }
+  },
+  {
+    "id": "wb-lilarasa-tigers-eye-jewellery-set",
+    "title": "Tiger's Eye Jewellery Set — Stellar Elegance",
+    "slug": "tigers-eye-jewellery-set-stellar-elegance",
+    "description": "A semi-precious gemstone set of necklace, earrings, and bracelet. Tiger's Eye stimulates personal power, courage, and motivation. Connected to the Solar Plexus chakra — the birthstone for November and June.",
+    "price": 65,
+    "currency": "GBP",
+    "images": [
+      "https://images.ctfassets.net/ace0ba6p9v98/2L3sdxUwp0iModP8z8tR2U/11593e34953ba202100c3006bf2781d0/wb-tigers-eye-jewellery-set.jpeg"
+    ],
+    "category": "jewellery-sets",
+    "tags": ["gemstone", "tigers-eye", "necklace", "earrings", "bracelet", "jewellery"],
+    "stock": 22,
+    "rating": 4.5,
+    "reviewCount": 19,
+    "metadata": {
+      "brand": "Lila Rasa",
+      "model": "Stellar Elegance",
+      "articleNumber": "LR-007",
+      "type": "Jewellery Set",
+      "madeIn": "India"
+    }
+  },
+  {
+    "id": "wb-rimini-woven-leather-handbag-caterina",
+    "title": "Woven Leather Handbag 'Caterina'",
+    "slug": "woven-leather-handbag-caterina",
+    "description": "A hand-woven Italian leather tote with a rich brown finish. The intricate intrecciato weave gives it timeless character, while the spacious interior accommodates daily essentials with ease. A statement piece rooted in artisan craftsmanship.",
+    "price": 325,
+    "currency": "GBP",
+    "images": [
+      "https://images.ctfassets.net/ace0ba6p9v98/3VbWgNfy0LazCMKZDuoFfH/dca1ec7db9c7cf25ac3de764db93606c/wb-woven-leather-handbag-caterina.jpeg"
+    ],
+    "category": "bags",
+    "tags": ["leather", "woven", "tote", "handmade", "italian", "womenswear"],
+    "stock": 6,
+    "rating": 4.8,
+    "reviewCount": 11,
+    "metadata": {
+      "brand": "Rimini",
+      "model": "Caterina",
+      "articleNumber": "RIM-008",
+      "type": "Handbag",
+      "madeIn": "Italy"
+    }
+  },
+  {
+    "id": "wb-lulu-guinness-leather-cole-crossbody",
+    "title": "Leather Cole Crossbody Bag",
+    "slug": "leather-cole-crossbody-bag",
+    "description": "An iconic Lulu Guinness crossbody in smooth black leather with signature lip clasp detail. Compact yet practical with an adjustable strap, interior card slots, and a zip pocket. The perfect day-to-night companion.",
+    "price": 225,
+    "currency": "GBP",
+    "images": [
+      "https://images.ctfassets.net/ace0ba6p9v98/44m7l0zm96ehQB1fvqFAia/66c9e909298a8df943121f0caa4966de/wb-leather-cole-crossbody-bag.jpeg"
+    ],
+    "category": "bags",
+    "tags": ["leather", "crossbody", "designer", "iconic", "womenswear"],
+    "stock": 10,
+    "rating": 4.6,
+    "reviewCount": 33,
+    "metadata": {
+      "brand": "Lulu Guinness",
+      "model": "Cole Crossbody",
+      "articleNumber": "LG-009",
+      "type": "Crossbody Bag",
+      "madeIn": "United Kingdom"
+    }
+  },
+  {
+    "id": "wb-sons-trading-co-drover-boot",
+    "title": "The Drover Boot",
+    "slug": "sons-the-drover-boot",
+    "description": "A rugged yet refined leather boot built for exploration. Full-grain leather upper with a Goodyear-welted sole for durability and easy resoling. Inspired by the pioneering spirit of the outback, designed for modern city and country life alike.",
+    "price": 245,
+    "currency": "GBP",
+    "images": [
+      "https://images.ctfassets.net/ace0ba6p9v98/5SulytB4CXg5inoIcd6Ma7/af59fd65bf7c5c1453a05b4ab758e6a7/wb-the-drover-boot.jpeg"
+    ],
+    "category": "shoes",
+    "tags": ["leather", "boots", "goodyear-welt", "heritage", "menswear"],
+    "stock": 14,
+    "rating": 4.7,
+    "reviewCount": 28,
+    "metadata": {
+      "brand": "&SONS Trading Co",
+      "model": "The Drover",
+      "articleNumber": "SONS-010",
+      "type": "Boot",
+      "madeIn": "Portugal"
     }
   }
 ]

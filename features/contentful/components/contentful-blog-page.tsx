@@ -116,13 +116,15 @@ const ContentfulBlogPage: FC<IProps> = ({ entry: publishedEntry }) => {
         </p>
       )}
 
+    
+
       {featuredImageUrl && (
         <div
           {...inspectorProps({ fieldId: "featuredImage" })}
           className="mb-6 relative overflow-hidden"
         >
           <img
-            src={`https:${featuredImageUrl}`}
+            src={`${featuredImageUrl}`}
             alt={title || "Featured Image"}
             className="relative rounded-lg w-full max-w-full object-cover"
           />

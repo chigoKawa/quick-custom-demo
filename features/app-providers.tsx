@@ -8,7 +8,6 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { NinetailedInsightsPlugin } from "@ninetailed/experience.js-plugin-insights";
 import { NinetailedPreviewPlugin } from "@ninetailed/experience.js-plugin-preview";
 import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provider-wrapper";
-import { getI18nConfig } from "@/i18n-config";
 import {
   loadPreviewData,
   type PreviewData,
@@ -128,6 +127,7 @@ export default function AppProviders({ children }: Props) {
   const [audiences, setAudiences] = useState<unknown[]>([]);
   const [previewLoading, setPreviewLoading] = useState(true); // Start true to block until we know preview status
   const [previewDataLoading, setPreviewDataLoading] = useState(false);
+  const [previewDataFailed, setPreviewDataFailed] = useState(false);
   const [previewEnabled, setPreviewEnabled] = useState(false);
   const [providerKey, setProviderKey] = useState(0);
   const searchParams = useSearchParams();
@@ -138,8 +138,15 @@ export default function AppProviders({ children }: Props) {
   }
 
   const [previewPlugin, setPreviewPlugin] = useState<NinetailedPreviewPlugin | null>(null);
-  const [effectiveLocale, setEffectiveLocale] = useState<string>("en-US");
   const pathname = usePathname();
+
+  // Sync locale from pathname — first segment if it looks like a locale, else default.
+  // Page-level LivePreviewProviderWrappers override this for page content;
+  // this outer one exists so header/footer have a provider context.
+  const outerLocale = useMemo(() => {
+    const seg = (pathname || "").split("/").filter(Boolean)[0] || "";
+    return /^[a-z]{2}(-[A-Z]{2,3})?$/.test(seg) ? seg : "en-US";
+  }, [pathname]);
 
   // Proactively clear stale profile if clientId/env changed across sessions
   useEffect(() => {
@@ -166,25 +173,6 @@ export default function AppProviders({ children }: Props) {
       // ignore storage issues
     }
   }, []);
-
-  // Derive effective locale from pathname with i18n config fallback
-  useEffect(() => {
-    let mounted = true;
-    const load = async () => {
-      try {
-        const cfg = await getI18nConfig();
-        const seg = (pathname || "").split("/").filter(Boolean)[0] || "";
-        const next = cfg.locales.includes(seg as any) ? seg : cfg.defaultLocale;
-        if (mounted) setEffectiveLocale(next);
-      } catch {
-        if (mounted) setEffectiveLocale("en-US");
-      }
-    };
-    load();
-    return () => {
-      mounted = false;
-    };
-  }, [pathname]);
 
   // SDK-level error handler: passed to <NinetailedProvider onError>.
   // When the Experience API returns a 404 (stale profile), we call
@@ -266,11 +254,13 @@ export default function AppProviders({ children }: Props) {
   useEffect(() => {
     if (!previewEnabled) {
       setPreviewDataLoading(false);
+      setPreviewDataFailed(false);
       setPreviewPlugin(null);
       return;
     }
     let mounted = true;
     setPreviewDataLoading(true);
+    setPreviewDataFailed(false);
 
     loadPreviewData()
       .then((data: PreviewData) => {
@@ -295,9 +285,12 @@ export default function AppProviders({ children }: Props) {
         });
         setPreviewDataLoading(false);
       })
-      .catch(() => {
-        // preview helper; ignore errors but stop loading
-        if (mounted) setPreviewDataLoading(false);
+      .catch((err) => {
+        console.warn("[Ninetailed] Failed to load preview data. Rendering without preview plugin.", err);
+        if (mounted) {
+          setPreviewDataLoading(false);
+          setPreviewDataFailed(true);
+        }
       });
     return () => {
       mounted = false;
@@ -312,10 +305,14 @@ export default function AppProviders({ children }: Props) {
 
   // Block initial render until:
   // 1. We know the preview status (previewLoading)
-  // 2. If preview is enabled, wait for preview data to load (previewDataLoading)
-  // 3. If preview is enabled, wait for the plugin instance to exist
-  if (previewLoading || (previewEnabled && (previewDataLoading || !previewPlugin))) {
+  // 2. If preview is enabled, wait for preview data to finish loading (but NOT for plugin
+  //    to exist — if data loading failed, render without the plugin instead of deadlocking)
+  if (previewLoading || (previewEnabled && previewDataLoading)) {
     return null;
+  }
+
+  if (previewEnabled && previewDataFailed) {
+    console.warn("[Ninetailed] Rendering without preview plugin due to failed data loading.");
   }
 
   // Keep provider key stable (except when forcing a reset).
@@ -336,10 +333,8 @@ export default function AppProviders({ children }: Props) {
           console.debug("[Ninetailed]", ...args);
         }
       }}
-      
-       
     >
-      <LivePreviewProviderWrapper locale={effectiveLocale} isPreviewEnabled={!!previewEnabled}>
+      <LivePreviewProviderWrapper locale={outerLocale} isPreviewEnabled={previewEnabled}>
         <Suspense fallback={null}>
           <ProfileErrorRecovery onReset={handleProfileReset} />
           <PageEventOnMount />

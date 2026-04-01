@@ -19,6 +19,7 @@ export default async function ProductDetailPage(
   try {
     const commerce = await IntegrationFactory.getIntegration('commerce') as ICommerceIntegration;
     product = await commerce.getProduct(id);
+
   } catch (error) {
     console.error('Error fetching product:', error);
     notFound();

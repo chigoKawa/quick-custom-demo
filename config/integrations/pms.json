@@ -1,0 +1,33 @@
+{
+  "defaultProvider": "mock",
+  "providers": {
+    "mock": {
+      "name": "Mock PMS",
+      "enabled": true,
+      "useMock": true,
+      "fixtureFile": "properties.json",
+      "simulateLatency": true,
+      "latencyRange": [150, 400]
+    },
+    "beds24": {
+      "name": "Beds24",
+      "enabled": false,
+      "baseUrl": "https://beds24.com/api/v2",
+      "endpoints": {
+        "properties": "/properties",
+        "roomTypes": "/roomTypes",
+        "availability": "/availability",
+        "rates": "/rates",
+        "bookingSession": "/bookingSession"
+      },
+      "rateLimit": {
+        "requestsPerSecond": 2,
+        "burstLimit": 20
+      },
+      "auth": {
+        "type": "bearer",
+        "tokenHeader": "Authorization"
+      }
+    }
+  }
+}

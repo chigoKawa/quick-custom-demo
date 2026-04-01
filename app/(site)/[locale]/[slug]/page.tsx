@@ -64,7 +64,7 @@ export default async function IndexPage({ params, searchParams }: Props) {
         locale={locale}
         isPreviewEnabled={!!isPreviewEnabledFlag}
       >
-        
+
         <ContentfulLandingPage entry={pageData} />
       </LivePreviewProviderWrapper>
     </div>

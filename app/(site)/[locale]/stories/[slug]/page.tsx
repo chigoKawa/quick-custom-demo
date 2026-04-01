@@ -45,6 +45,7 @@ export default async function StoryRoute({ params, searchParams }: Props) {
       locale={effectiveLocale}
       isPreviewEnabled={!!preview}
     >
+      
       <ProductStoryPage entry={pageData} locale={effectiveLocale} microcopy={microcopy} />
     </LivePreviewProviderWrapper>
   );

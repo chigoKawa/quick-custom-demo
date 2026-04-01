@@ -10,6 +10,7 @@ import PersonalizedFormEmbed from "../components/form-embed/personalized-form-em
 import KbGroupSection from "../../kb/kb-group-section";
 import RichContentModuleWrapper from "../components/rich-content-module/rich-content-module-wrapper";
 import PersonalizedMultiItemModule from "../components/multi-item-module/personalized-multi-item-module";
+import PersonalizedPropertyListings from "../components/property-listings/personalized-property-listings";
 
 // Centralized component map for landing page sections
 export const sectionsComponentMap: Record<string, FC<any>> = {
@@ -23,4 +24,5 @@ export const sectionsComponentMap: Record<string, FC<any>> = {
   kbGroup: KbGroupSection as unknown as FC<IKbGroup>,
   richContentModule: RichContentModuleWrapper,
   multiItemModule: PersonalizedMultiItemModule,
+  propertyListings: PersonalizedPropertyListings,
 } as const;

@@ -86,5 +86,16 @@
       "type": "Locale",
       "version": 1
     }
+  },
+  {
+    "code": "zh",
+    "name": "Chinese",
+    "default": false,
+    "fallbackCode": "en-US",
+    "sys": {
+      "id": "032RWfgTQ4Ldx8iOjYLPpj",
+      "type": "Locale",
+      "version": 1
+    }
   }
 ]

@@ -8,7 +8,8 @@ export type IntegrationType =
   | 'auth'
   | 'search'
   | 'dam'
-  | 'analytics';
+  | 'analytics'
+  | 'pms';
 
 export type IntegrationProvider = string;
 

@@ -1,0 +1,30 @@
+{
+  "name": "Page Tree",
+  "src": "app/ctf-apps/page-tree/page.tsx",
+  "locations": [
+    {
+      "location": "app-config",
+      "src": "app/ctf-apps/page-tree/locations/config-screen.tsx"
+    },
+    {
+      "location": "home",
+      "src": "app/ctf-apps/page-tree/locations/page-tree-home.tsx"
+    },
+    {
+      "location": "entry-sidebar",
+      "src": "app/ctf-apps/page-tree/locations/page-tree-sidebar.tsx"
+    },
+    {
+      "location": "page",
+      "src": "app/ctf-apps/page-tree/locations/page-tree-page.tsx"
+    },
+    {
+      "location": "entry-editor",
+      "src": "app/ctf-apps/page-tree/locations/page-tree-editor.tsx"
+    },
+    {
+      "location": "dialog",
+      "src": "app/ctf-apps/page-tree/locations/parent-picker-dialog.tsx"
+    }
+  ]
+}

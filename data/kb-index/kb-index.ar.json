@@ -1,5 +1,5 @@
 {
-  "version": 1773700937763,
+  "version": 1775029134861,
   "locale": "ar",
   "docs": [
     {
@@ -9,14 +9,11 @@
       "summary": "# My Card Was Blocked Abroad\n\n**Quick fix:** Unblock your card instantly in the Superapp by opening **Wallet** > **Cards** > select your card > tap **Unblock**, or contact our 24/7 support if the option is unavailable.\n\n---\n\n## Why This Happens\n\nYour card may be blocked abroad for three main reasons:\n\n- **Fraud protection** – Our system flags unusual spending patterns in new countries to protect your account\n- **Travel notification missing** – You didn't inform us of your travel plans\n- **Spending limits** – Daily or monthly limits may be lower for international transactions under your current plan\n\nThis is a standard security measure across European banking to keep your money safe.\n\n---\n\n## How to Unblock Your Card\n\nFollow these steps in order:\n\n### 1. Check if your card is blocked\n\n1. Open the Superapp\n2. Tap **Wallet** at the bottom menu\n3. Select the blocked card\n4. Look for a red banner or **\"Blocked\"** status at the top\n\n### 2. Unblock it yourself (fastest option)\n\n1. On the card details screen, tap **Unblock Card**\n2. Verify your identity using Face ID, fingerprint, or your 6-digit PIN\n3. Confirm the unblock request\n4. Wait 30–60 seconds for the change to take effect\n\n**Try your card again** at the ATM or point of sale.\n\n### 3. Add a travel notice (prevents future blocks)\n\n1. Go to **Wallet** > **Cards** > **Settings** (gear icon)\n2. Tap **Travel Plans**\n3. Enter your destination country and travel dates\n4. Tap **Save**\n\nThis tells our fraud system to expect transactions from that location.\n\n### 4. Check your spending limits\n\n1. In **Wallet**, tap your card\n2. Scroll to **Limits & Controls**\n3. Review your **Daily International Limit** and **Monthly Limit**\n4. If needed, tap **Increase Limit** and follow the prompts (may require identity verification)\n\n### 5. Contact support if the unblock option is missing\n\n- Tap **Help** in the app, then **Chat with Us**\n- Or call the number on the back of your card (24/7, toll-free from most countries)\n\n**Security reminder:** We will never ask for your full card number, CVV, or PIN in a chat or call. Only verify your identity through the app's secure prompts.\n\n---\n\n## Still Not Working?\n\n### Edge Case 1: \"Unblock\" button is greyed out\n\n**Cause:** Your card may be permanently blocked due to suspected fraud or multiple failed PIN attempts.\n\n**Solution:**  \n- Tap **Help** > **Report a Problem** > **Card Issues**  \n- Our security team will review your account within 2 hours  \n- You may need to order a replacement card (free, arrives in 3–5 business days to your registered address)\n\n### Edge Case 2: Card unblocks but transactions still decline\n\n**Cause:** The merchant's payment terminal may not support your card network (Mastercard/Visa) or contactless payments abroad.\n\n**Solution:**  \n- Try **inserting the card** and entering your PIN instead of tapping  \n- Use an ATM to withdraw local currency as a backup  \n- Check if the merchant accepts your card type (look for logos at the register)  \n- Ensure you have **sufficient balance** – international transactions may include foreign exchange fees (typically 0–2%)\n\n---\n\n## Prevent Future Blocks\n\n✅ **Always add travel plans** before you leave  \n✅ **Enable push notifications** for real-time transaction alerts  \n✅ **Keep your contact details up to date** in **Profile** > **Personal Info**  \n\n---\n\n**Need more help?** Visit our [Security & Fraud Protection](https://help.superapp.eu/security) guide or chat with us in-app 24/7.",
       "body": "",
       "categories": [],
-      "groups": [
-        "payments",
-        "security"
-      ],
+      "groups": [],
       "updatedAt": "2026-03-04T14:01:31.964Z",
       "locale": "ar",
       "categoriesJoined": "",
-      "groupsJoined": "payments security"
+      "groupsJoined": ""
     },
     {
       "id": "6tsie4SHH8sThpdWg5uB91",
@@ -25,14 +22,11 @@
       "summary": "Temporarily freeze your card to prevent transactions, then unfreeze anytime.",
       "body": "",
       "categories": [],
-      "groups": [
-        "payments",
-        "security"
-      ],
+      "groups": [],
       "updatedAt": "2026-02-17T18:09:17.146Z",
       "locale": "ar",
       "categoriesJoined": "",
-      "groupsJoined": "payments security"
+      "groupsJoined": ""
     },
     {
       "id": "3dljGLLbdHBM6cN8cwpze9",
@@ -41,13 +35,11 @@
       "summary": "Manage billing settings and invoices in your account.",
       "body": "document",
       "categories": [],
-      "groups": [
-        "payments"
-      ],
+      "groups": [],
       "updatedAt": "2026-02-17T17:40:28.428Z",
       "locale": "ar",
       "categoriesJoined": "",
-      "groupsJoined": "payments"
+      "groupsJoined": ""
     },
     {
       "id": "4gOe6pPsTPm5ZiWjU5XPxx",
@@ -56,14 +48,11 @@
       "summary": "Common reasons a card payment may fail and how to fix it quickly.",
       "body": "If your card payment fails, start by checking your balance, payment limits, and whether the merchant supports your card type. Then verify your card isn’t frozen and that your billing address matches what the merchant expects. If the issue persists, try a smaller amount, retry after a few minutes, and confirm there are no security blocks on your account.",
       "categories": [],
-      "groups": [
-        "payments",
-        "security"
-      ],
+      "groups": [],
       "updatedAt": "2026-02-17T17:40:08.954Z",
       "locale": "ar",
       "categoriesJoined": "",
-      "groupsJoined": "payments security"
+      "groupsJoined": ""
     },
     {
       "id": "1ChapOs4CK8erH92PCN7YO",
@@ -71,16 +60,12 @@
       "title": "Getting Started Overview",
       "summary": "Learn how to get started quickly.",
       "body": "This article walks you through the basics of getting started.",
-      "categories": [
-        "getting-started"
-      ],
-      "groups": [
-        "products"
-      ],
+      "categories": [],
+      "groups": [],
       "updatedAt": "2026-02-17T17:39:51.138Z",
       "locale": "ar",
-      "categoriesJoined": "getting-started",
-      "groupsJoined": "products"
+      "categoriesJoined": "",
+      "groupsJoined": ""
     },
     {
       "id": "7FYb79TnrOGlB55n9K3xa5",
@@ -88,16 +73,12 @@
       "title": "Update your profile information",
       "summary": "Change your name, contact details, and preferences from your account settings.",
       "body": "Open Account settings to update your personal details. Some fields may require re-verification for security reasons. After saving changes, confirm they appear correctly across your profile and notifications.",
-      "categories": [
-        "getting-started"
-      ],
-      "groups": [
-        "security"
-      ],
+      "categories": [],
+      "groups": [],
       "updatedAt": "2026-02-17T17:36:13.412Z",
       "locale": "ar",
-      "categoriesJoined": "getting-started",
-      "groupsJoined": "security"
+      "categoriesJoined": "",
+      "groupsJoined": ""
     },
     {
       "id": "5atsbC9RGcxuPrK5HoaeJt",
@@ -105,16 +86,12 @@
       "title": "Getting started overview",
       "summary": "A quick checklist to get set up and ready to go.",
       "body": "",
-      "categories": [
-        "getting-started"
-      ],
-      "groups": [
-        "payments"
-      ],
+      "categories": [],
+      "groups": [],
       "updatedAt": "2026-02-17T17:35:47.455Z",
       "locale": "ar",
-      "categoriesJoined": "getting-started",
-      "groupsJoined": "payments"
+      "categoriesJoined": "",
+      "groupsJoined": ""
     },
     {
       "id": "4xOOnBhwzuoZC5W7NSLIMA",
@@ -122,17 +99,12 @@
       "title": "Resetting your password",
       "summary": "Steps to reset your password and regain access to your account.",
       "body": "document",
-      "categories": [
-        "getting-started"
-      ],
-      "groups": [
-        "payments",
-        "security"
-      ],
+      "categories": [],
+      "groups": [],
       "updatedAt": "2026-02-17T17:35:29.943Z",
       "locale": "ar",
-      "categoriesJoined": "getting-started",
-      "groupsJoined": "payments security"
+      "categoriesJoined": "",
+      "groupsJoined": ""
     }
   ]
 }

@@ -24,6 +24,7 @@ export class MockCommerceAdapter extends BaseIntegration implements ICommerceInt
     // Load mock product data
     try {
       this.products = await loadMockData<Product[]>('products.json');
+  
       this.log('info', `Loaded ${this.products.length} mock products`);
     } catch (error) {
       this.log('warn', 'No mock products file found, using empty catalog');

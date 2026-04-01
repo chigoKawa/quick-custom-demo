@@ -1,0 +1,22 @@
+{
+  "name": "PMS Integration",
+  "src": "app/ctf-apps/pms-integration/page.tsx",
+  "locations": [
+    {
+      "location": "app-config",
+      "src": "app/ctf-apps/pms-integration/locations/config-screen.tsx"
+    },
+    {
+      "location": "entry-field",
+      "src": "app/ctf-apps/pms-integration/locations/property-selector-field.tsx"
+    },
+    {
+      "location": "entry-sidebar",
+      "src": "app/ctf-apps/pms-integration/locations/pms-sidebar.tsx"
+    },
+    {
+      "location": "dialog",
+      "src": "app/ctf-apps/pms-integration/locations/property-selector-field.tsx"
+    }
+  ]
+}

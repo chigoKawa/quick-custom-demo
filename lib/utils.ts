@@ -7,6 +7,7 @@ import {
   IBlogPostPage,
   ICategoryPage,
   IProductStory,
+  IPmsPropertyEntry,
 } from "@/features/contentful/type";
 
 export function cn(...inputs: ClassValue[]) {
@@ -44,7 +45,7 @@ export function getTimelineToken(
 }
 
 export const extractUrlFromTarget = (
-  target: IExternalUrl | ILandingPage | IBlogPostPage | ICategoryPage | IProductStory
+  target: IExternalUrl | ILandingPage | IBlogPostPage | ICategoryPage | IProductStory | IPmsPropertyEntry
 ) => {
   const contentType = target?.sys?.contentType?.sys?.id;
   if (contentType === "landingPage") {
@@ -58,7 +59,6 @@ export const extractUrlFromTarget = (
 
   if (contentType === "blogPost") {
     const entry = target as IBlogPostPage;
-
     return `/blog/${entry?.fields?.slug}`;
   }
 
@@ -72,6 +72,12 @@ export const extractUrlFromTarget = (
     const entry = target as IProductStory;
     const slug = entry?.fields?.slug;
     return slug ? `/stories/${slug}` : "";
+  }
+
+  if (contentType === "pmsProperty") {
+    const entry = target as IPmsPropertyEntry;
+    const id = entry?.fields?.propertyId ?? entry?.fields?.slug;
+    return id ? `/properties/${id}` : "";
   }
 
   if (contentType === "externalLink") {

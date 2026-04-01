@@ -15,6 +15,9 @@ import { MockAuthAdapter } from '../auth/mock.adapter';
 // Search
 import { MockSearchAdapter } from '../search/mock.adapter';
 
+// PMS
+import { MockPmsAdapter } from '../pms/mock.adapter';
+
 /**
  * Integration factory - creates the appropriate adapter based on type and provider
  */
@@ -80,6 +83,9 @@ export class IntegrationFactory {
 
       case 'search':
         return this.createSearchAdapter(provider, config);
+
+      case 'pms':
+        return this.createPmsAdapter(provider, config);
 
       default:
         throw new IntegrationNotFoundError(type, provider);
@@ -151,6 +157,22 @@ export class IntegrationFactory {
 
       default:
         throw new IntegrationNotFoundError('search', provider);
+    }
+  }
+
+  /**
+   * Create PMS adapter
+   */
+  private static createPmsAdapter(provider: string, config: any): IBaseIntegration {
+    switch (provider) {
+      case 'mock':
+        return new MockPmsAdapter({ config });
+
+      // case 'beds24':
+      //   return new Beds24Adapter({ config });
+
+      default:
+        throw new IntegrationNotFoundError('pms', provider);
     }
   }
 

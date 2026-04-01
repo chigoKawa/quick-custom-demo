@@ -35,7 +35,7 @@ export interface IBaseButton extends Entry {
   fields: {
     internalTitle: EntryFields.Symbol;
     label: EntryFields.Symbol;
-    target: IExternalUrl | ILandingPage | IBlogPostPage | ICategoryPage | IProductStory;
+    target: IExternalUrl | ILandingPage | IBlogPostPage | ICategoryPage | IProductStory | IPmsPropertyEntry;
     openInNewTab?: EntryFields.Boolean;
     color: EntryFields.Symbol<
       "Default" | "Primary" | "Secondary" | "Success" | "Danger" | "Warning"
@@ -162,9 +162,12 @@ export interface ILandingPage extends Entry {
         | CalloutSkeleton
         | KbGroupSkeleton
         | MultiItemModuleSkeleton
+        | PropertyListingsSkeleton
       >
     >;
     seoMetadata?: ISeo;
+    parent?: EntryFields.EntryLink<LandingPageSkeleton>;
+    fullPath?: EntryFields.Symbol;
   };
 }
 
@@ -486,4 +489,72 @@ export interface IProductStory extends Entry {
 export type ProductStorySkeleton = {
   contentTypeId: "productStory";
   fields: IProductStory["fields"];
+};
+
+/**
+ * General Topic — a versatile content type usable in many contexts
+ * (offers, FAQs, callouts, tooltips, etc.).
+ * Fields: internalName, title, body (RichText), media (image/video Asset), tagline (≤80 chars).
+ */
+export interface IGeneralTopic extends Entry<any> {
+  fields: {
+    internalName: EntryFields.Symbol;
+    title: EntryFields.Symbol;
+    body?: EntryFields.RichText;
+    media?: Asset;
+    tagline?: EntryFields.Symbol;
+  };
+}
+
+export type GeneralTopicSkeleton = {
+  contentTypeId: "generalTopic";
+  fields: IGeneralTopic["fields"];
+};
+
+/**
+ * Property Listings — a curated section module combining multiple pmsProperty entries
+ * with editorial framing (title, subtitle, body). Supports grid / carousel / list layouts
+ * with an optional CTA. Designed for landing page sections.
+ */
+export interface IPropertyListings extends Entry<any> {
+  fields: {
+    internalName: EntryFields.Symbol;
+    title?: EntryFields.Symbol;
+    subtitle?: EntryFields.Symbol;
+    body?: EntryFields.Text;
+    properties: EntryFields.Array<EntryFields.EntryLink<PmsPropertyEntrySkeleton>>;
+    layout?: EntryFields.Symbol<"grid" | "carousel" | "list">;
+    columns?: EntryFields.Integer;
+    ctaLabel?: EntryFields.Symbol;
+    ctaUrl?: EntryFields.Symbol;
+    backgroundTheme?: EntryFields.Symbol<"default" | "brand" | "dark" | "none">;
+    nt_experiences?: Entry<EntrySkeletonType>[];
+  };
+}
+
+export type PropertyListingsSkeleton = {
+  contentTypeId: "propertyListings";
+  fields: IPropertyListings["fields"];
+};
+
+export interface IPmsPropertyEntry extends Entry<any> {
+  fields: {
+    internalName: EntryFields.Symbol;
+    propertyId: EntryFields.Symbol;
+    slug: EntryFields.Symbol;
+    editorialTitle?: EntryFields.Symbol;
+    editorialIntro?: EntryFields.RichText;
+    /** Optional editorial hero — overrides the default PMS hero image when set. */
+    hero?: EntryFields.EntryLink<HeroModuleSkeleton>;
+    /** Optional editorial gallery — overrides the PMS gallery image URLs when set. */
+    gallery?: EntryFields.Array<Asset>;
+    /** Optional curated offers — rendered instead of (or in addition to) the PMS offers. */
+    offers?: EntryFields.Array<EntryFields.EntryLink<GeneralTopicSkeleton>>;
+    bodySections?: EntryFields.Array<EntryFields.EntryLink<EntrySkeletonType>>;
+  };
+}
+
+export type PmsPropertyEntrySkeleton = {
+  contentTypeId: "pmsProperty";
+  fields: IPmsPropertyEntry["fields"];
 };

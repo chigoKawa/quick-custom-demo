@@ -50,6 +50,8 @@ export default function ProductStoryPage({ entry: published, locale, microcopy }
         <DefaultProductHero product={product} angles={storyAngles} />
       ) : null}
 
+      
+
       {/* ── Primary Product + Add to Cart ── */}
       {product && (
         <section className="relative">
@@ -229,6 +231,7 @@ function DefaultProductHero({
 }) {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-primary/5">
+
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
         <div className="absolute bottom-1/3 -right-32 w-80 h-80 bg-primary/10 rounded-full blur-3xl" />

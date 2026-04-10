@@ -17,7 +17,14 @@ import {
 } from "lucide-react";
 import type { Entry, Asset } from "contentful";
 import type { SiteSettingsSkeleton } from "@/lib/site-settings";
-import { resolveNavLinkUrl, getAssetUrl, getIconName } from "@/lib/site-settings";
+import {
+  resolveNavLinkUrl,
+  getAssetUrl,
+  getIconName,
+  getEntryField,
+  getEntryFieldArray,
+} from "@/lib/site-settings";
+import { useSiteChromeLocale } from "@/features/site-chrome-locale";
 import { useContentfulInspectorMode, useContentfulLiveUpdates } from "@contentful/live-preview/react";
 
 interface FooterProps {
@@ -36,25 +43,10 @@ const iconComponents: Record<string, LucideIcon> = {
   credit_card: CreditCard,
 };
 
-// Safe field accessor for Contentful entries (handles localized vs resolved fields)
-function getField<T>(entry: any, fieldName: string, fallback: T): T {
-  if (!entry?.fields) return fallback;
-  const value = entry.fields[fieldName];
-  if (value === undefined || value === null) return fallback;
-  // If it's a localized object, try to get the first value
-  if (typeof value === 'object' && !Array.isArray(value) && !('sys' in value)) {
-    const keys = Object.keys(value);
-    if (keys.length > 0) return value[keys[0]] as T;
-  }
-  return value as T;
-}
-
-function getFieldArray<T>(entry: any, fieldName: string): T[] {
-  const value = getField(entry, fieldName, []);
-  return Array.isArray(value) ? value : [];
-}
-
 const Footer = ({ siteSettings }: FooterProps) => {
+  const { locale: chromeLocale, defaultLocale: chromeDefaultLocale } =
+    useSiteChromeLocale();
+  const localePick = { locale: chromeLocale, defaultLocale: chromeDefaultLocale };
   const thisyear = new Date().getFullYear();
   const [localesData, setLocalesData] = useState<Array<{ code: string; name?: string; default?: boolean }>>([]);
 
@@ -81,14 +73,40 @@ const Footer = ({ siteSettings }: FooterProps) => {
   }, []);
 
   // Extract data from site settings with safe accessors
-  const logoAsset = getField<Asset | null>(liveSiteSettings, 'logo', null);
-  const logoUrl = logoAsset ? getAssetUrl(logoAsset) : null;
-  const logoAlt = getField(liveSiteSettings, 'logoAlt', 'Logo');
-  const footerFeatures = getFieldArray<Entry<any>>(liveSiteSettings, 'footerFeatures');
-  const footerLinkColumns = getFieldArray<Entry<any>>(liveSiteSettings, 'footerLinkColumns');
-  const footerSocialLinks = getFieldArray<Entry<any>>(liveSiteSettings, 'footerSocialLinks');
-  const footerPaymentMethods = getFieldArray<Entry<any>>(liveSiteSettings, 'footerPaymentMethods');
-  const footerLegalText = getField(liveSiteSettings, 'footerLegalText', `© ${thisyear} All rights reserved.`);
+  const logoAsset = getEntryField<Asset | null>(
+    liveSiteSettings,
+    "logo",
+    null,
+    localePick
+  );
+  const logoUrl = logoAsset ? getAssetUrl(logoAsset, localePick) : null;
+  const logoAlt = getEntryField(liveSiteSettings, "logoAlt", "Logo", localePick);
+  const footerFeatures = getEntryFieldArray<Entry<any>>(
+    liveSiteSettings,
+    "footerFeatures",
+    localePick
+  );
+  const footerLinkColumns = getEntryFieldArray<Entry<any>>(
+    liveSiteSettings,
+    "footerLinkColumns",
+    localePick
+  );
+  const footerSocialLinks = getEntryFieldArray<Entry<any>>(
+    liveSiteSettings,
+    "footerSocialLinks",
+    localePick
+  );
+  const footerPaymentMethods = getEntryFieldArray<Entry<any>>(
+    liveSiteSettings,
+    "footerPaymentMethods",
+    localePick
+  );
+  const footerLegalText = getEntryField(
+    liveSiteSettings,
+    "footerLegalText",
+    `© ${thisyear} All rights reserved.`,
+    localePick
+  );
 
   return (
     <footer className="bg-foreground text-background">
@@ -98,9 +116,14 @@ const Footer = ({ siteSettings }: FooterProps) => {
           <div className="container mx-auto px-4 py-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {footerFeatures.map((featureEntry, idx) => {
-                const title = getField(featureEntry, 'title', '');
-                const description = getField(featureEntry, 'description', '');
-                const iconKey = getField(featureEntry, 'icon', '');
+                const title = getEntryField(featureEntry, "title", "", localePick);
+                const description = getEntryField(
+                  featureEntry,
+                  "description",
+                  "",
+                  localePick
+                );
+                const iconKey = getEntryField(featureEntry, "icon", "", localePick);
                 const iconName = getIconName(iconKey);
                 const IconComponent = iconName ? iconComponents[iconName] : Truck;
 
@@ -164,10 +187,15 @@ const Footer = ({ siteSettings }: FooterProps) => {
             {footerSocialLinks.length > 0 && (
               <div className="flex gap-3">
                 {footerSocialLinks.map((linkEntry, idx) => {
-                  const href = resolveNavLinkUrl(linkEntry);
-                  const iconKey = getField(linkEntry, 'icon', '');
-                  const openInNewTab = getField(linkEntry, 'openInNewTab', false);
-                  const rel = getField(linkEntry, 'rel', '');
+                  const href = resolveNavLinkUrl(linkEntry, localePick);
+                  const iconKey = getEntryField(linkEntry, "icon", "", localePick);
+                  const openInNewTab = getEntryField(
+                    linkEntry,
+                    "openInNewTab",
+                    false,
+                    localePick
+                  );
+                  const rel = getEntryField(linkEntry, "rel", "", localePick);
                   const iconName = getIconName(iconKey);
                   const IconComponent = iconName ? iconComponents[iconName] : null;
 
@@ -191,8 +219,8 @@ const Footer = ({ siteSettings }: FooterProps) => {
 
           {/* Footer link columns */}
           {footerLinkColumns.map((columnEntry, idx) => {
-            const title = getField(columnEntry, 'title', '');
-            const links = getFieldArray<Entry<any>>(columnEntry, 'links');
+            const title = getEntryField(columnEntry, "title", "", localePick);
+            const links = getEntryFieldArray<Entry<any>>(columnEntry, "links", localePick);
 
             return (
               <div key={columnEntry.sys?.id || idx}>
@@ -205,10 +233,15 @@ const Footer = ({ siteSettings }: FooterProps) => {
                 </h4>
                 <ul className="space-y-2">
                   {links.map((linkEntry, linkIdx) => {
-                    const label = getField(linkEntry, 'label', '');
-                    const openInNewTab = getField(linkEntry, 'openInNewTab', false);
-                    const rel = getField(linkEntry, 'rel', '');
-                    const href = resolveNavLinkUrl(linkEntry);
+                    const label = getEntryField(linkEntry, "label", "", localePick);
+                    const openInNewTab = getEntryField(
+                      linkEntry,
+                      "openInNewTab",
+                      false,
+                      localePick
+                    );
+                    const rel = getEntryField(linkEntry, "rel", "", localePick);
+                    const href = resolveNavLinkUrl(linkEntry, localePick);
 
                     return (
                       <li key={linkEntry.sys?.id || linkIdx}>
@@ -250,9 +283,14 @@ const Footer = ({ siteSettings }: FooterProps) => {
             {footerPaymentMethods.length > 0 && (
               <div className="flex gap-2">
                 {footerPaymentMethods.map((paymentEntry, idx) => {
-                  const label = getField(paymentEntry, 'label', '');
-                  const iconAsset = getField<Asset | null>(paymentEntry, 'icon', null);
-                  const iconUrl = iconAsset ? getAssetUrl(iconAsset) : null;
+                  const label = getEntryField(paymentEntry, "label", "", localePick);
+                  const iconAsset = getEntryField<Asset | null>(
+                    paymentEntry,
+                    "icon",
+                    null,
+                    localePick
+                  );
+                  const iconUrl = iconAsset ? getAssetUrl(iconAsset, localePick) : null;
 
                   return (
                     <div

@@ -86,13 +86,16 @@ export async function getSiteSettings(
   preview?: boolean,
   timelineToken?: string | null
 ): Promise<Entry<SiteSettingsSkeleton> | null> {
+  const query: Record<string, unknown> = {
+    content_type: "siteSettings",
+    include: 5,
+    order: "sys.createdAt",
+  };
+  if (locale) {
+    query.locale = locale;
+  }
   const entries = await getEntries<SiteSettingsSkeleton>(
-    {
-      content_type: "siteSettings",
-      locale,
-      include: 5, // Deep include to get all nested references
-      order: "sys.createdAt", // Oldest first — baseline before variants
-    },
+    query,
     preview || false,
     timelineToken
   );
@@ -110,35 +113,95 @@ export async function getSiteSettings(
   return baseline || entries[0] || null;
 }
 
-// Safe field accessor for Contentful entries (handles localized vs resolved fields)
-function getFieldValue<T>(entry: any, fieldName: string, fallback: T): T {
-  if (!entry?.fields) return fallback;
-  const value = entry.fields[fieldName];
-  if (value === undefined || value === null) return fallback;
-  // If it's a localized object, try to get the first value
-  if (typeof value === 'object' && !Array.isArray(value) && !('sys' in value)) {
-    const keys = Object.keys(value);
-    if (keys.length > 0) return value[keys[0]] as T;
+export type LocaleFieldPick = { locale?: string; defaultLocale?: string };
+
+/**
+ * Resolve a Contentful field value: plain scalar/entry or locale-keyed map
+ * (Delivery API can return maps when resolveLocale:false / nested includes).
+ */
+export function resolveLocalizedField<T>(
+  raw: unknown,
+  pick?: LocaleFieldPick
+): T | undefined {
+  if (raw === undefined || raw === null) return undefined;
+  if (typeof raw !== "object" || Array.isArray(raw)) return raw as T;
+  const obj = raw as Record<string, unknown> & { sys?: unknown };
+  if (obj.sys !== undefined && typeof obj.sys === "object") {
+    return raw as T;
   }
-  return value as T;
+  const { locale, defaultLocale } = pick ?? {};
+  if (locale && raw !== null && locale in obj) {
+    return obj[locale] as T;
+  }
+  if (defaultLocale && raw !== null && defaultLocale in obj) {
+    return obj[defaultLocale] as T;
+  }
+  const keys = Object.keys(obj);
+  if (keys.length > 0) return obj[keys[0]] as T;
+  return undefined;
 }
+
+function getFieldValue<T>(
+  entry: any,
+  fieldName: string,
+  fallback: T,
+  pick?: LocaleFieldPick
+): T {
+  if (!entry?.fields) return fallback;
+  const resolved = resolveLocalizedField<T>(entry.fields[fieldName], pick);
+  return resolved === undefined ? fallback : resolved;
+}
+
+/** Client/server helper for reading localized entry fields. */
+export function getEntryField<T>(
+  entry: any,
+  fieldName: string,
+  fallback: T,
+  pick?: LocaleFieldPick
+): T {
+  return getFieldValue(entry, fieldName, fallback, pick);
+}
+
+export function getEntryFieldArray<T>(
+  entry: any,
+  fieldName: string,
+  pick?: LocaleFieldPick
+): T[] {
+  const v = getFieldValue(entry, fieldName, [] as T[], pick);
+  return Array.isArray(v) ? v : [];
+}
+
+export type ResolveNavLinkUrlOptions = {
+  /** Active locale from the `[locale]` segment (after middleware rewrite). */
+  locale?: string;
+  /** Space default locale — URLs stay unprefixed for this locale (see middleware). */
+  defaultLocale?: string;
+};
 
 /**
  * Helper to resolve nav link URL
  * Priority: target page slug > href
  */
-export function resolveNavLinkUrl(navLink: Entry<NavLinkSkeleton> | Entry<any>, locale?: string): string {
-  const target = getFieldValue<Entry<any> | null>(navLink, 'target', null);
-  const href = getFieldValue<string>(navLink, 'href', '#');
+export function resolveNavLinkUrl(
+  navLink: Entry<NavLinkSkeleton> | Entry<any>,
+  options?: ResolveNavLinkUrlOptions
+): string {
+  const locale = options?.locale;
+  const defaultLocale = options?.defaultLocale ?? 'en-US';
+  const pick: LocaleFieldPick = { locale, defaultLocale };
+  const target = getFieldValue<Entry<any> | null>(navLink, 'target', null, pick);
+  const href = getFieldValue<string>(navLink, 'href', '#', pick);
 
   // If target page is set, use its slug
   if (target) {
-    const slug = getFieldValue<string>(target, 'slug', '') || getFieldValue<string>(target, 'url', '');
+    const slug =
+      getFieldValue<string>(target, 'slug', '', pick) ||
+      getFieldValue<string>(target, 'url', '', pick);
 
     if (slug) {
-      // Prepend locale if not default
-      const localePrefix = locale && locale !== 'en-US' ? `/${locale}` : '';
-      return `${localePrefix}/${slug}`;
+      const localePrefix =
+        locale && locale !== defaultLocale ? `/${locale}` : '';
+      return `${localePrefix}/${slug}`.replace(/\/+/g, '/');
     }
   }
 
@@ -172,19 +235,21 @@ export function getIconName(iconKey?: string): string | null {
 /**
  * Get asset URL from Contentful asset
  */
-export function getAssetUrl(asset?: Asset | any): string | null {
+export function getAssetUrl(
+  asset?: Asset | any,
+  pick?: LocaleFieldPick
+): string | null {
   if (!asset || !asset.fields) {
     return null;
   }
 
   // Handle localized file field
-  let file = asset.fields.file;
+  let file: unknown = asset.fields.file;
   if (!file) return null;
-  
-  // If file is localized, get first locale value
-  if (typeof file === 'object' && !('url' in file)) {
-    const keys = Object.keys(file);
-    if (keys.length > 0) file = file[keys[0]];
+
+  if (typeof file === "object" && file !== null && !("url" in file)) {
+    const resolved = resolveLocalizedField<{ url?: string }>(file, pick);
+    file = resolved ?? file;
   }
   
   if (!file || typeof file !== 'object') return null;

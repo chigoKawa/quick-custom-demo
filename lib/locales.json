@@ -88,12 +88,12 @@
     }
   },
   {
-    "code": "zh",
-    "name": "Chinese",
+    "code": "da",
+    "name": "Danish",
     "default": false,
     "fallbackCode": "en-US",
     "sys": {
-      "id": "032RWfgTQ4Ldx8iOjYLPpj",
+      "id": "032SLFq1zRdmFSVeyW52lS",
       "type": "Locale",
       "version": 1
     }

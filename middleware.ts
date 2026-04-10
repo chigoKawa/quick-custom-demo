@@ -41,6 +41,33 @@ const PREVIEW_NO_CACHE_HEADERS: HeadersInit = {
   Expires: "0",
 };
 
+/**
+ * Build a NextResponse that forwards preview/timeline flags as request
+ * headers so that layouts (which lack searchParams) can detect preview mode.
+ */
+function withPreviewHeaders(
+  request: NextRequest,
+  base: NextResponse
+): NextResponse {
+  const isPreview = request.nextUrl.searchParams.has("preview");
+  if (!isPreview) return base;
+
+  const timeline = request.nextUrl.searchParams.get("timeline") ?? "";
+
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-contentful-preview", "1");
+  if (timeline) {
+    requestHeaders.set("x-contentful-timeline", timeline);
+  }
+
+  const res = NextResponse.next({ request: { headers: requestHeaders } });
+
+  for (const [k, v] of Object.entries(PREVIEW_NO_CACHE_HEADERS)) {
+    res.headers.set(k, v);
+  }
+  return res;
+}
+
 export async function middleware(request: NextRequest) {
   const { locales, defaultLocale } = await getI18nConfig();
   const { pathname } = request.nextUrl;
@@ -62,21 +89,11 @@ export async function middleware(request: NextRequest) {
       if (!isPreview && cleanPath !== pathname) {
         const url = request.nextUrl.clone();
         url.pathname = cleanPath;
-        // preserve existing search params by mutating only the pathname
         return NextResponse.redirect(url);
       }
     }
-    // Preview/timeline: prevent browser from caching the iframe response
-    // so switching releases always triggers a fresh server render.
-    if (isPreview) {
-      const res = NextResponse.next();
-      for (const [k, v] of Object.entries(PREVIEW_NO_CACHE_HEADERS)) {
-        res.headers.set(k, v);
-      }
-      return res;
-    }
-    // Non-default locales: let the request continue
-    return;
+
+    return withPreviewHeaders(request, NextResponse.next());
   }
 
   // 2) If URL is missing a locale prefix
@@ -86,14 +103,7 @@ export async function middleware(request: NextRequest) {
   if (best === defaultLocale) {
     const url = request.nextUrl.clone();
     url.pathname = `/${defaultLocale}${pathname}`;
-    const res = NextResponse.rewrite(url);
-    // Bust cache for preview/timeline requests
-    if (isPreview) {
-      for (const [k, v] of Object.entries(PREVIEW_NO_CACHE_HEADERS)) {
-        res.headers.set(k, v);
-      }
-    }
-    return res;
+    return withPreviewHeaders(request, NextResponse.rewrite(url));
   }
 
   // For non-default best matches: redirect to locale-prefixed URL

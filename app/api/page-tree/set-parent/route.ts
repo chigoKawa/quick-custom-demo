@@ -12,18 +12,35 @@ function getCmaClient(): PlainClientAPI {
 
 /**
  * POST /api/page-tree/set-parent
- * Body: { entryId: string; parentId: string | null; locale: string }
  *
- * Sets (or clears) the `parent` field on the given entry, then
- * recomputes and writes `fullPath` by fetching the parent chain.
+ * Body: {
+ *   entryId: string;
+ *   parentId: string | null;
+ *   locale?: string;
+ *   parentFieldName?: string;   // field ID for the parent link (default: "parent")
+ *   fullPathFieldName?: string;  // field ID for the full path  (default: "fullPath")
+ *   slugFieldName?: string;      // field ID for the slug       (default: "slug")
+ * }
  */
 export async function POST(request: NextRequest) {
   try {
-    const { entryId, parentId, locale = "en-US" } = await request.json() as {
+    const body = await request.json() as {
       entryId: string;
       parentId: string | null;
       locale?: string;
+      parentFieldName?: string;
+      fullPathFieldName?: string;
+      slugFieldName?: string;
     };
+
+    const {
+      entryId,
+      parentId,
+      locale = "en-US",
+      parentFieldName = "parent",
+      fullPathFieldName = "fullPath",
+      slugFieldName = "slug",
+    } = body;
 
     if (!entryId) {
       return NextResponse.json({ success: false, error: "entryId is required" }, { status: 400 });
@@ -31,7 +48,6 @@ export async function POST(request: NextRequest) {
 
     const client = getCmaClient();
 
-    // Fetch the entry
     const entry = await client.entry.get({
       spaceId: SPACE_ID,
       environmentId: ENVIRONMENT_ID,
@@ -40,24 +56,27 @@ export async function POST(request: NextRequest) {
 
     const fields = entry.fields as Record<string, Record<string, unknown>>;
 
-    // Set or clear the parent field
     if (parentId) {
-      fields.parent = {
+      fields[parentFieldName] = {
         [locale]: { sys: { type: "Link", linkType: "Entry", id: parentId } },
       };
     } else {
-      // Remove parent by setting to undefined; CMA will clear it
-      delete fields.parent;
+      delete fields[parentFieldName];
     }
 
-    // Compute the new fullPath by fetching the parent chain
-    const newPath = await computePath(client, entryId, parentId, locale);
+    const newPath = await computePath(
+      client,
+      entryId,
+      parentId,
+      locale,
+      slugFieldName,
+      parentFieldName
+    );
 
-    if (fields.fullPath !== undefined || newPath) {
-      fields.fullPath = { [locale]: newPath };
+    if (fields[fullPathFieldName] !== undefined || newPath) {
+      fields[fullPathFieldName] = { [locale]: newPath };
     }
 
-    // Update entry
     const updated = await client.entry.update(
       { spaceId: SPACE_ID, environmentId: ENVIRONMENT_ID, entryId },
       { ...entry, fields }
@@ -75,35 +94,48 @@ async function computePath(
   entryId: string,
   parentId: string | null,
   locale: string,
+  slugFieldName: string,
+  parentFieldName: string,
   depth = 0
 ): Promise<string> {
   if (depth > 20) return "/(cycle-detected)";
 
-  // Get the slug of the current entry
   const entry = await client.entry.get({
     spaceId: SPACE_ID,
     environmentId: ENVIRONMENT_ID,
     entryId,
   });
   const fields = entry.fields as Record<string, Record<string, unknown>>;
-  const slug = (fields.slug?.[locale] ?? fields.slug?.["en-US"] ?? entryId) as string;
+  const slug = (fields[slugFieldName]?.[locale] ?? fields[slugFieldName]?.["en-US"] ?? entryId) as string;
 
   const HOME_SLUG = process.env.NEXT_PUBLIC_CTF_HOMEPAGE_SLUG || "home";
   if (slug === HOME_SLUG) return "/";
 
   if (!parentId) return "/" + slug;
 
-  // Fetch parent's path recursively
   const parentEntry = await client.entry.get({
     spaceId: SPACE_ID,
     environmentId: ENVIRONMENT_ID,
     entryId: parentId,
   });
   const parentFields = parentEntry.fields as Record<string, Record<string, unknown>>;
-  const parentParentLink = parentFields.parent?.[locale] as { sys?: { id?: string } } | undefined;
+
+  // The parent may be a different content type with a different parent field name.
+  // Try the provided field name first, then fall back to "parent".
+  const parentParentLink =
+    (parentFields[parentFieldName]?.[locale] as { sys?: { id?: string } } | undefined) ??
+    (parentFields.parent?.[locale] as { sys?: { id?: string } } | undefined);
   const parentParentId = parentParentLink?.sys?.id ?? null;
 
-  const parentPath = await computePath(client, parentId, parentParentId, locale, depth + 1);
+  const parentPath = await computePath(
+    client,
+    parentId,
+    parentParentId,
+    locale,
+    slugFieldName,
+    parentFieldName,
+    depth + 1
+  );
   if (parentPath === "/(cycle-detected)") return "/(cycle-detected)";
   if (parentPath === "/") return "/" + slug;
   return parentPath + "/" + slug;

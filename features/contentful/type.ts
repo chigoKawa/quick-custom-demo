@@ -202,6 +202,8 @@ export interface IBlogPostPage extends Entry {
     featuredImage: Asset;
     author?: IPerson;
     seoMetadata?: ISeo;
+    parent?: EntryFields.EntryLink<LandingPageSkeleton | BlogPostPageSkeleton>;
+    fullPath?: EntryFields.Symbol;
   };
 }
 

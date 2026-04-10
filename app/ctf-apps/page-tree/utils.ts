@@ -1,4 +1,53 @@
-import type { PageTreeEntry, PageTreeNode } from "./types";
+import {
+  DEFAULT_CONTENT_TYPE_ID,
+  DEFAULT_FULLPATH_FIELD,
+  DEFAULT_PARENT_FIELD,
+  DEFAULT_SLUG_FIELD,
+} from "./constants";
+import type {
+  ContentTypeConfig,
+  PageTreeEntry,
+  PageTreeInstallationParameters,
+  PageTreeNode,
+} from "./types";
+
+/**
+ * Normalises installation parameters into a ContentTypeConfig[].
+ * Handles both the new `contentTypes` array and the legacy single-type fields.
+ */
+export function resolveContentTypes(
+  params: PageTreeInstallationParameters
+): ContentTypeConfig[] {
+  if (params.contentTypes && params.contentTypes.length > 0) {
+    return params.contentTypes;
+  }
+  return [
+    {
+      contentTypeId: params.contentTypeId ?? DEFAULT_CONTENT_TYPE_ID,
+      parentFieldName: params.parentFieldName ?? DEFAULT_PARENT_FIELD,
+      fullPathFieldName: params.fullPathFieldName ?? DEFAULT_FULLPATH_FIELD,
+      slugFieldName: params.slugFieldName ?? DEFAULT_SLUG_FIELD,
+    },
+  ];
+}
+
+/**
+ * Look up the ContentTypeConfig for a given content type ID.
+ * Falls back to defaults if not found.
+ */
+export function getConfigForType(
+  configs: ContentTypeConfig[],
+  contentTypeId: string
+): ContentTypeConfig {
+  return (
+    configs.find((c) => c.contentTypeId === contentTypeId) ?? {
+      contentTypeId,
+      parentFieldName: DEFAULT_PARENT_FIELD,
+      fullPathFieldName: DEFAULT_FULLPATH_FIELD,
+      slugFieldName: DEFAULT_SLUG_FIELD,
+    }
+  );
+}
 
 /**
  * Walks the parent chain to compute the full URL path for an entry.
@@ -16,16 +65,18 @@ export function computeFullPath(
   const entry = entries.find((e) => e.id === entryId);
   if (!entry) return "/unknown";
 
-  if (entry.slug === homeSlug) return "/";
+  const slug = entry.slug || entryId;
+
+  if (slug === homeSlug) return "/";
 
   if (!entry.parentId) {
-    return "/" + entry.slug;
+    return "/" + slug;
   }
 
   const parentPath = computeFullPath(entries, entry.parentId, homeSlug, depth + 1);
   if (parentPath === "/(cycle-detected)") return "/(cycle-detected)";
-  if (parentPath === "/") return "/" + entry.slug;
-  return parentPath + "/" + entry.slug;
+  if (parentPath === "/") return "/" + slug;
+  return parentPath + "/" + slug;
 }
 
 /**
@@ -33,13 +84,15 @@ export function computeFullPath(
  * Orphan = parentId is set but that parent ID is not in the list.
  * Uses a Map for O(1) lookups.
  */
-export function buildTree(entries: PageTreeEntry[]): {
+export function buildTree(
+  entries: PageTreeEntry[],
+  homeSlug = "home"
+): {
   roots: PageTreeNode[];
   orphans: PageTreeNode[];
 } {
   const nodeMap = new Map<string, PageTreeNode>();
 
-  // First pass: create all nodes
   for (const entry of entries) {
     nodeMap.set(entry.id, {
       ...entry,
@@ -49,7 +102,6 @@ export function buildTree(entries: PageTreeEntry[]): {
     });
   }
 
-  // Second pass: wire up parent-child relationships
   const roots: PageTreeNode[] = [];
   const orphans: PageTreeNode[] = [];
 
@@ -63,16 +115,15 @@ export function buildTree(entries: PageTreeEntry[]): {
     }
   }
 
-  // Third pass: assign depths and computedPaths (BFS from roots)
-  const homeSlug = "home";
   const assignDepthAndPath = (node: PageTreeNode, depth: number, parentPath: string) => {
     node.depth = depth;
-    if (node.slug === homeSlug) {
+    const slug = node.slug || node.id;
+    if (slug === homeSlug) {
       node.computedPath = "/";
     } else if (parentPath === "/") {
-      node.computedPath = "/" + node.slug;
+      node.computedPath = "/" + slug;
     } else {
-      node.computedPath = parentPath + "/" + node.slug;
+      node.computedPath = parentPath + "/" + slug;
     }
     for (const child of node.children) {
       assignDepthAndPath(child, depth + 1, node.computedPath);
@@ -84,10 +135,9 @@ export function buildTree(entries: PageTreeEntry[]): {
   }
 
   for (const orphan of orphans) {
-    orphan.computedPath = "/" + orphan.slug;
+    orphan.computedPath = "/" + (orphan.slug || orphan.id);
   }
 
-  // Sort roots and children alphabetically by title
   const sortNodes = (nodes: PageTreeNode[]) => {
     nodes.sort((a, b) => a.title.localeCompare(b.title));
     for (const node of nodes) {
@@ -113,31 +163,3 @@ export function getInitials(contentTypeId: string): string {
     .slice(0, 3);
 }
 
-/**
- * Fetch with AbortController timeout.
- */
-export async function fetchWithTimeout<T>(
-  url: string,
-  options: RequestInit = {},
-  timeoutMs = 8000
-): Promise<{ ok: true; data: T } | { ok: false; error: string }> {
-  const controller = new AbortController();
-  const id = setTimeout(() => controller.abort(), timeoutMs);
-
-  try {
-    const res = await fetch(url, { ...options, signal: controller.signal });
-    if (!res.ok) {
-      return { ok: false, error: `Request failed with status ${res.status}` };
-    }
-    const data = await res.json();
-    return { ok: true, data };
-  } catch (err: unknown) {
-    const isAbort = (err as { name?: string })?.name === "AbortError";
-    return {
-      ok: false,
-      error: isAbort ? `Request timed out after ${timeoutMs}ms` : "Network error",
-    };
-  } finally {
-    clearTimeout(id);
-  }
-}

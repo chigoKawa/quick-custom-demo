@@ -3,9 +3,10 @@
 import type { DialogAppSDK } from "@contentful/app-sdk";
 import { useSDK } from "@contentful/react-apps-toolkit";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { BADGE_COLOURS, DEFAULT_CONTENT_TYPE_ID, DEFAULT_LOCALE } from "../constants";
+import { BADGE_COLOURS, DEFAULT_LOCALE } from "../constants";
+import { fetchAllEntries } from "../cma-service";
 import type { PageTreeInstallationParameters, PageTreeEntry, PageTreeNode } from "../types";
-import { buildTree, computeFullPath, fetchWithTimeout, getInitials } from "../utils";
+import { buildTree, computeFullPath, getInitials, resolveContentTypes } from "../utils";
 import styles from "./parent-picker-dialog.module.css";
 
 interface InvocationParams {
@@ -37,14 +38,24 @@ export default function ParentPickerDialog() {
   const sdk = useSDK<DialogAppSDK>();
 
   const installParams = (sdk.parameters.installation ?? {}) as PageTreeInstallationParameters;
-  const invocation = ((sdk.parameters as unknown as { invocation?: InvocationParams }).invocation) ?? {
-    currentEntryId: "",
-    selectedEntryId: null,
-  };
+  const rawInvocation = (sdk.parameters as unknown as { invocation?: InvocationParams }).invocation;
+  const invocation: InvocationParams = rawInvocation && typeof rawInvocation === "object"
+    ? {
+        currentEntryId: rawInvocation.currentEntryId ?? "",
+        selectedEntryId: rawInvocation.selectedEntryId ?? null,
+      }
+    : { currentEntryId: "", selectedEntryId: null };
 
-  const contentTypeId = installParams.contentTypeId ?? DEFAULT_CONTENT_TYPE_ID;
+  const contentTypeConfigs = resolveContentTypes(installParams);
   const locale = installParams.locale ?? DEFAULT_LOCALE;
   const homeSlug = installParams.homeSlug ?? "home";
+
+  // Stable key for configs to prevent infinite re-fetches
+  const configsKey = useMemo(
+    () => JSON.stringify(contentTypeConfigs),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [JSON.stringify(contentTypeConfigs)]
+  );
 
   const [entries, setEntries] = useState<PageTreeEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -53,29 +64,25 @@ export default function ParentPickerDialog() {
   const [selectedId, setSelectedId] = useState<string | null>(invocation.selectedEntryId);
 
   useEffect(() => {
+    let cancelled = false;
     const load = async () => {
       setLoading(true);
       setError(null);
-      const result = await fetchWithTimeout<{ success: boolean; data: PageTreeEntry[] }>(
-        `/api/page-tree/entries?contentTypeId=${contentTypeId}&locale=${locale}`,
-        {},
-        10000
-      );
-      if (!result.ok) {
-        setError(result.error);
-      } else if (!result.data.success) {
-        setError("Failed to load entries");
-      } else {
-        setEntries(result.data.data);
+      try {
+        const data = await fetchAllEntries(sdk.cma, contentTypeConfigs, locale);
+        if (!cancelled) setEntries(data);
+      } catch (err) {
+        if (!cancelled) setError(err instanceof Error ? err.message : "Failed to load entries");
       }
-      setLoading(false);
+      if (!cancelled) setLoading(false);
     };
     load();
-  }, [contentTypeId, locale]);
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [configsKey, locale, sdk.cma]);
 
-  // Build flat node map for descendant collection
-  const { nodeMap, excludedIds } = useMemo(() => {
-    const { roots, orphans } = buildTree(entries);
+  const excludedIds = useMemo(() => {
+    const { roots, orphans } = buildTree(entries, homeSlug);
     const map = new Map<string, PageTreeNode>();
     const flatten = (node: PageTreeNode) => {
       map.set(node.id, node);
@@ -89,16 +96,16 @@ export default function ParentPickerDialog() {
     const descendants = collectDescendantIds(map, invocation.currentEntryId);
     for (const id of descendants) excluded.add(id);
 
-    return { nodeMap: map, excludedIds: excluded };
-  }, [entries, invocation.currentEntryId]);
+    return excluded;
+  }, [entries, homeSlug, invocation.currentEntryId]);
 
-  // Flat selectable list (excluding current entry + descendants)
+  // All entries with computed paths; excluded ones are marked disabled
   const selectableEntries = useMemo(() => {
     return entries
-      .filter((e) => !excludedIds.has(e.id))
       .map((e) => ({
         ...e,
         computedPath: computeFullPath(entries, e.id, homeSlug),
+        disabled: excludedIds.has(e.id),
       }))
       .filter((e) => {
         if (!search.trim()) return true;
@@ -109,7 +116,10 @@ export default function ParentPickerDialog() {
           e.slug.toLowerCase().includes(q)
         );
       })
-      .sort((a, b) => a.computedPath.localeCompare(b.computedPath));
+      .sort((a, b) => {
+        if (a.disabled !== b.disabled) return a.disabled ? 1 : -1;
+        return a.computedPath.localeCompare(b.computedPath);
+      });
   }, [entries, excludedIds, homeSlug, search]);
 
   const handleConfirm = useCallback(() => {
@@ -119,6 +129,10 @@ export default function ParentPickerDialog() {
     }
     (sdk as unknown as { close: (v: unknown) => void }).close({ selectedEntryId: selectedId });
   }, [sdk, selectedId]);
+
+  const handleRemoveParent = useCallback(() => {
+    (sdk as unknown as { close: (v: unknown) => void }).close({ selectedEntryId: null });
+  }, [sdk]);
 
   const handleCancel = useCallback(() => {
     (sdk as unknown as { close: (v: unknown) => void }).close(null);
@@ -168,20 +182,29 @@ export default function ParentPickerDialog() {
           <div className={styles.list}>
             {selectableEntries.map((entry) => {
               const isSelected = selectedId === entry.id;
+              const isDisabled = entry.disabled;
               return (
                 <div
                   key={entry.id}
-                  className={`${styles.listRow} ${isSelected ? styles.listRowSelected : ""}`}
-                  onClick={() => setSelectedId(isSelected ? null : entry.id)}
+                  className={`${styles.listRow} ${isSelected ? styles.listRowSelected : ""} ${isDisabled ? styles.listRowDisabled : ""}`}
+                  onClick={() => {
+                    if (isDisabled) return;
+                    setSelectedId(isSelected ? null : entry.id);
+                  }}
                 >
                   <span
                     className={styles.initials}
-                    style={getBadgeStyle(entry.contentTypeId)}
+                    style={isDisabled ? { background: "#f3f4f6", color: "#9ca3af" } : getBadgeStyle(entry.contentTypeId)}
                   >
                     {getInitials(entry.contentTypeId)}
                   </span>
                   <div className={styles.listRowContent}>
-                    <div className={styles.listRowTitle}>{entry.title}</div>
+                    <div className={styles.listRowTitle}>
+                      {entry.title}
+                      {entry.id === invocation.currentEntryId && (
+                        <span className={styles.currentBadge}>current</span>
+                      )}
+                    </div>
                     <div className={styles.listRowPath}>{entry.computedPath}</div>
                   </div>
                   {isSelected && <span className={styles.checkmark}>✓</span>}
@@ -196,6 +219,11 @@ export default function ParentPickerDialog() {
         <button className={styles.cancelBtn} onClick={handleCancel}>
           Cancel
         </button>
+        {invocation.selectedEntryId && (
+          <button className={styles.removeParentBtn} onClick={handleRemoveParent}>
+            Set as root page
+          </button>
+        )}
         <button
           className={styles.confirmBtn}
           onClick={handleConfirm}

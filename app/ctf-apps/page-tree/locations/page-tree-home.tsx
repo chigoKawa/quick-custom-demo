@@ -2,10 +2,14 @@
 
 import type { HomeAppSDK } from "@contentful/app-sdk";
 import { useSDK } from "@contentful/react-apps-toolkit";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { BADGE_COLOURS, DEFAULT_CONTENT_TYPE_ID, DEFAULT_LOCALE } from "../constants";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { BADGE_COLOURS, DEFAULT_LOCALE } from "../constants";
+import { fetchAllEntries } from "../cma-service";
 import type { PageTreeEntry, PageTreeInstallationParameters, PageTreeNode } from "../types";
-import { buildTree, fetchWithTimeout, getInitials } from "../utils";
+import { useDebouncedValue } from "../use-debounced-value";
+import { buildTree, getInitials, resolveContentTypes } from "../utils";
+import Pagination, { DEFAULT_PAGE_SIZE } from "./pagination";
+import { StatsSkeleton, TreeSkeleton } from "./skeleton";
 import styles from "./page-tree-home.module.css";
 
 // ---------------------------------------------------------------------------
@@ -58,7 +62,7 @@ interface TreeNodeProps {
   siteBaseUrl?: string;
 }
 
-function TreeNode({ node, expanded, onToggle, onOpen, siteBaseUrl }: TreeNodeProps) {
+const TreeNode = memo(function TreeNode({ node, expanded, onToggle, onOpen, siteBaseUrl }: TreeNodeProps) {
   const hasChildren = node.children.length > 0;
   const isExpanded = expanded.has(node.id);
   const colours = BADGE_COLOURS[node.contentTypeId] ?? BADGE_COLOURS.default;
@@ -129,7 +133,7 @@ function TreeNode({ node, expanded, onToggle, onOpen, siteBaseUrl }: TreeNodePro
       )}
     </div>
   );
-}
+});
 
 // ---------------------------------------------------------------------------
 // Stats computation
@@ -220,39 +224,69 @@ export default function PageTreeHome() {
   const sdk = useSDK<HomeAppSDK>();
 
   const installParams = (sdk.parameters.installation ?? {}) as PageTreeInstallationParameters;
-  const contentTypeId = installParams.contentTypeId ?? DEFAULT_CONTENT_TYPE_ID;
+  const contentTypeConfigs = resolveContentTypes(installParams);
   const locale = installParams.locale ?? DEFAULT_LOCALE;
+  const homeSlug = installParams.homeSlug ?? "home";
   const siteBaseUrl = installParams.siteBaseUrl;
 
-  const [entries, setEntries] = useState<PageTreeEntry[]>([]);
+  const showTabs = contentTypeConfigs.length > 1;
+
+  // Stable key for configs to prevent infinite re-fetches
+  const configsKey = useMemo(
+    () => JSON.stringify(contentTypeConfigs),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [JSON.stringify(contentTypeConfigs)]
+  );
+
+  const [allEntries, setAllEntries] = useState<PageTreeEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState("");
+  const debouncedFilter = useDebouncedValue(filter, 250);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const [activeTab, setActiveTab] = useState<string>("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const initialExpandDone = useRef(false);
 
   const loadEntries = useCallback(async () => {
     setLoading(true);
     setError(null);
-    const result = await fetchWithTimeout<{ success: boolean; data: PageTreeEntry[] }>(
-      `/api/page-tree/entries?contentTypeId=${contentTypeId}&locale=${locale}`,
-      {},
-      15000
-    );
-    if (!result.ok) {
-      setError(result.error);
-    } else if (!result.data.success) {
-      setError("API returned an error");
-    } else {
-      setEntries(result.data.data);
+    try {
+      const data = await fetchAllEntries(sdk.cma, contentTypeConfigs, locale);
+      setAllEntries(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load entries");
     }
     setLoading(false);
-  }, [contentTypeId, locale]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [configsKey, locale, sdk.cma]);
 
   useEffect(() => { loadEntries(); }, [loadEntries]);
 
-  const { roots, orphans } = useMemo(() => buildTree(entries), [entries]);
+  // Filter entries for the active tab. For per-type tabs, entries whose
+  // parent is of a different type are promoted to root (parentId → null)
+  // so they don't show as orphans.
+  const entries = useMemo(() => {
+    if (activeTab === "all") return allEntries;
+    const typeEntries = allEntries.filter((e) => e.contentTypeId === activeTab);
+    const idSet = new Set(typeEntries.map((e) => e.id));
+    return typeEntries.map((e) =>
+      e.parentId && !idSet.has(e.parentId) ? { ...e, parentId: null } : e
+    );
+  }, [allEntries, activeTab]);
+
+  const { roots, orphans } = useMemo(() => buildTree(entries, homeSlug), [entries, homeSlug]);
   const stats = useMemo(() => computeStats(entries, roots, orphans), [entries, roots, orphans]);
+
+  // Per-type counts for tab badges
+  const typeCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const e of allEntries) {
+      counts[e.contentTypeId] = (counts[e.contentTypeId] ?? 0) + 1;
+    }
+    return counts;
+  }, [allEntries]);
 
   // Default expand depth 0 + 1
   useEffect(() => {
@@ -265,6 +299,14 @@ export default function PageTreeHome() {
     }
     setExpanded(toExpand);
   }, [loading, roots]);
+
+  const handleTabChange = useCallback((tab: string) => {
+    setActiveTab(tab);
+    setFilter("");
+    setExpanded(new Set());
+    setCurrentPage(1);
+    initialExpandDone.current = false;
+  }, []);
 
   const handleToggle = useCallback((id: string) => {
     setExpanded((prev) => {
@@ -284,18 +326,23 @@ export default function PageTreeHome() {
     const traverse = (n: PageTreeNode) => { ids.add(n.id); n.children.forEach(traverse); };
     roots.forEach(traverse);
     setExpanded(ids);
+    setCurrentPage(1);
   }, [roots]);
 
-  const handleCollapseAll = useCallback(() => setExpanded(new Set()), []);
+  const handleCollapseAll = useCallback(() => {
+    setExpanded(new Set());
+    setCurrentPage(1);
+  }, []);
 
+  const newPageType = activeTab !== "all" ? activeTab : contentTypeConfigs[0]?.contentTypeId ?? "landingPage";
   const handleNewPage = useCallback(() => {
-    if (sdk.navigator.openNewEntry) sdk.navigator.openNewEntry(contentTypeId, { slideIn: true });
-  }, [sdk.navigator, contentTypeId]);
+    if (sdk.navigator.openNewEntry) sdk.navigator.openNewEntry(newPageType, { slideIn: true });
+  }, [sdk.navigator, newPageType]);
 
-  // Flat search results
+  // Flat search results (uses debounced filter for performance)
   const filteredNodes = useMemo<PageTreeNode[] | null>(() => {
-    if (!filter.trim()) return null;
-    const q = filter.toLowerCase();
+    if (!debouncedFilter.trim()) return null;
+    const q = debouncedFilter.toLowerCase();
     const all: PageTreeNode[] = [];
     const traverse = (n: PageTreeNode) => { all.push(n); n.children.forEach(traverse); };
     roots.forEach(traverse);
@@ -306,7 +353,38 @@ export default function PageTreeHome() {
         n.computedPath.toLowerCase().includes(q) ||
         n.slug.toLowerCase().includes(q)
     );
-  }, [filter, roots, orphans]);
+  }, [debouncedFilter, roots, orphans]);
+
+  // Pagination: for tree view paginate root nodes, for search paginate flat list
+  const allRootsAndOrphans = useMemo(() => [...roots, ...orphans], [roots, orphans]);
+  const paginationTotal = filteredNodes !== null ? filteredNodes.length : allRootsAndOrphans.length;
+
+  const paginatedRoots = useMemo(() => {
+    if (filteredNodes !== null) return [];
+    const start = (currentPage - 1) * pageSize;
+    return allRootsAndOrphans.slice(start, start + pageSize);
+  }, [filteredNodes, allRootsAndOrphans, currentPage, pageSize]);
+
+  const paginatedFilteredNodes = useMemo(() => {
+    if (filteredNodes === null) return [];
+    const start = (currentPage - 1) * pageSize;
+    return filteredNodes.slice(start, start + pageSize);
+  }, [filteredNodes, currentPage, pageSize]);
+
+  const orphanIdSet = useMemo(
+    () => new Set(orphans.map((n) => n.id)),
+    [orphans]
+  );
+
+  const handleFilterChange = useCallback((value: string) => {
+    setFilter(value);
+    setCurrentPage(1);
+  }, []);
+
+  const handlePageSizeChange = useCallback((size: number) => {
+    setPageSize(size);
+    setCurrentPage(1);
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -314,17 +392,51 @@ export default function PageTreeHome() {
       <div className={styles.pageHeader}>
         <div className={styles.pageHeaderLeft}>
           <h1 className={styles.pageTitle}>🌳 Page Tree</h1>
-          <span className={styles.envBadge}>{contentTypeId}</span>
         </div>
         <div className={styles.pageHeaderRight}>
           <button className={styles.iconBtn} onClick={loadEntries} disabled={loading} title="Refresh">
             {loading ? "…" : "↻ Refresh"}
           </button>
-          <button className={styles.newBtn} onClick={handleNewPage}>+ New page</button>
+          <button className={styles.newBtn} onClick={handleNewPage}>
+            + New {activeTab !== "all" ? activeTab : "page"}
+          </button>
         </div>
       </div>
 
+      {/* Tab bar */}
+      {showTabs && (
+        <div className={styles.tabBar}>
+          <button
+            className={`${styles.tab} ${activeTab === "all" ? styles.tabActive : ""}`}
+            onClick={() => handleTabChange("all")}
+          >
+            All
+            <span className={styles.tabCount}>{allEntries.length}</span>
+          </button>
+          {contentTypeConfigs.map((c) => {
+            const colours = BADGE_COLOURS[c.contentTypeId] ?? BADGE_COLOURS.default;
+            return (
+              <button
+                key={c.contentTypeId}
+                className={`${styles.tab} ${activeTab === c.contentTypeId ? styles.tabActive : ""}`}
+                onClick={() => handleTabChange(c.contentTypeId)}
+              >
+                <span
+                  className={styles.tabBadge}
+                  style={{ background: colours.bg, color: colours.text }}
+                >
+                  {getInitials(c.contentTypeId)}
+                </span>
+                {c.contentTypeId}
+                <span className={styles.tabCount}>{typeCounts[c.contentTypeId] ?? 0}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       {/* Stats row */}
+      {loading && <StatsSkeleton count={6} />}
       {!loading && !error && (
         <div className={styles.statsRow}>
           <StatCard label="Total pages" value={stats.total} colour="#111827" />
@@ -354,7 +466,9 @@ export default function PageTreeHome() {
       <div className={styles.treeSection}>
         <div className={styles.treeHeader}>
           <div className={styles.treeHeaderLeft}>
-            <span className={styles.sectionTitle}>Site tree</span>
+            <span className={styles.sectionTitle}>
+              {activeTab === "all" ? "Site tree" : activeTab}
+            </span>
             <span className={styles.countBadge}>{entries.length}</span>
           </div>
           <div className={styles.treeHeaderRight}>
@@ -363,7 +477,7 @@ export default function PageTreeHome() {
               type="text"
               placeholder="Search pages…"
               value={filter}
-              onChange={(e) => setFilter(e.target.value)}
+              onChange={(e) => handleFilterChange(e.target.value)}
             />
             {!filter && (
               <>
@@ -375,12 +489,7 @@ export default function PageTreeHome() {
         </div>
 
         <div className={styles.treeBody}>
-          {loading && (
-            <div className={styles.loadingState}>
-              <div className={styles.spinner} />
-              <span>Loading tree…</span>
-            </div>
-          )}
+          {loading && <TreeSkeleton rows={8} />}
 
           {!loading && error && (
             <div className={styles.errorBanner}>
@@ -390,7 +499,11 @@ export default function PageTreeHome() {
           )}
 
           {!loading && !error && entries.length === 0 && (
-            <div className={styles.emptyState}>No {contentTypeId} entries found.</div>
+            <div className={styles.emptyState}>
+              {activeTab === "all"
+                ? "No entries found."
+                : `No ${activeTab} entries found.`}
+            </div>
           )}
 
           {/* Flat search */}
@@ -398,7 +511,7 @@ export default function PageTreeHome() {
             filteredNodes.length === 0
               ? <div className={styles.emptyState}>No pages match &ldquo;{filter}&rdquo;</div>
               : <div>
-                  {filteredNodes.map((node) => {
+                  {paginatedFilteredNodes.map((node) => {
                     const colours = BADGE_COLOURS[node.contentTypeId] ?? BADGE_COLOURS.default;
                     return (
                       <div
@@ -420,10 +533,10 @@ export default function PageTreeHome() {
                 </div>
           )}
 
-          {/* Full nested tree */}
+          {/* Full nested tree (paginated by root nodes) */}
           {!loading && !error && filteredNodes === null && entries.length > 0 && (
             <div>
-              {roots.map((node) => (
+              {paginatedRoots.map((node) => (
                 <TreeNode
                   key={node.id}
                   node={node}
@@ -433,27 +546,19 @@ export default function PageTreeHome() {
                   siteBaseUrl={siteBaseUrl}
                 />
               ))}
-
-              {orphans.length > 0 && (
-                <div className={styles.orphanSection}>
-                  <div className={styles.orphanHeader}>
-                    ⚠️ Orphaned pages ({orphans.length}) — parent not in list
-                  </div>
-                  {orphans.map((node) => (
-                    <TreeNode
-                      key={node.id}
-                      node={node}
-                      expanded={expanded}
-                      onToggle={handleToggle}
-                      onOpen={handleOpen}
-                      siteBaseUrl={siteBaseUrl}
-                    />
-                  ))}
-                </div>
-              )}
             </div>
           )}
         </div>
+
+        {!loading && !error && paginationTotal > 0 && (
+          <Pagination
+            totalItems={paginationTotal}
+            pageSize={pageSize}
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+            onPageSizeChange={handlePageSizeChange}
+          />
+        )}
       </div>
     </div>
   );

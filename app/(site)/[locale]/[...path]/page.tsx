@@ -16,13 +16,19 @@
 import { Locale, getI18nConfig } from "@/i18n-config";
 import { getEntries } from "@/lib/contentful";
 import ContentfulLandingPage from "@/features/contentful/components/contentful-landing-page";
-import { ILandingPage, LandingPageSkeleton } from "@/features/contentful/type";
-import type { Asset } from "contentful";
+import ContentfulBlogPage from "@/features/contentful/components/contentful-blog-page";
+import {
+  IBlogPostPage,
+  BlogPostPageSkeleton,
+  ILandingPage,
+  LandingPageSkeleton,
+} from "@/features/contentful/type";
+import type { Asset, Entry } from "contentful";
 import type { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
 import { extractContentfulAssetUrl, isPreviewEnabled, getTimelineToken } from "@/lib/utils";
 import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provider-wrapper";
-import { mapLandingPageToProps } from "@/lib/contentful-mappers";
+import { mapLandingPageToProps, mapBlogPostToProps } from "@/lib/contentful-mappers";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -35,26 +41,25 @@ type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
+type ResolvedPage =
+  | { contentType: "landingPage"; entry: ILandingPage }
+  | { contentType: "blogPost"; entry: IBlogPostPage };
+
 /**
- * Resolve a landing page entry given path segments and locale.
- * Tries fullPath first, then falls back to last-segment slug.
+ * Try to resolve an entry of a given content type by fullPath, then by slug.
  */
-async function resolveLandingPage(
-  pathSegments: string[],
+async function tryContentType<S extends { contentTypeId: string; fields: Record<string, unknown> }>(
+  contentType: string,
+  fullPath: string,
+  lastSlug: string,
   locale: string,
   isPreview: boolean,
   timelineToken?: string | null
-): Promise<ILandingPage | undefined> {
-  // Only handle multi-segment paths — single segments belong to [slug]
-  if (pathSegments.length < 2) return undefined;
-
-  const fullPath = "/" + pathSegments.join("/");
-
-  // 1. Query by fullPath field
+): Promise<Entry<S> | undefined> {
   try {
-    const byFullPath = await getEntries<LandingPageSkeleton>(
+    const byFullPath = await getEntries<S>(
       {
-        content_type: "landingPage",
+        content_type: contentType,
         "fields.fullPath": fullPath,
         include: INCLUDES_COUNT,
         locale,
@@ -63,17 +68,15 @@ async function resolveLandingPage(
       isPreview,
       timelineToken
     );
-    if (byFullPath[0]) return byFullPath[0] as ILandingPage;
+    if (byFullPath[0]) return byFullPath[0];
   } catch {
     // fall through
   }
 
-  // 2. Fallback: query by last segment slug (handles pages where fullPath hasn't been written yet)
-  const lastSlug = pathSegments[pathSegments.length - 1];
   try {
-    const bySlug = await getEntries<LandingPageSkeleton>(
+    const bySlug = await getEntries<S>(
       {
-        content_type: "landingPage",
+        content_type: contentType,
         "fields.slug": lastSlug,
         include: INCLUDES_COUNT,
         locale,
@@ -82,7 +85,7 @@ async function resolveLandingPage(
       isPreview,
       timelineToken
     );
-    if (bySlug[0]) return bySlug[0] as ILandingPage;
+    if (bySlug[0]) return bySlug[0];
   } catch {
     // fall through
   }
@@ -90,22 +93,53 @@ async function resolveLandingPage(
   return undefined;
 }
 
-export default async function NestedLandingPage({ params, searchParams }: Props) {
+/**
+ * Resolve a page entry given path segments and locale.
+ * Tries landingPage first, then blogPost. Each is checked by
+ * fullPath, then by last-segment slug.
+ */
+async function resolvePageEntry(
+  pathSegments: string[],
+  locale: string,
+  isPreview: boolean,
+  timelineToken?: string | null
+): Promise<ResolvedPage | undefined> {
+  if (pathSegments.length < 2) return undefined;
+
+  const fullPath = "/" + pathSegments.join("/");
+  const lastSlug = pathSegments[pathSegments.length - 1];
+
+  const landing = await tryContentType<LandingPageSkeleton>(
+    "landingPage", fullPath, lastSlug, locale, isPreview, timelineToken
+  );
+  if (landing) return { contentType: "landingPage", entry: landing as ILandingPage };
+
+  const blog = await tryContentType<BlogPostPageSkeleton>(
+    "blogPost", fullPath, lastSlug, locale, isPreview, timelineToken
+  );
+  if (blog) return { contentType: "blogPost", entry: blog as IBlogPostPage };
+
+  return undefined;
+}
+
+export default async function NestedPage({ params, searchParams }: Props) {
   const resolvedSp = await searchParams;
   const isPreview = isPreviewEnabled(resolvedSp);
   const timelineToken = getTimelineToken(resolvedSp);
   const { locale, path: pathSegments } = await params;
 
-  const pageEntry = await resolveLandingPage(pathSegments, locale, !!isPreview, timelineToken);
+  const resolved = await resolvePageEntry(pathSegments, locale, !!isPreview, timelineToken);
 
-  if (!pageEntry) notFound();
-
-  const pageData = mapLandingPageToProps(pageEntry);
+  if (!resolved) notFound();
 
   return (
     <div>
       <LivePreviewProviderWrapper locale={locale} isPreviewEnabled={!!isPreview}>
-        <ContentfulLandingPage entry={pageData} />
+        {resolved.contentType === "blogPost" ? (
+          <ContentfulBlogPage entry={mapBlogPostToProps(resolved.entry)} />
+        ) : (
+          <ContentfulLandingPage entry={mapLandingPageToProps(resolved.entry)} />
+        )}
       </LivePreviewProviderWrapper>
     </div>
   );
@@ -120,7 +154,8 @@ export async function generateMetadata(
   const timelineToken = getTimelineToken(resolvedSp);
   const { locale, path: pathSegments } = await params;
 
-  const pageEntry = await resolveLandingPage(pathSegments, locale, !!isPreview, timelineToken);
+  const resolved = await resolvePageEntry(pathSegments, locale, !!isPreview, timelineToken);
+  const pageEntry = resolved?.entry;
   const previousImages = (await parent).openGraph?.images || [];
 
   const joinedPath = "/" + pathSegments.join("/");
@@ -158,26 +193,38 @@ export const dynamicParams = true;
 export async function generateStaticParams() {
   const { locales } = await getI18nConfig();
 
-  // Fetch all entries that have a fullPath set
-  const entries = await getEntries<LandingPageSkeleton>(
-    {
-      content_type: "landingPage",
-      "fields.fullPath[exists]": true,
-      select: "fields.fullPath",
-      limit: 1000,
-    },
-    false
-  ) as ILandingPage[];
+  const [landingPages, blogPosts] = await Promise.all([
+    getEntries<LandingPageSkeleton>(
+      {
+        content_type: "landingPage",
+        "fields.fullPath[exists]": true,
+        select: "fields.fullPath",
+        limit: 1000,
+      },
+      false
+    ).then((r) => r as ILandingPage[]),
+    getEntries<BlogPostPageSkeleton>(
+      {
+        content_type: "blogPost",
+        "fields.fullPath[exists]": true,
+        select: "fields.fullPath",
+        limit: 1000,
+      },
+      false
+    )
+      .then((r) => r as IBlogPostPage[])
+      .catch(() => [] as IBlogPostPage[]),
+  ]);
 
+  const allEntries = [...landingPages, ...blogPosts];
   const paths: { locale: string; path: string[] }[] = [];
 
-  for (const entry of entries) {
+  for (const entry of allEntries) {
     const fullPath = entry.fields.fullPath;
     if (!fullPath || fullPath === "/") continue;
 
-    // "/benefit/child" → ["benefit", "child"]
     const segments = fullPath.replace(/^\//, "").split("/").filter(Boolean);
-    if (segments.length < 2) continue; // single-segment handled by [slug]
+    if (segments.length < 2) continue;
 
     for (const locale of locales) {
       paths.push({ locale, path: segments });

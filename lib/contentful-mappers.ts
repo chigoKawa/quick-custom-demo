@@ -1,4 +1,4 @@
-import type { ILandingPage } from "@/features/contentful/type";
+import type { IBlogPostPage, ILandingPage } from "@/features/contentful/type";
 
 /**
  * Safely stringify an object, handling *true* circular references
@@ -59,8 +59,9 @@ function deepClone(value: unknown, ancestors: Set<object>): unknown {
  * Handles circular references by replacing them with null.
  */
 export function mapLandingPageToProps(entry: ILandingPage): ILandingPage {
-  // Create a plain-object copy safe for the server→client boundary.
-  // safeClone preserves shared references (e.g. the same button used by
-  // multiple sections) while still handling true circular references.
+  return safeClone(entry);
+}
+
+export function mapBlogPostToProps(entry: IBlogPostPage): IBlogPostPage {
   return safeClone(entry);
 }

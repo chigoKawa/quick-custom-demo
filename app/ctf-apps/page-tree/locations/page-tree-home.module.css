@@ -77,6 +77,72 @@
 
 .newBtn:hover { background: #0052a3; }
 
+/* ── Tab bar ── */
+
+.tabBar {
+  display: flex;
+  gap: 0;
+  padding: 0 24px;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  overflow-x: auto;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.tab:hover {
+  color: #111827;
+}
+
+.tabActive {
+  color: #0066cc;
+  border-bottom-color: #0066cc;
+  font-weight: 600;
+}
+
+.tabBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 16px;
+  border-radius: 3px;
+  font-size: 8px;
+  font-weight: 800;
+  font-family: monospace;
+  flex-shrink: 0;
+}
+
+.tabCount {
+  font-size: 11px;
+  font-weight: 600;
+  color: #9ca3af;
+  background: #f3f4f6;
+  padding: 1px 6px;
+  border-radius: 8px;
+  min-width: 18px;
+  text-align: center;
+}
+
+.tabActive .tabCount {
+  background: #eff6ff;
+  color: #0066cc;
+}
+
 /* ── Stats row ── */
 
 .statsRow {

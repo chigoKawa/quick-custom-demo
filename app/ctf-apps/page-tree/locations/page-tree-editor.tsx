@@ -2,10 +2,10 @@
 
 import type { EditorAppSDK } from "@contentful/app-sdk";
 import { useSDK } from "@contentful/react-apps-toolkit";
-import { useCallback, useEffect, useRef, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useMemo, useState } from "react";
+import { fetchAllEntries, setEntryParent } from "../cma-service";
 import {
   BADGE_COLOURS,
-  DEFAULT_CONTENT_TYPE_ID,
   DEFAULT_LOCALE,
 } from "../constants";
 import type {
@@ -13,7 +13,10 @@ import type {
   PageTreeInstallationParameters,
   PageTreeNode,
 } from "../types";
-import { buildTree, fetchWithTimeout, getInitials } from "../utils";
+import { useDebouncedValue } from "../use-debounced-value";
+import { buildTree, computeFullPath, getConfigForType, getInitials, resolveContentTypes } from "../utils";
+import Pagination, { DEFAULT_PAGE_SIZE } from "./pagination";
+import { TreeSkeleton } from "./skeleton";
 import styles from "./page-tree-editor.module.css";
 
 // ---------------------------------------------------------------------------
@@ -46,7 +49,7 @@ interface RowActionsProps {
   siteBaseUrl?: string;
 }
 
-function RowActions({
+const RowActions = memo(function RowActions({
   node,
   onOpen,
   onNewChild,
@@ -109,7 +112,7 @@ function RowActions({
       )}
     </div>
   );
-}
+});
 
 // ---------------------------------------------------------------------------
 // Recursive tree node
@@ -126,7 +129,7 @@ interface TreeNodeProps {
   siteBaseUrl?: string;
 }
 
-function TreeNode({
+const TreeNode = memo(function TreeNode({
   node,
   expanded,
   highlightedId,
@@ -219,7 +222,7 @@ function TreeNode({
       )}
     </div>
   );
-}
+});
 
 // ---------------------------------------------------------------------------
 // Main editor
@@ -229,46 +232,49 @@ export default function PageTreeEditor() {
   const sdk = useSDK<EditorAppSDK>();
 
   const installParams = (sdk.parameters.installation ?? {}) as PageTreeInstallationParameters;
-  const contentTypeId = installParams.contentTypeId ?? DEFAULT_CONTENT_TYPE_ID;
+  const contentTypeConfigs = resolveContentTypes(installParams);
   const locale = installParams.locale ?? DEFAULT_LOCALE;
+  const homeSlug = installParams.homeSlug ?? "home";
   const siteBaseUrl = installParams.siteBaseUrl;
 
-  // The entry currently open in the editor — highlight it in the tree
   const currentEntryId = sdk.entry.getSys().id;
+
+  // Stable key for configs to prevent infinite re-fetches
+  const configsKey = useMemo(
+    () => JSON.stringify(contentTypeConfigs),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [JSON.stringify(contentTypeConfigs)]
+  );
 
   const [entries, setEntries] = useState<PageTreeEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState("");
+  const debouncedFilter = useDebouncedValue(filter, 250);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [saving, setSaving] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const initialExpandDone = useRef(false);
-
-  // ----- Data loading -----
 
   const loadEntries = useCallback(async () => {
     setLoading(true);
     setError(null);
-    const result = await fetchWithTimeout<{ success: boolean; data: PageTreeEntry[] }>(
-      `/api/page-tree/entries?contentTypeId=${contentTypeId}&locale=${locale}`,
-      {},
-      15000
-    );
-    if (!result.ok) {
-      setError(result.error);
-    } else if (!result.data.success) {
-      setError("API returned an error");
-    } else {
-      setEntries(result.data.data);
+    try {
+      const data = await fetchAllEntries(sdk.cma, contentTypeConfigs, locale);
+      setEntries(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load entries");
     }
     setLoading(false);
-  }, [contentTypeId, locale]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [configsKey, locale, sdk.cma]);
 
   useEffect(() => {
     loadEntries();
   }, [loadEntries]);
 
-  const { roots, orphans } = useMemo(() => buildTree(entries), [entries]);
+  const { roots, orphans } = useMemo(() => buildTree(entries, homeSlug), [entries, homeSlug]);
 
   // ----- Default expansion: depth 0+1, plus ancestors of current entry -----
 
@@ -312,10 +318,11 @@ export default function PageTreeEditor() {
   );
 
   const handleNewChild = useCallback(() => {
+    const firstType = contentTypeConfigs[0]?.contentTypeId ?? "landingPage";
     if (sdk.navigator.openNewEntry) {
-      sdk.navigator.openNewEntry(contentTypeId, { slideIn: true });
+      sdk.navigator.openNewEntry(firstType, { slideIn: true });
     }
-  }, [sdk.navigator, contentTypeId]);
+  }, [sdk.navigator, contentTypeConfigs]);
 
   const handleChangeParent = useCallback(
     async (entryId: string, currentParentId: string | null) => {
@@ -326,30 +333,72 @@ export default function PageTreeEditor() {
         shouldCloseOnOverlayClick: true,
         shouldCloseOnEscapePress: true,
         parameters: {
-          invocation: { currentEntryId: entryId, selectedEntryId: currentParentId },
+          currentEntryId: entryId,
+          selectedEntryId: currentParentId,
         },
       });
 
       if (!result || typeof result !== "object") return;
       const { selectedEntryId: newParentId = null } = result as { selectedEntryId?: string | null };
 
+      if (newParentId === currentParentId) return;
+
       setSaving(true);
       try {
-        const res = await fetch("/api/page-tree/set-parent", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ entryId, parentId: newParentId, locale }),
+        const entry = entries.find((e) => e.id === entryId);
+        const cfg = entry
+          ? getConfigForType(contentTypeConfigs, entry.contentTypeId)
+          : contentTypeConfigs[0];
+
+        if (entryId === currentEntryId) {
+          const pField = sdk.entry.fields[cfg?.parentFieldName ?? "parent"];
+          const fpField = sdk.entry.fields[cfg?.fullPathFieldName ?? "fullPath"];
+          if (pField) {
+            if (newParentId) {
+              await pField.setValue({ sys: { type: "Link", linkType: "Entry", id: newParentId } });
+            } else {
+              await pField.removeValue();
+            }
+          }
+          const updatedEntries = entries.map((e) =>
+            e.id === entryId ? { ...e, parentId: newParentId } : e
+          );
+          const newPath = computeFullPath(updatedEntries, entryId, homeSlug);
+          if (fpField && !newPath.includes("(cycle-detected)")) {
+            await fpField.setValue(newPath);
+          }
+        } else {
+          await setEntryParent(sdk.cma, {
+            entryId,
+            parentId: newParentId,
+            locale,
+            parentFieldName: cfg?.parentFieldName,
+            fullPathFieldName: cfg?.fullPathFieldName,
+            slugFieldName: cfg?.slugFieldName,
+            homeSlug,
+          });
+        }
+
+        // Optimistically update local state so the tree reflects immediately.
+        // No background re-fetch — the CMA may lag behind the SDK field API
+        // auto-save and would overwrite this correct state with stale data.
+        // The user can click Refresh for a full sync if needed.
+        setEntries((prev) => {
+          const patched = prev.map((e) =>
+            e.id === entryId ? { ...e, parentId: newParentId } : e
+          );
+          const newPath = computeFullPath(patched, entryId, homeSlug);
+          return patched.map((e) =>
+            e.id === entryId ? { ...e, fullPath: newPath } : e
+          );
         });
-        const json = await res.json();
-        if (!json.success) throw new Error(json.error ?? "Failed to move entry");
-        await loadEntries();
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to move entry");
       } finally {
         setSaving(false);
       }
     },
-    [sdk.dialogs, locale, loadEntries]
+    [sdk.dialogs, sdk.cma, sdk.entry.fields, locale, entries, contentTypeConfigs, currentEntryId, homeSlug]
   );
 
   const handleExpandAll = useCallback(() => {
@@ -357,15 +406,19 @@ export default function PageTreeEditor() {
     const traverse = (n: PageTreeNode) => { ids.add(n.id); n.children.forEach(traverse); };
     roots.forEach(traverse);
     setExpanded(ids);
+    setCurrentPage(1);
   }, [roots]);
 
-  const handleCollapseAll = useCallback(() => setExpanded(new Set()), []);
+  const handleCollapseAll = useCallback(() => {
+    setExpanded(new Set());
+    setCurrentPage(1);
+  }, []);
 
   // ----- Filter: flat list while searching -----
 
   const filteredNodes = useMemo<PageTreeNode[] | null>(() => {
-    if (!filter.trim()) return null;
-    const q = filter.toLowerCase();
+    if (!debouncedFilter.trim()) return null;
+    const q = debouncedFilter.toLowerCase();
     const all: PageTreeNode[] = [];
     const traverse = (n: PageTreeNode) => { all.push(n); n.children.forEach(traverse); };
     roots.forEach(traverse);
@@ -376,7 +429,34 @@ export default function PageTreeEditor() {
         n.computedPath.toLowerCase().includes(q) ||
         n.slug.toLowerCase().includes(q)
     );
-  }, [filter, roots, orphans]);
+  }, [debouncedFilter, roots, orphans]);
+
+  // ----- Pagination -----
+
+  const allRootsAndOrphans = useMemo(() => [...roots, ...orphans], [roots, orphans]);
+  const paginationTotal = filteredNodes !== null ? filteredNodes.length : allRootsAndOrphans.length;
+
+  const paginatedRoots = useMemo(() => {
+    if (filteredNodes !== null) return [];
+    const start = (currentPage - 1) * pageSize;
+    return allRootsAndOrphans.slice(start, start + pageSize);
+  }, [filteredNodes, allRootsAndOrphans, currentPage, pageSize]);
+
+  const paginatedFilteredNodes = useMemo(() => {
+    if (filteredNodes === null) return [];
+    const start = (currentPage - 1) * pageSize;
+    return filteredNodes.slice(start, start + pageSize);
+  }, [filteredNodes, currentPage, pageSize]);
+
+  const handleFilterChange = useCallback((value: string) => {
+    setFilter(value);
+    setCurrentPage(1);
+  }, []);
+
+  const handlePageSizeChange = useCallback((size: number) => {
+    setPageSize(size);
+    setCurrentPage(1);
+  }, []);
 
   // ----- Render -----
 
@@ -395,7 +475,7 @@ export default function PageTreeEditor() {
             type="text"
             placeholder="Search pages…"
             value={filter}
-            onChange={(e) => setFilter(e.target.value)}
+            onChange={(e) => handleFilterChange(e.target.value)}
           />
           {!filter && (
             <>
@@ -414,12 +494,7 @@ export default function PageTreeEditor() {
 
       {/* Body */}
       <div className={styles.body}>
-        {loading && (
-          <div className={styles.loadingState}>
-            <div className={styles.spinner} />
-            <span>Loading tree…</span>
-          </div>
-        )}
+        {loading && <TreeSkeleton rows={10} />}
 
         {!loading && error && (
           <div className={styles.errorBanner}>
@@ -432,7 +507,7 @@ export default function PageTreeEditor() {
 
         {!loading && !error && entries.length === 0 && (
           <div className={styles.emptyState}>
-            No {contentTypeId} entries found.
+            No entries found.
           </div>
         )}
 
@@ -441,7 +516,7 @@ export default function PageTreeEditor() {
           filteredNodes.length === 0
             ? <div className={styles.emptyState}>No pages match &ldquo;{filter}&rdquo;</div>
             : <div className={styles.tree}>
-                {filteredNodes.map((node) => {
+                {paginatedFilteredNodes.map((node) => {
                   const colours = BADGE_COLOURS[node.contentTypeId] ?? BADGE_COLOURS.default;
                   return (
                     <div
@@ -473,10 +548,10 @@ export default function PageTreeEditor() {
               </div>
         )}
 
-        {/* Full nested tree */}
+        {/* Full nested tree (paginated by root nodes) */}
         {!loading && !error && filteredNodes === null && entries.length > 0 && (
           <div className={styles.tree}>
-            {roots.map((node) => (
+            {paginatedRoots.map((node) => (
               <TreeNode
                 key={node.id}
                 node={node}
@@ -489,30 +564,19 @@ export default function PageTreeEditor() {
                 siteBaseUrl={siteBaseUrl}
               />
             ))}
-
-            {orphans.length > 0 && (
-              <div className={styles.orphanSection}>
-                <div className={styles.orphanDivider}>
-                  ⚠️ Orphaned pages ({orphans.length}) — parent not found in list
-                </div>
-                {orphans.map((node) => (
-                  <TreeNode
-                    key={node.id}
-                    node={node}
-                    expanded={expanded}
-                    highlightedId={currentEntryId}
-                    onToggle={handleToggle}
-                    onOpen={handleOpen}
-                    onNewChild={handleNewChild}
-                    onChangeParent={handleChangeParent}
-                    siteBaseUrl={siteBaseUrl}
-                  />
-                ))}
-              </div>
-            )}
           </div>
         )}
       </div>
+
+      {!loading && !error && paginationTotal > 0 && (
+        <Pagination
+          totalItems={paginationTotal}
+          pageSize={pageSize}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+          onPageSizeChange={handlePageSizeChange}
+        />
+      )}
     </div>
   );
 }

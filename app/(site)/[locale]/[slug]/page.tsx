@@ -1,13 +1,19 @@
-import { Locale, getI18nConfig } from "@/i18n-config"; // Import locale type for internationalization
-import { getEntries, getAllPageSlugs } from "@/lib/contentful"; // Function to fetch data from Contentful
-import ContentfulLandingPage from "@/features/contentful/components/contentful-landing-page"; // Component to render the landing page
-import { ILandingPage, LandingPageSkeleton } from "@/features/contentful/type"; // Types for Contentful landing page entries
+import { Locale, getI18nConfig } from "@/i18n-config";
+import { getEntries, getAllPageSlugs } from "@/lib/contentful";
+import ContentfulLandingPage from "@/features/contentful/components/contentful-landing-page";
+import ContentfulBlogPage from "@/features/contentful/components/contentful-blog-page";
+import {
+  IBlogPostPage,
+  BlogPostPageSkeleton,
+  ILandingPage,
+  LandingPageSkeleton,
+} from "@/features/contentful/type";
 import type { Asset } from "contentful";
 import type { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
 import { extractContentfulAssetUrl, isPreviewEnabled, getTimelineToken } from "@/lib/utils";
 import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provider-wrapper";
-import { mapLandingPageToProps } from "@/lib/contentful-mappers";
+import { mapLandingPageToProps, mapBlogPostToProps } from "@/lib/contentful-mappers";
 
 const INCLUDES_COUNT = 6;
 
@@ -25,14 +31,15 @@ type Props = {
 };
 
 export default async function IndexPage({ params, searchParams }: Props) {
-  // App Router: treat presence of ?preview as enabled
   const resolvedSearchParams = await searchParams;
   const isPreviewEnabledFlag = isPreviewEnabled(resolvedSearchParams);
   const timelineToken = getTimelineToken(resolvedSearchParams);
 
   const { locale, slug } = await params;
 
-  let pageEntry: ILandingPage | undefined;
+  let landingPage: ILandingPage | undefined;
+  let blogPost: IBlogPostPage | undefined;
+
   try {
     const entries = await getEntries<LandingPageSkeleton>(
       {
@@ -44,28 +51,44 @@ export default async function IndexPage({ params, searchParams }: Props) {
       !!isPreviewEnabledFlag,
       timelineToken
     );
-    pageEntry = entries[0] as ILandingPage | undefined;
+    landingPage = entries[0] as ILandingPage | undefined;
   } catch (err) {
-    console.error("[slug] getEntries error", { slug, locale, err });
+    console.error("[slug] getEntries landingPage error", { slug, locale, err });
   }
 
-  if (!pageEntry) {
-    // Gracefully render 404 for missing content/locale combinations
+  if (!landingPage) {
+    try {
+      const entries = await getEntries<BlogPostPageSkeleton>(
+        {
+          content_type: "blogPost",
+          "fields.slug": slug,
+          include: INCLUDES_COUNT,
+          locale,
+        },
+        !!isPreviewEnabledFlag,
+        timelineToken
+      );
+      blogPost = entries[0] as IBlogPostPage | undefined;
+    } catch (err) {
+      console.error("[slug] getEntries blogPost error", { slug, locale, err });
+    }
+  }
+
+  if (!landingPage && !blogPost) {
     notFound();
   }
 
-  // Serialize the Contentful Entry to ensure only plain JSON crosses the server->client boundary
-  const pageData = mapLandingPageToProps(pageEntry);
-
   return (
     <div>
-      {/* Render the landing page component with the fetched data */}
       <LivePreviewProviderWrapper
         locale={locale}
         isPreviewEnabled={!!isPreviewEnabledFlag}
       >
-
-        <ContentfulLandingPage entry={pageData} />
+        {blogPost ? (
+          <ContentfulBlogPage entry={mapBlogPostToProps(blogPost)} />
+        ) : (
+          <ContentfulLandingPage entry={mapLandingPageToProps(landingPage!)} />
+        )}
       </LivePreviewProviderWrapper>
     </div>
   );
@@ -81,7 +104,7 @@ export async function generateMetadata(
   const timelineToken = getTimelineToken(resolvedSp);
   const { locale, slug } = await params;
 
-  let pageEntry: ILandingPage | undefined;
+  let pageEntry: ILandingPage | IBlogPostPage | undefined;
   try {
     const entries = await getEntries<LandingPageSkeleton>(
       {
@@ -95,8 +118,27 @@ export async function generateMetadata(
     );
     pageEntry = entries[0] as ILandingPage | undefined;
   } catch (err) {
-    console.error("[slug] generateMetadata getEntries error", { slug, locale, err });
+    console.error("[slug] generateMetadata landingPage error", { slug, locale, err });
   }
+
+  if (!pageEntry) {
+    try {
+      const entries = await getEntries<BlogPostPageSkeleton>(
+        {
+          content_type: "blogPost",
+          "fields.slug": slug,
+          include: INCLUDES_COUNT,
+          locale,
+        },
+        !!isPreviewEnabledFlag,
+        timelineToken
+      );
+      pageEntry = entries[0] as IBlogPostPage | undefined;
+    } catch (err) {
+      console.error("[slug] generateMetadata blogPost error", { slug, locale, err });
+    }
+  }
+
   const previousImages = (await parent).openGraph?.images || [];
   const pageTitle = `${pageEntry?.fields?.title ?? slug} | Contentful Site`;
   const seoTitle = pageEntry?.fields?.seoMetadata?.fields?.title || pageTitle;
@@ -105,9 +147,7 @@ export async function generateMetadata(
 
   const ogAsset = (pageEntry?.fields?.seoMetadata?.fields?.ogImage ?? null) as Asset | null;
   const seoOgImage = extractContentfulAssetUrl(ogAsset);
-
   const fullImageUrl = seoOgImage ? `${seoOgImage}?w=1200&h=630` : null;
-
   const images = fullImageUrl
     ? [fullImageUrl, ...previousImages]
     : [...previousImages];
@@ -115,7 +155,6 @@ export async function generateMetadata(
   const seoNoIndex = pageEntry?.fields?.seoMetadata?.fields?.noIndex || false;
   const seoNoFollow = pageEntry?.fields?.seoMetadata?.fields?.noFollow || false;
 
-  // Determine the metadata base URL (Vercel's URL or localhost for development)
   const metadataBase = process.env.VERCEL_URL
     ? new URL(`https://${process.env.VERCEL_URL}`)
     : new URL(
@@ -123,7 +162,6 @@ export async function generateMetadata(
           `http://localhost:${process.env.PORT || 3000}`
       );
 
-  // Build canonical URL: clean path for default locale, prefixed for others
   const { defaultLocale } = await getI18nConfig();
   const canonicalPath =
     locale === defaultLocale ? `/${slug}` : `/${locale}/${slug}`;
@@ -131,17 +169,10 @@ export async function generateMetadata(
   return {
     title: seoTitle,
     description: seoDescription,
-    openGraph: {
-      images: images,
-    },
-    robots: {
-      index: !seoNoIndex,
-      follow: !seoNoFollow,
-    },
+    openGraph: { images },
+    robots: { index: !seoNoIndex, follow: !seoNoFollow },
     metadataBase,
-    alternates: {
-      canonical: canonicalPath,
-    },
+    alternates: { canonical: canonicalPath },
   };
 }
 

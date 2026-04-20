@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 import type { Metadata, ResolvingMetadata } from "next";
 import type { Asset } from "contentful";
 import { getI18nConfig, type Locale } from "@/i18n-config";
-import { extractContentfulAssetUrl, isPreviewEnabled, getTimelineToken } from "@/lib/utils";
+import { extractContentfulAssetUrl } from "@/lib/utils";
+import { resolvePreviewMode } from "@/lib/preview";
 import { getMicrocopyWithIds } from "@/lib/microcopy";
 import {
   getProductStoryBySlug,
@@ -23,8 +24,7 @@ type Props = {
 
 export default async function StoryRoute({ params, searchParams }: Props) {
   const resolvedSearchParams = await searchParams;
-  const preview = isPreviewEnabled(resolvedSearchParams);
-  const timelineToken = getTimelineToken(resolvedSearchParams);
+  const { isPreview: preview, timelineToken } = await resolvePreviewMode(resolvedSearchParams);
   const { locale, slug } = await params;
   const { locales, defaultLocale } = await getI18nConfig();
   const effectiveLocale = locales.includes(locale as string) ? locale : defaultLocale;
@@ -58,12 +58,10 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const resolvedSp = await searchParams;
-  const preview = isPreviewEnabled(resolvedSp);
+  const { isPreview: preview, timelineToken } = await resolvePreviewMode(resolvedSp);
   const { locale, slug } = await params;
   const { locales, defaultLocale } = await getI18nConfig();
   const effectiveLocale = locales.includes(locale as string) ? locale : defaultLocale;
-
-  const timelineToken = getTimelineToken(resolvedSp);
 
   const entry = await getProductStoryBySlug(slug, effectiveLocale, !!preview, timelineToken);
   const previousImages = (await parent).openGraph?.images || [];

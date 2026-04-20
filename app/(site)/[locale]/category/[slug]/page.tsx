@@ -5,7 +5,8 @@ import type { Metadata, ResolvingMetadata } from "next";
 
 import { getI18nConfig, type Locale } from "@/i18n-config";
 import { getEntries } from "@/lib/contentful";
-import { extractContentfulAssetUrl, isPreviewEnabled, getTimelineToken } from "@/lib/utils";
+import { extractContentfulAssetUrl } from "@/lib/utils";
+import { resolvePreviewMode } from "@/lib/preview";
 import type {
   ICategoryPage,
   CategoryPageSkeleton,
@@ -31,8 +32,7 @@ type Props = {
 export default async function CategoryPage({ params, searchParams }: Props) {
   const { locale, slug } = await params;
   const resolvedSearchParams = await searchParams;
-  const isPreviewEnabledFlag = isPreviewEnabled(resolvedSearchParams);
-  const timelineToken = getTimelineToken(resolvedSearchParams);
+  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSearchParams);
 
   const entries = await getEntries<CategoryPageSkeleton>(
     {
@@ -41,7 +41,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       include: INCLUDES_COUNT,
       locale,
     },
-    !!isPreviewEnabledFlag,
+    isPreview,
     timelineToken
   );
 
@@ -78,7 +78,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   return (
     <LivePreviewProviderWrapper
       locale={locale}
-      isPreviewEnabled={!!isPreviewEnabledFlag}
+      isPreviewEnabled={isPreview}
     >
       <ContentfulLandingPage entry={landingLike as unknown as LandingPageSkeleton as any} />
       {shelfApp && (
@@ -97,8 +97,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { locale, slug } = await params;
   const resolvedSp = await searchParams;
-  const isPreviewEnabledFlag = isPreviewEnabled(resolvedSp);
-  const timelineToken = getTimelineToken(resolvedSp);
+  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSp);
 
   const entries = await getEntries<CategoryPageSkeleton>(
     {
@@ -107,7 +106,7 @@ export async function generateMetadata(
       include: 2,
       locale,
     },
-    !!isPreviewEnabledFlag,
+    isPreview,
     timelineToken
   );
   const entry = entries[0] as unknown as ICategoryPage | undefined;

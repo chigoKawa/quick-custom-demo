@@ -7,7 +7,8 @@ import {
   BlogPostPageSkeleton,
 } from "@/features/contentful/type";
 import ContentfulBlogPage from "@/features/contentful/components/contentful-blog-page";
-import { extractContentfulAssetUrl, isPreviewEnabled, getTimelineToken } from "@/lib/utils";
+import { extractContentfulAssetUrl } from "@/lib/utils";
+import { resolvePreviewMode } from "@/lib/preview";
 import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provider-wrapper";
 
 const INCLUDES_COUNT = 6;
@@ -22,11 +23,9 @@ type Props = {
 export default async function IndexPage({ params, searchParams }: Props) {
   // preview search param is used to enable preview mode e.g localhost:3000/de/home?preview=true
   const resolvedSearchParams = await searchParams;
-  const isPreviewEnabledFlag = isPreviewEnabled(resolvedSearchParams);
-  const timelineToken = getTimelineToken(resolvedSearchParams);
+  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSearchParams);
   const { locale, blogSlug } = await params;
 
-  // Fetch landing page data from Contentful based on the slug and locale
   const entries = await getEntries<BlogPostPageSkeleton>(
     {
       content_type: "blogPost",
@@ -34,7 +33,7 @@ export default async function IndexPage({ params, searchParams }: Props) {
       include: INCLUDES_COUNT,
       locale,
     },
-    !!isPreviewEnabledFlag,
+    isPreview,
     timelineToken
   );
 
@@ -50,7 +49,7 @@ export default async function IndexPage({ params, searchParams }: Props) {
       {/* Render the blog page component with the fetched data */}
       <LivePreviewProviderWrapper
         locale={locale}
-        isPreviewEnabled={!!isPreviewEnabledFlag}
+        isPreviewEnabled={isPreview}
       >
         <ContentfulBlogPage entry={blogEntry} />
       </LivePreviewProviderWrapper>
@@ -64,11 +63,9 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const resolvedSp = await searchParams;
-  const isPreviewEnabledFlag = isPreviewEnabled(resolvedSp);
-  const timelineToken = getTimelineToken(resolvedSp);
+  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSp);
   const { locale, blogSlug } = await params;
 
-  // Fetch landing page data from Contentful based on the slug and locale
   const entries = await getEntries<BlogPostPageSkeleton>(
     {
       content_type: "blogPost",
@@ -76,7 +73,7 @@ export async function generateMetadata(
       include: INCLUDES_COUNT,
       locale,
     },
-    !!isPreviewEnabledFlag,
+    isPreview,
     timelineToken
   );
 

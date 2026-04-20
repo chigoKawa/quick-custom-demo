@@ -4,7 +4,8 @@ import ContentfulLandingPage from "@/features/contentful/components/contentful-l
 import { ILandingPage, LandingPageSkeleton } from "@/features/contentful/type"; // Types for Contentful landing page entries
 import type { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
-import { extractContentfulAssetUrl, isPreviewEnabled, getTimelineToken } from "@/lib/utils";
+import { extractContentfulAssetUrl } from "@/lib/utils";
+import { resolvePreviewMode } from "@/lib/preview";
 import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provider-wrapper";
 
 // Get the homepage slug from environment variables
@@ -22,10 +23,8 @@ export default async function IndexPage({ params, searchParams }: Props) {
   const { locale } = await params;
 
   const resolvedSearchParams = await searchParams;
-  const isPreviewEnabledFlag = isPreviewEnabled(resolvedSearchParams);
-  const timelineToken = getTimelineToken(resolvedSearchParams);
+  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSearchParams);
 
-  // Fetch landing page data from Contentful based on the slug and locale
   const entries = await getEntries<LandingPageSkeleton>(
     {
       content_type: "landingPage",
@@ -33,7 +32,7 @@ export default async function IndexPage({ params, searchParams }: Props) {
       include: INCLUDES_COUNT,
       locale,
     },
-    isPreviewEnabledFlag,
+    isPreview,
     timelineToken
   );
 
@@ -48,7 +47,7 @@ export default async function IndexPage({ params, searchParams }: Props) {
       {/* Render the landing page component with the fetched data */}
       <LivePreviewProviderWrapper
         locale={locale}
-        isPreviewEnabled={!!isPreviewEnabledFlag}
+        isPreviewEnabled={isPreview}
       >
         <ContentfulLandingPage entry={pageEntry} />
       </LivePreviewProviderWrapper>
@@ -62,11 +61,9 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const sp = await searchParams;
-  const isPreviewEnabledFlag = isPreviewEnabled(sp);
-  const timelineToken = getTimelineToken(sp);
+  const { isPreview, timelineToken } = await resolvePreviewMode(sp);
   const { locale } = await params;
 
-  // Fetch landing page data from Contentful based on the slug and locale
   const entries = await getEntries<LandingPageSkeleton>(
     {
       content_type: "landingPage",
@@ -74,7 +71,7 @@ export async function generateMetadata(
       include: INCLUDES_COUNT,
       locale,
     },
-    !!isPreviewEnabledFlag,
+    isPreview,
     timelineToken
   );
 

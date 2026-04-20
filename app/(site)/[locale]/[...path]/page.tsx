@@ -26,7 +26,8 @@ import {
 import type { Asset, Entry } from "contentful";
 import type { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
-import { extractContentfulAssetUrl, isPreviewEnabled, getTimelineToken } from "@/lib/utils";
+import { extractContentfulAssetUrl } from "@/lib/utils";
+import { resolvePreviewMode } from "@/lib/preview";
 import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provider-wrapper";
 import { mapLandingPageToProps, mapBlogPostToProps } from "@/lib/contentful-mappers";
 
@@ -124,17 +125,16 @@ async function resolvePageEntry(
 
 export default async function NestedPage({ params, searchParams }: Props) {
   const resolvedSp = await searchParams;
-  const isPreview = isPreviewEnabled(resolvedSp);
-  const timelineToken = getTimelineToken(resolvedSp);
+  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSp);
   const { locale, path: pathSegments } = await params;
 
-  const resolved = await resolvePageEntry(pathSegments, locale, !!isPreview, timelineToken);
+  const resolved = await resolvePageEntry(pathSegments, locale, isPreview, timelineToken);
 
   if (!resolved) notFound();
 
   return (
     <div>
-      <LivePreviewProviderWrapper locale={locale} isPreviewEnabled={!!isPreview}>
+      <LivePreviewProviderWrapper locale={locale} isPreviewEnabled={isPreview}>
         {resolved.contentType === "blogPost" ? (
           <ContentfulBlogPage entry={mapBlogPostToProps(resolved.entry)} />
         ) : (
@@ -150,11 +150,10 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const resolvedSp = await searchParams;
-  const isPreview = isPreviewEnabled(resolvedSp);
-  const timelineToken = getTimelineToken(resolvedSp);
+  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSp);
   const { locale, path: pathSegments } = await params;
 
-  const resolved = await resolvePageEntry(pathSegments, locale, !!isPreview, timelineToken);
+  const resolved = await resolvePageEntry(pathSegments, locale, isPreview, timelineToken);
   const pageEntry = resolved?.entry;
   const previousImages = (await parent).openGraph?.images || [];
 

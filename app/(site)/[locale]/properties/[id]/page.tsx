@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getI18nConfig } from "@/i18n-config";
-import { isPreviewEnabled, getTimelineToken } from "@/lib/utils";
+import { resolvePreviewMode } from "@/lib/preview";
 import { IntegrationFactory } from "@/lib/integrations/core/integration-factory";
 import type { IPmsIntegration } from "@/lib/integrations/pms/pms.interface";
 import {
@@ -21,8 +21,7 @@ type Props = {
 
 export default async function PropertyRoute({ params, searchParams }: Props) {
   const resolvedSearchParams = await searchParams;
-  const preview = isPreviewEnabled(resolvedSearchParams);
-  const timelineToken = getTimelineToken(resolvedSearchParams);
+  const { isPreview: preview, timelineToken } = await resolvePreviewMode(resolvedSearchParams);
   const { locale, id } = await params;
   const { locales, defaultLocale } = await getI18nConfig();
   const effectiveLocale = locales.includes(locale as string) ? locale : defaultLocale;

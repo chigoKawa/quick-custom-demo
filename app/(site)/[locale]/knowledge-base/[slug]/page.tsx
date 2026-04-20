@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { getEntries } from "@/lib/contentful";
 import Link from "next/link";
-import { isPreviewEnabled, getTimelineToken } from "@/lib/utils";
+import { resolvePreviewMode } from "@/lib/preview";
 import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provider-wrapper";
 import KbArticleClient from "@/features/kb/kb-article-client";
 import KbArticleFeedback from "@/features/kb/kb-article-feedback";
@@ -29,8 +29,7 @@ export default async function KbArticlePage({
 }) {
   const { locale = "en-US", slug = "" } = await params;
   const resolvedSearchParams = await searchParams;
-  const isPreviewEnabledFlag = isPreviewEnabled(resolvedSearchParams);
-  const timelineToken = getTimelineToken(resolvedSearchParams);
+  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSearchParams);
   const [entry] = await Promise.all([
     getEntries<any>(
       {
@@ -40,7 +39,7 @@ export default async function KbArticlePage({
         limit: 1,
         include: INCLUDES_COUNT,
       },
-      !!isPreviewEnabledFlag,
+      isPreview,
       timelineToken
     ).then((items) => items?.[0] ?? null),
   ]);
@@ -61,7 +60,7 @@ export default async function KbArticlePage({
     : null;
 
   return (
-    <LivePreviewProviderWrapper locale={locale} isPreviewEnabled={!!isPreviewEnabledFlag}>
+    <LivePreviewProviderWrapper locale={locale} isPreviewEnabled={isPreview}>
       <div className="min-h-screen">
         {/* Breadcrumb */}
         <div className="border-b">

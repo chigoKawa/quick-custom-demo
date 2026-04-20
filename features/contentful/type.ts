@@ -163,6 +163,7 @@ export interface ILandingPage extends Entry {
         | KbGroupSkeleton
         | MultiItemModuleSkeleton
         | PropertyListingsSkeleton
+        | InteractiveMapSkeleton
       >
     >;
     seoMetadata?: ISeo;
@@ -559,4 +560,47 @@ export interface IPmsPropertyEntry extends Entry<any> {
 export type PmsPropertyEntrySkeleton = {
   contentTypeId: "pmsProperty";
   fields: IPmsPropertyEntry["fields"];
+};
+
+// -----------------------------
+// Interactive Map content types
+// -----------------------------
+
+export interface IMapPoint extends Entry<any> {
+  fields: {
+    internalTitle: EntryFields.Symbol;
+    title: EntryFields.Symbol;
+    pointType: EntryFields.Symbol<
+      "Station" | "Building" | "Airport" | "Hospital" | "School" | "Park" | "Restaurant" | "Hotel"
+    >;
+    location: { lat: number; lon: number };
+    summary?: EntryFields.RichText;
+  };
+}
+
+export type MapPointSkeleton = {
+  contentTypeId: "mapPoint";
+  fields: IMapPoint["fields"];
+};
+
+export interface IInteractiveMap extends Entry<any> {
+  fields: {
+    internalTitle: EntryFields.Symbol;
+    title?: EntryFields.Symbol;
+    description?: EntryFields.RichText;
+    mapStyle: EntryFields.Symbol<"standard" | "light" | "dark">;
+    animation: EntryFields.Symbol<"none" | "fadeIn" | "slideUp">;
+    isActive: EntryFields.Boolean;
+    defaultZoom?: EntryFields.Integer;
+    defaultCenter?: { lat: number; lon: number };
+    enableClustering?: EntryFields.Boolean;
+    showRouteLines?: EntryFields.Boolean;
+    points: EntryFields.Array<EntryFields.EntryLink<MapPointSkeleton>>;
+    nt_experiences?: Entry<EntrySkeletonType>[];
+  };
+}
+
+export type InteractiveMapSkeleton = {
+  contentTypeId: "interactiveMap";
+  fields: IInteractiveMap["fields"];
 };

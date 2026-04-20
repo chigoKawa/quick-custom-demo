@@ -1,5 +1,5 @@
 import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provider-wrapper";
-import { isPreviewEnabled, getTimelineToken } from "@/lib/utils";
+import { resolvePreviewMode } from "@/lib/preview";
 import { getKbIndex } from "@/lib/kb/loader";
 import { getEntries } from "@/lib/contentful";
 import { ILandingPage, LandingPageSkeleton } from "@/features/contentful/type";
@@ -21,10 +21,8 @@ export default async function KnowledgeBasePage({
 }) {
   const { locale = "en-US" } = await params;
   const resolvedSearchParams = await searchParams;
-  const isPreviewEnabledFlag = isPreviewEnabled(resolvedSearchParams);
-  const timelineToken = getTimelineToken(resolvedSearchParams);
+  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSearchParams);
 
-  // Fetch landing page and microcopy in parallel
   let landing: ILandingPage | undefined;
   let microcopy: Record<string, { value: string; entryId: string }> = {};
   
@@ -37,10 +35,10 @@ export default async function KnowledgeBasePage({
           include: INCLUDES_COUNT,
           locale,
         },
-        !!isPreviewEnabledFlag,
+        isPreview,
         timelineToken
       ),
-      getMicrocopyWithIds(locale, !!isPreviewEnabledFlag, timelineToken),
+      getMicrocopyWithIds(locale, isPreview, timelineToken),
     ]);
     landing = entries?.[0] as ILandingPage | undefined;
     microcopy = microcopyData;
@@ -64,7 +62,7 @@ export default async function KnowledgeBasePage({
   }
 
   return (
-    <LivePreviewProviderWrapper locale={locale} isPreviewEnabled={!!isPreviewEnabledFlag}>
+    <LivePreviewProviderWrapper locale={locale} isPreviewEnabled={isPreview}>
       <KbLandingContent
         locale={locale}
         landingEntry={landing || null}

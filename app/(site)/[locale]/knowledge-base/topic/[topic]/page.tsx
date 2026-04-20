@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { isPreviewEnabled } from "@/lib/utils";
+import { resolvePreviewMode } from "@/lib/preview";
 import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provider-wrapper";
 import { getKbIndex } from "@/lib/kb/loader";
 import KbFooterCta from "@/features/kb/kb-footer-cta";
@@ -24,7 +24,7 @@ export default async function KbTopicPage({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const { locale = "en-US", topic = "" } = await params;
-  const isPreviewEnabledFlag = isPreviewEnabled(await searchParams);
+  const { isPreview: isPreviewEnabledFlag } = await resolvePreviewMode(await searchParams);
 
   const idx = getKbIndex(locale);
   

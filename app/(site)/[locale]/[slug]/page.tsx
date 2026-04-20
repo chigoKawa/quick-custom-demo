@@ -11,7 +11,8 @@ import {
 import type { Asset } from "contentful";
 import type { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
-import { extractContentfulAssetUrl, isPreviewEnabled, getTimelineToken } from "@/lib/utils";
+import { extractContentfulAssetUrl } from "@/lib/utils";
+import { resolvePreviewMode } from "@/lib/preview";
 import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provider-wrapper";
 import { mapLandingPageToProps, mapBlogPostToProps } from "@/lib/contentful-mappers";
 
@@ -32,8 +33,7 @@ type Props = {
 
 export default async function IndexPage({ params, searchParams }: Props) {
   const resolvedSearchParams = await searchParams;
-  const isPreviewEnabledFlag = isPreviewEnabled(resolvedSearchParams);
-  const timelineToken = getTimelineToken(resolvedSearchParams);
+  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSearchParams);
 
   const { locale, slug } = await params;
 
@@ -48,7 +48,7 @@ export default async function IndexPage({ params, searchParams }: Props) {
         include: INCLUDES_COUNT,
         locale,
       },
-      !!isPreviewEnabledFlag,
+      isPreview,
       timelineToken
     );
     landingPage = entries[0] as ILandingPage | undefined;
@@ -65,7 +65,7 @@ export default async function IndexPage({ params, searchParams }: Props) {
           include: INCLUDES_COUNT,
           locale,
         },
-        !!isPreviewEnabledFlag,
+        isPreview,
         timelineToken
       );
       blogPost = entries[0] as IBlogPostPage | undefined;
@@ -82,7 +82,7 @@ export default async function IndexPage({ params, searchParams }: Props) {
     <div>
       <LivePreviewProviderWrapper
         locale={locale}
-        isPreviewEnabled={!!isPreviewEnabledFlag}
+        isPreviewEnabled={isPreview}
       >
         {blogPost ? (
           <ContentfulBlogPage entry={mapBlogPostToProps(blogPost)} />
@@ -100,8 +100,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const resolvedSp = await searchParams;
-  const isPreviewEnabledFlag = isPreviewEnabled(resolvedSp);
-  const timelineToken = getTimelineToken(resolvedSp);
+  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSp);
   const { locale, slug } = await params;
 
   let pageEntry: ILandingPage | IBlogPostPage | undefined;
@@ -113,7 +112,7 @@ export async function generateMetadata(
         include: INCLUDES_COUNT,
         locale,
       },
-      !!isPreviewEnabledFlag,
+      isPreview,
       timelineToken
     );
     pageEntry = entries[0] as ILandingPage | undefined;
@@ -130,7 +129,7 @@ export async function generateMetadata(
           include: INCLUDES_COUNT,
           locale,
         },
-        !!isPreviewEnabledFlag,
+        isPreview,
         timelineToken
       );
       pageEntry = entries[0] as IBlogPostPage | undefined;

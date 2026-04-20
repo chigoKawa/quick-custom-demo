@@ -42,26 +42,25 @@ const PREVIEW_NO_CACHE_HEADERS: HeadersInit = {
 };
 
 /**
- * Build a NextResponse that forwards preview/timeline flags as request
- * headers so that layouts (which lack searchParams) can detect preview mode.
+ * Build request headers that forward preview/timeline flags so that
+ * server components (which read `headers()`) can detect preview mode.
  */
-function withPreviewHeaders(
-  request: NextRequest,
-  base: NextResponse
-): NextResponse {
-  const isPreview = request.nextUrl.searchParams.has("preview");
-  if (!isPreview) return base;
-
-  const timeline = request.nextUrl.searchParams.get("timeline") ?? "";
-
+function buildRequestHeaders(request: NextRequest): Headers {
   const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-contentful-preview", "1");
-  if (timeline) {
-    requestHeaders.set("x-contentful-timeline", timeline);
+  const isPreview = request.nextUrl.searchParams.has("preview");
+
+  if (isPreview) {
+    requestHeaders.set("x-contentful-preview", "1");
+    const timeline = request.nextUrl.searchParams.get("timeline") ?? "";
+    if (timeline) {
+      requestHeaders.set("x-contentful-timeline", timeline);
+    }
   }
 
-  const res = NextResponse.next({ request: { headers: requestHeaders } });
+  return requestHeaders;
+}
 
+function applyNoCacheHeaders(res: NextResponse): NextResponse {
   for (const [k, v] of Object.entries(PREVIEW_NO_CACHE_HEADERS)) {
     res.headers.set(k, v);
   }
@@ -72,6 +71,7 @@ export async function middleware(request: NextRequest) {
   const { locales, defaultLocale } = await getI18nConfig();
   const { pathname } = request.nextUrl;
   const isPreview = request.nextUrl.searchParams.has("preview");
+  const requestHeaders = buildRequestHeaders(request);
 
   const startsWithLocale = locales.find(
     (loc) => pathname === `/${loc}` || pathname.startsWith(`/${loc}/`)
@@ -93,7 +93,8 @@ export async function middleware(request: NextRequest) {
       }
     }
 
-    return withPreviewHeaders(request, NextResponse.next());
+    const res = NextResponse.next({ request: { headers: requestHeaders } });
+    return isPreview ? applyNoCacheHeaders(res) : res;
   }
 
   // 2) If URL is missing a locale prefix
@@ -103,7 +104,10 @@ export async function middleware(request: NextRequest) {
   if (best === defaultLocale) {
     const url = request.nextUrl.clone();
     url.pathname = `/${defaultLocale}${pathname}`;
-    return withPreviewHeaders(request, NextResponse.rewrite(url));
+    const res = NextResponse.rewrite(url, {
+      request: { headers: requestHeaders },
+    });
+    return isPreview ? applyNoCacheHeaders(res) : res;
   }
 
   // For non-default best matches: redirect to locale-prefixed URL

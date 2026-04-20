@@ -29,10 +29,15 @@ export async function GET(request: NextRequest) {
   const draft = await draftMode();
   draft.enable();
 
-  // Normalize: strip any protocol/host, ensure leading slash
+  // Normalize: strip protocol/host, collapse leading slashes to one
   let pathname = rawPath.replace(/^https?:\/\/[^/]*/, "");
-  if (!pathname.startsWith("/")) pathname = "/" + pathname;
+  pathname = "/" + pathname.replace(/^\/+/, "");
 
   const redirectUrl = new URL(pathname, request.nextUrl.origin);
+
+  // Always append ?preview so the page route, middleware, and resolvePreviewMode
+  // all detect preview mode — draftMode cookies alone can be lost during redirects.
+  redirectUrl.searchParams.set("preview", "");
+
   return NextResponse.redirect(redirectUrl);
 }

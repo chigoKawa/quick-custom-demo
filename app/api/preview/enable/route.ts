@@ -5,14 +5,18 @@ import { draftMode } from "next/headers";
  * GET /api/preview/enable?secret=...&slug=/some-path
  *
  * Enables Next.js draft mode and redirects to the target page.
- * Contentful should be configured to call this URL when the user
- * clicks "Open preview" — e.g.:
- *   https://your-site.com/api/preview/enable?secret={PREVIEW_SECRET}&slug=/{entry.fields.fullPath}
+ *
+ * Accepts either `slug` or `path` query parameter — both are treated
+ * as the URL path to redirect to after enabling draft mode.
+ *
+ * Contentful preview URL examples:
+ *   https://your-site.com/api/preview/enable?secret={SECRET}&slug={entry.fields.slug}
+ *   https://your-site.com/api/preview/enable?secret={SECRET}&path={entry.fields.fullPath}
  */
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
   const secret = searchParams.get("secret");
-  const slug = searchParams.get("slug") || "/";
+  const rawPath = searchParams.get("path") || searchParams.get("slug") || "/";
 
   const expectedSecret =
     process.env.CONTENTFUL_PREVIEW_SECRET ||
@@ -25,6 +29,10 @@ export async function GET(request: NextRequest) {
   const draft = await draftMode();
   draft.enable();
 
-  const redirectUrl = new URL(slug, request.nextUrl.origin);
+  // Normalize: strip any protocol/host, ensure leading slash
+  let pathname = rawPath.replace(/^https?:\/\/[^/]*/, "");
+  if (!pathname.startsWith("/")) pathname = "/" + pathname;
+
+  const redirectUrl = new URL(pathname, request.nextUrl.origin);
   return NextResponse.redirect(redirectUrl);
 }

@@ -1,22 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 import { draftMode } from "next/headers";
+import { getI18nConfig } from "@/i18n-config";
 
 /**
- * GET /api/preview/enable?secret=...&slug=/some-path
+ * GET /api/preview/enable?secret=...&path=/some-path&locale=de
  *
  * Enables Next.js draft mode and redirects to the target page.
  *
  * Accepts either `slug` or `path` query parameter — both are treated
  * as the URL path to redirect to after enabling draft mode.
  *
+ * The optional `locale` parameter (Contentful's {locale} token) controls
+ * the URL prefix. Non-default locales are prefixed (e.g. /de/some-path),
+ * while the default locale uses a clean URL (e.g. /some-path).
+ *
  * Contentful preview URL examples:
- *   https://your-site.com/api/preview/enable?secret={SECRET}&slug={entry.fields.slug}
- *   https://your-site.com/api/preview/enable?secret={SECRET}&path={entry.fields.fullPath}
+ *   https://your-site.com/api/preview/enable?secret={SECRET}&slug={entry.fields.slug}&locale={locale}
+ *   https://your-site.com/api/preview/enable?secret={SECRET}&path={entry.fields.fullPath}&locale={locale}
  */
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
   const secret = searchParams.get("secret");
   const rawPath = searchParams.get("path") || searchParams.get("slug") || "/";
+  const locale = searchParams.get("locale");
 
   const expectedSecret =
     process.env.CONTENTFUL_PREVIEW_SECRET ||
@@ -32,6 +38,14 @@ export async function GET(request: NextRequest) {
   // Normalize: strip protocol/host, collapse leading slashes to one
   let pathname = rawPath.replace(/^https?:\/\/[^/]*/, "");
   pathname = "/" + pathname.replace(/^\/+/, "");
+
+  // Prefix with locale when it differs from the default (default uses clean URLs)
+  if (locale) {
+    const { defaultLocale } = await getI18nConfig();
+    if (locale !== defaultLocale) {
+      pathname = `/${locale}${pathname}`;
+    }
+  }
 
   const redirectUrl = new URL(pathname, request.nextUrl.origin);
 

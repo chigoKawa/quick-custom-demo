@@ -23,7 +23,7 @@ export function LongText({
 }: {
   text: string;
   className?: string;
-  inspectorProps?: Record<string, unknown>;
+  inspectorProps?: Record<string, unknown> | null;
 }) {
   const html = marked.parse(text) as string;
 

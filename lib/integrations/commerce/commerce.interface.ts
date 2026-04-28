@@ -71,10 +71,25 @@ export interface ProductFilters {
 }
 
 /**
+ * Product category derived from commerce data
+ */
+export interface ProductCategory {
+  id: string;
+  name: string;
+  slug: string;
+  productCount: number;
+}
+
+/**
  * Commerce Integration Interface
  * All commerce adapters must implement this interface
  */
 export interface ICommerceIntegration extends IBaseIntegration {
+  /**
+   * Get available product categories (derived from product data)
+   */
+  getCategories(): Promise<ProductCategory[]>;
+
   /**
    * Get list of products with optional filters
    */

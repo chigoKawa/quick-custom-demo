@@ -14,6 +14,11 @@ type KbArticleEntry = {
   fields?: Record<string, unknown>;
 };
 
+type MarketOverrideEntry = {
+  sys?: { id?: string };
+  fields?: Record<string, unknown>;
+} | null;
+
 function getLocalizedStringField(value: unknown, locale: string): string | undefined {
   if (typeof value === "string") return value;
   if (!value || typeof value !== "object") return undefined;
@@ -83,8 +88,8 @@ function createKbRichTextOptions(locale: string): Options {
           </div>
         );
       },
-      [BLOCKS.EMBEDDED_ENTRY]: (node) => renderEmbeddedEntry(node?.data?.target),
-      [INLINES.EMBEDDED_ENTRY]: (node) => renderEmbeddedEntry(node?.data?.target, { isInline: true }),
+      [BLOCKS.EMBEDDED_ENTRY]: (node) => renderEmbeddedEntry(node?.data?.target, { locale }),
+      [INLINES.EMBEDDED_ENTRY]: (node) => renderEmbeddedEntry(node?.data?.target, { isInline: true, locale }),
       [INLINES.HYPERLINK]: (node, children) => (
         <a
           href={node.data.uri as string}
@@ -100,16 +105,39 @@ function createKbRichTextOptions(locale: string): Options {
   };
 }
 
-export default function KbArticleClient({ entry: publishedEntry, locale }: { entry: KbArticleEntry; locale: string }) {
+export default function KbArticleClient({
+  entry: publishedEntry,
+  locale,
+  marketOverride: publishedOverride,
+}: {
+  entry: KbArticleEntry;
+  locale: string;
+  marketOverride?: MarketOverrideEntry;
+}) {
   const entry = (useContentfulLiveUpdates(publishedEntry) || publishedEntry) as KbArticleEntry;
+  const override = (useContentfulLiveUpdates(publishedOverride) || publishedOverride) as MarketOverrideEntry;
   const inspectorProps = useContentfulInspectorMode({ entryId: entry?.sys?.id });
+  const overrideInspectorProps = useContentfulInspectorMode({
+    entryId: override?.sys?.id,
+  });
 
   const fields = (entry?.fields || {}) as Record<string, unknown>;
-  const title = getLocalizedStringField(fields.title, locale) || "";
+  const overrideFields = (override?.fields || null) as Record<string, unknown> | null;
+
+  const hasOverrideBody = overrideFields?.overrideBody != null;
+  const title =
+    getLocalizedStringField(overrideFields?.overrideLabel, locale) ||
+    getLocalizedStringField(fields.title, locale) ||
+    "";
   const summary = getLocalizedStringField(fields.summary, locale) || "";
-  const body = (fields.body as Document | undefined) || undefined;
+  const body = hasOverrideBody
+    ? (overrideFields!.overrideBody as Document)
+    : ((fields.body as Document | undefined) || undefined);
 
   const richTextOptions = React.useMemo(() => createKbRichTextOptions(locale), [locale]);
+
+  const bodyFieldId = hasOverrideBody ? "overrideBody" : "body";
+  const bodyInspector = hasOverrideBody ? overrideInspectorProps : inspectorProps;
 
   return (
     <article className="prose prose-neutral max-w-none dark:prose-invert">
@@ -121,7 +149,7 @@ export default function KbArticleClient({ entry: publishedEntry, locale }: { ent
           {summary}
         </p>
       ) : null}
-      <div {...inspectorProps({ fieldId: "body" })} className="mt-6">
+      <div {...bodyInspector({ fieldId: bodyFieldId })} className="mt-6">
         {body ? documentToReactComponents(body, richTextOptions) : null}
       </div>
     </article>

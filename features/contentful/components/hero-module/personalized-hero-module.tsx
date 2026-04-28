@@ -5,6 +5,18 @@ import { Experience } from "@ninetailed/experience.js-react";
 import { ExperienceMapper } from "@ninetailed/experience.js-utils-contentful";
 import type { IHeroModule } from "../../type";
 import HeroModuleWrapper from "./hero-module-wrapper";
+import { useSiteChromeLocale } from "@/features/site-chrome-locale";
+
+function HeroModuleWithLocale(entry: IHeroModule) {
+  const { locale, defaultLocale } = useSiteChromeLocale();
+  return (
+    <HeroModuleWrapper
+      {...entry}
+      locale={locale}
+      defaultLocale={defaultLocale}
+    />
+  );
+}
 
 export default function PersonalizedHeroModule(entry: IHeroModule) {
   // Guard against undefined entry or missing sys/fields
@@ -21,11 +33,11 @@ export default function PersonalizedHeroModule(entry: IHeroModule) {
   try {
     mappedExperiencesUnknown = experiencesUnknown.filter(isExp).map(mapExp);
   } catch {
-    return <HeroModuleWrapper {...entry} />;
+    return <HeroModuleWithLocale {...entry} />;
   }
 
   if (!mappedExperiencesUnknown || mappedExperiencesUnknown.length === 0) {
-    return <HeroModuleWrapper {...entry} />;
+    return <HeroModuleWithLocale {...entry} />;
   }
 
   type ExperiencesProp = NonNullable<
@@ -37,7 +49,7 @@ export default function PersonalizedHeroModule(entry: IHeroModule) {
     <Experience
       key={entry.sys.id}
       id={entry.sys.id}
-      component={HeroModuleWrapper}
+      component={HeroModuleWithLocale}
       experiences={experiencesForProp}
       {...entry}
     />

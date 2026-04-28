@@ -1,5 +1,6 @@
 import React, { FC, ReactNode } from "react";
 import { useContentfulInspectorMode } from "@contentful/live-preview/react";
+import { LongText } from "@/features/contentful/components/long-text";
 
 interface IProps {
   entryId: string; // Unique ID for the entry used for live preview inspector mode
@@ -25,12 +26,11 @@ const VariantCentered: FC<IProps> = ({ title, body, buttons, entryId, image }) =
 
             {/* Optional body text */}
             {body && (
-              <p
-                {...inspectorProps({ fieldId: "body" })}
+              <LongText
+                text={body}
+                inspectorProps={inspectorProps({ fieldId: "body" })}
                 className="text-lg text-muted-foreground mb-8 max-w-md mx-auto leading-relaxed"
-              >
-                {body}
-              </p>
+              />
             )}
 
             {/* Button section */}

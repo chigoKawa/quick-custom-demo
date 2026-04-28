@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useContentfulInspectorMode } from "@contentful/live-preview/react";
 import { cn } from "@/lib/utils";
 import type { IPropertyListings } from "../../type";
+import { LongText } from "@/features/contentful/components/long-text";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -224,12 +225,11 @@ export default function PropertyListingsSection({
               </p>
             )}
             {body && (
-              <p
-                {...inspectorProps({ fieldId: "body" })}
+              <LongText
+                text={body}
+                inspectorProps={inspectorProps({ fieldId: "body" })}
                 className={cn("text-base leading-relaxed", colors.body)}
-              >
-                {body}
-              </p>
+              />
             )}
           </div>
         )}

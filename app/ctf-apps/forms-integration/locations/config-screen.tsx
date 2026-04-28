@@ -12,6 +12,7 @@ interface AppInstallationParameters {
 
 const PROVIDERS = [
   { id: "mock", name: "Mock Forms", description: "Demo forms for testing" },
+  { id: "jotform", name: "JotForm", description: "Powerful online form builder" },
   { id: "typeform", name: "Typeform", description: "Beautiful conversational forms" },
   { id: "hubspot", name: "HubSpot Forms", description: "Marketing and lead capture forms" },
   { id: "formstack", name: "Formstack", description: "Enterprise form builder" },

@@ -29,15 +29,13 @@ export type CommerceAppInstallationParameters = {
 
 /**
  * Product catalog field value (stored in Contentful entry field)
- * Supports both single and multiple product selection
+ * Supports single product, multiple products, and category selection
  */
 export type ProductCatalogFieldValue = {
   version: 1;
-  
-  // Selection mode
-  selectionMode: "single" | "multiple";
-  
-  // Selected product (single mode)
+
+  selectionMode: "single" | "multiple" | "category";
+
   selectedProduct?: {
     id: string;
     title: string;
@@ -46,8 +44,7 @@ export type ProductCatalogFieldValue = {
     sku?: string;
     category?: string;
   };
-  
-  // Selected products (multiple mode)
+
   selectedProducts?: Array<{
     id: string;
     title: string;
@@ -56,6 +53,15 @@ export type ProductCatalogFieldValue = {
     sku?: string;
     category?: string;
   }>;
+
+  selectedCategory?: {
+    id: string;
+    name: string;
+    slug: string;
+    productCount: number;
+  };
+
+  categoryDisplayLimit?: number;
 };
 
 /**

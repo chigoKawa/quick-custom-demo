@@ -31,6 +31,20 @@
         "clientId": "${SALESFORCE_CLIENT_ID}",
         "clientSecret": "${SALESFORCE_CLIENT_SECRET}"
       }
+    },
+    "jotform": {
+      "name": "JotForm",
+      "enabled": false,
+      "baseUrl": "https://api.jotform.com",
+      "endpoints": {
+        "forms": "/user/forms",
+        "form": "/form/{formId}",
+        "questions": "/form/{formId}/questions",
+        "submissions": "/form/{formId}/submissions"
+      },
+      "credentials": {
+        "apiKey": "${JOTFORM_API_KEY}"
+      }
     }
   }
 }

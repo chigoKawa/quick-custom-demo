@@ -435,3 +435,71 @@
 .noResultsText {
   font-size: 14px;
 }
+
+/* ---- Category Mode ---- */
+
+.categoryCard {
+  border: 2px solid #e5eaef;
+  border-radius: 8px;
+  padding: 16px;
+  background: white;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.categoryCardIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+}
+
+.categoryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.categoryPickerCard {
+  border: 2px solid #e5eaef;
+  border-radius: 8px;
+  padding: 16px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.categoryPickerCard:hover {
+  border-color: #6366f1;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+  transform: translateY(-2px);
+}
+
+.categoryPickerIcon {
+  font-size: 32px;
+}
+
+.categoryPickerName {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e2329;
+}
+
+.categoryPickerCount {
+  font-size: 13px;
+  color: #8492a6;
+  background: #f0f0f0;
+  padding: 2px 10px;
+  border-radius: 10px;
+}

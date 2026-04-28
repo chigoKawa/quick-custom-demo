@@ -4,10 +4,22 @@ import type { FieldAppSDK, DialogAppSDK } from "@contentful/app-sdk";
 import { locations } from "@contentful/app-sdk";
 import { useSDK } from "@contentful/react-apps-toolkit";
 import React, { useEffect, useState, useCallback } from "react";
-import type { Product } from "@/lib/integrations/commerce/commerce.interface";
+import type { Product, ProductCategory } from "@/lib/integrations/commerce/commerce.interface";
 import type { ProductCatalogFieldValue } from "../types";
 import { fetchWithTimeout } from "../utils";
 import styles from "./product-catalog-field-v2.module.css";
+
+const SELECTION_MODES: ProductCatalogFieldValue["selectionMode"][] = [
+  "single",
+  "multiple",
+  "category",
+];
+
+const MODE_LABELS: Record<ProductCatalogFieldValue["selectionMode"], string> = {
+  single: "Single Product",
+  multiple: "Multiple Products",
+  category: "Product Category",
+};
 
 function readInitialValue(value: unknown): ProductCatalogFieldValue {
   if (!value || typeof value !== "object") {
@@ -16,37 +28,55 @@ function readInitialValue(value: unknown): ProductCatalogFieldValue {
 
   const v = value as Partial<ProductCatalogFieldValue>;
   const mode = v.selectionMode || "single";
-  return {
-    version: 1,
-    selectionMode: mode,
-    selectedProduct: mode === "single" ? v.selectedProduct : undefined,
-    selectedProducts: mode === "multiple" ? (v.selectedProducts || []) : undefined,
-  };
+  const base: ProductCatalogFieldValue = { version: 1, selectionMode: mode };
+
+  if (mode === "single" && v.selectedProduct) {
+    base.selectedProduct = v.selectedProduct;
+  } else if (mode === "multiple") {
+    base.selectedProducts = v.selectedProducts || [];
+  } else if (mode === "category") {
+    if (v.selectedCategory) base.selectedCategory = v.selectedCategory;
+    base.categoryDisplayLimit = v.categoryDisplayLimit ?? 10;
+  }
+
+  return base;
 }
 
 export default function ProductCatalogField() {
   const sdk = useSDK<FieldAppSDK | DialogAppSDK>();
   
-  // Check if we're in dialog mode first
   const isDialog = sdk.location.is(locations.LOCATION_DIALOG);
-  
-  // Only access sdk.field if we're in field mode
   const fieldSdk = isDialog ? null : (sdk as FieldAppSDK);
+
+  // Detect what Contentful field type we're attached to.
+  // Symbol → simple string field (e.g. commerceCategoryId on productCategory)
+  // Object → rich JSON field (e.g. products on productCatalog)
+  const fieldType = fieldSdk?.field?.type as string | undefined;
+  const isSymbolField = fieldType === "Symbol";
   
   const [config, setConfig] = useState<ProductCatalogFieldValue>(() => {
     if (isDialog) {
-      // In dialog mode, get initial config from invocation parameters
       const params = (sdk as DialogAppSDK).parameters?.invocation as any;
       return {
         version: 1,
         selectionMode: params?.mode || "single",
       };
     }
+    if (isSymbolField) {
+      const raw = fieldSdk?.field?.getValue() as string | undefined;
+      return {
+        version: 1,
+        selectionMode: "category" as const,
+        selectedCategory: raw ? { id: raw, name: raw, slug: raw, productCount: 0 } : undefined,
+      };
+    }
     return readInitialValue(fieldSdk?.field?.getValue());
   });
   const [searchQuery, setSearchQuery] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(isDialog); // Start loading if in dialog mode
+  const [categories, setCategories] = useState<ProductCategory[]>([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(false);
+  const [loading, setLoading] = useState(isDialog);
   const [error, setError] = useState<string | null>(null);
   const [tempSelection, setTempSelection] = useState<string[]>(() => {
     if (isDialog) {
@@ -58,12 +88,20 @@ export default function ProductCatalogField() {
 
   const saveValue = useCallback(
     (newConfig: ProductCatalogFieldValue) => {
-      setConfig(newConfig);
-      if (fieldSdk?.field) {
-        fieldSdk.field.setValue(newConfig);
-      }
+      const cleaned = JSON.parse(JSON.stringify(newConfig));
+      setConfig(cleaned);
+      if (!fieldSdk?.field) return;
+
+      // For Symbol fields, persist only the category ID string
+      const persistedValue = isSymbolField
+        ? (cleaned.selectedCategory?.id ?? "")
+        : cleaned;
+
+      fieldSdk.field.setValue(persistedValue).catch((err: unknown) => {
+        console.error("[ProductCatalog] setValue failed:", err);
+      });
     },
-    [fieldSdk]
+    [fieldSdk, isSymbolField]
   );
 
   const loadProducts = useCallback(async (query?: string) => {
@@ -95,6 +133,29 @@ export default function ProductCatalogField() {
       setProducts([]);
     } finally {
       setLoading(false);
+    }
+  }, []);
+
+  const loadCategories = useCallback(async () => {
+    setCategoriesLoading(true);
+    setError(null);
+    try {
+      const result = await fetchWithTimeout<{ categories: ProductCategory[] }>(
+        "/api/integrations/categories",
+        {},
+        8000,
+      );
+      if (!result.ok) {
+        setError(result.error);
+        setCategories([]);
+        return;
+      }
+      setCategories(result.data.categories);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unknown error");
+      setCategories([]);
+    } finally {
+      setCategoriesLoading(false);
     }
   }, []);
 
@@ -217,22 +278,57 @@ export default function ProductCatalogField() {
   }, [tempSelection, products, handleDialogClose]);
 
   const handleRemove = useCallback(() => {
-    saveValue({ version: 1, selectionMode: config.selectionMode });
-  }, [saveValue, config.selectionMode]);
+    const cleared: ProductCatalogFieldValue = { version: 1, selectionMode: config.selectionMode };
+    setConfig(cleared);
+    if (fieldSdk?.field) {
+      fieldSdk.field.removeValue().catch((err: unknown) => {
+        console.error("[ProductCatalog] removeValue failed:", err);
+      });
+    }
+  }, [config.selectionMode, fieldSdk]);
 
   const handleToggleMode = useCallback(() => {
-    const newMode = config.selectionMode === "single" ? "multiple" : "single";
+    const idx = SELECTION_MODES.indexOf(config.selectionMode);
+    const newMode = SELECTION_MODES[(idx + 1) % SELECTION_MODES.length];
     saveValue({
       version: 1,
       selectionMode: newMode,
     });
   }, [config.selectionMode, saveValue]);
 
+  const handleSelectCategory = useCallback(
+    (cat: ProductCategory) => {
+      saveValue({
+        version: 1,
+        selectionMode: "category",
+        selectedCategory: cat,
+        categoryDisplayLimit: config.categoryDisplayLimit ?? 10,
+      });
+    },
+    [saveValue, config.categoryDisplayLimit],
+  );
+
+  const handleCategoryLimitChange = useCallback(
+    (limit: number) => {
+      saveValue({
+        ...config,
+        categoryDisplayLimit: limit,
+      });
+    },
+    [saveValue, config],
+  );
+
 
   const isSingleMode = config.selectionMode === "single";
+  const isCategoryMode = config.selectionMode === "category";
   const selectedProduct = config.selectedProduct;
   const selectedProducts = config.selectedProducts || [];
-  const hasSelection = isSingleMode ? !!selectedProduct : selectedProducts.length > 0;
+  const selectedCategory = config.selectedCategory;
+  const hasSelection = isCategoryMode
+    ? !!selectedCategory
+    : isSingleMode
+      ? !!selectedProduct
+      : selectedProducts.length > 0;
 
   // If in dialog mode, show product selector directly
   if (isDialog) {
@@ -334,29 +430,76 @@ export default function ProductCatalogField() {
   // Regular field view
   return (
     <div className={styles.container}>
-      {/* Mode Toggle */}
-      <div style={{ marginBottom: 16, display: "flex", alignItems: "center", gap: 12 }}>
-        <label style={{ fontSize: 14, fontWeight: 600, color: "#1e2329" }}>
-          Selection Mode:
-        </label>
-        <button
-          onClick={handleToggleMode}
-          style={{
-            padding: "6px 12px",
-            background: "white",
-            border: "2px solid #0066cc",
-            borderRadius: 6,
-            color: "#0066cc",
-            fontSize: 13,
-            fontWeight: 500,
-            cursor: "pointer",
-          }}
-        >
-          {isSingleMode ? "Single Product" : "Multiple Products"}
-        </button>
-      </div>
+      {/* Mode Toggle — hidden for Symbol fields (locked to category) */}
+      {!isSymbolField && (
+        <div style={{ marginBottom: 16, display: "flex", alignItems: "center", gap: 12 }}>
+          <label style={{ fontSize: 14, fontWeight: 600, color: "#1e2329" }}>
+            Selection Mode:
+          </label>
+          <button
+            onClick={handleToggleMode}
+            style={{
+              padding: "6px 12px",
+              background: "white",
+              border: "2px solid #0066cc",
+              borderRadius: 6,
+              color: "#0066cc",
+              fontSize: 13,
+              fontWeight: 500,
+              cursor: "pointer",
+            }}
+          >
+            {MODE_LABELS[config.selectionMode]}
+          </button>
+        </div>
+      )}
 
-      {hasSelection ? (
+      {/* Category mode */}
+      {isCategoryMode ? (
+        selectedCategory ? (
+          <div>
+            <div className={styles.categoryCard}>
+              <div className={styles.categoryCardIcon}>🏷️</div>
+              <div className={styles.selectedProductInfo}>
+                <div className={styles.selectedProductTitle}>{selectedCategory.name}</div>
+                <div className={styles.selectedProductMeta}>
+                  ID: {selectedCategory.id} · {selectedCategory.productCount} product{selectedCategory.productCount !== 1 ? "s" : ""}
+                </div>
+              </div>
+              <button className={styles.removeButton} onClick={handleRemove}>
+                Remove
+              </button>
+            </div>
+            <div style={{ marginTop: 12, display: "flex", alignItems: "center", gap: 12 }}>
+              <label style={{ fontSize: 13, fontWeight: 600, color: "#1e2329" }}>
+                Display limit:
+              </label>
+              <select
+                value={config.categoryDisplayLimit ?? 10}
+                onChange={(e) => handleCategoryLimitChange(Number(e.target.value))}
+                style={{
+                  padding: "6px 10px",
+                  border: "2px solid #d3dce6",
+                  borderRadius: 6,
+                  fontSize: 13,
+                }}
+              >
+                {[4, 8, 10, 12, 16, 20].map((n) => (
+                  <option key={n} value={n}>{n} products</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        ) : (
+          <CategoryPicker
+            categories={categories}
+            loading={categoriesLoading}
+            error={error}
+            onLoad={loadCategories}
+            onSelect={handleSelectCategory}
+          />
+        )
+      ) : hasSelection ? (
         isSingleMode && selectedProduct ? (
         <div className={styles.selectedProductCard}>
           <div className={styles.selectedProductImage}>
@@ -430,6 +573,82 @@ export default function ProductCatalogField() {
         </div>
       )}
 
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Category Picker sub-component                                     */
+/* ------------------------------------------------------------------ */
+
+function CategoryPicker({
+  categories,
+  loading,
+  error,
+  onLoad,
+  onSelect,
+}: {
+  categories: ProductCategory[];
+  loading: boolean;
+  error: string | null;
+  onLoad: () => void;
+  onSelect: (cat: ProductCategory) => void;
+}) {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!loaded) {
+      setLoaded(true);
+      onLoad();
+    }
+  }, [loaded, onLoad]);
+
+  if (loading) {
+    return (
+      <div className={styles.loadingState}>
+        <div className={styles.spinner}></div>
+        <div>Loading categories…</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.errorState}>
+        <div className={styles.errorTitle}>⚠️ Error Loading Categories</div>
+        <div className={styles.errorMessage}>{error}</div>
+      </div>
+    );
+  }
+
+  if (categories.length === 0) {
+    return (
+      <div className={styles.emptyState}>
+        <div className={styles.emptyIcon}>🏷️</div>
+        <div className={styles.emptyTitle}>No categories found</div>
+        <div className={styles.emptyText}>
+          Categories are derived from your product catalog. Add products with category values to see them here.
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.categoryGrid}>
+      {categories.map((cat) => (
+        <button
+          key={cat.id}
+          type="button"
+          className={styles.categoryPickerCard}
+          onClick={() => onSelect(cat)}
+        >
+          <span className={styles.categoryPickerIcon}>🏷️</span>
+          <span className={styles.categoryPickerName}>{cat.name}</span>
+          <span className={styles.categoryPickerCount}>
+            {cat.productCount} product{cat.productCount !== 1 ? "s" : ""}
+          </span>
+        </button>
+      ))}
     </div>
   );
 }

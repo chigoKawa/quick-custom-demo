@@ -2,6 +2,7 @@ import { BaseIntegration } from '../core/base-integration';
 import type {
   ICommerceIntegration,
   Product,
+  ProductCategory,
   ProductFilters,
   Cart,
   CartItem,
@@ -40,7 +41,14 @@ export class MockCommerceAdapter extends BaseIntegration implements ICommerceInt
     if (filters) {
       // Apply category filter
       if (filters.category) {
-        filtered = filtered.filter((p) => p.category === filters.category);
+        // Resolve legacy cat-* aliases used by some Contentful category entries
+        const categoryAliases: Record<string, string> = {
+          'cat-pots-planters': 'outdoor-pots',
+          'cat-outdoor-lighting': 'leisure-outdoor',
+          'cat-storage': 'outdoor-storage',
+        };
+        const resolvedCategory = categoryAliases[filters.category] ?? filters.category;
+        filtered = filtered.filter((p) => p.category === resolvedCategory);
       }
 
       // Apply tags filter
@@ -91,6 +99,29 @@ export class MockCommerceAdapter extends BaseIntegration implements ICommerceInt
     }
 
     return filtered;
+  }
+
+  async getCategories(): Promise<ProductCategory[]> {
+    await this.simulateLatency();
+
+    const counts = new Map<string, number>();
+    for (const p of this.products) {
+      if (p.category) {
+        counts.set(p.category, (counts.get(p.category) ?? 0) + 1);
+      }
+    }
+
+    return Array.from(counts.entries())
+      .map(([id, productCount]) => ({
+        id,
+        name: id
+          .split('-')
+          .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+          .join(' '),
+        slug: id,
+        productCount,
+      }))
+      .sort((a, b) => b.productCount - a.productCount);
   }
 
   async getProduct(id: string): Promise<Product | null> {

@@ -1,6 +1,7 @@
 import React, { FC, ReactNode } from "react";
 import { useContentfulInspectorMode } from "@contentful/live-preview/react";
 import { cn } from "@/lib/utils";
+import { LongText } from "@/features/contentful/components/long-text";
 
 type BackgroundColor = "Default" | "Primary" | "Secondary" | "None";
 
@@ -42,12 +43,11 @@ const SimpleCta: FC<IProps> = ({ title, body, images, buttons, entryId, imagePla
 
             {/* Optional body text */}
             {body && (
-              <p
-                {...inspectorProps({ fieldId: "body" })}
+              <LongText
+                text={body}
+                inspectorProps={inspectorProps({ fieldId: "body" })}
                 className="text-lg text-muted-foreground mb-8 max-w-md leading-relaxed"
-              >
-                {body}
-              </p>
+              />
             )}
             <div className="flex items-center gap-4">
               {buttons}

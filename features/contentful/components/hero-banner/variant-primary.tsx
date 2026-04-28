@@ -1,6 +1,7 @@
 import React, { FC, ReactNode } from "react";
 import { useContentfulInspectorMode } from "@contentful/live-preview/react";
 import { cn } from "@/lib/utils";
+import { LongText } from "@/features/contentful/components/long-text";
 interface IProps {
   alignRight?: boolean; // Optional prop to align the text and buttons to the right side
   entryId: string; // Unique ID for the entry used for live preview inspector mode
@@ -34,12 +35,11 @@ const VariantPrimary: FC<IProps> = ({
 
             {/* Optional body text */}
             {body && (
-              <p
-                {...inspectorProps({ fieldId: "body" })}
+              <LongText
+                text={body}
+                inspectorProps={inspectorProps({ fieldId: "body" })}
                 className="text-lg text-muted-foreground mb-8 max-w-md leading-relaxed"
-              >
-                {body}
-              </p>
+              />
             )}
 
             {/* Button section */}

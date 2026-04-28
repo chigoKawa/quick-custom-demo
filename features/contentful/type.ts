@@ -35,7 +35,7 @@ export interface IBaseButton extends Entry {
   fields: {
     internalTitle: EntryFields.Symbol;
     label: EntryFields.Symbol;
-    target: IExternalUrl | ILandingPage | IBlogPostPage | ICategoryPage | IProductStory | IPmsPropertyEntry;
+    target: IExternalUrl | ILandingPage | IBlogPostPage | ICategoryPage | IProductStory | IPmsPropertyEntry | IProductCategory | ICampaign;
     openInNewTab?: EntryFields.Boolean;
     color: EntryFields.Symbol<
       "Default" | "Primary" | "Secondary" | "Success" | "Danger" | "Warning"
@@ -438,7 +438,7 @@ export interface IMultiItemModule extends Entry {
     subtitle?: EntryFields.Symbol;
     items: EntryFields.Array<
       EntryFields.EntryLink<
-        HeroModuleSkeleton | BlogPostPageSkeleton | LandingPageSkeleton | LogoSkeleton
+        HeroModuleSkeleton | BlogPostPageSkeleton | LandingPageSkeleton | LogoSkeleton | CampaignSkeleton
       >
     >;
     layout: EntryFields.Symbol<"carousel" | "grid" | "strip" | "list">;
@@ -603,4 +603,224 @@ export interface IInteractiveMap extends Entry<any> {
 export type InteractiveMapSkeleton = {
   contentTypeId: "interactiveMap";
   fields: IInteractiveMap["fields"];
+};
+
+// -----------------------------
+// Payment Methods content types
+// -----------------------------
+
+export interface IPaymentMethod extends Entry<any> {
+  fields: {
+    internalName: EntryFields.Symbol;
+    label: EntryFields.Symbol;
+    category: EntryFields.Symbol<"card" | "digitalWallet" | "payLater" | "localPayment">;
+    provider?: EntryFields.Symbol;
+    icon?: Asset;
+    description?: EntryFields.Symbol;
+  };
+}
+
+export type PaymentMethodSkeleton = {
+  contentTypeId: "paymentMethod";
+  fields: IPaymentMethod["fields"];
+};
+
+export interface IPaymentMethodsByMarket extends Entry<any> {
+  fields: {
+    internalTitle: EntryFields.Symbol;
+    market: Entry<any>;
+    acceptedCardSchemes?: EntryFields.Array<EntryFields.EntryLink<PaymentMethodSkeleton>>;
+    digitalWallets?: EntryFields.Array<EntryFields.EntryLink<PaymentMethodSkeleton>>;
+    payLaterAndInstallments?: EntryFields.Array<EntryFields.EntryLink<PaymentMethodSkeleton>>;
+    localPaymentMethods?: EntryFields.Array<EntryFields.EntryLink<PaymentMethodSkeleton>>;
+    status: EntryFields.Symbol<"draft" | "active" | "deprecated">;
+  };
+}
+
+export type PaymentMethodsByMarketSkeleton = {
+  contentTypeId: "paymentMethodsByMarket";
+  fields: IPaymentMethodsByMarket["fields"];
+};
+
+export interface IPaymentMethodsSnippet extends Entry<any> {
+  fields: {
+    internalTitle: EntryFields.Symbol;
+    marketsConfig: EntryFields.Array<EntryFields.EntryLink<PaymentMethodsByMarketSkeleton>>;
+    displayMode: EntryFields.Symbol<"currentMarketOnly" | "allMarkets" | "currentMarketWithFallback">;
+    fallbackMessage?: EntryFields.Symbol;
+  };
+}
+
+export type PaymentMethodsSnippetSkeleton = {
+  contentTypeId: "paymentMethodsSnippet";
+  fields: IPaymentMethodsSnippet["fields"];
+};
+
+// -----------------------------
+// Market Override content type
+// -----------------------------
+
+export interface IMarketOverride extends Entry<any> {
+  fields: {
+    internalName: EntryFields.Symbol;
+    article?: Entry<any>;
+    market: Entry<any>;
+    overrideLabel?: EntryFields.Symbol;
+    overrideBody?: EntryFields.RichText;
+    overrideIntro?: EntryFields.RichText;
+    active: EntryFields.Boolean;
+  };
+}
+
+export type MarketOverrideSkeleton = {
+  contentTypeId: "marketOverride";
+  fields: IMarketOverride["fields"];
+};
+
+// -----------------------------
+// Market Content Block
+// -----------------------------
+
+export interface IMarketContentBlock extends Entry<any> {
+  fields: {
+    internalTitle: EntryFields.Symbol;
+    displayMode: EntryFields.Symbol<"showForMarkets" | "hideForMarkets">;
+    targetMarkets: EntryFields.Array<Entry<any>>;
+    content: EntryFields.RichText;
+  };
+}
+
+export type MarketContentBlockSkeleton = {
+  contentTypeId: "marketContentBlock";
+  fields: IMarketContentBlock["fields"];
+};
+
+// -----------------------------
+// Product Category
+// -----------------------------
+
+export interface IProductCategory extends Entry<any> {
+  fields: {
+    internalName: EntryFields.Symbol;
+    title: EntryFields.Symbol;
+    slug: EntryFields.Symbol;
+    commerceCategoryId: EntryFields.Symbol;
+    description?: EntryFields.Text;
+    heroImage?: Asset;
+    sections?: Entry<any>[];
+    seoMetadata?: Entry<any>;
+    nt_experiences?: Entry<any>[];
+  };
+}
+
+export type ProductCategorySkeleton = {
+  contentTypeId: "productCategory";
+  fields: IProductCategory["fields"];
+};
+
+// -----------------------------
+// Campaign
+// -----------------------------
+
+export interface ICampaign extends Entry<any> {
+  fields: {
+    internalName: EntryFields.Symbol;
+    name: EntryFields.Symbol;
+    slug: EntryFields.Symbol;
+    validFrom?: EntryFields.Date;
+    validTo?: EntryFields.Date;
+    heroComponent?: Entry<any>;
+    promoTileComponent?: Entry<any>;
+    promoTitle?: EntryFields.Symbol;
+    topSections?: Entry<any>[];
+    targetCategories?: IProductCategory[];
+    targetProducts?: EntryFields.Object<JsonObject>;
+    bottomSections?: Entry<any>[];
+    seoMetadata?: Entry<any>;
+    nt_experiences?: Entry<any>[];
+  };
+}
+
+export type CampaignSkeleton = {
+  contentTypeId: "campaign";
+  fields: ICampaign["fields"];
+};
+
+// -----------------------------
+// Email Layout
+// -----------------------------
+
+export interface IEmailLayout extends Entry<any> {
+  fields: {
+    internalName: EntryFields.Symbol;
+    logo?: ILogo;
+    brandColor?: EntryFields.Symbol;
+    companyName?: EntryFields.Symbol;
+    socialLinks?: IExternalUrl[];
+    footerText?: EntryFields.RichText;
+    footerLinks?: IBaseButton[];
+  };
+}
+
+export type EmailLayoutSkeleton = {
+  contentTypeId: "emailLayout";
+  fields: IEmailLayout["fields"];
+};
+
+// -----------------------------
+// Notification Template
+// -----------------------------
+
+export interface INotificationTemplate extends Entry<any> {
+  fields: {
+    internalName: EntryFields.Symbol;
+    key: EntryFields.Symbol;
+    slug: EntryFields.Symbol;
+    channel: EntryFields.Symbol<"email" | "sms" | "in-app">;
+    subject: EntryFields.Symbol;
+    preheader?: EntryFields.Symbol;
+    bodyRichText: EntryFields.RichText;
+    audience?: EntryFields.Symbol<"all" | "mer-member" | "non-member">;
+    emailLayout?: IEmailLayout;
+    sampleData?: EntryFields.Object<JsonObject>;
+  };
+}
+
+export type NotificationTemplateSkeleton = {
+  contentTypeId: "notificationTemplate";
+  fields: INotificationTemplate["fields"];
+};
+
+// -----------------------------
+// Social Variant
+// -----------------------------
+
+export type SocialPlatform =
+  | "instagram_feed"
+  | "instagram_story"
+  | "tiktok"
+  | "x"
+  | "facebook"
+  | "linkedin"
+  | "pinterest";
+
+export type SocialVariantStatus = "draft" | "generated" | "approved" | "posted";
+
+export interface ISocialVariant extends Entry<any> {
+  fields: {
+    internalName: EntryFields.Symbol;
+    source: Entry<any>;
+    platform: EntryFields.Symbol<SocialPlatform>;
+    caption?: EntryFields.Text;
+    hashtags?: EntryFields.Array<EntryFields.Symbol>;
+    language?: EntryFields.Symbol;
+    status: EntryFields.Symbol<SocialVariantStatus>;
+    scheduledAt?: EntryFields.Date;
+    externalPostId?: EntryFields.Text;
+  };
+}
+
+export type SocialVariantSkeleton = {
+  contentTypeId: "socialVariant";
+  fields: ISocialVariant["fields"];
 };

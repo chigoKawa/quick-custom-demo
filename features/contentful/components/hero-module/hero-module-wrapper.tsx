@@ -6,19 +6,29 @@ import type { IBaseButton } from "../../type";
 import HeroModule, { type HeroModuleSlide } from "./hero-module";
 import { extractImageWithFocalPoint } from "@/lib/focal-point";
 
-function mapButtons(buttons: unknown): Array<{ label: string; href: string }> {
+function mapButtons(
+  buttons: unknown,
+  linkLocale: { locale?: string; defaultLocale?: string }
+): Array<{ label: string; href: string }> {
   if (!Array.isArray(buttons)) return [];
+  const { locale, defaultLocale = "en-US" } = linkLocale;
   return (buttons as IBaseButton[])
     .map((b) => {
       const label = b?.fields?.label;
-      const href = extractUrlFromTarget(b?.fields?.target);
+      const href = extractUrlFromTarget(b?.fields?.target, { locale, defaultLocale });
       if (!label || !href) return null;
       return { label, href };
     })
     .filter((v): v is { label: string; href: string } => Boolean(v));
 }
 
-export default function HeroModuleWrapper(entry: IHeroModule) {
+export default function HeroModuleWrapper(
+  props: IHeroModule & { locale?: string; defaultLocale?: string }
+) {
+  const { locale, defaultLocale: defaultLocaleProp, ...entry } = props;
+  const defaultLocale = defaultLocaleProp ?? "en-US";
+  const linkLocale = { locale, defaultLocale };
+
   // Guard against undefined entry or missing sys
   if (!entry?.sys?.id || !entry?.fields) {
     return null;
@@ -30,7 +40,7 @@ export default function HeroModuleWrapper(entry: IHeroModule) {
   const imagePlacement = entry?.fields?.imagePlacement;
 
   // Extract image with focal point support
-  const imageEntry = entry?.fields?.image;
+  const imageEntry = entry.fields.image;
   const {
     url: imageUrl,
     alt: imageAlt,
@@ -38,7 +48,7 @@ export default function HeroModuleWrapper(entry: IHeroModule) {
     entryId: imageEntryId
   } = extractImageWithFocalPoint(imageEntry);
 
-  const buttons = mapButtons(entry?.fields?.buttons);
+  const buttons = mapButtons(entry?.fields?.buttons, linkLocale);
 
   const slide: HeroModuleSlide = {
     title,

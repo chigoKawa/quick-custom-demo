@@ -1,13 +1,15 @@
 import React from "react";
 import { Entry } from "contentful";
 
-import type { IMultiItemModule, IHeroModule, IBlogPostPage, ILandingPage, ILogo, IBaseButton } from "../../type";
-import { extractUrlFromTarget } from "@/lib/utils";
+import type { IMultiItemModule, IHeroModule, IBlogPostPage, ILandingPage, ILogo, IBaseButton, ICampaign } from "../../type";
+import { extractUrlFromTarget, localizeInternalPath } from "@/lib/utils";
 import { extractImageWithFocalPoint } from "@/lib/focal-point";
 import MultiItemModule, { type MultiItemModuleItem, type MultiItemLayout, type BackgroundTheme } from "./multi-item-module";
 import HeroModule, { type HeroModuleSlide } from "../hero-module/hero-module";
 
-type SupportedItemEntry = IHeroModule | IBlogPostPage | ILandingPage | ILogo;
+type SupportedItemEntry = IHeroModule | IBlogPostPage | ILandingPage | ILogo | ICampaign;
+
+type LinkLocale = { locale?: string; defaultLocale?: string };
 
 function getContentTypeId(entry: Entry<any>): string | null {
   return (
@@ -17,19 +19,20 @@ function getContentTypeId(entry: Entry<any>): string | null {
   );
 }
 
-function mapButtons(buttons: unknown): Array<{ label: string; href: string }> {
+function mapButtons(buttons: unknown, linkLocale: LinkLocale): Array<{ label: string; href: string }> {
   if (!Array.isArray(buttons)) return [];
+  const { locale, defaultLocale = "en-US" } = linkLocale;
   return (buttons as IBaseButton[])
     .map((b) => {
       const label = b?.fields?.label;
-      const href = extractUrlFromTarget(b?.fields?.target);
+      const href = extractUrlFromTarget(b?.fields?.target, { locale, defaultLocale });
       if (!label || !href) return null;
       return { label, href };
     })
     .filter((v): v is { label: string; href: string } => Boolean(v));
 }
 
-function extractHeroModuleSlide(entry: IHeroModule): HeroModuleSlide | null {
+function extractHeroModuleSlide(entry: IHeroModule, linkLocale: LinkLocale): HeroModuleSlide | null {
   if (!entry?.sys?.id || !entry?.fields) return null;
 
   const title = entry.fields.headline ?? "";
@@ -46,7 +49,7 @@ function extractHeroModuleSlide(entry: IHeroModule): HeroModuleSlide | null {
     entryId: imageEntryId,
   } = extractImageWithFocalPoint(imageEntry);
 
-  const buttons = mapButtons(entry.fields.buttons);
+  const buttons = mapButtons(entry.fields.buttons, linkLocale);
 
   return {
     title,
@@ -79,13 +82,14 @@ function extractItemFromHeroModule(entry: IHeroModule): MultiItemModuleItem | nu
   };
 }
 
-function extractItemFromBlogPost(entry: IBlogPostPage): MultiItemModuleItem | null {
+function extractItemFromBlogPost(entry: IBlogPostPage, linkLocale: LinkLocale): MultiItemModuleItem | null {
   if (!entry?.sys?.id || !entry?.fields) return null;
 
   const featuredImage = entry.fields.featuredImage as any;
   const imageUrl = featuredImage?.fields?.file?.url
     ? `https:${featuredImage.fields.file.url}`
     : undefined;
+  const { locale, defaultLocale = "en-US" } = linkLocale;
 
   return {
     id: entry.sys.id,
@@ -93,22 +97,26 @@ function extractItemFromBlogPost(entry: IBlogPostPage): MultiItemModuleItem | nu
     title: entry.fields.title ?? undefined,
     imageUrl,
     imageAlt: featuredImage?.fields?.title ?? entry.fields.title ?? undefined,
-    href: `/blog/${entry.fields.slug}`,
+    href: localizeInternalPath(`/blog/${entry.fields.slug}`, locale, defaultLocale),
   };
 }
 
-function extractItemFromLandingPage(entry: ILandingPage): MultiItemModuleItem | null {
+function extractItemFromLandingPage(entry: ILandingPage, linkLocale: LinkLocale): MultiItemModuleItem | null {
   if (!entry?.sys?.id || !entry?.fields) return null;
+  const { locale, defaultLocale = "en-US" } = linkLocale;
+  const slug = entry.fields.slug;
+  const path =
+    slug === "homepage" || slug === "home" ? "/" : `/${slug}`;
 
   return {
     id: entry.sys.id,
     contentType: "landingPage",
     title: entry.fields.title ?? undefined,
-    href: `/${entry.fields.slug}`,
+    href: localizeInternalPath(path, locale, defaultLocale),
   };
 }
 
-function extractItemFromLogo(entry: ILogo): MultiItemModuleItem | null {
+function extractItemFromLogo(entry: ILogo, linkLocale: LinkLocale): MultiItemModuleItem | null {
   if (!entry?.sys?.id || !entry?.fields) return null;
 
   const imageAsset = entry.fields.image as any;
@@ -117,7 +125,8 @@ function extractItemFromLogo(entry: ILogo): MultiItemModuleItem | null {
     : undefined;
 
   const linkTarget = entry.fields.link;
-  const href = linkTarget ? extractUrlFromTarget(linkTarget) : undefined;
+  const { locale, defaultLocale = "en-US" } = linkLocale;
+  const href = linkTarget ? extractUrlFromTarget(linkTarget, { locale, defaultLocale }) : undefined;
 
   return {
     id: entry.sys.id,
@@ -129,18 +138,43 @@ function extractItemFromLogo(entry: ILogo): MultiItemModuleItem | null {
   };
 }
 
-function extractItem(entry: SupportedItemEntry): MultiItemModuleItem | null {
+function extractItemFromCampaign(entry: ICampaign, linkLocale: LinkLocale): MultiItemModuleItem | null {
+  if (!entry?.sys?.id || !entry?.fields) return null;
+
+  let imageUrl: string | undefined;
+  const hero = entry.fields.heroComponent as any;
+  if (hero?.fields) {
+    const heroImage = hero.fields?.image ?? hero.fields?.heroImage;
+    const asset = heroImage?.fields?.image ?? heroImage;
+    const url = asset?.fields?.file?.url;
+    if (url) imageUrl = url.startsWith("//") ? `https:${url}` : url;
+  }
+  const { locale, defaultLocale = "en-US" } = linkLocale;
+
+  return {
+    id: entry.sys.id,
+    contentType: "campaign",
+    title: entry.fields.name ?? undefined,
+    imageUrl,
+    imageAlt: entry.fields.name ?? "Campaign",
+    href: localizeInternalPath(`/campaigns/${entry.fields.slug}`, locale, defaultLocale),
+  };
+}
+
+function extractItem(entry: SupportedItemEntry, linkLocale: LinkLocale): MultiItemModuleItem | null {
   const contentType = getContentTypeId(entry);
 
   switch (contentType) {
     case "heroModule":
       return extractItemFromHeroModule(entry as IHeroModule);
     case "blogPost":
-      return extractItemFromBlogPost(entry as IBlogPostPage);
+      return extractItemFromBlogPost(entry as IBlogPostPage, linkLocale);
     case "landingPage":
-      return extractItemFromLandingPage(entry as ILandingPage);
+      return extractItemFromLandingPage(entry as ILandingPage, linkLocale);
     case "logo":
-      return extractItemFromLogo(entry as ILogo);
+      return extractItemFromLogo(entry as ILogo, linkLocale);
+    case "campaign":
+      return extractItemFromCampaign(entry as ICampaign, linkLocale);
     default:
       if (process.env.NODE_ENV === "development") {
         console.warn(`[MultiItemModule] Unknown item content type: ${contentType}`);
@@ -149,7 +183,13 @@ function extractItem(entry: SupportedItemEntry): MultiItemModuleItem | null {
   }
 }
 
-export default function MultiItemModuleWrapper(entry: IMultiItemModule) {
+export default function MultiItemModuleWrapper(
+  props: IMultiItemModule & { locale?: string; defaultLocale?: string }
+) {
+  const { locale, defaultLocale: defaultLocaleProp, ...entry } = props;
+  const defaultLocale = defaultLocaleProp ?? "en-US";
+  const linkLocale: LinkLocale = { locale, defaultLocale };
+
   if (!entry?.sys?.id || !entry?.fields) {
     return null;
   }
@@ -180,7 +220,7 @@ export default function MultiItemModuleWrapper(entry: IMultiItemModule) {
   // Always render as 1-column carousel with autoplay, ignoring column settings
   if (firstItemContentType === "heroModule") {
     const slides: HeroModuleSlide[] = filteredItems
-      .map((item) => extractHeroModuleSlide(item as IHeroModule))
+      .map((item) => extractHeroModuleSlide(item as IHeroModule, linkLocale))
       .filter((slide): slide is HeroModuleSlide => slide !== null);
 
     if (slides.length === 0) {
@@ -197,7 +237,7 @@ export default function MultiItemModuleWrapper(entry: IMultiItemModule) {
 
   // Extract item data for other content types
   const items: MultiItemModuleItem[] = filteredItems
-    .map(extractItem)
+    .map((item) => extractItem(item, linkLocale))
     .filter((item): item is MultiItemModuleItem => item !== null);
 
   if (items.length === 0) {

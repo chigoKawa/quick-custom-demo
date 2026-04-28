@@ -1,0 +1,215 @@
+[
+  {
+    "id": "xxl-whey-delicious-1000g",
+    "title": "Whey Delicious — 1000 g",
+    "slug": "whey-delicious-1000g",
+    "description": "Europe's most popular whey protein shake. A premium blend of 60% whey concentrate and 40% whey isolate delivering 24 g protein per 30 g serving. Rich in BCAAs and glutamine with a creamy, smooth taste. Independently lab-tested. Available in 21 flavours including Vanilla, Chocolate, Cookies & Cream and Salted Caramel.",
+    "price": 34.99,
+    "currency": "EUR",
+    "images": ["https://images.ctfassets.net/ace0ba6p9v98/5rZ6Fh1ggKuYVft9YBpYcT/e547ee2b1eeb29287c9522f9f368be03/xxl-whey-delicious.jpg"],
+    "category": "protein",
+    "tags": ["performance", "protein", "whey", "muscle-growth", "bestseller"],
+    "stock": 850,
+    "rating": 9.4,
+    "reviewCount": 4400,
+    "metadata": {
+      "brand": "XXL Nutrition",
+      "articleNumber": "16866",
+      "type": "Whey Protein Shake",
+      "weight": "1000 g",
+      "proteinPerServing": "24 g",
+      "servings": "33"
+    }
+  },
+  {
+    "id": "xxl-whey-isolate-1000g",
+    "title": "Whey Isolate — 1000 g",
+    "slug": "whey-isolate-1000g",
+    "description": "Ultra-pure whey protein isolate with up to 93% protein content and only 0.8% lactose. Made in Holland in exclusive partnership with Volac using cold cross-flow microfiltration. Exceptionally high in EAAs and BCAAs. Low fat, low carb, aspartame-free. Available in 11 flavours.",
+    "price": 36.99,
+    "currency": "EUR",
+    "images": ["https://images.ctfassets.net/ace0ba6p9v98/3fxYSY8rsYy5qLTjyCgACl/86939dd66d17f2bbb941d059f432c5f4/xxl-whey-isolate.webp"],
+    "category": "protein",
+    "tags": ["performance", "protein", "whey-isolate", "low-lactose", "premium"],
+    "stock": 420,
+    "rating": 9.4,
+    "reviewCount": 2218,
+    "metadata": {
+      "brand": "XXL Nutrition",
+      "articleNumber": "9221",
+      "type": "Whey Protein Isolate",
+      "weight": "1000 g",
+      "proteinPer100g": "89 g",
+      "lactose": "0.8%"
+    }
+  },
+  {
+    "id": "xxl-creatine-monohydrate-500g",
+    "title": "Creatine Monohydrate — 500 g",
+    "slug": "creatine-monohydrate-500g",
+    "description": "100% pure, microfine creatine monohydrate with zero additives. Scientifically proven to increase explosive power and support muscle building at a daily dose of 3 g. Completely calorie-free, vegan, and quick-dissolving. The most popular creatine supplement in Europe.",
+    "price": 14.99,
+    "currency": "EUR",
+    "images": ["https://images.ctfassets.net/ace0ba6p9v98/2Y2J43M7v3J1wChU0uZvMT/8efcb6e1da9d8342e41185ee8b2f40fc/xxl-creatine-monohydrate.png"],
+    "category": "performance",
+    "tags": ["performance", "creatine", "strength", "muscle-building", "vegan"],
+    "stock": 1200,
+    "rating": 9.4,
+    "reviewCount": 2574,
+    "metadata": {
+      "brand": "XXL Nutrition",
+      "articleNumber": "10250",
+      "type": "Creatine Monohydrate",
+      "weight": "500 g",
+      "dailyDose": "3 g",
+      "servings": "166"
+    }
+  },
+  {
+    "id": "xxl-blast-pre-workout-300g",
+    "title": "Blast! Pre-Workout — 300 g",
+    "slug": "blast-pre-workout-300g",
+    "description": "The #1 pre-workout formula in Europe. Packed with Citrulline Malate for muscle pump, Beta-Alanine for endurance, Taurine for hydration, Arginine-AKG for nitric oxide production, and Caffeine for focus. Creatine-free for universal tolerance. Only 0.3 g sugar per serving. Effects kick in within 15 minutes. Also available caffeine-free.",
+    "price": 27.99,
+    "currency": "EUR",
+    "images": ["https://images.ctfassets.net/ace0ba6p9v98/2bBc6gu3GG6jS3R24k1vTE/b07219b2bfe1c72e6d40949957c24580/xxl-blast-preworkout.jpg"],
+    "category": "performance",
+    "tags": ["performance", "pre-workout", "energy", "pump", "focus"],
+    "stock": 680,
+    "rating": 4.4,
+    "reviewCount": 835,
+    "metadata": {
+      "brand": "XXL Nutrition",
+      "articleNumber": "12100",
+      "type": "Pre-Workout Powder",
+      "weight": "300 g",
+      "servings": "30",
+      "caffeinePerServing": "200 mg"
+    }
+  },
+  {
+    "id": "xxl-essential-amino-stack-500g",
+    "title": "Essential Amino Stack — 500 g",
+    "slug": "essential-amino-stack-500g",
+    "description": "Complete EAA powder containing all 8 essential amino acids in free form for rapid absorption, plus Citrulline Malate for enhanced blood flow. High-dosed BCAAs (Leucine, Isoleucine, Valine) included. Made from fermented amino acids with no cheap fillers. Vegetarian-friendly. Multiple flavour options available.",
+    "price": 25.99,
+    "currency": "EUR",
+    "images": ["https://images.ctfassets.net/ace0ba6p9v98/1BZAcLXpJOufYvdTLlyf3X/00927b185f5c8d45188fb2038cf0e8b0/xxl-essential-amino-stack.jpg"],
+    "category": "performance",
+    "tags": ["performance", "amino-acids", "EAA", "BCAA", "recovery"],
+    "stock": 340,
+    "rating": 9.4,
+    "reviewCount": 312,
+    "metadata": {
+      "brand": "XXL Nutrition",
+      "articleNumber": "14078",
+      "type": "EAA Powder",
+      "weight": "500 g",
+      "aminoAcids": "8 essential + Citrulline Malate"
+    }
+  },
+  {
+    "id": "xxl-bcaa-powder-500g",
+    "title": "BCAA Powder — 500 g",
+    "slug": "bcaa-powder-500g",
+    "description": "Branched-chain amino acid powder in the optimal 2:1:1 ratio of Leucine, Isoleucine and Valine. Supports muscle protein synthesis, reduces muscle breakdown during training, and accelerates recovery. Easily mixable with a refreshing taste. Ideal for intra-workout or post-workout use.",
+    "price": 24.99,
+    "currency": "EUR",
+    "images": ["https://images.ctfassets.net/ace0ba6p9v98/S44liJkoaseWDKHa6UneK/1782a2e2f1f13238b36ed576c36468a6/xxl-bcaa-powder.png"],
+    "category": "performance",
+    "tags": ["performance", "amino-acids", "BCAA", "recovery", "intra-workout"],
+    "stock": 290,
+    "rating": 9.2,
+    "reviewCount": 187,
+    "metadata": {
+      "brand": "XXL Nutrition",
+      "articleNumber": "13500",
+      "type": "BCAA Powder",
+      "weight": "500 g",
+      "ratio": "2:1:1"
+    }
+  },
+  {
+    "id": "xxl-crunchy-protein-bar",
+    "title": "Crunchy Protein Bar",
+    "slug": "crunchy-protein-bar",
+    "description": "Delicious crunchy protein bar delivering 21 g of protein per bar with a satisfying crispy texture. The perfect high-protein snack between meals or after training. Low in sugar with a balanced macronutrient profile. Available in multiple flavours.",
+    "price": 2.59,
+    "currency": "EUR",
+    "images": ["https://images.ctfassets.net/ace0ba6p9v98/5qk9VZo2zKKBfFSzROuxZO/158c9bad945918c7a024c08ed84d2d37/xxl-crunchy-protein-bar.png"],
+    "category": "snacks-food",
+    "tags": ["snacks", "protein-bar", "high-protein", "on-the-go", "low-sugar"],
+    "stock": 2400,
+    "rating": 9.0,
+    "reviewCount": 156,
+    "metadata": {
+      "brand": "XXL Nutrition",
+      "articleNumber": "17800",
+      "type": "Protein Bar",
+      "proteinPerBar": "21 g",
+      "barWeight": "65 g"
+    }
+  },
+  {
+    "id": "xxl-magnesium-citrate-200mg",
+    "title": "Magnesium Citrate — 200 mg",
+    "slug": "magnesium-citrate-200mg",
+    "description": "Highly bioavailable magnesium citrate tablets providing 200 mg elemental magnesium per serving. Supports muscle function, reduces tiredness and fatigue, and contributes to normal energy metabolism and electrolyte balance. Essential for athletes with increased mineral demands.",
+    "price": 10.99,
+    "currency": "EUR",
+    "images": ["https://images.ctfassets.net/ace0ba6p9v98/6ljkv1YJGrZLcDlCK5uiBl/d71431ab05d11ad543e0432fbbc32b9f/xxl-magnesium-citrate.jpg"],
+    "category": "wellness",
+    "tags": ["wellness", "minerals", "magnesium", "recovery", "anti-fatigue"],
+    "stock": 560,
+    "rating": 9.3,
+    "reviewCount": 98,
+    "metadata": {
+      "brand": "XXL Nutrition",
+      "articleNumber": "19200",
+      "type": "Mineral Supplement",
+      "magnesiumPerServing": "200 mg",
+      "form": "Citrate"
+    }
+  },
+  {
+    "id": "xxl-protein-oat-meal",
+    "title": "Protein Oat Meal — 1000 g",
+    "slug": "protein-oat-meal-1000g",
+    "description": "High-protein oat meal combining the sustained energy of whole oats with added whey protein for a balanced macronutrient profile. Perfect as a pre-workout meal or nutritious breakfast. Easy to prepare — just add water or milk. Rich in complex carbohydrates and fibre.",
+    "price": 12.99,
+    "currency": "EUR",
+    "images": ["https://images.ctfassets.net/ace0ba6p9v98/56Mg0RpyhiYLemhyF65hZq/4393901962282801604b0210a00e95ab/xxl-protein-oat-meal.png"],
+    "category": "snacks-food",
+    "tags": ["snacks", "oatmeal", "breakfast", "complex-carbs", "high-protein"],
+    "stock": 380,
+    "rating": 9.1,
+    "reviewCount": 124,
+    "metadata": {
+      "brand": "XXL Nutrition",
+      "articleNumber": "18600",
+      "type": "Protein Oat Meal",
+      "weight": "1000 g"
+    }
+  },
+  {
+    "id": "xxl-dutch-giant-beef-bar",
+    "title": "Dutch Giant Beef Bar — 12 Pack",
+    "slug": "dutch-giant-beef-bar-12-pack",
+    "description": "Premium high-protein beef bar made with real Dutch beef. Packed with protein and low in carbs, making it the ultimate savoury on-the-go snack for athletes. No artificial colours or preservatives. Gluten-free. 12-pack for maximum value.",
+    "price": 29.99,
+    "currency": "EUR",
+    "images": ["https://images.ctfassets.net/ace0ba6p9v98/YS0RvrBHnaqiUSJ7lfqO7/b91487591526d95481547ceca6db7561/xxl-dutch-giant-beef-bar.png"],
+    "category": "snacks-food",
+    "tags": ["snacks", "beef-bar", "high-protein", "low-carb", "gluten-free"],
+    "stock": 145,
+    "rating": 9.0,
+    "reviewCount": 87,
+    "metadata": {
+      "brand": "XXL Nutrition",
+      "articleNumber": "19500",
+      "type": "Beef Protein Bar",
+      "pieces": "12",
+      "proteinPerBar": "20 g"
+    }
+  }
+]

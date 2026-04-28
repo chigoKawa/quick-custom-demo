@@ -7,6 +7,7 @@ import Link from "next/link";
 import { extractUrlFromTarget } from "@/lib/utils";
 import { useContentfulInspectorMode } from "@contentful/live-preview/react";
 import { useTracking, type MetricEventName } from "@/features/tracking/use-tracking";
+import { useSiteChromeLocale } from "@/features/site-chrome-locale";
 
 import _ from "lodash";
 
@@ -20,6 +21,10 @@ const sizeMap = {
 // BaseButtonWrapper: A wrapper for rendering buttons dynamically based on Contentful-entry-provided data
 // Accepts optional metricEventName from the parent section for tracking clicks
 const BaseButtonWrapper: React.FC<IBaseButton & { metricEventName?: MetricEventName }> = (entry) => {
+  const { locale, defaultLocale } = useSiteChromeLocale();
+  const inspectorProps = useContentfulInspectorMode({ entryId: entry?.sys?.id ?? "" });
+  const { trackMetric } = useTracking();
+
   // Guard against undefined entry or missing sys
   if (!entry?.sys?.id) {
     return null;
@@ -47,10 +52,7 @@ const BaseButtonWrapper: React.FC<IBaseButton & { metricEventName?: MetricEventN
   // If label is missing the button is not renderable
   if (!label) return null;
 
-  const targetUrl = extractUrlFromTarget(target); // Extract the actual URL from the target field
-
-  const inspectorProps = useContentfulInspectorMode({ entryId: entry.sys.id });
-  const { trackMetric } = useTracking();
+  const targetUrl = extractUrlFromTarget(target, { locale, defaultLocale });
 
   // Base button styling (additional utility classes for spacing and focus styles)
   const btnClasses =

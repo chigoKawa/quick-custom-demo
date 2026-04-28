@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useContentfulInspectorMode } from "@contentful/live-preview/react";
 import type { IBaseButton } from "@/features/contentful/type";
 import { extractUrlFromTarget, cn } from "@/lib/utils";
+import { useSiteChromeLocale } from "@/features/site-chrome-locale";
 
 type Props = {
   button: IBaseButton;
@@ -21,11 +22,12 @@ const variantStyles: Record<string, string> = {
 
 export default function MobileButton({ button, fullWidth = false }: Props) {
   const inspectorProps = useContentfulInspectorMode({ entryId: button?.sys?.id ?? "" });
+  const { locale, defaultLocale } = useSiteChromeLocale();
 
   if (!button?.sys?.id || !button?.fields?.label) return null;
 
   const label = button.fields.label;
-  const href = extractUrlFromTarget(button.fields.target) || "#";
+  const href = extractUrlFromTarget(button.fields.target, { locale, defaultLocale }) || "#";
   const variant = button.fields.variant || "Primary";
 
   return (

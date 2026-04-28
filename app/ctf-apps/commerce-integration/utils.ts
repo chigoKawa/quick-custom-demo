@@ -23,12 +23,18 @@ export function normalizeProductCatalogField(
   input: Partial<ProductCatalogFieldValue>
 ): ProductCatalogFieldValue {
   const mode = input.selectionMode || "single";
-  return {
-    version: 1,
-    selectionMode: mode,
-    selectedProduct: mode === "single" ? input.selectedProduct : undefined,
-    selectedProducts: mode === "multiple" ? (input.selectedProducts || []) : undefined,
-  };
+  const base: ProductCatalogFieldValue = { version: 1, selectionMode: mode };
+
+  if (mode === "single" && input.selectedProduct) {
+    base.selectedProduct = input.selectedProduct;
+  } else if (mode === "multiple") {
+    base.selectedProducts = input.selectedProducts || [];
+  } else if (mode === "category") {
+    if (input.selectedCategory) base.selectedCategory = input.selectedCategory;
+    base.categoryDisplayLimit = input.categoryDisplayLimit ?? 10;
+  }
+
+  return base;
 }
 
 /**

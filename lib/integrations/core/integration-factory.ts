@@ -8,6 +8,7 @@ import { MockCommerceAdapter } from '../commerce/mock.adapter';
 
 // Forms
 import { MockFormsAdapter } from '../forms/mock.adapter';
+import { JotFormAdapter } from '../forms/jotform.adapter';
 
 // Auth
 import { MockAuthAdapter } from '../auth/mock.adapter';
@@ -117,7 +118,9 @@ export class IntegrationFactory {
       case 'mock':
         return new MockFormsAdapter({ config });
 
-      // Add real adapters here
+      case 'jotform':
+        return new JotFormAdapter({ config });
+
       // case 'hubspot':
       //   return new HubspotAdapter({ config });
 

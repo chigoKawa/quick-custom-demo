@@ -5,6 +5,19 @@ import { Experience } from "@ninetailed/experience.js-react";
 import { ExperienceMapper } from "@ninetailed/experience.js-utils-contentful";
 import type { IMultiItemModule } from "../../type";
 import MultiItemModuleWrapper from "./multi-item-module-wrapper";
+import { useSiteChromeLocale } from "@/features/site-chrome-locale";
+
+/** Ninetailed `Experience` only forwards entry-shaped props; locale comes from context here. */
+function MultiItemModuleWithLocale(entry: IMultiItemModule) {
+  const { locale, defaultLocale } = useSiteChromeLocale();
+  return (
+    <MultiItemModuleWrapper
+      {...entry}
+      locale={locale}
+      defaultLocale={defaultLocale}
+    />
+  );
+}
 
 export default function PersonalizedMultiItemModule(entry: IMultiItemModule) {
   // Guard against undefined entry or missing sys/fields
@@ -21,11 +34,11 @@ export default function PersonalizedMultiItemModule(entry: IMultiItemModule) {
   try {
     mappedExperiencesUnknown = experiencesUnknown.filter(isExp).map(mapExp);
   } catch {
-    return <MultiItemModuleWrapper {...entry} />;
+    return <MultiItemModuleWithLocale {...entry} />;
   }
 
   if (!mappedExperiencesUnknown || mappedExperiencesUnknown.length === 0) {
-    return <MultiItemModuleWrapper {...entry} />;
+    return <MultiItemModuleWithLocale {...entry} />;
   }
 
   type ExperiencesProp = NonNullable<
@@ -37,7 +50,7 @@ export default function PersonalizedMultiItemModule(entry: IMultiItemModule) {
     <Experience
       key={entry.sys.id}
       id={entry.sys.id}
-      component={MultiItemModuleWrapper}
+      component={MultiItemModuleWithLocale}
       experiences={experiencesForProp}
       {...entry}
     />

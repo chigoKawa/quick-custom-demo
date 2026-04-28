@@ -12,6 +12,18 @@ export const revalidate = 0;
 
 const INCLUDES_COUNT = 6;
 
+const LOCALE_TO_MARKET: Record<string, string> = {
+  "en-US": "US",
+  de: "DE",
+  ar: "DE",
+  sv: "SE",
+  da: "DK",
+  fi: "FI",
+  es: "ES",
+  "es-MX": "MX",
+  "it-IT": "IT",
+};
+
 function titleizeSlug(slug: string): string {
   return (slug || "")
     .split("-")
@@ -44,6 +56,36 @@ export default async function KbArticlePage({
     ).then((items) => items?.[0] ?? null),
   ]);
   if (!entry) return notFound();
+
+  // Fetch active market overrides for this article
+  let marketOverride: any = null;
+  try {
+    const overrides = await getEntries<any>(
+      {
+        content_type: "marketOverride",
+        "fields.article.sys.id": entry.sys?.id,
+        "fields.active": true,
+        locale,
+        include: INCLUDES_COUNT,
+      },
+      isPreview,
+      timelineToken
+    );
+
+    const marketCode = (
+      LOCALE_TO_MARKET[locale] ??
+      locale.split("-").pop()?.toUpperCase() ??
+      locale.toUpperCase()
+    );
+
+    marketOverride =
+      overrides?.find((o: any) => {
+        const code = (o?.fields?.market?.fields?.code ?? "").toUpperCase();
+        return code === marketCode;
+      }) ?? null;
+  } catch {
+    // Non-blocking — fall back to default article body
+  }
 
   const idx = getKbIndex(locale);
   const currentDoc = idx?.docs?.find((d) => d?.id === entry?.sys?.id || d?.slug === slug) || null;
@@ -101,7 +143,7 @@ export default async function KbArticlePage({
             ) : null}
 
             {/* Article body */}
-            <KbArticleClient entry={entry} locale={locale} />
+            <KbArticleClient entry={entry} locale={locale} marketOverride={marketOverride} />
 
             {/* Feedback section */}
             <KbArticleFeedback articleId={entry?.sys?.id} locale={locale} />

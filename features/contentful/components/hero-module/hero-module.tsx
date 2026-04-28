@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useContentfulInspectorMode } from "@contentful/live-preview/react";
 import { useTracking, type MetricEventName } from "@/features/tracking/use-tracking";
+import { LongText } from "@/features/contentful/components/long-text";
 
 export type HeroModuleSlide = {
   title: string;
@@ -88,9 +89,11 @@ export default function HeroModule({ slides, entryId, metricEventName }: Props) 
               {slide.title}
             </h2>
             {slide.description ? (
-              <p {...inspectorProps({ fieldId: "subCopy" })} className="text-lg text-muted-foreground mb-8 max-w-md leading-relaxed animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200">
-                {slide.description}
-              </p>
+              <LongText
+                text={slide.description}
+                inspectorProps={inspectorProps({ fieldId: "subCopy" })}
+                className="text-lg text-muted-foreground mb-8 max-w-md leading-relaxed animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200"
+              />
             ) : null}
             {primary || secondary ? (
               <div className="flex items-center gap-4 animate-in fade-in slide-in-from-bottom-5 duration-500 delay-300">

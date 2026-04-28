@@ -8,6 +8,8 @@ import {
   ICategoryPage,
   IProductStory,
   IPmsPropertyEntry,
+  IProductCategory,
+  ICampaign,
 } from "@/features/contentful/type";
 
 export function cn(...inputs: ClassValue[]) {
@@ -44,40 +46,83 @@ export function getTimelineToken(
   return null;
 }
 
+/**
+ * Prefix internal app paths with `[locale]` so Next.js matches `app/(site)/[locale]/…`.
+ * When `locale` is set, always prefixes (including default locale) so client-side
+ * `<Link href>` navigations hit the correct segment without relying on middleware rewrite.
+ * When `locale` is omitted, returns `path` unchanged for legacy/server-only callers.
+ */
+export function localizeInternalPath(
+  path: string,
+  locale?: string,
+  _defaultLocale = "en-US"
+): string {
+  const normalized = path === "" ? "/" : path.startsWith("/") ? path : `/${path}`;
+  if (!locale) return normalized;
+  if (normalized === "/") return `/${locale}`;
+  return `/${locale}${normalized}`.replace(/\/+/g, "/");
+}
+
+export type ExtractUrlFromTargetOptions = {
+  locale?: string;
+  defaultLocale?: string;
+};
+
 export const extractUrlFromTarget = (
-  target: IExternalUrl | ILandingPage | IBlogPostPage | ICategoryPage | IProductStory | IPmsPropertyEntry
+  target: IExternalUrl | ILandingPage | IBlogPostPage | ICategoryPage | IProductStory | IPmsPropertyEntry | IProductCategory | ICampaign,
+  options?: ExtractUrlFromTargetOptions
 ) => {
+  const { locale, defaultLocale = "en-US" } = options ?? {};
+  const L = (path: string) => localizeInternalPath(path, locale, defaultLocale);
+
   const contentType = target?.sys?.contentType?.sys?.id;
   if (contentType === "landingPage") {
     const entry = target as ILandingPage;
     if (entry?.fields?.slug === "homepage" || entry?.fields?.slug === "home") {
-      return "/";
+      return L("/");
     }
 
-    return `/${entry?.fields?.slug}`;
+    return L(`/${entry?.fields?.slug}`);
   }
 
   if (contentType === "blogPost") {
     const entry = target as IBlogPostPage;
-    return `/blog/${entry?.fields?.slug}`;
+    return L(`/blog/${entry?.fields?.slug}`);
   }
 
   if (contentType === "categoryPage") {
     const entry = target as ICategoryPage;
     const slug = entry?.fields?.slug;
-    return slug ? `/category/${slug}` : "";
+    return slug ? L(`/category/${slug}`) : "";
   }
 
   if (contentType === "productStory") {
     const entry = target as IProductStory;
     const slug = entry?.fields?.slug;
-    return slug ? `/stories/${slug}` : "";
+    return slug ? L(`/stories/${slug}`) : "";
   }
 
   if (contentType === "pmsProperty") {
     const entry = target as IPmsPropertyEntry;
     const id = entry?.fields?.propertyId ?? entry?.fields?.slug;
-    return id ? `/properties/${id}` : "";
+    return id ? L(`/properties/${id}`) : "";
+  }
+
+  if (contentType === "productCategory") {
+    const entry = target as IProductCategory;
+    const slug = entry?.fields?.slug;
+    return slug ? L(`/products/category/${slug}`) : "";
+  }
+
+  if (contentType === "campaign") {
+    const entry = target as ICampaign;
+    const slug = entry?.fields?.slug;
+    return slug ? L(`/campaigns/${slug}`) : "";
+  }
+
+  if (contentType === "kbArticle") {
+    const slug = (target as any)?.fields?.slug;
+    return slug ? L(`/knowledge-base/${slug}`) : "";
   }
 
   if (contentType === "externalLink") {

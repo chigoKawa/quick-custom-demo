@@ -14,9 +14,19 @@ interface ProductData {
   id: string;
   title: string;
   price: number;
+  currency?: string;
   image?: string;
   sku?: string;
   category?: string;
+}
+
+function formatPrice(price: number, currency?: string): string {
+  const c = (currency ?? "NOK").toUpperCase();
+  try {
+    return new Intl.NumberFormat(undefined, { style: "currency", currency: c, minimumFractionDigits: 2 }).format(price);
+  } catch {
+    return `${c} ${price.toFixed(2)}`;
+  }
 }
 
 interface CampaignPageClientProps {
@@ -39,7 +49,7 @@ export default function CampaignPageClient({
   locale,
   isPreview,
 }: CampaignPageClientProps) {
-  const entry = useContentfulLiveUpdates(serverEntry) || serverEntry;
+  const entry = useContentfulLiveUpdates({ sys: serverEntry.sys, fields: serverEntry.fields } as ICampaign) || serverEntry;
   const inspectorProps = useContentfulInspectorMode({ entryId: entry.sys.id });
 
   const active = isCampaignActive(entry);
@@ -99,6 +109,7 @@ export default function CampaignPageClient({
                   id: p.id,
                   title: p.title,
                   price: p.price,
+                  currency: p.currency,
                   image: p.images?.[0],
                   sku: p.sku,
                   category: p.category,
@@ -255,55 +266,55 @@ function ProductCarousel({ products, title, viewAllHref, locale }: ProductCarous
     const el = scrollRef.current;
     if (!el) return;
     const cardWidth = el.querySelector<HTMLElement>("[data-carousel-card]")?.offsetWidth ?? 280;
-    el.scrollBy({ left: direction === "left" ? -(cardWidth + 16) * 2 : (cardWidth + 16) * 2, behavior: "smooth" });
+    // Scroll 1 card on mobile, 2 on larger screens
+    const count = window.innerWidth < 640 ? 1 : 2;
+    el.scrollBy({ left: direction === "left" ? -(cardWidth + 16) * count : (cardWidth + 16) * count, behavior: "smooth" });
   }, []);
 
   return (
     <section className="py-10 md:py-14">
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
-        <div className="flex items-end justify-between mb-8">
-          <div>
+        <div className="flex items-center justify-between mb-6">
+          <div className="min-w-0">
             {title && (
-              <h2 className="text-2xl md:text-3xl font-bold tracking-tight">{title}</h2>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight truncate">{title}</h2>
             )}
           </div>
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-2 shrink-0 ml-3">
             {viewAllHref && (
-              <Link href={viewAllHref} className="text-sm font-medium text-primary hover:underline mr-2">
+              <Link href={viewAllHref} className="text-sm font-medium text-primary hover:underline mr-1 hidden sm:inline">
                 View all
               </Link>
             )}
-            <div className="hidden sm:flex items-center gap-2">
-              <button
-                type="button"
-                aria-label="Scroll left"
-                onClick={() => scroll("left")}
-                disabled={!canScrollLeft}
-                className={cn(
-                  "w-10 h-10 rounded-full border border-border/60 bg-background flex items-center justify-center transition-all duration-200",
-                  canScrollLeft ? "hover:bg-muted cursor-pointer shadow-sm" : "opacity-35 cursor-default"
-                )}
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
-              <button
-                type="button"
-                aria-label="Scroll right"
-                onClick={() => scroll("right")}
-                disabled={!canScrollRight}
-                className={cn(
-                  "w-10 h-10 rounded-full border border-border/60 bg-background flex items-center justify-center transition-all duration-200",
-                  canScrollRight ? "hover:bg-muted cursor-pointer shadow-sm" : "opacity-35 cursor-default"
-                )}
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
+            <button
+              type="button"
+              aria-label="Scroll left"
+              onClick={() => scroll("left")}
+              disabled={!canScrollLeft}
+              className={cn(
+                "w-9 h-9 rounded-full border border-border/60 bg-background flex items-center justify-center transition-all duration-200",
+                canScrollLeft ? "hover:bg-muted cursor-pointer shadow-sm" : "opacity-30 cursor-default"
+              )}
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              aria-label="Scroll right"
+              onClick={() => scroll("right")}
+              disabled={!canScrollRight}
+              className={cn(
+                "w-9 h-9 rounded-full border border-border/60 bg-background flex items-center justify-center transition-all duration-200",
+                canScrollRight ? "hover:bg-muted cursor-pointer shadow-sm" : "opacity-30 cursor-default"
+              )}
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
         </div>
 
@@ -325,7 +336,7 @@ function ProductCarousel({ products, title, viewAllHref, locale }: ProductCarous
                 key={product.id}
                 href={`/${locale}/products/${product.id}`}
                 data-carousel-card
-                className="group block snap-start shrink-0 w-[210px] sm:w-[230px] md:w-[calc(25%-12px)] lg:w-[calc(20%-13px)]"
+                className="group block snap-start shrink-0 w-[72vw] xs:w-[60vw] sm:w-[230px] md:w-[calc(25%-12px)] lg:w-[calc(20%-13px)]"
               >
                 <article className="h-full bg-card rounded-2xl overflow-hidden border border-border/50 shadow-sm hover:shadow-xl hover:border-border transition-all duration-300 hover:-translate-y-1">
                   <div className="aspect-square overflow-hidden bg-gradient-to-br from-muted/50 to-muted relative">
@@ -355,7 +366,7 @@ function ProductCarousel({ products, title, viewAllHref, locale }: ProductCarous
                     </h3>
                     {product.price > 0 && (
                       <p className="text-lg font-bold text-primary">
-                        kr {product.price.toLocaleString("nb-NO")},-
+                        {formatPrice(product.price, product.currency)}
                       </p>
                     )}
                   </div>

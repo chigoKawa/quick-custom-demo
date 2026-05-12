@@ -1,13 +1,16 @@
+"use client";
+
 import React from "react";
+import { useContentfulLiveUpdates } from "@contentful/live-preview/react";
 import { Entry } from "contentful";
 
-import type { IMultiItemModule, IHeroModule, IBlogPostPage, ILandingPage, ILogo, IBaseButton, ICampaign } from "../../type";
+import type { IMultiItemModule, IHeroModule, IBlogPostPage, ILandingPage, ILogo, IBaseButton, ICampaign, IAuction } from "../../type";
 import { extractUrlFromTarget, localizeInternalPath } from "@/lib/utils";
 import { extractImageWithFocalPoint } from "@/lib/focal-point";
 import MultiItemModule, { type MultiItemModuleItem, type MultiItemLayout, type BackgroundTheme } from "./multi-item-module";
 import HeroModule, { type HeroModuleSlide } from "../hero-module/hero-module";
 
-type SupportedItemEntry = IHeroModule | IBlogPostPage | ILandingPage | ILogo | ICampaign;
+type SupportedItemEntry = IHeroModule | IBlogPostPage | ILandingPage | ILogo | ICampaign | IAuction;
 
 type LinkLocale = { locale?: string; defaultLocale?: string };
 
@@ -161,6 +164,58 @@ function extractItemFromCampaign(entry: ICampaign, linkLocale: LinkLocale): Mult
   };
 }
 
+const AUCTION_PLACEHOLDER_IMAGE = "https://images.ctfassets.net/ace0ba6p9v98/2I5435KOFgkzr6W9eFhWqq/a1922532112ce04e62d6a0b8830e65a2/auction.png";
+
+function extractItemFromAuction(entry: IAuction, linkLocale: LinkLocale): MultiItemModuleItem | null {
+  if (!entry?.sys?.id || !entry?.fields) return null;
+
+  // externalAuctionId is an Object field storing the full snapshot from the picker
+  const snap = entry.fields.externalAuctionId as Record<string, any> | undefined;
+  const externalId = snap?.externalAuctionId as string | undefined;
+  const title = entry.fields.overrideTitle ?? snap?.title ?? entry.fields.internalName ?? undefined;
+  const saleType = entry.fields.overrideSaleType ?? snap?.saleType;
+  const location = snap?.location;
+  const startDate = snap?.startDate;
+  const endDate = snap?.endDate;
+  const lotCount = snap?.lotCount;
+
+  // Image: use first Contentful image if present, else fall back to placeholder
+  const firstImage = Array.isArray(entry.fields.images) ? (entry.fields.images as any[])[0] : undefined;
+  const ctfImageUrl = firstImage?.fields?.file?.url
+    ? `https:${firstImage.fields.file.url}`
+    : undefined;
+  const imageUrl = ctfImageUrl ?? AUCTION_PLACEHOLDER_IMAGE;
+
+  const saleTypeLabel = saleType ? `${saleType} Sale` : undefined;
+  const locationLabel = location ? `📍 ${location}` : undefined;
+  const subtitle = [saleTypeLabel, locationLabel].filter(Boolean).join("  ·  ") || undefined;
+
+  const dateLabel =
+    startDate && endDate
+      ? `${new Date(startDate).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })} – ${new Date(endDate).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}`
+      : startDate
+        ? new Date(startDate).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
+        : undefined;
+  const lotLabel = lotCount != null ? `${lotCount} lots` : undefined;
+  const description = [dateLabel, lotLabel].filter(Boolean).join("  ·  ") || undefined;
+
+  const { locale, defaultLocale = "en-US" } = linkLocale;
+  const href = externalId
+    ? localizeInternalPath(`/auctions/${externalId}`, locale, defaultLocale)
+    : undefined;
+
+  return {
+    id: entry.sys.id,
+    contentType: "auction",
+    title,
+    subtitle,
+    description,
+    imageUrl,
+    imageAlt: title ?? "Auction",
+    href,
+  };
+}
+
 function extractItem(entry: SupportedItemEntry, linkLocale: LinkLocale): MultiItemModuleItem | null {
   const contentType = getContentTypeId(entry);
 
@@ -175,6 +230,8 @@ function extractItem(entry: SupportedItemEntry, linkLocale: LinkLocale): MultiIt
       return extractItemFromLogo(entry as ILogo, linkLocale);
     case "campaign":
       return extractItemFromCampaign(entry as ICampaign, linkLocale);
+    case "auction":
+      return extractItemFromAuction(entry as IAuction, linkLocale);
     default:
       if (process.env.NODE_ENV === "development") {
         console.warn(`[MultiItemModule] Unknown item content type: ${contentType}`);
@@ -186,9 +243,14 @@ function extractItem(entry: SupportedItemEntry, linkLocale: LinkLocale): MultiIt
 export default function MultiItemModuleWrapper(
   props: IMultiItemModule & { locale?: string; defaultLocale?: string }
 ) {
-  const { locale, defaultLocale: defaultLocaleProp, ...entry } = props;
+  const { locale, defaultLocale: defaultLocaleProp, ...rawEntry } = props;
   const defaultLocale = defaultLocaleProp ?? "en-US";
   const linkLocale: LinkLocale = { locale, defaultLocale };
+
+  // Pass only sys+fields to avoid circular-reference stack overflow in
+  // useContentfulLiveUpdates' isEqual diffing (e.g. deeply nested JSON fields).
+  const liveEntry = useContentfulLiveUpdates({ sys: rawEntry.sys, fields: rawEntry.fields } as typeof rawEntry);
+  const entry = liveEntry ?? rawEntry;
 
   if (!entry?.sys?.id || !entry?.fields) {
     return null;

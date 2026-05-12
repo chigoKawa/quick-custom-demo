@@ -5,6 +5,15 @@ import { IntegrationFactory } from "@/lib/integrations/core/integration-factory"
 import type { ICommerceIntegration } from "@/lib/integrations/commerce/commerce.interface";
 import { AddToCartButton } from "./add-to-cart-button";
 
+function formatPrice(price: number, currency?: string): string {
+  const c = (currency ?? "NOK").toUpperCase();
+  try {
+    return new Intl.NumberFormat(undefined, { style: "currency", currency: c, minimumFractionDigits: 2 }).format(price);
+  } catch {
+    return `${c} ${price.toFixed(2)}`;
+  }
+}
+
 export default async function ProductDetailPage(
   props: {
     params: Promise<{ locale: string; id: string }>;
@@ -139,7 +148,7 @@ export default async function ProductDetailPage(
               <div className="flex items-center justify-between gap-4 mb-4">
                 {showPrice && (
                   <span className="text-3xl md:text-4xl font-bold text-primary">
-                    £{product.price.toFixed(2)}
+                    {formatPrice(product.price, product.currency)}
                   </span>
                 )}
                 {product.stock > 0 ? (

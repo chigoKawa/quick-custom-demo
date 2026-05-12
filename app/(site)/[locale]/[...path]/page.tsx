@@ -23,6 +23,7 @@ import {
   ILandingPage,
   LandingPageSkeleton,
 } from "@/features/contentful/type";
+import { fetchRelatedBlogPosts } from "@/lib/related-stories";
 import type { Asset, Entry } from "contentful";
 import type { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
@@ -132,13 +133,18 @@ export default async function NestedPage({ params, searchParams }: Props) {
 
   if (!resolved) notFound();
 
+  const { defaultLocale } = await getI18nConfig();
+  const relatedPosts = resolved.contentType === "landingPage"
+    ? await fetchRelatedBlogPosts({ entry: resolved.entry, locale, defaultLocale, isPreview, timelineToken })
+    : undefined;
+
   return (
     <div>
       <LivePreviewProviderWrapper locale={locale} isPreviewEnabled={isPreview}>
         {resolved.contentType === "blogPost" ? (
           <ContentfulBlogPage entry={mapBlogPostToProps(resolved.entry)} />
         ) : (
-          <ContentfulLandingPage entry={mapLandingPageToProps(resolved.entry)} />
+          <ContentfulLandingPage entry={mapLandingPageToProps(resolved.entry)} relatedPosts={relatedPosts} />
         )}
       </LivePreviewProviderWrapper>
     </div>

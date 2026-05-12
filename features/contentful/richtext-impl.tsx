@@ -2,6 +2,8 @@ import React from "react";
 import type { Options } from "@contentful/rich-text-react-renderer";
 import { BLOCKS, INLINES } from "@contentful/rich-text-types";
 import { MergeTag } from "@ninetailed/experience.js-react";
+import AuctionEmbedCard from "./components/auction-embed/auction-embed-card";
+import LotEmbedCard from "./components/auction-embed/lot-embed-card";
 
 export const baseRichTextOptions: Options = {
   renderNode: {
@@ -27,6 +29,13 @@ export const baseRichTextOptions: Options = {
         {children}
       </blockquote>
     ),
+    [BLOCKS.EMBEDDED_ENTRY]: (node) => {
+      const target = (node as any)?.data?.target;
+      const ctid = target?.sys?.contentType?.sys?.id ?? (target?.sys as any)?.contentTypeId;
+      if (ctid === "auction") return <AuctionEmbedCard entry={target} inline={false} />;
+      if (ctid === "lotReference") return <LotEmbedCard entry={target} inline={false} />;
+      return null;
+    },
     [BLOCKS.EMBEDDED_ASSET]: (node) => {
       const fileUrl = node?.data?.target?.fields?.file?.url as string | undefined;
       const title = (node?.data?.target?.fields?.title as string) || "Embedded Image";
@@ -54,23 +63,17 @@ export const baseRichTextOptions: Options = {
       </a>
     ),
     [INLINES.EMBEDDED_ENTRY]: (node) => {
-      type NtMergeTagEntry = {
-        sys?: { contentType?: { sys?: { id?: string } } };
-        fields?: { nt_mergetag_id?: string; nt_fallback?: string };
-      };
-      const target = (node as { data?: { target?: NtMergeTagEntry } })?.data?.target;
-      const ctid = target?.sys?.contentType?.sys?.id;
+      const target = (node as any)?.data?.target;
+      const ctid = target?.sys?.contentType?.sys?.id ?? (target?.sys as any)?.contentTypeId;
+
       if (ctid === "nt_mergetag") {
         const id = target?.fields?.nt_mergetag_id ?? "";
         const fallback = target?.fields?.nt_fallback ?? "";
-        if (id) {
-          return <MergeTag id={id} fallback={fallback} />;
-        }
-        // If no id provided, render the fallback string directly so authors still see content
-        if (fallback) {
-          return <span>{fallback}</span>;
-        }
+        if (id) return <MergeTag id={id} fallback={fallback} />;
+        if (fallback) return <span>{fallback}</span>;
       }
+      if (ctid === "auction") return <AuctionEmbedCard entry={target} inline={true} />;
+      if (ctid === "lotReference") return <LotEmbedCard entry={target} inline={true} />;
       return null;
     },
   },

@@ -30,13 +30,13 @@ const SimpleCta: FC<IProps> = ({ title, body, images, buttons, entryId, imagePla
   return (
     <section className={cn("relative overflow-hidden", bgClass)}>
       
-      <div className="containerxx max-w-7xl mx-auto px-4 py-12 md:py-20">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          {/* Text Section */}
-          <div className={placement === "Left" ? "order-2 lg:order-2" : "order-2 lg:order-1"}>
+      <div className="max-w-7xl mx-auto px-4 py-8 md:py-16 lg:py-20">
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
+          {/* Text Section — always first on mobile */}
+          <div className={placement === "Left" ? "order-1 lg:order-2" : "order-1 lg:order-1"}>
             <h2
               {...inspectorProps({ fieldId: "title" })}
-              className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight mb-4 text-balance"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight mb-3 text-balance"
             >
               {title}
             </h2>
@@ -46,22 +46,22 @@ const SimpleCta: FC<IProps> = ({ title, body, images, buttons, entryId, imagePla
               <LongText
                 text={body}
                 inspectorProps={inspectorProps({ fieldId: "body" })}
-                className="text-lg text-muted-foreground mb-8 max-w-md leading-relaxed"
+                className="text-base md:text-lg text-muted-foreground mb-6 max-w-md leading-relaxed"
               />
             )}
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 [&>*]:w-full [&>*]:sm:w-auto">
               {buttons}
             </div>
           </div>
 
           {/* Image Section with Conditional Grid Layout */}
-          <div className={placement === "Left" ? "order-1 lg:order-1 relative" : "order-1 lg:order-2 relative"}>
+          <div className={placement === "Left" ? "order-2 lg:order-1 relative" : "order-2 lg:order-2 relative"}>
             <div
               className={cn(
                 "grid gap-4",
-                images?.length === 1 && "grid-cols-1", // Single image takes full width
-                images?.length === 3 && "grid-cols-2 grid-rows-2", // Three images: two in a row, third spans full width
-                images?.length !== 1 && images?.length !== 3 && "grid-cols-2" // Default grid for even numbers
+                images?.length === 1 && "grid-cols-1",
+                images?.length === 3 && "grid-cols-2 grid-rows-2",
+                images?.length !== 1 && images?.length !== 3 && "grid-cols-2"
               )}
             >
               {Array.isArray(images) &&
@@ -76,7 +76,7 @@ const SimpleCta: FC<IProps> = ({ title, body, images, buttons, entryId, imagePla
                     <img
                       alt=""
                       src={image}
-                      className="max-w-full max-h-[380px] w-auto h-auto object-contain rounded-xl"
+                      className="max-w-full max-h-[280px] sm:max-h-[380px] w-auto h-auto object-contain rounded-xl"
                       style={{ filter: "drop-shadow(0 10px 30px rgba(0,0,0,0.08))" }}
                     />
                   </div>

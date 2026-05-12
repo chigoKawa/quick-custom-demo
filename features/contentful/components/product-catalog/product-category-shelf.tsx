@@ -9,9 +9,19 @@ interface ProductData {
   id: string;
   title: string;
   price: number;
+  currency?: string;
   image?: string;
   sku?: string;
   category?: string;
+}
+
+function formatPrice(price: number, currency?: string): string {
+  const c = (currency ?? "NOK").toUpperCase();
+  try {
+    return new Intl.NumberFormat(undefined, { style: "currency", currency: c, minimumFractionDigits: 2 }).format(price);
+  } catch {
+    return `${c} ${price.toFixed(2)}`;
+  }
 }
 
 interface ProductCategoryShelfProps {
@@ -54,6 +64,7 @@ export default function ProductCategoryShelf({ entry, locale }: ProductCategoryS
               id: p.id,
               title: p.title,
               price: p.price,
+              currency: p.currency,
               image: p.images?.[0],
               sku: p.sku,
               category: p.category,
@@ -90,8 +101,9 @@ export default function ProductCategoryShelf({ entry, locale }: ProductCategoryS
     const cardWidth =
       el.querySelector<HTMLElement>("[data-shelf-card]")?.offsetWidth ?? 220;
     const gap = 16;
+    const count = window.innerWidth < 640 ? 1 : 2;
     el.scrollBy({
-      left: direction === "left" ? -(cardWidth + gap) * 2 : (cardWidth + gap) * 2,
+      left: direction === "left" ? -(cardWidth + gap) * count : (cardWidth + gap) * count,
       behavior: "smooth",
     });
   }, []);
@@ -109,8 +121,8 @@ export default function ProductCategoryShelf({ entry, locale }: ProductCategoryS
   if (products.length === 0) return null;
 
   return (
-    <section className="my-10 py-8 md:py-12 bg-gradient-to-b from-muted/40 to-background rounded-2xl border border-border/40">
-      <div className="max-w-full px-5 md:px-8">
+    <section className="my-10 py-8 md:py-12 bg-gradient-to-b from-muted/40 to-background rounded-2xl border border-border/40 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className="flex items-end justify-between mb-6 gap-4">
           <div className="min-w-0">
@@ -126,7 +138,7 @@ export default function ProductCategoryShelf({ entry, locale }: ProductCategoryS
               />
             )}
           </div>
-          <div className="hidden sm:flex items-center gap-1.5 shrink-0">
+          <div className="flex items-center gap-1.5 shrink-0">
             <button
               type="button"
               aria-label="Scroll left"
@@ -180,7 +192,7 @@ export default function ProductCategoryShelf({ entry, locale }: ProductCategoryS
                 key={product.id}
                 href={`/en-US/products/${product.id}`}
                 data-shelf-card
-                className="group block snap-start shrink-0 w-[180px] sm:w-[200px] md:w-[220px]"
+                className="group block snap-start shrink-0 w-[65vw] xs:w-[55vw] sm:w-[200px] md:w-[220px]"
               >
                 <article className="h-full bg-card rounded-xl overflow-hidden border border-border/40 shadow-sm hover:shadow-lg hover:border-border transition-all duration-300 hover:-translate-y-0.5">
                   <div className="aspect-square overflow-hidden bg-muted/50 relative">
@@ -206,7 +218,7 @@ export default function ProductCategoryShelf({ entry, locale }: ProductCategoryS
                     </h4>
                     {product.price > 0 && (
                       <p className="text-base font-bold text-primary">
-                        kr {product.price.toFixed(2)}
+                        {formatPrice(product.price, product.currency)}
                       </p>
                     )}
                   </div>

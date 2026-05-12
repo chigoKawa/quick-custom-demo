@@ -1,6 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { notFound } from "next/navigation";
 import Link from "next/link";
+
+function formatPrice(price: number, currency?: string): string {
+  const c = (currency ?? "NOK").toUpperCase();
+  try {
+    return new Intl.NumberFormat(undefined, { style: "currency", currency: c, minimumFractionDigits: 2 }).format(price);
+  } catch {
+    return `${c} ${price.toFixed(2)}`;
+  }
+}
 import type { Metadata, ResolvingMetadata } from "next";
 
 import { getI18nConfig, type Locale } from "@/i18n-config";
@@ -142,9 +151,7 @@ export default async function ProductCategoryPage({ params, searchParams }: Prop
                       </h3>
                       {product.price > 0 && (
                         <p className="text-lg font-bold text-primary">
-                          {product.currency === "NOK" ? "kr " : "£"}
-                          {product.price.toLocaleString("nb-NO", { minimumFractionDigits: product.price % 1 === 0 ? 0 : 2 })}
-                          {product.currency === "NOK" ? ",-" : ""}
+                          {formatPrice(product.price, product.currency)}
                         </p>
                       )}
                     </div>

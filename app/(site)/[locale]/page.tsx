@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import { extractContentfulAssetUrl } from "@/lib/utils";
 import { resolvePreviewMode } from "@/lib/preview";
 import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provider-wrapper";
+import { fetchRelatedBlogPosts } from "@/lib/related-stories";
 
 // Get the homepage slug from environment variables
 const PAGE_SLUG = process.env.NEXT_PUBLIC_HOMEPAGE_SLUG! || "home";
@@ -42,6 +43,9 @@ export default async function IndexPage({ params, searchParams }: Props) {
     notFound();
   }
 
+  const { defaultLocale } = await getI18nConfig();
+  const relatedPosts = await fetchRelatedBlogPosts({ entry: pageEntry, locale, defaultLocale, isPreview, timelineToken });
+
   return (
     <div>
       {/* Render the landing page component with the fetched data */}
@@ -49,7 +53,7 @@ export default async function IndexPage({ params, searchParams }: Props) {
         locale={locale}
         isPreviewEnabled={isPreview}
       >
-        <ContentfulLandingPage entry={pageEntry} />
+        <ContentfulLandingPage entry={pageEntry} relatedPosts={relatedPosts} />
       </LivePreviewProviderWrapper>
     </div>
   );

@@ -1,0 +1,10 @@
+{
+  "name": "Theme Editor",
+  "description": "Visual color, radius and font editor for the siteSettings theme JSON field.",
+  "locations": [
+    {
+      "location": "entry-field",
+      "fieldTypes": [{ "type": "Object" }]
+    }
+  ]
+}

@@ -72,12 +72,13 @@ export default function HeroModule({ slides, entryId, metricEventName }: Props) 
 
   return (
     <section className="relative overflow-hidden">
-      
-      <div className="container mx-auto px-4 py-12 md:py-20">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+
+      <div className="container mx-auto px-4 py-8 md:py-16 lg:py-20">
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
+          {/* Text — always first on mobile regardless of imagePlacement */}
           <div
             className={
-              imagePlacement === "Left" ? "order-2 lg:order-2" : "order-2 lg:order-1"
+              imagePlacement === "Left" ? "order-1 lg:order-2" : "order-1 lg:order-1"
             }
           >
             {slide.subtitle ? (
@@ -85,20 +86,20 @@ export default function HeroModule({ slides, entryId, metricEventName }: Props) 
                 {slide.subtitle}
               </p>
             ) : null}
-            <h2 {...inspectorProps({ fieldId: "headline" })} className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight mb-4 text-balance animate-in fade-in slide-in-from-bottom-3 duration-500 delay-100">
+            <h2 {...inspectorProps({ fieldId: "headline" })} className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight mb-3 text-balance animate-in fade-in slide-in-from-bottom-3 duration-500 delay-100">
               {slide.title}
             </h2>
             {slide.description ? (
               <LongText
                 text={slide.description}
                 inspectorProps={inspectorProps({ fieldId: "subCopy" })}
-                className="text-lg text-muted-foreground mb-8 max-w-md leading-relaxed animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200"
+                className="text-base md:text-lg text-muted-foreground mb-6 max-w-md leading-relaxed animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200"
               />
             ) : null}
             {primary || secondary ? (
-              <div className="flex items-center gap-4 animate-in fade-in slide-in-from-bottom-5 duration-500 delay-300">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 animate-in fade-in slide-in-from-bottom-5 duration-500 delay-300 [&>*]:w-full [&>*]:sm:w-auto">
                 {primary ? (
-                  <Button asChild size="lg" className="rounded-full px-8">
+                  <Button asChild size="lg" className="rounded-full px-6 md:px-8">
                     <Link
                       href={primary.href}
                       onClick={() =>
@@ -118,7 +119,7 @@ export default function HeroModule({ slides, entryId, metricEventName }: Props) 
                     asChild
                     size="lg"
                     variant="outline"
-                    className="rounded-full px-8 bg-transparent"
+                    className="rounded-full px-6 md:px-8 bg-transparent"
                   >
                     <Link
                       href={secondary.href}
@@ -141,11 +142,11 @@ export default function HeroModule({ slides, entryId, metricEventName }: Props) 
           <div
             className={
               imagePlacement === "Left"
-                ? "order-1 lg:order-1 relative animate-in fade-in zoom-in-95 duration-700"
-                : "order-1 lg:order-2 relative animate-in fade-in zoom-in-95 duration-700"
+                ? "order-2 lg:order-1 relative animate-in fade-in zoom-in-95 duration-700"
+                : "order-2 lg:order-2 relative animate-in fade-in zoom-in-95 duration-700"
             }
           >
-            <div 
+            <div
               className="flex items-center justify-center"
               {...(slide.imageEntryId ? imageInspectorProps({ fieldId: "image" }) : {})}
             >
@@ -153,7 +154,7 @@ export default function HeroModule({ slides, entryId, metricEventName }: Props) 
                 <img
                   src={slide.imageUrl}
                   alt={slide.imageAlt || slide.title}
-                  className="max-w-full max-h-[480px] w-auto h-auto object-contain rounded-xl"
+                  className="max-w-full max-h-[300px] sm:max-h-[380px] md:max-h-[480px] w-auto h-auto object-contain rounded-xl"
                   style={{
                     objectPosition: slide.imageObjectPosition || "center center",
                     filter: "drop-shadow(0 10px 30px rgba(0,0,0,0.08))",

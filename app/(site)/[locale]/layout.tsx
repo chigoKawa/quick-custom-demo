@@ -2,6 +2,7 @@ import PersonalizedSiteSettings from "@/features/personalization/personalized-si
 import CouponAlert from "@/features/personalization/coupon-alert";
 import { SiteChromeLocaleProvider } from "@/features/site-chrome-locale";
 import { getSiteSettings } from "@/lib/site-settings";
+import { themeToCSS } from "@/lib/theme";
 import { draftMode, headers } from "next/headers";
 import { getI18nConfig, type Locale } from "@/i18n-config";
 
@@ -35,8 +36,11 @@ export default async function LocaleLayout({
     console.error("Failed to fetch site settings:", error);
   }
 
+  const themeCSS = themeToCSS(siteSettings?.fields?.theme ?? null);
+
   return (
     <SiteChromeLocaleProvider locale={locale} defaultLocale={defaultLocale}>
+      {themeCSS && <style dangerouslySetInnerHTML={{ __html: themeCSS }} />}
       <PersonalizedSiteSettings key={locale} siteSettings={siteSettings}>
         <CouponAlert />
         {children}

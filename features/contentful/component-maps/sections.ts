@@ -12,6 +12,7 @@ import RichContentModuleWrapper from "../components/rich-content-module/rich-con
 import PersonalizedMultiItemModule from "../components/multi-item-module/personalized-multi-item-module";
 import PersonalizedPropertyListings from "../components/property-listings/personalized-property-listings";
 import PersonalizedInteractiveMap from "../components/interactive-map/personalized-interactive-map";
+import PersonalizedSection from "../components/personalized-section/personalized-section";
 
 // Centralized component map for landing page sections
 export const sectionsComponentMap: Record<string, FC<any>> = {
@@ -27,4 +28,5 @@ export const sectionsComponentMap: Record<string, FC<any>> = {
   multiItemModule: PersonalizedMultiItemModule,
   propertyListings: PersonalizedPropertyListings,
   interactiveMap: PersonalizedInteractiveMap,
+  personalizedSection: PersonalizedSection,
 } as const;

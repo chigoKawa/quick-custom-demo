@@ -23,6 +23,7 @@ export interface SiteSettingsSkeleton {
     themeForeground?: string;
     themeSecondary?: string;
     themeAccent?: string;
+    theme?: import("./theme").SiteTheme;
     nt_experiences?: Entry<EntrySkeletonType>[];
   };
 }

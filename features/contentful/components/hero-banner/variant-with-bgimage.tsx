@@ -21,13 +21,13 @@ const VariantWithBgImage: FC<IProps> = ({
   const inspectorProps = useContentfulInspectorMode({ entryId });
   return (
     <section className="relative overflow-hidden">
-      <div className="container mx-auto px-4 py-12 md:py-20">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          {/* Content */}
-          <div className="order-2 lg:order-1">
+      <div className="container mx-auto px-4 py-8 md:py-16 lg:py-20">
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
+          {/* Content — always first on mobile */}
+          <div className="order-1 lg:order-1">
             <h1
               {...inspectorProps({ fieldId: "headline" })}
-              className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight mb-4 text-balance"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight mb-3 text-balance"
             >
               {title}
             </h1>
@@ -37,16 +37,16 @@ const VariantWithBgImage: FC<IProps> = ({
               <LongText
                 text={body}
                 inspectorProps={inspectorProps({ fieldId: "body" })}
-                className="text-lg text-muted-foreground mb-8 max-w-md leading-relaxed"
+                className="text-base md:text-lg text-muted-foreground mb-6 max-w-md leading-relaxed"
               />
             )}
 
             {/* Button section */}
-            <div className="flex items-center gap-4">{buttons}</div>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 [&>*]:w-full [&>*]:sm:w-auto">{buttons}</div>
           </div>
 
           {/* Image */}
-          <div className="order-1 lg:order-2 relative">
+          <div className="order-2 lg:order-2 relative">
             <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-secondary">
               {image.url ? (
                 <img

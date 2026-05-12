@@ -8,6 +8,7 @@ import {
   ILandingPage,
   LandingPageSkeleton,
 } from "@/features/contentful/type";
+import { fetchRelatedBlogPosts } from "@/lib/related-stories";
 import type { Asset } from "contentful";
 import type { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
@@ -78,6 +79,11 @@ export default async function IndexPage({ params, searchParams }: Props) {
     notFound();
   }
 
+  const { defaultLocale } = await getI18nConfig();
+  const relatedPosts = landingPage
+    ? await fetchRelatedBlogPosts({ entry: landingPage, locale, defaultLocale, isPreview, timelineToken })
+    : undefined;
+
   return (
     <div>
       <LivePreviewProviderWrapper
@@ -87,7 +93,7 @@ export default async function IndexPage({ params, searchParams }: Props) {
         {blogPost ? (
           <ContentfulBlogPage entry={mapBlogPostToProps(blogPost)} />
         ) : (
-          <ContentfulLandingPage entry={mapLandingPageToProps(landingPage!)} />
+          <ContentfulLandingPage entry={mapLandingPageToProps(landingPage!)} relatedPosts={relatedPosts} />
         )}
       </LivePreviewProviderWrapper>
     </div>

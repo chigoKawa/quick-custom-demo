@@ -1,0 +1,298 @@
+[
+
+  {
+    "id": "europris-kugjodsel-40l-liv",
+    "title": "Kugjødsel 40 L — Liv",
+    "slug": "kugjodsel-40l-liv",
+    "description": "Well-composted cow manure for enriching garden soil and potting mixes. Improves soil structure, water retention, and microbial activity. Use as a base layer or mix into existing soil. 40-litre bag.",
+    "price": 79.90,
+    "currency": "NOK",
+    "images": ["https://images2.europris.no/produkter/vw370/213563/213563_main.webp"],
+    "category": "plant-food",
+    "tags": ["garden", "fertilizer", "organic", "compost", "soil-improvement"],
+    "stock": 350,
+    "rating": 4.3,
+    "reviewCount": 167,
+    "metadata": {
+      "brand": "Liv",
+      "articleNumber": "213563",
+      "type": "Composted Cow Manure",
+      "volume": "40 L"
+    }
+  },
+  {
+    "id": "christies-aquanaut-5168g-010",
+    "title": "Patek Philippe Aquanaut Ref. 5168G-010",
+    "slug": "aquanaut-ref-5168g-010",
+    "description": "18k white gold Aquanaut with khaki-green dial and matching strap. Automatic movement with date, 42.2 mm cushion-shaped case. Sold at Christie's New York 2023, realised $75,600.",
+    "price": 60000,
+    "currency": "USD",
+    "category": "luxury-watches",
+    "tags": ["christies", "watches", "patek-philippe", "aquanaut", "white-gold"],
+    "stock": 1,
+    "rating": 4.9,
+    "reviewCount": 3,
+    "images": [
+      "https://www.christies.com/img/LotImages/2023/NYR/2023_NYR_22034_0048_000(patek_philippe_ref_5168g-010_aquanaut_a_fine_18k_white_gold_cushion-sh113951).jpg?mode=max",
+      "https://www.christies.com/img/LotImages/2023/NYR/2023_NYR_22034_0048_001(patek_philippe_ref_5168g-010_aquanaut_a_fine_18k_white_gold_cushion-sh110656).jpg?mode=max",
+      "https://www.christies.com/img/LotImages/2023/NYR/2023_NYR_22034_0048_002(patek_philippe_ref_5168g-010_aquanaut_a_fine_18k_white_gold_cushion-sh110701).jpg?mode=max",
+      "https://www.christies.com/img/LotImages/2023/NYR/2023_NYR_22034_0048_003(patek_philippe_ref_5168g-010_aquanaut_a_fine_18k_white_gold_cushion-sh110707).jpg?mode=max"
+    ],
+    "metadata": {
+      "brand": "Patek Philippe",
+      "reference": "5168G-010",
+      "type": "Watch",
+      "caseMaterial": "18k White Gold",
+      "caseDiameter": "42.2 mm",
+      "movement": "Automatic",
+      "functions": "Date"
+    }
+  },
+  {
+    "id": "christies-annual-calendar-chronograph-5960-1a-010",
+    "title": "Patek Philippe Annual Calendar Chronograph Ref. 5960/1A-010",
+    "slug": "annual-calendar-chronograph-ref-5960-1a-010",
+    "description": "Very rare stainless-steel automatic annual calendar flyback chronograph with black dial, power reserve, day/night indicator, and bracelet. 40.5 mm case. Sold at Christie's Geneva 2024, realised CHF 56,700.",
+    "price": 30000,
+    "currency": "CHF",
+    "category": "luxury-watches",
+    "tags": ["christies", "watches", "patek-philippe", "chronograph", "stainless-steel"],
+    "stock": 1,
+    "rating": 4.9,
+    "reviewCount": 2,
+    "images": [
+      "https://www.christies.com/img/LotImages/2024/GNV/2024_GNV_23037_0056_000(patek_philippe_a_very_rare_and_attractive_stainless_steel_automatic_an114016).jpg?mode=max",
+      "https://www.christies.com/img/LotImages/2024/GNV/2024_GNV_23037_0056_001(patek_philippe_a_very_rare_and_attractive_stainless_steel_automatic_an082950).jpg?mode=max",
+      "https://www.christies.com/img/LotImages/2024/GNV/2024_GNV_23037_0056_002(patek_philippe_a_very_rare_and_attractive_stainless_steel_automatic_an082957).jpg?mode=max",
+      "https://www.christies.com/img/LotImages/2024/GNV/2024_GNV_23037_0056_003(patek_philippe_a_very_rare_and_attractive_stainless_steel_automatic_an083004).jpg?mode=max"
+    ],
+    "metadata": {
+      "brand": "Patek Philippe",
+      "reference": "5960/1A-010",
+      "type": "Watch",
+      "caseMaterial": "Stainless Steel",
+      "caseDiameter": "40.5 mm",
+      "dial": "Black",
+      "movement": "Automatic"
+    }
+  },
+  {
+    "id": "christies-day-date-18388",
+    "title": "Rolex Day-Date Ref. 18388",
+    "slug": "day-date-ref-18388",
+    "description": "Rare 18k gold Day-Date with pavé diamond and sapphire-set dial, automatic movement, President bracelet, 36 mm case. Sold at Christie's Hong Kong 2020, realised HKD 187,500.",
+    "price": 120000,
+    "currency": "HKD",
+    "category": "luxury-watches",
+    "tags": ["christies", "watches", "rolex", "day-date", "gold", "diamond"],
+    "stock": 1,
+    "rating": 4.8,
+    "reviewCount": 4,
+    "images": [
+      "https://www.christies.com/img/LotImages/2020/HGK/2020_HGK_18894_2339_000(rolex_an_attractive_and_very_rare_18k_gold_diamond_and_sapphire-set_au011627).jpg?mode=max"
+    ],
+    "metadata": {
+      "brand": "Rolex",
+      "reference": "18388",
+      "type": "Watch",
+      "caseMaterial": "18k Gold",
+      "caseDiameter": "36 mm",
+      "dial": "Pavé diamond and sapphire",
+      "movement": "Automatic"
+    }
+  },
+  {
+    "id": "christies-jumbo-daytona-6239",
+    "title": "Rolex Cosmograph Daytona Ref. 6239 — Jumbo",
+    "slug": "jumbo-daytona-ref-6239",
+    "description": "Fine and rare vintage stainless-steel Cosmograph chronograph, the 'Jumbo Daytona', with original bracelet and box. Manual movement. Sold at Christie's Geneva 2019, realised CHF 40,000.",
+    "price": 35000,
+    "currency": "CHF",
+    "category": "luxury-watches",
+    "tags": ["christies", "watches", "rolex", "daytona", "vintage", "stainless-steel"],
+    "stock": 1,
+    "rating": 4.9,
+    "reviewCount": 5,
+    "images": [
+      "https://www.christies.com/img/LotImages/2019/GNV/2019_GNV_17435_0026_000(rolex_a_fine_and_rare_stainless_steel_chronograph_wristwatch_with_box124959).jpg?mode=max",
+      "https://www.christies.com/img/LotImages/2019/GNV/2019_GNV_17435_0026_001(rolex_a_fine_and_rare_stainless_steel_chronograph_wristwatch_with_box125006).jpg?mode=max",
+      "https://www.christies.com/img/LotImages/2019/GNV/2019_GNV_17435_0026_002(rolex_a_fine_and_rare_stainless_steel_chronograph_wristwatch_with_box125021).jpg?mode=max"
+    ],
+    "metadata": {
+      "brand": "Rolex",
+      "reference": "6239",
+      "type": "Watch",
+      "caseMaterial": "Stainless Steel",
+      "movement": "Manual"
+    }
+  },
+  {
+    "id": "christies-daytona-beach-116519",
+    "title": "Rolex Daytona Beach Ref. 116519",
+    "slug": "daytona-beach-ref-116519",
+    "description": "18k white gold Daytona Beach with pink mother-of-pearl dial and gem-set details. Automatic chronograph, 40 mm case. Sold at Christie's Geneva 2017, realised CHF 23,750.",
+    "price": 20000,
+    "currency": "CHF",
+    "category": "luxury-watches",
+    "tags": ["christies", "watches", "rolex", "daytona", "white-gold", "mother-of-pearl"],
+    "stock": 1,
+    "rating": 4.7,
+    "reviewCount": 6,
+    "images": [
+      "https://www.christies.com/img/LotImages/2017/GNV/2017_GNV_14212_0233_000(rolex_a_fine_18k_white_gold_and_pink_mother_of_pearl_automatic_chronog074611).jpg?mode=max"
+    ],
+    "metadata": {
+      "brand": "Rolex",
+      "reference": "116519",
+      "type": "Watch",
+      "caseMaterial": "18k White Gold",
+      "caseDiameter": "40 mm",
+      "movement": "Automatic"
+    }
+  },
+  {
+    "id": "christies-deepsea-116660",
+    "title": "Rolex Deepsea Sea-Dweller Ref. 116660",
+    "slug": "deepsea-ref-116660",
+    "description": "Stainless-steel Deepsea with date, 44 mm case, Oyster bracelet, and Ringlock System rated to 3,900 m / 12,800 ft. Sold at Christie's Geneva 2018, realised CHF 10,625.",
+    "price": 6000,
+    "currency": "CHF",
+    "category": "luxury-watches",
+    "tags": ["christies", "watches", "rolex", "deepsea", "stainless-steel", "diver"],
+    "stock": 3,
+    "rating": 4.6,
+    "reviewCount": 8,
+    "images": [
+      "https://www.christies.com/img/LotImages/2018/GNV/2018_GNV_16153_0202_000(rolex_a_large_stainless_steel_automatic_wristwatch_with_sweep_centre_s052956).jpg?mode=max"
+    ],
+    "metadata": {
+      "brand": "Rolex",
+      "reference": "116660",
+      "type": "Watch",
+      "caseMaterial": "Stainless Steel",
+      "caseDiameter": "44 mm",
+      "movement": "Automatic",
+      "functions": "Date",
+      "waterResistance": "3900 m / 12800 ft"
+    }
+  },
+  {
+    "id": "christies-submariner-114060",
+    "title": "Rolex Submariner Ref. 114060 — Mike Horn Edition",
+    "slug": "submariner-ref-114060",
+    "description": "Unique stainless-steel no-date Submariner with notable provenance: worn by explorer Mike Horn during the 2014 Makalu ascent. Black dial, 40 mm case, Oyster bracelet. Sold at Christie's Geneva 2015, realised CHF 46,250.",
+    "price": 20000,
+    "currency": "CHF",
+    "category": "luxury-watches",
+    "tags": ["christies", "watches", "rolex", "submariner", "stainless-steel", "provenance"],
+    "stock": 1,
+    "rating": 5.0,
+    "reviewCount": 2,
+    "images": [
+      "https://www.christies.com/img/LotImages/2015/GNV/2015_GNV_01410_0279_000(rolex_a_unique_and_important_stainless_steel_automatic_wristwatch_with061526).jpg?mode=max"
+    ],
+    "metadata": {
+      "brand": "Rolex",
+      "reference": "114060",
+      "type": "Watch",
+      "caseMaterial": "Stainless Steel",
+      "caseDiameter": "40 mm",
+      "movement": "Automatic",
+      "provenance": "Mike Horn, Makalu 2014"
+    }
+  },
+  {
+    "id": "christies-perpetual-calendar-5038g",
+    "title": "Patek Philippe Perpetual Calendar Ref. 5038G",
+    "slug": "perpetual-calendar-ref-5038g",
+    "description": "Limited-edition 18k white gold perpetual calendar with black dial, moon phases, leap-year and 24-hour indication, beaded bezel. Automatic movement. Sold at Christie's Hong Kong 2017, realised HKD 300,000.",
+    "price": 240000,
+    "currency": "HKD",
+    "category": "luxury-watches",
+    "tags": ["christies", "watches", "patek-philippe", "perpetual-calendar", "white-gold", "limited-edition"],
+    "stock": 1,
+    "rating": 4.9,
+    "reviewCount": 3,
+    "images": [
+      "https://www.christies.com/img/LotImages/2017/HGK/2017_HGK_14715_2381_000(patek_philippe_a_fine_and_rare_18k_white_gold_limited_edition_automati060200).jpg?mode=max"
+    ],
+    "metadata": {
+      "brand": "Patek Philippe",
+      "reference": "5038G",
+      "type": "Watch",
+      "caseMaterial": "18k White Gold",
+      "dial": "Black",
+      "movement": "Automatic",
+      "functions": "Perpetual calendar, moon phases, leap year, 24-hour indication"
+    }
+  },
+  {
+    "id": "christies-perpetual-calendar-london-edition-5050j-023",
+    "title": "Patek Philippe Perpetual Calendar London Edition Ref. 5050J-023",
+    "slug": "perpetual-calendar-london-edition-ref-5050j-023",
+    "description": "Extremely rare yellow-gold perpetual calendar London Edition with retrograde date, moon phases, grey dial with Breguet numerals, 35 mm case. Automatic movement. Christie's Online estimate USD 60,000.",
+    "price": 60000,
+    "currency": "USD",
+    "category": "luxury-watches",
+    "tags": ["christies", "watches", "patek-philippe", "perpetual-calendar", "yellow-gold", "london-edition"],
+    "stock": 1,
+    "rating": 4.9,
+    "reviewCount": 2,
+    "images": [],
+    "metadata": {
+      "brand": "Patek Philippe",
+      "reference": "5050J-023",
+      "type": "Watch",
+      "caseMaterial": "18k Yellow Gold",
+      "caseDiameter": "35 mm",
+      "dial": "Grey with Breguet numerals",
+      "movement": "Automatic",
+      "functions": "Perpetual calendar, retrograde date, moon phases"
+    }
+  },
+  {
+    "id": "christies-weekly-calendar-5212a-001",
+    "title": "Patek Philippe Calatrava Weekly Calendar Ref. 5212A-001",
+    "slug": "calatrava-weekly-calendar-ref-5212a-001",
+    "description": "Stainless-steel weekly calendar with silvered dial, distinctive handwritten-style calendar display, 40 mm case, automatic movement. Christie's Online estimate USD 30,000.",
+    "price": 30000,
+    "currency": "USD",
+    "category": "luxury-watches",
+    "tags": ["christies", "watches", "patek-philippe", "calatrava", "stainless-steel", "weekly-calendar"],
+    "stock": 1,
+    "rating": 4.8,
+    "reviewCount": 4,
+    "images": [],
+    "metadata": {
+      "brand": "Patek Philippe",
+      "reference": "5212A-001",
+      "type": "Watch",
+      "caseMaterial": "Stainless Steel",
+      "caseDiameter": "40 mm",
+      "dial": "Silvered",
+      "movement": "Automatic",
+      "functions": "Weekly calendar"
+    }
+  },
+  {
+    "id": "christies-calatrava-5226g-001",
+    "title": "Patek Philippe Calatrava Ref. 5226G-001",
+    "slug": "calatrava-ref-5226g-001",
+    "description": "18k white gold Calatrava dress watch with clean dial and classic case. Available via Christie's Shop. Price on application.",
+    "price": 45000,
+    "currency": "USD",
+    "category": "luxury-watches",
+    "tags": ["christies", "watches", "patek-philippe", "calatrava", "white-gold", "dress-watch"],
+    "stock": 1,
+    "rating": 4.8,
+    "reviewCount": 3,
+    "images": [],
+    "metadata": {
+      "brand": "Patek Philippe",
+      "reference": "5226G-001",
+      "type": "Watch",
+      "caseMaterial": "18k White Gold",
+      "movement": "Automatic"
+    }
+  }
+]

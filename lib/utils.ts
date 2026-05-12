@@ -10,6 +10,8 @@ import {
   IPmsPropertyEntry,
   IProductCategory,
   ICampaign,
+  IAuction,
+  ILotReference,
 } from "@/features/contentful/type";
 
 export function cn(...inputs: ClassValue[]) {
@@ -69,7 +71,7 @@ export type ExtractUrlFromTargetOptions = {
 };
 
 export const extractUrlFromTarget = (
-  target: IExternalUrl | ILandingPage | IBlogPostPage | ICategoryPage | IProductStory | IPmsPropertyEntry | IProductCategory | ICampaign,
+  target: IExternalUrl | ILandingPage | IBlogPostPage | ICategoryPage | IProductStory | IPmsPropertyEntry | IProductCategory | ICampaign | IAuction | ILotReference,
   options?: ExtractUrlFromTargetOptions
 ) => {
   const { locale, defaultLocale = "en-US" } = options ?? {};
@@ -123,6 +125,25 @@ export const extractUrlFromTarget = (
   if (contentType === "kbArticle") {
     const slug = (target as any)?.fields?.slug;
     return slug ? L(`/knowledge-base/${slug}`) : "";
+  }
+
+  if (contentType === "auction") {
+    const entry = target as IAuction;
+    // externalAuctionId is an Object field storing the full auction snapshot;
+    // the actual ID string lives at snap.externalAuctionId.
+    const snap = entry?.fields?.externalAuctionId as Record<string, any> | undefined;
+    const id = snap?.externalAuctionId as string | undefined;
+    return id ? L(`/auctions/${id}`) : "";
+  }
+
+  if (contentType === "lotReference") {
+    const entry = target as ILotReference;
+    const lotId = entry?.fields?.externalLotId;
+    // A lot URL requires /auctions/[auctionId]/lot/[lotNumber].
+    // lotReference does not store its parent auction ID, so we can only
+    // link to the lot number alone — callers that have auction context
+    // should build the URL themselves rather than using this function.
+    return lotId ? L(`/lot/${lotId}`) : "";
   }
 
   if (contentType === "externalLink") {

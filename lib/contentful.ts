@@ -1,5 +1,5 @@
 import { createClient } from "contentful";
-import type { EntryCollection, EntrySkeletonType, Entry } from "contentful";
+import type { EntryCollection, EntrySkeletonType, Entry, CreateClientParams } from "contentful";
 import { parseTimelinePreviewToken } from "@contentful/timeline-preview";
 
 const client = createClient({
@@ -31,21 +31,21 @@ function getPreviewClient(
   try {
     const { releaseId, timestamp } = parseTimelinePreviewToken(timelineToken);
 
-    const timelinePreview: Record<string, unknown> = {};
-    if (releaseId) timelinePreview.release = { lte: releaseId };
-    if (timestamp) timelinePreview.timestamp = { lte: timestamp };
-
     if (!releaseId && !timestamp) {
       console.warn("[Contentful] Timeline token parsed but contained no releaseId or timestamp. Falling back to standard preview.");
       return previewClient;
     }
+
+    const timelinePreview: CreateClientParams["timelinePreview"] = releaseId
+      ? { release: { lte: releaseId }, ...(timestamp ? { timestamp: { lte: timestamp } } : {}) }
+      : { timestamp: { lte: timestamp! } };
 
     return createClient({
       space: process.env.NEXT_PUBLIC_CTF_SPACE_ID!,
       accessToken: process.env.NEXT_PUBLIC_CTF_PREVIEW_TOKEN!,
       host: "preview.contentful.com",
       environment: process.env.NEXT_PUBLIC_CTF_ENVIRONMENT || "master",
-      timelinePreview: timelinePreview as any,
+      timelinePreview,
     });
   } catch (error) {
     console.error("[Contentful] Failed to parse timeline token. Falling back to standard preview.", error);

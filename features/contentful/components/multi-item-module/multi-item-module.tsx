@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -82,68 +82,25 @@ export default function MultiItemModule({
 
   const renderCarousel = () => {
     const visibleCount = Math.min(columns, safeItems.length);
-    
-    return (
-      <div className="relative">
-   
-        <div className="overflow-hidden">
-          <div
-            className="flex transition-transform duration-500 ease-out"
-            style={{
-              transform: `translateX(-${currentIndex * (100 / visibleCount)}%)`,
-            }}
-          >
-            {safeItems.map((item) => (
-              <div
-                key={item.id}
-                className="flex-shrink-0 px-2"
-                style={{ width: `${100 / visibleCount}%` }}
-              >
-                <ItemCard item={item} />
-              </div>
-            ))}
-          </div>
-        </div>
+    const cardWidthClass =
+      columns <= 2
+        ? "w-[85vw] sm:w-[calc(50%-8px)]"
+        : columns === 4
+        ? "w-[80vw] sm:w-[calc(50%-8px)] lg:w-[calc(25%-12px)]"
+        : "w-[80vw] sm:w-[calc(50%-8px)] lg:w-[calc(33.333%-11px)]";
 
-        {showArrows && !autoplay && safeItems.length > visibleCount && (
-          <>
-            <Button
-              variant="outline"
-              size="icon"
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 rounded-full bg-background shadow-md z-10"
-              onClick={prevSlide}
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 rounded-full bg-background shadow-md z-10"
-              onClick={nextSlide}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </>
-        )}
-
-        {showDots && safeItems.length > visibleCount && (
-          <div className="flex justify-center gap-2 mt-6">
-            {safeItems.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setCurrentIndex(idx)}
-                className={cn(
-                  "h-2 rounded-full transition-all duration-300",
-                  idx === currentIndex
-                    ? "w-8 bg-primary"
-                    : "w-2 bg-border hover:bg-muted-foreground"
-                )}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-    );
+    return <CarouselTrack
+      items={safeItems}
+      cardWidthClass={cardWidthClass}
+      visibleCount={visibleCount}
+      showArrows={showArrows}
+      showDots={showDots}
+      autoplay={autoplay}
+      currentIndex={currentIndex}
+      setCurrentIndex={setCurrentIndex}
+      prevSlide={prevSlide}
+      nextSlide={nextSlide}
+    />;
   };
 
   const renderGrid = () => {
@@ -230,6 +187,7 @@ export default function MultiItemModule({
       className={cn("py-12 md:py-16", backgroundThemeClasses[backgroundTheme])}
       {...inspectorProps({ fieldId: "internalName" })}
     >
+    
       <div className="max-w-7xl mx-auto px-4">
         {(title || subtitle) && (
           <div className="text-center mb-10">
@@ -273,6 +231,93 @@ function ImageSkeleton() {
           d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
         />
       </svg>
+    </div>
+  );
+}
+
+function CarouselTrack({
+  items,
+  cardWidthClass,
+  visibleCount,
+  showArrows,
+  showDots,
+  autoplay,
+  currentIndex,
+  setCurrentIndex,
+  prevSlide,
+  nextSlide,
+}: {
+  items: MultiItemModuleItem[];
+  cardWidthClass: string;
+  visibleCount: number;
+  showArrows: boolean;
+  showDots: boolean;
+  autoplay: boolean;
+  currentIndex: number;
+  setCurrentIndex: (idx: number) => void;
+  prevSlide: () => void;
+  nextSlide: () => void;
+}) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Scroll the track to align the currentIndex card at the left edge
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const card = el.children[currentIndex] as HTMLElement | undefined;
+    if (!card) return;
+    el.scrollTo({ left: card.offsetLeft, behavior: "smooth" });
+  }, [currentIndex]);
+
+  return (
+    <div className="relative px-6">
+      <div
+        ref={scrollRef}
+        className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 -mb-2 scrollbar-hide"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        {items.map((item) => (
+          <div key={item.id} className={cn("flex-shrink-0 snap-start", cardWidthClass)}>
+            <ItemCard item={item} />
+          </div>
+        ))}
+      </div>
+
+      {showArrows && !autoplay && items.length > visibleCount && (
+        <>
+          <Button
+            variant="outline"
+            size="icon"
+            className="absolute left-0 top-[calc(50%-16px)] -translate-y-1/2 rounded-full bg-background shadow-md z-10"
+            onClick={prevSlide}
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            className="absolute right-0 top-[calc(50%-16px)] -translate-y-1/2 rounded-full bg-background shadow-md z-10"
+            onClick={nextSlide}
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </>
+      )}
+
+      {showDots && items.length > visibleCount && (
+        <div className="flex justify-center gap-2 mt-6">
+          {items.map((item, idx) => (
+            <button
+              key={item.id}
+              onClick={() => setCurrentIndex(idx)}
+              className={cn(
+                "h-2 rounded-full transition-all duration-300",
+                idx === currentIndex ? "w-8 bg-primary" : "w-2 bg-border hover:bg-muted-foreground"
+              )}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

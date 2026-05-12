@@ -6,31 +6,123 @@ import { ILandingPage } from "../type";
 // Import live updates hook from Contentful -> https://github.com/contentful/live-preview
 import { useContentfulLiveUpdates } from "@contentful/live-preview/react";
 import { sectionsComponentMap } from "../component-maps/sections";
+import RelatedStoriesSection, { type RelatedStoryPost } from "./landing-page/related-stories-section";
 
 // Define the props interface for the ContentfulLandingPage component
 interface IProps {
   // The entry prop contains the data for a landing page fetched from Contentful
   entry: ILandingPage;
+  relatedPosts?: RelatedStoryPost[];
+}
+
+// Strips deeply-nested linked entries from a section's fields so that
+// useContentfulLiveUpdates' lodash isEqual doesn't recurse into include:6 depth.
+// Scalar fields and asset refs are kept; Entry links are replaced with bare sys stubs.
+function shallowSection(s: any): any {
+  if (!s?.sys?.id || !s?.fields) return s;
+  const shallowFields: Record<string, any> = {};
+  for (const [k, v] of Object.entries(s.fields)) {
+    if (Array.isArray(v)) {
+      shallowFields[k] = (v as any[]).map((item) =>
+        item?.sys?.type === "Entry" || item?.sys?.contentType
+          ? { sys: item.sys }
+          : item
+      );
+    } else if (v && typeof v === "object" && ((v as any).sys?.type === "Entry" || (v as any).sys?.contentType)) {
+      shallowFields[k] = { sys: (v as any).sys };
+    } else {
+      shallowFields[k] = v;
+    }
+  }
+  return { sys: s.sys, fields: shallowFields };
+}
+
+// Index every entry in the server-fetched tree by sys.id.
+// Only recurses into arrays and entry `fields` — never into arbitrary object values —
+// to avoid call stack overflow from deeply nested or prototype-chained objects.
+function buildResolvedMap(node: any, map: Map<string, any>) {
+  if (!node || typeof node !== "object") return;
+  if (Array.isArray(node)) {
+    for (const item of node) buildResolvedMap(item, map);
+    return;
+  }
+  if (node.sys?.id && node.fields) {
+    if (map.has(node.sys.id)) return; // already visited
+    map.set(node.sys.id, node);
+    // Only descend into the fields object, not the whole entry
+    for (const v of Object.values(node.fields as object)) {
+      buildResolvedMap(v, map);
+    }
+  }
+}
+
+// Resolve a value from live preview: if it's a bare sys stub, look it up in
+// resolvedById; if it's an array, resolve each item; otherwise return as-is.
+function resolveValue(v: any, resolvedById: Map<string, any>): any {
+  if (Array.isArray(v)) {
+    return v.map((item) => resolveValue(item, resolvedById));
+  }
+  if (v && typeof v === "object" && v.sys?.id && !v.fields) {
+    return resolvedById.get(v.sys.id) ?? v;
+  }
+  return v;
 }
 
 // Main ContentfulLandingPage component
-const ContentfulLandingPage: FC<IProps> = ({ entry: publishedEntry }) => {
-  // Use live updates hook for Contentful preview mode or fallback to the published entry
-  const entry = useContentfulLiveUpdates(publishedEntry) || publishedEntry;
+const ContentfulLandingPage: FC<IProps> = ({ entry: publishedEntry, relatedPosts }) => {
+  const publishedSections = publishedEntry?.fields?.sections as unknown as Array<any> | undefined;
 
-  const sections = entry?.fields?.sections as unknown as Array<any> | undefined;
+  // Build a deep map of every resolved entry in the server-fetched tree so we can
+  // fill in bare sys stubs that come back from useContentfulLiveUpdates.
+  const resolvedById = new Map<string, any>();
+  buildResolvedMap(publishedEntry, resolvedById);
+
+  // Build shallow version of the entry for useContentfulLiveUpdates: each section is
+  // reduced to { sys, shallowFields } so isEqual never recurses past 1 level of fields.
+  const shallowSections = Array.isArray(publishedSections)
+    ? publishedSections.map(shallowSection)
+    : [];
+  const shallowEntry = {
+    sys: publishedEntry.sys,
+    fields: { ...publishedEntry.fields, sections: shallowSections },
+  } as unknown as ILandingPage;
+
+  const liveEntry = useContentfulLiveUpdates(shallowEntry);
+
+  // Merge live section data: use live-updated fields for scalar/structural changes,
+  // and resolve any bare sys stubs against the deep resolvedById map.
+  const liveSections = (liveEntry?.fields?.sections as unknown as Array<any> | undefined) ?? shallowSections;
+  const sections = liveSections.map((liveSection: any) => {
+    if (!liveSection?.sys?.id) return liveSection;
+    const original = resolvedById.get(liveSection.sys.id);
+    if (!original) return liveSection;
+    // Merge: apply every live field, resolving stubs against the server-fetched tree.
+    const mergedFields: Record<string, any> = { ...original.fields };
+    for (const [k, v] of Object.entries(liveSection.fields ?? {})) {
+      mergedFields[k] = resolveValue(v, resolvedById);
+    }
+    return { ...original, fields: mergedFields };
+  });
 
   return (
-    <div className="w-full overflow-hidden max-w-7xlx mx-auto">
-      
-      {/* New: render Frames if present */}
+    <div className="w-full">
       {Array.isArray(sections)
-        ? sections.map((sectionEntry, index) => {
+        ? sections.map((rawSection, index) => {
+            if (!rawSection?.sys?.id) return null;
+
+            // If live preview returned an unresolved link (no contentType/fields),
+            // fall back to the fully-resolved version from the original server fetch.
+            const sectionEntry =
+              rawSection?.sys?.contentType || rawSection?.fields
+                ? rawSection
+                : (resolvedById.get(rawSection.sys.id) ?? rawSection);
+
             const contentTypeId =
               sectionEntry?.sys?.contentType?.sys?.id ??
               sectionEntry?.sys?.contentType?.id ??
               sectionEntry?.sys?.contentTypeId ??
               null;
+
             const Component =
               contentTypeId && typeof contentTypeId === "string"
                 ? (sectionsComponentMap as Record<string, FC<any>>)[contentTypeId]
@@ -44,9 +136,12 @@ const ContentfulLandingPage: FC<IProps> = ({ entry: publishedEntry }) => {
               return null;
             }
 
-            return <Component key={sectionEntry?.sys?.id ?? `section-${index}`} {...sectionEntry} />;
+            return <Component key={`${sectionEntry.sys.id}-${index}`} {...sectionEntry} />;
           })
         : null}
+      {relatedPosts && relatedPosts.length > 0 && (
+        <RelatedStoriesSection posts={relatedPosts} />
+      )}
     </div>
   );
 };

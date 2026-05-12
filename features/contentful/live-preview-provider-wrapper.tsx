@@ -19,6 +19,8 @@ const LivePreviewProviderWrapper = ({
         locale,
         enableInspectorMode: true,
         enableLiveUpdates: true,
+        space: process.env.NEXT_PUBLIC_CTF_SPACE_ID,
+        environment: process.env.NEXT_PUBLIC_CTF_ENVIRONMENT,
       });
     } catch {
       // non-fatal
@@ -35,6 +37,8 @@ const LivePreviewProviderWrapper = ({
       locale={locale}
       enableInspectorMode={isPreviewEnabled}
       enableLiveUpdates={isPreviewEnabled}
+      space={process.env.NEXT_PUBLIC_CTF_SPACE_ID}
+      environment={process.env.NEXT_PUBLIC_CTF_ENVIRONMENT}
     >
       {children}
     </ContentfulLivePreviewProvider>

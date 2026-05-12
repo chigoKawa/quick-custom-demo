@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useRef, useState, useCallback, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import useEmblaCarousel from "embla-carousel-react";
 import Link from "next/link";
 import { useContentfulInspectorMode } from "@contentful/live-preview/react";
 import { cn } from "@/lib/utils";
@@ -13,9 +14,19 @@ interface ProductData {
   id: string;
   title: string;
   price: number;
+  currency?: string;
   image?: string;
   sku?: string;
   category?: string;
+}
+
+function formatPrice(price: number, currency?: string): string {
+  const c = (currency ?? "GBP").toUpperCase();
+  try {
+    return new Intl.NumberFormat(undefined, { style: "currency", currency: c, minimumFractionDigits: 2 }).format(price);
+  } catch {
+    return `${c} ${price.toFixed(2)}`;
+  }
 }
 
 interface ProductCatalogSectionProps {
@@ -44,10 +55,11 @@ export default function ProductCatalogSection({ entry }: ProductCatalogSectionPr
   } | null;
   const ctaButton = entry.fields.cta;
 
-  const [categoryProducts, setCategoryProducts] = useState<ProductData[]>([]);
-  const [loadingCategory, setLoadingCategory] = useState(false);
+  const isCategory = productsData?.selectionMode === "category" && !!productsData.selectedCategory;
 
-  const isCategory = productsData?.selectionMode === "category" && productsData.selectedCategory;
+  // For category mode, start in loading state so the skeleton shows immediately.
+  const [categoryProducts, setCategoryProducts] = useState<ProductData[]>([]);
+  const [loadingCategory, setLoadingCategory] = useState(isCategory);
 
   useEffect(() => {
     if (!isCategory) return;
@@ -62,6 +74,7 @@ export default function ProductCatalogSection({ entry }: ProductCatalogSectionPr
               id: p.id,
               title: p.title,
               price: p.price,
+              currency: p.currency,
               image: p.images?.[0],
               sku: p.sku,
               category: p.category,
@@ -87,7 +100,11 @@ export default function ProductCatalogSection({ entry }: ProductCatalogSectionPr
     }
   }
 
-  if (products.length === 0 && !loadingCategory) {
+  if (loadingCategory) {
+    return <ProductCatalogSkeleton title={title} body={body} inspectorProps={inspectorProps} />;
+  }
+
+  if (products.length === 0) {
     return null;
   }
 
@@ -163,7 +180,7 @@ export default function ProductCatalogSection({ entry }: ProductCatalogSectionPr
                   <h3 className="text-xl font-semibold leading-tight">{product.title}</h3>
                   {showPrice && (
                     <span className="shrink-0 text-2xl md:text-3xl font-bold text-primary">
-                      £{product.price.toFixed(2)}
+                      {formatPrice(product.price, product.currency)}
                     </span>
                   )}
                 </div>
@@ -224,6 +241,67 @@ export default function ProductCatalogSection({ entry }: ProductCatalogSectionPr
 }
 
 /* ------------------------------------------------------------------ */
+/*  Skeleton                                                          */
+/* ------------------------------------------------------------------ */
+
+function ProductCatalogSkeleton({
+  title,
+  body,
+  inspectorProps,
+}: {
+  title?: string;
+  body?: string;
+  inspectorProps: ReturnType<typeof useContentfulInspectorMode>;
+}) {
+  return (
+    <section className="py-10 md:py-16 lg:py-24 bg-gradient-to-b from-muted/30 to-background">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex items-start justify-between mb-6 md:mb-10 gap-3">
+          <div className="min-w-0">
+            <h2
+              {...inspectorProps({ fieldId: "title" })}
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-1"
+            >
+              {title}
+            </h2>
+            {body && (
+              <p
+                {...inspectorProps({ fieldId: "body" })}
+                className="text-base md:text-lg text-muted-foreground max-w-2xl leading-relaxed"
+              >
+                {body}
+              </p>
+            )}
+          </div>
+          {/* Arrow placeholders */}
+          <div className="flex items-center gap-2 shrink-0 mt-1">
+            <div className="w-9 h-9 rounded-full border border-border/60 bg-muted/40 opacity-30" />
+            <div className="w-9 h-9 rounded-full border border-border/60 bg-muted/40 opacity-30" />
+          </div>
+        </div>
+
+        {/* Card skeletons */}
+        <div className="flex gap-4 overflow-hidden">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div
+              key={i}
+              className="shrink-0 w-[72vw] xs:w-[60vw] sm:w-[230px] md:w-[calc(25%-12px)] rounded-2xl border border-border/50 bg-card overflow-hidden"
+            >
+              <div className="aspect-square bg-muted animate-pulse" />
+              <div className="p-4 space-y-2">
+                <div className="h-4 rounded bg-muted animate-pulse w-3/4" />
+                <div className="h-4 rounded bg-muted animate-pulse w-1/2" />
+                <div className="h-6 rounded bg-muted animate-pulse w-1/3 mt-1" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /*  Carousel sub-component                                            */
 /* ------------------------------------------------------------------ */
 
@@ -250,128 +328,104 @@ function ProductCarousel({
   listId,
   trackMetric,
 }: ProductCarouselProps) {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    align: "start",
+    slidesToScroll: 4,
+    breakpoints: {
+      "(max-width: 1023px)": { slidesToScroll: 2 },
+      "(max-width: 639px)": { slidesToScroll: 1 },
+    },
+  });
 
-  const checkScroll = useCallback(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    setCanScrollLeft(el.scrollLeft > 2);
-    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 2);
-  }, []);
+  const [canPrev, setCanPrev] = useState(false);
+  const [canNext, setCanNext] = useState(true);
+
+  const updateButtons = useCallback(() => {
+    if (!emblaApi) return;
+    setCanPrev(emblaApi.canScrollPrev());
+    setCanNext(emblaApi.canScrollNext());
+  }, [emblaApi]);
 
   useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    // Defer so the browser has laid out any newly rendered cards
-    requestAnimationFrame(checkScroll);
-    el.addEventListener("scroll", checkScroll, { passive: true });
-    window.addEventListener("resize", checkScroll);
+    if (!emblaApi) return;
+    updateButtons();
+    emblaApi.on("select", updateButtons);
+    emblaApi.on("reInit", updateButtons);
     return () => {
-      el.removeEventListener("scroll", checkScroll);
-      window.removeEventListener("resize", checkScroll);
+      emblaApi.off("select", updateButtons);
+      emblaApi.off("reInit", updateButtons);
     };
-  }, [checkScroll, products.length]);
-
-  const scroll = useCallback((direction: "left" | "right") => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const cardWidth = el.querySelector<HTMLElement>("[data-carousel-card]")?.offsetWidth ?? 280;
-    const gap = 16;
-    const distance = (cardWidth + gap) * 2;
-    el.scrollBy({ left: direction === "left" ? -distance : distance, behavior: "smooth" });
-  }, []);
+  }, [emblaApi, updateButtons]);
 
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-b from-muted/30 to-background">
+    <section className="py-10 md:py-16 lg:py-24 bg-gradient-to-b from-muted/30 to-background">
       <div className="max-w-7xl mx-auto px-4">
         {/* Header with nav arrows */}
-        <div className="flex items-end justify-between mb-10">
-          <div>
+        <div className="flex items-start justify-between mb-6 md:mb-10 gap-3">
+          <div className="min-w-0">
             <h2
               {...inspectorProps({ fieldId: "title" })}
-              className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-2"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-1"
             >
               {title}
             </h2>
             {body && (
               <p
                 {...inspectorProps({ fieldId: "body" })}
-                className="text-lg text-muted-foreground max-w-2xl leading-relaxed"
+                className="text-base md:text-lg text-muted-foreground max-w-2xl leading-relaxed"
               >
                 {body}
               </p>
             )}
           </div>
 
-          <div className="hidden sm:flex items-center gap-2 shrink-0 ml-6">
+          <div className="flex items-center gap-2 shrink-0 mt-1">
             <button
               type="button"
-              aria-label="Scroll left"
-              onClick={() => scroll("left")}
-              disabled={!canScrollLeft}
+              aria-label="Previous"
+              onClick={() => emblaApi?.scrollPrev()}
+              disabled={!canPrev}
               className={cn(
-                "w-10 h-10 rounded-full border border-border/60 bg-background flex items-center justify-center transition-all duration-200",
-                canScrollLeft
-                  ? "hover:bg-muted hover:border-border cursor-pointer shadow-sm"
-                  : "opacity-35 cursor-default"
+                "w-9 h-9 rounded-full border border-border/60 bg-background flex items-center justify-center transition-all duration-200",
+                canPrev ? "hover:bg-muted hover:border-border shadow-sm" : "opacity-30 cursor-default"
               )}
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
               </svg>
             </button>
             <button
               type="button"
-              aria-label="Scroll right"
-              onClick={() => scroll("right")}
-              disabled={!canScrollRight}
+              aria-label="Next"
+              onClick={() => emblaApi?.scrollNext()}
+              disabled={!canNext}
               className={cn(
-                "w-10 h-10 rounded-full border border-border/60 bg-background flex items-center justify-center transition-all duration-200",
-                canScrollRight
-                  ? "hover:bg-muted hover:border-border cursor-pointer shadow-sm"
-                  : "opacity-35 cursor-default"
+                "w-9 h-9 rounded-full border border-border/60 bg-background flex items-center justify-center transition-all duration-200",
+                canNext ? "hover:bg-muted hover:border-border shadow-sm" : "opacity-30 cursor-default"
               )}
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
               </svg>
             </button>
           </div>
         </div>
 
-        {/* Carousel track */}
-        <div className="relative">
-          {/* Left fade */}
-          <div
-            className={cn(
-              "pointer-events-none absolute left-0 top-0 bottom-0 w-12 z-10 bg-gradient-to-r from-background/80 to-transparent transition-opacity duration-300",
-              canScrollLeft ? "opacity-100" : "opacity-0"
-            )}
-          />
-
-          <div
-            ref={scrollRef}
-            {...inspectorProps({ fieldId: "products" })}
-            className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide pb-2 -mb-2"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
-            {products.map((product, index) => {
+        {/* Embla viewport */}
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div className="flex gap-4">
+            {products.map((product, i) => {
               const showPrice = shouldShowPrice(product.price);
-              const position = index + 1;
-
               return (
                 <Link
                   key={product.id}
                   href={`/en-US/products/${product.id}`}
-                  data-carousel-card
-                  className="group block snap-start shrink-0 w-[210px] sm:w-[230px] md:w-[calc(25%-12px)] lg:w-[calc(25%-12px)]"
+                  className="group block shrink-0 w-full sm:w-[calc(50%-8px)] lg:w-[calc(25%-12px)]"
                   onClick={() => {
                     if (metricEventName) {
                       trackMetric(metricEventName, {
                         product_id: product.sku || product.id,
-                        position,
+                        position: i + 1,
                         list_id: listId,
                         variant: "carousel",
                         productTitle: product.title,
@@ -401,24 +455,14 @@ function ProductCarousel({
                         </span>
                       </div>
                     </div>
-
                     <div className="p-4">
                       <h3 className="font-semibold text-sm md:text-base line-clamp-2 group-hover:text-primary transition-colors leading-snug mb-2">
                         {product.title}
                       </h3>
-                      {(showPrice || product.category) && (
-                        <div className="flex items-center justify-between gap-2 mt-auto">
-                          {showPrice && (
-                            <p className="text-lg md:text-xl font-bold text-primary">
-                              £{product.price.toFixed(2)}
-                            </p>
-                          )}
-                          {product.category && showPrice && (
-                            <span className="text-[10px] md:text-xs px-2 py-1 rounded-full bg-muted/80 text-muted-foreground truncate max-w-[80px]">
-                              {product.category}
-                            </span>
-                          )}
-                        </div>
+                      {showPrice && (
+                        <p className="text-lg md:text-xl font-bold text-primary">
+                          {formatPrice(product.price, product.currency)}
+                        </p>
                       )}
                     </div>
                   </article>
@@ -426,14 +470,6 @@ function ProductCarousel({
               );
             })}
           </div>
-
-          {/* Right fade */}
-          <div
-            className={cn(
-              "pointer-events-none absolute right-0 top-0 bottom-0 w-12 z-10 bg-gradient-to-l from-background/80 to-transparent transition-opacity duration-300",
-              canScrollRight ? "opacity-100" : "opacity-0"
-            )}
-          />
         </div>
 
         {/* Optional CTA */}

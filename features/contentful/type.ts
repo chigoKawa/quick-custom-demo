@@ -35,7 +35,7 @@ export interface IBaseButton extends Entry {
   fields: {
     internalTitle: EntryFields.Symbol;
     label: EntryFields.Symbol;
-    target: IExternalUrl | ILandingPage | IBlogPostPage | ICategoryPage | IProductStory | IPmsPropertyEntry | IProductCategory | ICampaign;
+    target: IExternalUrl | ILandingPage | IBlogPostPage | ICategoryPage | IProductStory | IPmsPropertyEntry | IProductCategory | ICampaign | IAuction | ILotReference;
     openInNewTab?: EntryFields.Boolean;
     color: EntryFields.Symbol<
       "Default" | "Primary" | "Secondary" | "Success" | "Danger" | "Warning"
@@ -164,6 +164,7 @@ export interface ILandingPage extends Entry {
         | MultiItemModuleSkeleton
         | PropertyListingsSkeleton
         | InteractiveMapSkeleton
+        | PersonalizedSectionSkeleton
       >
     >;
     seoMetadata?: ISeo;
@@ -823,4 +824,60 @@ export interface ISocialVariant extends Entry<any> {
 export type SocialVariantSkeleton = {
   contentTypeId: "socialVariant";
   fields: ISocialVariant["fields"];
+};
+
+// -----------------------------
+// Christie's Demo: Auction & Lot Reference
+// -----------------------------
+
+export interface IAuction extends Entry<any> {
+  fields: {
+    internalName: EntryFields.Symbol;
+    externalAuctionId: EntryFields.Object;
+    overrideTitle?: EntryFields.Symbol;
+    overrideSummary?: EntryFields.Text;
+    overrideSaleType?: EntryFields.Symbol<"Evening" | "Day" | "Online">;
+    images?: Asset[];
+    topSections?: Entry<any>[];
+    bottomSections?: Entry<any>[];
+  };
+}
+
+export type AuctionSkeleton = {
+  contentTypeId: "auction";
+  fields: IAuction["fields"];
+};
+
+export interface ILotReference extends Entry<any> {
+  fields: {
+    internalName: EntryFields.Symbol;
+    externalLotId: EntryFields.Symbol;
+    label?: EntryFields.Symbol;
+    promoTitle?: EntryFields.Symbol;
+    promoCopy?: EntryFields.Text;
+    featured?: EntryFields.Boolean;
+    gallery?: Asset[];
+  };
+}
+
+export type LotReferenceSkeleton = {
+  contentTypeId: "lotReference";
+  fields: ILotReference["fields"];
+};
+
+// -----------------------------
+// Personalized Multi Variant Section
+// -----------------------------
+
+export interface IPersonalizedSection extends Entry<any> {
+  fields: {
+    internalTitle: EntryFields.Symbol;
+    baseline: Entry<any>;
+    nt_experiences?: Entry<EntrySkeletonType>[];
+  };
+}
+
+export type PersonalizedSectionSkeleton = {
+  contentTypeId: "personalizedSection";
+  fields: IPersonalizedSection["fields"];
 };

@@ -1,0 +1,144 @@
+{
+  "auctions": [
+    {
+      "id": "auction-modern-visionaries-evening",
+      "code": "MODERN-VISIONARIES-EVE-2026",
+      "title": "Modern Visionaries – The Roger and Josette Vanthournout Collection (Evening Sale)",
+      "saleType": "Evening",
+      "startDate": "2026-03-05T19:00:00Z",
+      "endDate": "2026-03-05T22:00:00Z",
+      "location": "London",
+      "lots": [
+        "lot-magritte-la-plaine",
+        "lot-moore-goslar-warrior",
+        "lot-magritte-le-lieu-dit",
+        "lot-manray-la-priere",
+        "lot-maxernst-seestuck",
+        "lot-jeanarp-constellation"
+      ]
+    },
+    {
+      "id": "auction-modern-visionaries-day",
+      "code": "MODERN-VISIONARIES-DAY-2026",
+      "title": "Modern Visionaries – The Roger and Josette Vanthournout Collection (Day Sale)",
+      "saleType": "Day",
+      "startDate": "2026-03-06T10:00:00Z",
+      "endDate": "2026-03-06T16:00:00Z",
+      "location": "London",
+      "lots": [
+        "lot-kusama-infinity-nets"
+      ]
+    },
+    {
+      "id": "auction-modern-visionaries-online",
+      "code": "MODERN-VISIONARIES-ONLINE-2026",
+      "title": "Modern Visionaries – The Roger and Josette Vanthournout Collection (Online Sale)",
+      "saleType": "Online",
+      "startDate": "2026-02-25T09:00:00Z",
+      "endDate": "2026-03-12T21:00:00Z",
+      "location": "Online",
+      "lots": [
+        "lot-agnusmartin-untitled17"
+      ]
+    }
+  ],
+  "lots": {
+    "lot-magritte-la-plaine": {
+      "id": "lot-magritte-la-plaine",
+      "auctionId": "auction-modern-visionaries-evening",
+      "lotNumber": 213,
+      "productId": "product-magritte-la-plaine",
+      "title": "La plaine de l'air (The plain of the air)",
+      "artist": "René Magritte",
+      "year": 1940,
+      "estimateLowGBP": 3500000,
+      "estimateHighGBP": 5500000,
+      "heroImageUrl": "https://www.christies.com/img/LotImages/2026/CKS/2026_CKS_24750_0213_000(rene_magritte_la_plaine_de_lair113635).jpg?mode=max"
+    },
+    "lot-moore-goslar-warrior": {
+      "id": "lot-moore-goslar-warrior",
+      "auctionId": "auction-modern-visionaries-evening",
+      "lotNumber": 215,
+      "productId": "product-moore-goslar-warrior",
+      "title": "Goslar Warrior",
+      "artist": "Henry Moore",
+      "year": 1974,
+      "estimateLowGBP": 3500000,
+      "estimateHighGBP": 5500000,
+      "heroImageUrl": "https://www.christies.com/img/LotImages/2026/CKS/2026_CKS_24750_0215_000(henry_moore_om_ch_goslar_warrior114421).jpg?mode=max"
+    },
+    "lot-kusama-infinity-nets": {
+      "id": "lot-kusama-infinity-nets",
+      "auctionId": "auction-modern-visionaries-day",
+      "lotNumber": 212,
+      "productId": "product-kusama-infinity-nets",
+      "title": "Infinity Nets",
+      "artist": "Yayoi Kusama",
+      "year": 1960,
+      "estimateLowGBP": 2000000,
+      "estimateHighGBP": 3000000,
+      "heroImageUrl": "https://www.christies.com/img/LotImages/2026/CKS/2026_CKS_24750_0212_000(yayoi_kusama_infinity_nets113625).jpg?mode=max"
+    },
+    "lot-agnusmartin-untitled17": {
+      "id": "lot-agnusmartin-untitled17",
+      "auctionId": "auction-modern-visionaries-online",
+      "lotNumber": 207,
+      "productId": "product-agnusmartin-untitled17",
+      "title": "Untitled #17",
+      "artist": "Agnes Martin",
+      "year": 1996,
+      "estimateLowGBP": 2000000,
+      "estimateHighGBP": 3000000,
+      "heroImageUrl": "https://www.christies.com/img/LotImages/2026/CKS/2026_CKS_24750_0207_000(agnes_martin_untitled_17113538).jpg?mode=max"
+    },
+
+    "lot-magritte-le-lieu-dit": {
+      "id": "lot-magritte-le-lieu-dit",
+      "auctionId": "auction-modern-visionaries-evening",
+      "lotNumber": 208,
+      "productId": "product-magritte-le-lieu-dit",
+      "title": "Le lieu-dit (The spot on the map)",
+      "artist": "René Magritte",
+      "year": 1955,
+      "estimateLowGBP": 2000000,
+      "estimateHighGBP": 3000000,
+      "heroImageUrl": "https://www.christies.com/img/LotImages/2026/CKS/2026_CKS_24750_0208_000(rene_magritte_le_lieu-dit113547).jpg?mode=max"
+    },
+    "lot-manray-la-priere": {
+      "id": "lot-manray-la-priere",
+      "auctionId": "auction-modern-visionaries-evening",
+      "lotNumber": 209,
+      "productId": "product-manray-la-priere",
+      "title": "La prière (The prayer)",
+      "artist": "Man Ray",
+      "year": 1930,
+      "estimateLowGBP": 50000,
+      "estimateHighGBP": 70000,
+      "heroImageUrl": "https://www.christies.com/img/LotImages/2026/CKS/2026_CKS_24750_0209_000(man_ray_la_priere_1930113555).jpg?mode=max"
+    },
+    "lot-maxernst-seestuck": {
+      "id": "lot-maxernst-seestuck",
+      "auctionId": "auction-modern-visionaries-evening",
+      "lotNumber": 210,
+      "productId": "product-maxernst-seestuck",
+      "title": "Seestück (Seascape)",
+      "artist": "Max Ernst",
+      "year": 1921,
+      "estimateLowGBP": 1500000,
+      "estimateHighGBP": 2500000,
+      "heroImageUrl": "https://www.christies.com/img/LotImages/2026/CKS/2026_CKS_24750_0210_000(max_ernst_seestuck113606).jpg?mode=max"
+    },
+    "lot-jeanarp-constellation": {
+      "id": "lot-jeanarp-constellation",
+      "auctionId": "auction-modern-visionaries-evening",
+      "lotNumber": 211,
+      "productId": "product-jeanarp-constellation",
+      "title": "Constellation de sept formes blanches sur fond blanc",
+      "artist": "Jean (Hans) Arp",
+      "year": 1963,
+      "estimateLowGBP": 180000,
+      "estimateHighGBP": 250000,
+      "heroImageUrl": "https://www.christies.com/img/LotImages/2026/CKS/2026_CKS_24750_0211_000(jean_arp_constellation_de_sept_formes_blanches_sur_fond_blanc122551).jpg?mode=max"
+    }
+  }
+}

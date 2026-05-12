@@ -30,6 +30,16 @@
   --border: oklch(0.88 0.01 85);
   --input: oklch(0.92 0.01 85);
   --ring: oklch(0.35 0.08 180);
+  /* Font resolution layer — themeToCSS writes --font-sans/serif/mono,
+     these resolved vars provide the actual fallback values used by @theme inline */
+  --resolved-font-sans: var(--font-sans, "Source Serif 4", serif);
+  --resolved-font-serif: var(--font-serif, "Source Serif 4", serif);
+  --resolved-font-mono: var(--font-mono, "Geist Mono", monospace);
+  /* Surface inverse — the footer's dark band. Aliases --foreground so it
+     stays in sync with the brand colour without a separate Contentful field.
+     Override via themeToCSS if a brand needs a distinct footer colour. */
+  --surface-inverse: var(--foreground);
+  --surface-inverse-foreground: var(--background);
   --chart-1: oklch(0.35 0.08 180);
   --chart-2: oklch(0.72 0.12 65);
   --chart-3: oklch(0.45 0.08 180);
@@ -49,6 +59,9 @@
 .dark {
   --background: oklch(0.15 0.02 50);
   --foreground: oklch(0.95 0.005 85);
+  /* In dark mode the inverse surface is a very dark neutral, not the light foreground */
+  --surface-inverse: oklch(0.1 0.015 50);
+  --surface-inverse-foreground: oklch(0.95 0.005 85);
   --card: oklch(0.18 0.02 50);
   --card-foreground: oklch(0.95 0.005 85);
   --popover: oklch(0.18 0.02 50);
@@ -82,9 +95,11 @@
 }
 
 @theme inline {
-  --font-sans: "Source Serif 4", "Source Serif 4 Fallback", serif;
-  --font-serif: "Source Serif 4", "Source Serif 4 Fallback", serif;
-  --font-mono: "Geist Mono", "Geist Mono Fallback";
+  /* Fonts — point to the :root vars so themeToCSS overrides propagate into Tailwind */
+  --font-sans: var(--resolved-font-sans);
+  --font-serif: var(--resolved-font-serif);
+  --font-mono: var(--resolved-font-mono);
+  /* Colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -109,10 +124,15 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  /* Surface inverse — footer / dark-band regions */
+  --color-surface-inverse: var(--surface-inverse);
+  --color-surface-inverse-foreground: var(--surface-inverse-foreground);
+  /* Radius scale */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  /* Sidebar */
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -130,6 +150,14 @@
   }
   body {
     @apply bg-background text-foreground;
+    overflow-x: hidden;
+    font-size: var(--body-size, 1rem);
+    line-height: var(--line-height, 1.6);
+    letter-spacing: var(--letter-spacing, 0em);
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: var(--heading-weight, 700);
+    letter-spacing: var(--heading-letter-spacing, -0.02em);
   }
 }
 

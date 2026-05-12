@@ -1,24 +1,56 @@
 import type { Metadata } from "next";
-
-import { Geist, Geist_Mono, Roboto } from "next/font/google";
+import {
+  Inter,
+  Geist,
+  Geist_Mono,
+  Roboto,
+  Open_Sans,
+  Lato,
+  Nunito,
+  DM_Sans,
+  Source_Serif_4,
+  Playfair_Display,
+  Merriweather,
+  Lora,
+  Sora,
+  Space_Grotesk,
+  Fira_Code,
+  JetBrains_Mono,
+} from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
-
-
 import "./globals.css";
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+// ── Sans-serif ──────────────────────────────────────────────────────────────
+const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+const roboto = Roboto({ variable: "--font-roboto", weight: ["400", "500", "700"], subsets: ["latin"] });
+const openSans = Open_Sans({ variable: "--font-open-sans", subsets: ["latin"] });
+const lato = Lato({ variable: "--font-lato", weight: ["400", "700"], subsets: ["latin"] });
+const nunito = Nunito({ variable: "--font-nunito", subsets: ["latin"] });
+const dmSans = DM_Sans({ variable: "--font-dm-sans", subsets: ["latin"] });
 
-const roboto = Roboto({
-weight: '400',
-subsets: ['latin'],
-});
+// ── Serif ───────────────────────────────────────────────────────────────────
+const sourceSerif4 = Source_Serif_4({ variable: "--font-source-serif-4", subsets: ["latin"] });
+const playfairDisplay = Playfair_Display({ variable: "--font-playfair-display", subsets: ["latin"] });
+const merriweather = Merriweather({ variable: "--font-merriweather", weight: ["400", "700"], subsets: ["latin"] });
+const lora = Lora({ variable: "--font-lora", subsets: ["latin"] });
+
+// ── Display ─────────────────────────────────────────────────────────────────
+const sora = Sora({ variable: "--font-sora", subsets: ["latin"] });
+const spaceGrotesk = Space_Grotesk({ variable: "--font-space-grotesk", subsets: ["latin"] });
+
+// ── Monospace ────────────────────────────────────────────────────────────────
+const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+const firaCode = Fira_Code({ variable: "--font-fira-code", subsets: ["latin"] });
+const jetbrainsMono = JetBrains_Mono({ variable: "--font-jetbrains-mono", subsets: ["latin"] });
+
+/** All font CSS-variable classes applied to <body> so every var is available globally. */
+const FONT_CLASSES = [
+  inter, geistSans, roboto, openSans, lato, nunito, dmSans,
+  sourceSerif4, playfairDisplay, merriweather, lora,
+  sora, spaceGrotesk,
+  geistMono, firaCode, jetbrainsMono,
+].map((f) => f.variable).join(" ");
 
 export const metadata: Metadata = {
   title: "Contentful Example",
@@ -32,10 +64,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        className={roboto.className}
-      >
+      <body className={FONT_CLASSES}>
         {children}
         <Toaster />
       </body>

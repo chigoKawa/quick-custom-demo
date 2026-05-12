@@ -1,0 +1,29 @@
+{
+  "name": "Auction Picker",
+  "src": "app/ctf-apps/auction-picker/page.tsx",
+  "locations": [
+    {
+      "location": "entry-field",
+      "src": "app/ctf-apps/auction-picker/locations/auction-picker-field.tsx",
+      "fieldTypes": [{ "name": "Object" }, { "name": "Symbol" }],
+      "instanceParameters": [
+        {
+          "id": "mode",
+          "name": "Mode",
+          "description": "What this field picks — 'auction' for auction entries, 'lot' for lot reference entries.",
+          "type": "Enum",
+          "required": true,
+          "default": "auction",
+          "options": [
+            { "value": "auction", "displayName": "Auction" },
+            { "value": "lot", "displayName": "Lot" }
+          ]
+        }
+      ]
+    },
+    {
+      "location": "dialog",
+      "src": "app/ctf-apps/auction-picker/locations/auction-picker-field.tsx"
+    }
+  ]
+}

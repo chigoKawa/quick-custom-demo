@@ -109,10 +109,10 @@ const Footer = ({ siteSettings }: FooterProps) => {
   );
 
   return (
-    <footer className="bg-foreground text-background">
+    <footer className="bg-surface-inverse text-surface-inverse-foreground">
       {/* Features bar */}
       {footerFeatures.length > 0 && (
-        <div className="border-b border-background/10">
+        <div className="border-b border-surface-inverse-foreground/10">
           <div className="container mx-auto px-4 py-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {footerFeatures.map((featureEntry, idx) => {
@@ -129,7 +129,7 @@ const Footer = ({ siteSettings }: FooterProps) => {
 
                 return (
                   <div key={featureEntry.sys?.id || idx} className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-background/10 flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-surface-inverse-foreground/10 flex items-center justify-center flex-shrink-0">
                       {IconComponent && <IconComponent className="h-4 w-4" />}
                     </div>
                     <div
@@ -139,7 +139,7 @@ const Footer = ({ siteSettings }: FooterProps) => {
                       <p className="text-sm font-medium">{title}</p>
                       {description && (
                         <p
-                          className="text-xs text-background/60"
+                          className="text-xs text-surface-inverse-foreground/60"
                           data-contentful-entry-id={featureEntry.sys?.id}
                           data-contentful-field-id="description"
                         >
@@ -172,11 +172,11 @@ const Footer = ({ siteSettings }: FooterProps) => {
                 />
               ) : (
                 <div
-                  className="w-10 h-10 bg-background rounded-full flex items-center justify-center"
+                  className="w-10 h-10 bg-surface-inverse-foreground/10 rounded-full flex items-center justify-center"
                   data-contentful-entry-id={liveSiteSettings?.sys.id}
                   data-contentful-field-id="logoAlt"
                 >
-                  <span className="text-foreground font-bold text-lg">
+                  <span className="text-surface-inverse-foreground font-bold text-lg">
                     {logoAlt.substring(0, 3).toUpperCase()}
                   </span>
                 </div>
@@ -205,7 +205,7 @@ const Footer = ({ siteSettings }: FooterProps) => {
                       href={href}
                       target={openInNewTab ? "_blank" : undefined}
                       rel={rel || (openInNewTab ? "noopener noreferrer" : undefined)}
-                      className="w-8 h-8 rounded-full bg-background/10 flex items-center justify-center hover:bg-background/20 transition-colors"
+                      className="w-8 h-8 rounded-full bg-surface-inverse-foreground/10 flex items-center justify-center hover:bg-surface-inverse-foreground/20 transition-colors"
                       data-contentful-entry-id={linkEntry.sys?.id}
                       data-contentful-field-id="label"
                     >
@@ -249,7 +249,7 @@ const Footer = ({ siteSettings }: FooterProps) => {
                           href={href}
                           target={openInNewTab ? "_blank" : undefined}
                           rel={rel || undefined}
-                          className="text-sm text-background/60 hover:text-background transition-colors"
+                          className="text-sm text-surface-inverse-foreground/60 hover:text-background transition-colors"
                           data-contentful-entry-id={linkEntry.sys?.id}
                           data-contentful-field-id="label"
                         >
@@ -265,9 +265,9 @@ const Footer = ({ siteSettings }: FooterProps) => {
         </div>
 
         {/* Bottom bar with legal text, locale switcher, and payment methods */}
-        <div className="mt-12 pt-8 border-t border-background/10 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="mt-12 pt-8 border-t border-surface-inverse-foreground/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p
-            className="text-sm text-background/60"
+            className="text-sm text-surface-inverse-foreground/60"
             data-contentful-entry-id={liveSiteSettings?.sys.id}
             data-contentful-field-id="footerLegalText"
           >

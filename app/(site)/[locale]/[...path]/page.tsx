@@ -31,6 +31,8 @@ import { extractContentfulAssetUrl } from "@/lib/utils";
 import { resolvePreviewMode } from "@/lib/preview";
 import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provider-wrapper";
 import { mapLandingPageToProps, mapBlogPostToProps } from "@/lib/contentful-mappers";
+import { getActiveMarketCode } from "@/lib/market-overrides/server";
+import { requireValidActiveMarket } from "@/lib/markets";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -127,6 +129,7 @@ async function resolvePageEntry(
 export default async function NestedPage({ params, searchParams }: Props) {
   const resolvedSp = await searchParams;
   const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSp);
+  await requireValidActiveMarket({ isPreview, bypassInPreview: true });
   const { locale, path: pathSegments } = await params;
 
   const resolved = await resolvePageEntry(pathSegments, locale, isPreview, timelineToken);
@@ -173,7 +176,12 @@ export async function generateMetadata(
   const fullImageUrl = seoOgImage ? `${seoOgImage}?w=1200&h=630` : null;
   const images = fullImageUrl ? [fullImageUrl, ...previousImages] : [...previousImages];
 
-  const seoNoIndex = pageEntry?.fields?.seoMetadata?.fields?.noIndex || false;
+  const marketCode = await getActiveMarketCode();
+  // Market-prefixed URLs are duplicates of their base URL for SEO purposes.
+  // Always noindex them to avoid duplicate content; follow is still allowed
+  // so internal links keep their authority.
+  const seoNoIndex =
+    Boolean(pageEntry?.fields?.seoMetadata?.fields?.noIndex) || Boolean(marketCode);
   const seoNoFollow = pageEntry?.fields?.seoMetadata?.fields?.noFollow || false;
 
   const metadataBase = process.env.VERCEL_URL

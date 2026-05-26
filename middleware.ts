@@ -42,10 +42,52 @@ const PREVIEW_NO_CACHE_HEADERS: HeadersInit = {
 };
 
 /**
- * Build request headers that forward preview/timeline flags so that
- * server components (which read `headers()`) can detect preview mode.
+ * Detect and strip a `/market/<code>` segment from the pathname. Supports two
+ * forms:
+ *
+ *   /market/<code>(/rest)?           — default locale, no locale prefix
+ *   /<locale>/market/<code>(/rest)?  — locale-prefixed
+ *
+ * Returns the market code (if present) plus the path with the market segment
+ * removed. The de-marketed path is used for all downstream routing decisions
+ * so the underlying page resolves normally; the user-visible URL is left
+ * untouched (we only ever internally rewrite, never redirect, when a market
+ * segment is present).
  */
-function buildRequestHeaders(request: NextRequest): Headers {
+function stripMarketSegment(
+  pathname: string,
+  locales: string[]
+): { marketCode: string | null; pathWithoutMarket: string } {
+  // /<locale>/market/<code>(/...)
+  for (const locale of locales) {
+    const escaped = locale.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const m = pathname.match(
+      new RegExp(`^/${escaped}/market/([a-zA-Z0-9_-]+)(/.*)?$`)
+    );
+    if (m) {
+      return {
+        marketCode: m[1],
+        pathWithoutMarket: `/${locale}${m[2] ?? ""}`,
+      };
+    }
+  }
+  // /market/<code>(/...)
+  const m = pathname.match(/^\/market\/([a-zA-Z0-9_-]+)(\/.*)?$/);
+  if (m) {
+    return { marketCode: m[1], pathWithoutMarket: m[2] || "/" };
+  }
+  return { marketCode: null, pathWithoutMarket: pathname };
+}
+
+/**
+ * Build request headers that forward preview/timeline + market flags so that
+ * server components (which read `headers()`) can detect preview mode and the
+ * active market override.
+ */
+function buildRequestHeaders(
+  request: NextRequest,
+  marketCode: string | null
+): Headers {
   const requestHeaders = new Headers(request.headers);
   const isPreview = request.nextUrl.searchParams.has("preview");
 
@@ -55,6 +97,10 @@ function buildRequestHeaders(request: NextRequest): Headers {
     if (timeline) {
       requestHeaders.set("x-contentful-timeline", timeline);
     }
+  }
+
+  if (marketCode) {
+    requestHeaders.set("x-market-code", marketCode);
   }
 
   return requestHeaders;
@@ -69,17 +115,29 @@ function applyNoCacheHeaders(res: NextResponse): NextResponse {
 
 export async function middleware(request: NextRequest) {
   const { locales, defaultLocale } = await getI18nConfig();
-  const { pathname } = request.nextUrl;
+  const originalPathname = request.nextUrl.pathname;
   const isPreview = request.nextUrl.searchParams.has("preview");
-  const requestHeaders = buildRequestHeaders(request);
+
+  // Strip /market/<code> early. The de-marketed path drives all routing
+  // decisions below; the original pathname is only used when computing
+  // user-visible redirect destinations so the /market/<code> segment is
+  // preserved in the address bar.
+  const { marketCode, pathWithoutMarket } = stripMarketSegment(
+    originalPathname,
+    locales
+  );
+  const requestHeaders = buildRequestHeaders(request, marketCode);
+  const pathname = pathWithoutMarket;
+  const hasMarket = marketCode !== null;
 
   const startsWithLocale = locales.find(
     (loc) => pathname === `/${loc}` || pathname.startsWith(`/${loc}/`)
   );
 
-  // 1) If URL already has a locale prefix
+  // 1) If (de-marketed) URL already has a locale prefix
   if (startsWithLocale) {
-    // If it's the default locale, redirect to clean URL without the locale prefix
+    // If it's the default locale, redirect to a clean URL without the prefix.
+    // Preserve the /market/<code> segment in the visible URL when present.
     if (startsWithLocale === defaultLocale) {
       const stripped = pathname.replace(
         new RegExp(`^/${defaultLocale}(?:/)?`),
@@ -88,9 +146,23 @@ export async function middleware(request: NextRequest) {
       const cleanPath = stripped === "" ? "/" : stripped;
       if (!isPreview && cleanPath !== pathname) {
         const url = request.nextUrl.clone();
-        url.pathname = cleanPath;
+        url.pathname = hasMarket
+          ? `/market/${marketCode}${cleanPath === "/" ? "" : cleanPath}`
+          : cleanPath;
         return NextResponse.redirect(url);
       }
+    }
+
+    // When a market segment is present, the actual URL contains /market/<code>
+    // but the route we want to resolve is the de-marketed path. Internally
+    // rewrite so the page renders.
+    if (hasMarket && pathname !== originalPathname) {
+      const url = request.nextUrl.clone();
+      url.pathname = pathname;
+      const res = NextResponse.rewrite(url, {
+        request: { headers: requestHeaders },
+      });
+      return isPreview ? applyNoCacheHeaders(res) : res;
     }
 
     const res = NextResponse.next({ request: { headers: requestHeaders } });
@@ -100,7 +172,7 @@ export async function middleware(request: NextRequest) {
   // 2) If URL is missing a locale prefix
   const best = await getLocale(request);
 
-  // For the default locale: keep clean URL by rewriting internally
+  // For the default locale: keep clean URL by rewriting internally.
   if (best === defaultLocale) {
     const url = request.nextUrl.clone();
     url.pathname = `/${defaultLocale}${pathname}`;
@@ -110,9 +182,10 @@ export async function middleware(request: NextRequest) {
     return isPreview ? applyNoCacheHeaders(res) : res;
   }
 
-  // For non-default best matches: redirect to locale-prefixed URL
+  // For non-default best matches: redirect to locale-prefixed URL.
+  // Preserve the original /market/<code> segment in the visible URL.
   const url = request.nextUrl.clone();
-  url.pathname = `/${best}${pathname}`;
+  url.pathname = `/${best}${originalPathname}`;
   return NextResponse.redirect(url);
 }
 

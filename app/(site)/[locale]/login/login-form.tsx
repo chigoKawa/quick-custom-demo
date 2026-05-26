@@ -60,8 +60,11 @@ export function LoginForm({ microcopy, locale }: LoginFormProps) {
         return;
       }
 
+      const stable_id = "01KCAC0SF95T90GC5M39MT2FWW"
+      // const stable_id = email
+
       // Success - call Ninetailed identify with email as ID
-      await identify(email, {
+      await identify(stable_id, {
         email,
         authenticated: true,
         loginTime: new Date().toISOString(),

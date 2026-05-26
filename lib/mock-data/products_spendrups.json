@@ -1,0 +1,292 @@
+[
+  {
+    "id": "spendrups-mariestads-alkoholfri-05",
+    "title": "Mariestads Alkoholfri 0,5",
+    "slug": "mariestads-alkoholfri-05",
+    "description": "Alcohol-free lager described as malty and hop-aromatic, suitable with food or social occasions, with a lightly floral hop aroma and balanced bitterness.",
+    "price": 0,
+    "currency": "SEK",
+    "images": [
+      "https://images.pexels.com/photos/2707972/pexels-photo-2707972.jpeg"
+    ],
+    "category": "beer",
+    "tags": [
+      "beer",
+      "lager",
+      "alcohol-free",
+      "malty",
+      "mariestads",
+      "sweden"
+    ],
+    "stock": 93,
+    "rating": 4.0,
+    "reviewCount": 84,
+    "metadata": {
+      "brand": "Spendrups",
+      "line": "Mariestads",
+      "type": "Alcohol-Free Lager",
+      "format": "Bottle"
+    }
+  },
+  {
+    "id": "spendrups-mariestads-export-53",
+    "title": "Mariestads Export 5,3",
+    "slug": "mariestads-export-53",
+    "description": "Amber-coloured export beer with slightly roasted malt and German hops, positioned as a hearty, malty and bready lager with balanced bitterness.",
+    "price": 0,
+    "currency": "SEK",
+    "images": [
+      "https://images.pexels.com/photos/5054683/pexels-photo-5054683.jpeg"
+    ],
+    "category": "beer",
+    "tags": [
+      "beer",
+      "export",
+      "amber",
+      "malt",
+      "mariestads",
+      "sweden"
+    ],
+    "stock": 43,
+    "rating": 4.1,
+    "reviewCount": 40,
+    "metadata": {
+      "brand": "Spendrups",
+      "line": "Mariestads",
+      "type": "Export Beer",
+      "format": "Keg"
+    }
+  },
+  {
+    "id": "spendrups-mariestads-old-ox-69",
+    "title": "Mariestads Old Ox 6,9",
+    "slug": "mariestads-old-ox-69",
+    "description": "Bock-style beer originally introduced in 1957, described as powerful and balanced with high maltiness plus a clear balance between bitterness and sweetness.",
+    "price": 0,
+    "currency": "SEK",
+    "images": [
+      "https://images.pexels.com/photos/5659493/pexels-photo-5659493.jpeg"
+    ],
+    "category": "beer",
+    "tags": [
+      "beer",
+      "bock",
+      "strong",
+      "malty",
+      "mariestads",
+      "sweden"
+    ],
+    "stock": 81,
+    "rating": 4.0,
+    "reviewCount": 122,
+    "metadata": {
+      "brand": "Spendrups",
+      "line": "Mariestads",
+      "type": "Bock Beer",
+      "format": "Bottle"
+    }
+  },
+  {
+    "id": "spendrups-norrlands-guld-35",
+    "title": "Norrlands Guld 3,5",
+    "slug": "norrlands-guld-35",
+    "description": "Dortmunder-style lager with a fresh malty aroma, moderate hop character, a full body and some bitterness, positioned as a straightforward classic.",
+    "price": 0,
+    "currency": "SEK",
+    "images": [
+      "https://images.pexels.com/photos/2707972/pexels-photo-2707972.jpeg"
+    ],
+    "category": "beer",
+    "tags": [
+      "beer",
+      "lager",
+      "dortmunder",
+      "norrlands-guld",
+      "classic",
+      "sweden"
+    ],
+    "stock": 16,
+    "rating": 3.9,
+    "reviewCount": 69,
+    "metadata": {
+      "brand": "Spendrups",
+      "line": "Norrlands Guld",
+      "type": "Lager",
+      "format": "Keg"
+    }
+  },
+  {
+    "id": "spendrups-norrlands-guld-alkoholfri-05",
+    "title": "Norrlands Guld Alkoholfri 0,5",
+    "slug": "norrlands-guld-alkoholfri-05",
+    "description": "Alcohol-free version of Norrlands Guld, positioned as the same uncomplicated northern-style lager experience without the alcohol.",
+    "price": 0,
+    "currency": "SEK",
+    "images": [
+      "https://images.pexels.com/photos/5054683/pexels-photo-5054683.jpeg"
+    ],
+    "category": "beer",
+    "tags": [
+      "beer",
+      "lager",
+      "alcohol-free",
+      "norrlands-guld",
+      "classic",
+      "sweden"
+    ],
+    "stock": 41,
+    "rating": 4.5,
+    "reviewCount": 20,
+    "metadata": {
+      "brand": "Spendrups",
+      "line": "Norrlands Guld",
+      "type": "Alcohol-Free Lager",
+      "format": "Bottle"
+    }
+  },
+  {
+    "id": "spendrups-norrlands-guld-export-50",
+    "title": "Norrlands Guld Export 5,0",
+    "slug": "norrlands-guld-export-50",
+    "description": "Export lager with fresh malt aroma and moderate hop character, described as a mild Dortmunder-style beer with some bitterness and broad food appeal.",
+    "price": 0,
+    "currency": "SEK",
+    "images": [
+      "https://images.pexels.com/photos/5054683/pexels-photo-5054683.jpeg"
+    ],
+    "category": "beer",
+    "tags": [
+      "beer",
+      "export",
+      "lager",
+      "norrlands-guld",
+      "malt",
+      "sweden"
+    ],
+    "stock": 83,
+    "rating": 4.1,
+    "reviewCount": 180,
+    "metadata": {
+      "brand": "Spendrups",
+      "line": "Norrlands Guld",
+      "type": "Export Lager",
+      "format": "Keg"
+    }
+  },
+  {
+    "id": "spendrups-loka-paron",
+    "title": "Loka Päron",
+    "slug": "loka-paron",
+    "description": "Pear-flavoured sparkling water from Loka, positioned as a fresh and lightly carbonated water with a clean, refreshing profile.",
+    "price": 0,
+    "currency": "SEK",
+    "images": [
+      "https://images.pexels.com/photos/274131/pexels-photo-274131.jpeg"
+    ],
+    "category": "sparkling-water",
+    "tags": [
+      "water",
+      "sparkling-water",
+      "pear",
+      "loka",
+      "no-sugar",
+      "sweden"
+    ],
+    "stock": 81,
+    "rating": 4.4,
+    "reviewCount": 128,
+    "metadata": {
+      "brand": "Spendrups",
+      "line": "Loka",
+      "type": "Sparkling Water",
+      "format": "Bottle"
+    }
+  },
+  {
+    "id": "spendrups-loka-citron",
+    "title": "Loka Citron",
+    "slug": "loka-citron",
+    "description": "Classic lemon-flavoured Loka, first introduced as the brand's original flavoured water and positioned as a crisp sparkling refreshment.",
+    "price": 0,
+    "currency": "SEK",
+    "images": [
+      "https://images.pexels.com/photos/327090/pexels-photo-327090.jpeg"
+    ],
+    "category": "sparkling-water",
+    "tags": [
+      "water",
+      "sparkling-water",
+      "lemon",
+      "loka",
+      "no-sugar",
+      "sweden"
+    ],
+    "stock": 87,
+    "rating": 4.2,
+    "reviewCount": 15,
+    "metadata": {
+      "brand": "Spendrups",
+      "line": "Loka",
+      "type": "Sparkling Water",
+      "format": "PET Bottle"
+    }
+  },
+  {
+    "id": "spendrups-briska-paroncider-45",
+    "title": "Briska Päroncider 4,5",
+    "slug": "briska-paroncider-45",
+    "description": "Pear cider built on balanced pear wine with high juice content, positioned as a modern cider with fresh pear character and crisp acidity.",
+    "price": 0,
+    "currency": "SEK",
+    "images": [
+      "https://images.pexels.com/photos/6542767/pexels-photo-6542767.jpeg"
+    ],
+    "category": "cider",
+    "tags": [
+      "cider",
+      "pear",
+      "briska",
+      "fruit-forward",
+      "refreshing",
+      "sweden"
+    ],
+    "stock": 32,
+    "rating": 4.7,
+    "reviewCount": 101,
+    "metadata": {
+      "brand": "Spendrups",
+      "line": "Briska",
+      "type": "Pear Cider",
+      "format": "Keg"
+    }
+  },
+  {
+    "id": "spendrups-briska-jordgubb-rabarber-45",
+    "title": "Briska Jordgubb & Rabarber 4,5",
+    "slug": "briska-jordgubb-rabarber-45",
+    "description": "Apple-cider base with strawberry and rhubarb flavour, described as bright, fruity and crisp with sweet strawberry notes and a tart rhubarb finish.",
+    "price": 0,
+    "currency": "SEK",
+    "images": [
+      "https://images.pexels.com/photos/845552/pexels-photo-845552.jpeg"
+    ],
+    "category": "cider",
+    "tags": [
+      "cider",
+      "strawberry",
+      "rhubarb",
+      "briska",
+      "fruit-forward",
+      "sweden"
+    ],
+    "stock": 47,
+    "rating": 4.1,
+    "reviewCount": 100,
+    "metadata": {
+      "brand": "Spendrups",
+      "line": "Briska",
+      "type": "Flavoured Cider",
+      "format": "Bottle"
+    }
+  }
+]

@@ -1,0 +1,15 @@
+{
+  "name": "Market Override Helper",
+  "src": "app/ctf-apps/market-override-helper/page.tsx",
+  "locations": [
+    {
+      "location": "app-config",
+      "src": "app/ctf-apps/market-override-helper/locations/config-screen.tsx"
+    },
+    {
+      "location": "entry-field",
+      "src": "app/ctf-apps/market-override-helper/locations/market-override-field.tsx",
+      "fieldTypes": [{ "type": "Object" }]
+    }
+  ]
+}

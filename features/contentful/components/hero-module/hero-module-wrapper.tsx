@@ -1,21 +1,39 @@
-import React from "react";
+"use client";
 
-import type { IHeroModule } from "../../type";
+import React, { useMemo } from "react";
+
+import type { IHeroModule, IBaseButton } from "../../type";
 import { extractUrlFromTarget } from "@/lib/utils";
-import type { IBaseButton } from "../../type";
 import HeroModule, { type HeroModuleSlide } from "./hero-module";
 import { extractImageWithFocalPoint } from "@/lib/focal-point";
+import {
+  resolveFieldsForMarket,
+  MARKET_OVERRIDE_FIELD_ID,
+} from "@/lib/market-overrides";
+import { useActiveMarket } from "@/lib/market-overrides/react";
 
 function mapButtons(
   buttons: unknown,
-  linkLocale: { locale?: string; defaultLocale?: string }
+  linkLocale: { locale?: string; defaultLocale?: string },
+  marketCode: string | null
 ): Array<{ label: string; href: string }> {
   if (!Array.isArray(buttons)) return [];
   const { locale, defaultLocale = "en-US" } = linkLocale;
   return (buttons as IBaseButton[])
     .map((b) => {
-      const label = b?.fields?.label;
-      const href = extractUrlFromTarget(b?.fields?.target, { locale, defaultLocale });
+      if (!b?.fields) return null;
+      // Resolve the button's own market overrides (e.g. translated label).
+      // Each button is an entry of `baseButton`, so its overrides live in its
+      // own `marketOverride` field.
+      const fields = marketCode
+        ? resolveFieldsForMarket(
+            b.fields,
+            (b.fields as Record<string, unknown>)[MARKET_OVERRIDE_FIELD_ID],
+            marketCode
+          )
+        : b.fields;
+      const label = fields.label;
+      const href = extractUrlFromTarget(fields.target, { locale, defaultLocale });
       if (!label || !href) return null;
       return { label, href };
     })
@@ -28,27 +46,38 @@ export default function HeroModuleWrapper(
   const { locale, defaultLocale: defaultLocaleProp, ...entry } = props;
   const defaultLocale = defaultLocaleProp ?? "en-US";
   const linkLocale = { locale, defaultLocale };
+  const marketCode = useActiveMarket();
 
-  // Guard against undefined entry or missing sys
-  if (!entry?.sys?.id || !entry?.fields) {
+  // Resolve the hero's own fields against the active market BEFORE mapping
+  // to presentational props. Buttons are resolved separately inside
+  // mapButtons since they each have their own overrides field.
+  const resolvedFields = useMemo(() => {
+    if (!entry?.fields) return undefined;
+    if (!marketCode) return entry.fields;
+    return resolveFieldsForMarket(
+      entry.fields,
+      (entry.fields as Record<string, unknown>)[MARKET_OVERRIDE_FIELD_ID],
+      marketCode
+    );
+  }, [entry?.fields, marketCode]);
+
+  if (!entry?.sys?.id || !resolvedFields) {
     return null;
   }
 
-  const title = entry.fields.headline ?? "";
-  const description = entry?.fields?.subCopy;
+  const title = resolvedFields.headline ?? "";
+  const description = resolvedFields.subCopy;
+  const imagePlacement = resolvedFields.imagePlacement;
 
-  const imagePlacement = entry?.fields?.imagePlacement;
-
-  // Extract image with focal point support
-  const imageEntry = entry.fields.image;
+  const imageEntry = resolvedFields.image;
   const {
     url: imageUrl,
     alt: imageAlt,
     objectPosition,
-    entryId: imageEntryId
+    entryId: imageEntryId,
   } = extractImageWithFocalPoint(imageEntry);
 
-  const buttons = mapButtons(entry?.fields?.buttons, linkLocale);
+  const buttons = mapButtons(resolvedFields.buttons, linkLocale, marketCode);
 
   const slide: HeroModuleSlide = {
     title,
@@ -68,7 +97,9 @@ export default function HeroModuleWrapper(
       <HeroModule
         slides={[slide]}
         entryId={entry?.sys?.id}
-        metricEventName={(entry?.fields as unknown as { metricEventName?: string })?.metricEventName as any}
+        metricEventName={
+          (resolvedFields as unknown as { metricEventName?: string })?.metricEventName as never
+        }
       />
     </div>
   );

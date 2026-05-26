@@ -13,6 +13,8 @@ const nextConfig = async (): Promise<NextConfig> => {
     //   defaultLocale: localeCodes.includes("en-US") ? "en-US" : localeCodes[0], // Ensure default
     // },
     // Other Next.js config options...
+
+    devIndicators: false,
   };
 };
 

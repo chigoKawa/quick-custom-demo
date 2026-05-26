@@ -75,12 +75,30 @@ export default function HeroModule({ slides, entryId, metricEventName }: Props) 
 
       <div className="container mx-auto px-4 py-8 md:py-16 lg:py-20">
         <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
-          {/* Text — always first on mobile regardless of imagePlacement */}
-          <div
-            className={
-              imagePlacement === "Left" ? "order-1 lg:order-2" : "order-1 lg:order-1"
-            }
-          >
+          {/* When image is Left, render image column first in DOM so it appears left on desktop */}
+          {imagePlacement === "Left" ? (
+            <div className="relative animate-in fade-in zoom-in-95 duration-700 hidden lg:block">
+              <div
+                className="flex items-center justify-center"
+                {...(slide.imageEntryId ? imageInspectorProps({ fieldId: "image" }) : {})}
+              >
+                {slide.imageUrl ? (
+                  <img
+                    src={slide.imageUrl}
+                    alt={slide.imageAlt || slide.title}
+                    className="max-w-full max-h-[300px] sm:max-h-[380px] md:max-h-[480px] w-auto h-auto object-contain rounded-xl"
+                    style={{
+                      objectPosition: slide.imageObjectPosition || "center center",
+                      filter: "drop-shadow(0 10px 30px rgba(0,0,0,0.08))",
+                    }}
+                  />
+                ) : null}
+              </div>
+            </div>
+          ) : null}
+
+          {/* Text — always shown */}
+          <div>
             {slide.subtitle ? (
               <p className="text-accent font-medium mb-2 animate-in fade-in slide-in-from-bottom-2 duration-500">
                 {slide.subtitle}
@@ -139,13 +157,8 @@ export default function HeroModule({ slides, entryId, metricEventName }: Props) 
             ) : null}
           </div>
 
-          <div
-            className={
-              imagePlacement === "Left"
-                ? "order-2 lg:order-1 relative animate-in fade-in zoom-in-95 duration-700"
-                : "order-2 lg:order-2 relative animate-in fade-in zoom-in-95 duration-700"
-            }
-          >
+          {/* Image column — on mobile always below text; on desktop: right when imagePlacement=Right, already rendered left above when Left */}
+          <div className="relative animate-in fade-in zoom-in-95 duration-700">
             <div
               className="flex items-center justify-center"
               {...(slide.imageEntryId ? imageInspectorProps({ fieldId: "image" }) : {})}
@@ -154,7 +167,7 @@ export default function HeroModule({ slides, entryId, metricEventName }: Props) 
                 <img
                   src={slide.imageUrl}
                   alt={slide.imageAlt || slide.title}
-                  className="max-w-full max-h-[300px] sm:max-h-[380px] md:max-h-[480px] w-auto h-auto object-contain rounded-xl"
+                  className={imagePlacement === "Left" ? "max-w-full max-h-[300px] sm:max-h-[380px] md:max-h-[480px] w-auto h-auto object-contain rounded-xl lg:hidden" : "max-w-full max-h-[300px] sm:max-h-[380px] md:max-h-[480px] w-auto h-auto object-contain rounded-xl"}
                   style={{
                     objectPosition: slide.imageObjectPosition || "center center",
                     filter: "drop-shadow(0 10px 30px rgba(0,0,0,0.08))",

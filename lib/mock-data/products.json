@@ -1,297 +1,582 @@
 [
   {
-    "id": "poochandmutt-primal-sprat-salmon-fish-jerky",
-    "title": "Primal Sprat & Salmon Fish Jerky",
-    "slug": "primal-sprat-salmon-fish-jerky",
-    "description": "Fish jerky dog treat made with 85% sprat, salmon and trout. Positioned as a high-value reward with omega support for skin and coat health and protein to help maintain muscle.",
-    "price": 3.99,
-    "currency": "GBP",
+    "id": "mbcrusher-bf90-3",
+    "title": "BF90.3 Bucket Crusher",
+    "slug": "bf90-3-bucket-crusher",
+    "description": "Flagship crusher bucket from MB Crusher, first introduced in 2001 and positioned for medium- to large-sized companies. It is described as compact, versatile, and built to handle difficult on-site conditions while processing inert material.",
+    "price": 0,
+    "currency": "EUR",
     "images": [
-      "https://www.petbusinessworld.co.uk/wp-content/uploads/2026/05/HD-Fish-Chews-Lifestyle-cropped.jpg"
+      "https://www.mbcrusher.com/media/3814/w-640/MB_Materiali_Render_13feb_BF90.3-S4.webp"
     ],
-    "category": "dog-treats",
+    "category": "crusher-bucket",
     "tags": [
-      "dogs",
-      "treats",
-      "fish-jerky",
-      "primal",
-      "omega",
-      "skin-and-coat"
+      "crusher-bucket",
+      "excavator",
+      "flagship",
+      "inert-material",
+      "recycling",
+      "medium-large-sites"
     ],
-    "stock": 42,
-    "rating": 5.0,
-    "reviewCount": 31,
+    "stock": 93,
+    "rating": 4,
+    "reviewCount": 85,
     "metadata": {
-      "brand": "Pooch & Mutt",
-      "line": "Primal",
-      "type": "Fish Jerky",
-      "format": "Treat",
-      "primaryProtein": "Sprat, Salmon & Trout"
+      "brand": "MB Crusher",
+      "line": "BF Series",
+      "type": "Crusher Bucket",
+      "format": "Excavator"
     }
   },
   {
-    "id": "poochandmutt-puppy-fish-jerky",
-    "title": "Puppy Fish Jerky",
-    "slug": "puppy-fish-jerky",
-    "description": "Grain-free fish puppy jerky designed as a high-value training treat. Made with 85% sprat, salmon and trout and positioned for smaller puppy mouths.",
-    "price": 3.99,
-    "currency": "GBP",
+    "id": "mbcrusher-mb-l120-s2",
+    "title": "MB-L120 S2",
+    "slug": "mb-l120-s2",
+    "description": "Compact crusher bucket designed for small yards and limited spaces. MB describes it as easy to carry, handy, low-maintenance, and suitable for skid steers, backhoes, loaders, and excavators.",
+    "price": 0,
+    "currency": "EUR",
     "images": [
-      "https://www.petgazette.biz/wp-content/uploads/2025/09/38fed9ec59095c33d329c6b5d.png",
-      "https://www.petbusinessworld.co.uk/wp-content/uploads/2026/05/HD-Fish-Chews-Lifestyle-cropped.jpg"
+      "https://www.mbcrusher.com/media/2652/w-640/MB_Materiali_Render_13feb_MB-L120-S2.webp"
     ],
-    "category": "dog-treats",
+    "category": "crusher-bucket",
     "tags": [
-      "dogs",
-      "puppy",
-      "treats",
-      "fish-jerky",
-      "grain-free",
-      "training"
+      "crusher-bucket",
+      "compact",
+      "small-sites",
+      "skid-steer",
+      "backhoe",
+      "loader"
     ],
-    "stock": 38,
-    "rating": 5.0,
-    "reviewCount": 24,
+    "stock": 43,
+    "rating": 4.1,
+    "reviewCount": 41,
     "metadata": {
-      "brand": "Pooch & Mutt",
-      "line": "Puppy",
-      "type": "Fish Jerky",
-      "format": "Treat",
-      "lifeStage": "Puppy"
+      "brand": "MB Crusher",
+      "line": "MB-L Series",
+      "type": "Crusher Bucket",
+      "format": "Excavator/Loader/Backhoe/Skid Steer"
     }
   },
   {
-    "id": "poochandmutt-primal-venison-lamb-high-meat-dry-food",
-    "title": "Primal Venison & Lamb High Meat Dry Food",
-    "slug": "primal-venison-lamb-high-meat-dry-food",
-    "description": "High-meat dry dog food in the Primal range featuring venison and lamb. Positioned as a protein-forward dry food option for dogs.",
-    "price": 18.99,
-    "currency": "GBP",
-    "images": [],
-    "category": "dog-food-dry",
-    "tags": [
-      "dogs",
-      "dry-food",
-      "primal",
-      "venison",
-      "lamb",
-      "high-meat"
-    ],
-    "stock": 27,
-    "rating": 5.0,
-    "reviewCount": 19,
-    "metadata": {
-      "brand": "Pooch & Mutt",
-      "line": "Primal",
-      "type": "High Meat Dry Food",
-      "format": "Dry Food",
-      "primaryProtein": "Venison & Lamb"
-    }
-  },
-  {
-    "id": "poochandmutt-primal-long-lasting-fish-hide-chews",
-    "title": "Primal Long-Lasting Fish Hide Chews",
-    "slug": "primal-long-lasting-fish-hide-chews",
-    "description": "Long-lasting dog chews in the Primal range made from fish hide. Positioned as a durable chew treat option.",
-    "price": 4.99,
-    "currency": "GBP",
+    "id": "mbcrusher-mb-l140-s2",
+    "title": "MB-L140 S2",
+    "slug": "mb-l140-s2",
+    "description": "Small, compact crusher bucket positioned as a practical combination of versatility, performance, and productivity. It is suitable for excavators, backhoes, loaders, telehandlers, and skid steers in lighter weight classes.",
+    "price": 0,
+    "currency": "EUR",
     "images": [
-      "https://ladyandthescamps.com/wp-content/uploads/2023/12/img_1034-1.jpg"
+      "https://www.mbcrusher.com/media/2653/w-640/MB_Materiali_Render_13feb_MB-L140-S2.webp"
     ],
-    "category": "dog-chews",
+    "category": "crusher-bucket",
     "tags": [
-      "dogs",
-      "chews",
-      "fish-hide",
-      "primal",
-      "long-lasting",
-      "treats"
+      "crusher-bucket",
+      "compact",
+      "versatile",
+      "telehandler",
+      "loader",
+      "backhoe"
     ],
-    "stock": 33,
-    "rating": 5.0,
-    "reviewCount": 17,
+    "stock": 81,
+    "rating": 4,
+    "reviewCount": 123,
     "metadata": {
-      "brand": "Pooch & Mutt",
-      "line": "Primal",
-      "type": "Fish Hide Chews",
-      "format": "Chew",
-      "primaryProtein": "Fish"
+      "brand": "MB Crusher",
+      "line": "MB-L Series",
+      "type": "Crusher Bucket",
+      "format": "Excavator/Loader/Backhoe/Skid Steer"
     }
   },
   {
-    "id": "poochandmutt-calm-relaxed-dry-food",
-    "title": "Calm & Relaxed Dry Food",
-    "slug": "calm-relaxed-dry-food",
-    "description": "Dry dog food positioned for calm and relaxed wellbeing support. Part of the wellbeing-focused product range.",
-    "price": 8.49,
-    "currency": "GBP",
+    "id": "mbcrusher-mb-l160-s2",
+    "title": "MB-L160 S2",
+    "slug": "mb-l160-s2",
+    "description": "Crusher bucket focused on balancing efficiency and mobility for compact carriers. MB positions it for skid steers and backhoes while retaining the power and productivity of the wider MB range.",
+    "price": 0,
+    "currency": "EUR",
     "images": [
-      "https://www.justdogsshop.co.uk/wp-content/uploads/2023/07/pm-calm-relax.jpg"
+      "https://www.mbcrusher.com/media/2654/w-640/MB_Materiali_Render_13feb_MB-L160-S2.webp"
     ],
-    "category": "dog-food-dry",
+    "category": "crusher-bucket",
     "tags": [
-      "dogs",
-      "dry-food",
-      "wellbeing",
-      "calming",
-      "adult-dogs",
-      "functional-nutrition"
+      "crusher-bucket",
+      "efficiency",
+      "mobility",
+      "skid-steer",
+      "backhoe",
+      "compact-sites"
     ],
-    "stock": 29,
-    "rating": 5.0,
-    "reviewCount": 22,
+    "stock": 16,
+    "rating": 3.9,
+    "reviewCount": 70,
     "metadata": {
-      "brand": "Pooch & Mutt",
-      "line": "Wellbeing",
-      "type": "Functional Dry Food",
-      "format": "Dry Food",
-      "focus": "Calming"
+      "brand": "MB Crusher",
+      "line": "MB-L Series",
+      "type": "Crusher Bucket",
+      "format": "Excavator/Loader/Backhoe/Skid Steer"
     }
   },
   {
-    "id": "poochandmutt-bionic-biotic",
-    "title": "Bionic Biotic",
-    "slug": "bionic-biotic",
-    "description": "Dog supplement positioned within the superfoods range. Marketed as a functional wellness product for daily support.",
-    "price": 10.99,
-    "currency": "GBP",
-    "images": [],
-    "category": "dog-supplements",
-    "tags": [
-      "dogs",
-      "supplements",
-      "superfoods",
-      "biotic",
-      "wellness",
-      "daily-support"
-    ],
-    "stock": 46,
-    "rating": 5.0,
-    "reviewCount": 28,
-    "metadata": {
-      "brand": "Pooch & Mutt",
-      "line": "Superfoods",
-      "type": "Supplement",
-      "format": "Powder or Daily Add-on",
-      "focus": "Digestive and daily wellness support"
-    }
-  },
-  {
-    "id": "poochandmutt-turkey-chicken-wet-food",
-    "title": "Turkey & Chicken Wet Food",
-    "slug": "turkey-chicken-wet-food",
-    "description": "Wet dog food featuring turkey and chicken. Positioned as a complete wet food product in the veterinary-led range shown on the homepage.",
-    "price": 2.49,
-    "currency": "GBP",
+    "id": "mbcrusher-mb-l200-s2",
+    "title": "MB-L200 S2",
+    "slug": "mb-l200-s2",
+    "description": "Crusher bucket built with the same materials and technology as MB's larger bucket crushers, but adapted for specific skid steer and backhoe work requirements. It is positioned as compact, durable, and high-performing.",
+    "price": 0,
+    "currency": "EUR",
     "images": [
-      "https://i0.wp.com/peexmart.com/wp-content/uploads/2024/01/7130870PL.jpg?fit=300%2C300&ssl=1"
+      "https://www.mbcrusher.com/media/2655/w-640/MB_Materiali_Render_13feb_MB-L200-S2.webp"
     ],
-    "category": "dog-food-wet",
+    "category": "crusher-bucket",
     "tags": [
-      "dogs",
-      "wet-food",
-      "turkey",
-      "chicken",
-      "veterinary",
-      "complete-food"
+      "crusher-bucket",
+      "skid-steer",
+      "backhoe",
+      "compact",
+      "durable",
+      "high-performance"
     ],
-    "stock": 54,
-    "rating": 5.0,
-    "reviewCount": 18,
+    "stock": 41,
+    "rating": 4.3,
+    "reviewCount": 21,
     "metadata": {
-      "brand": "Pooch & Mutt",
-      "line": "Veterinary",
-      "type": "Wet Food",
-      "format": "Wet Food",
-      "primaryProtein": "Turkey & Chicken"
+      "brand": "MB Crusher",
+      "line": "MB-L Series",
+      "type": "Crusher Bucket",
+      "format": "Excavator/Loader/Backhoe/Skid Steer"
     }
   },
   {
-    "id": "poochandmutt-gut-health-test",
-    "title": "Gut Health Test",
-    "slug": "gut-health-test",
-    "description": "At-home gut health testing product for dogs. Positioned as a premium diagnostic product within Pooch & Mutt's gut health offering.",
-    "price": 69.99,
-    "currency": "GBP",
+    "id": "mbcrusher-mb-s14-s4",
+    "title": "MB-S14 S4",
+    "slug": "mb-s14-s4",
+    "description": "Screening bucket designed for small and medium-scale sites. MB describes it as compact, easy to transport, and effective for volumetric separation with interchangeable modular panels.",
+    "price": 0,
+    "currency": "EUR",
     "images": [
-      "https://www.vafo.com/wp-content/uploads/2025/08/pr-gut-health-pr-images-test-kit-open-1.jpg"
+      "https://www.mbcrusher.com/media/10884/w-640/MB-S14_640x640.webp"
     ],
-    "category": "dog-health-tests",
+    "category": "screening-bucket",
     "tags": [
-      "dogs",
-      "gut-health",
-      "test",
-      "wellbeing",
-      "microbiome",
-      "diagnostics"
+      "screening-bucket",
+      "excavator",
+      "small-sites",
+      "medium-sites",
+      "volumetric-separation",
+      "modular-panels"
     ],
-    "stock": 12,
-    "rating": 5.0,
-    "reviewCount": 14,
+    "stock": 83,
+    "rating": 4.1,
+    "reviewCount": 154,
     "metadata": {
-      "brand": "Pooch & Mutt",
-      "line": "Wellbeing",
-      "type": "Gut Health Test",
-      "format": "Home Test Kit",
-      "focus": "Gut microbiome"
+      "brand": "MB Crusher",
+      "line": "MB-S Series",
+      "type": "Screening Bucket",
+      "format": "Excavator"
     }
   },
   {
-    "id": "poochandmutt-dental-powder-for-dogs",
-    "title": "Dental Powder For Dogs",
-    "slug": "dental-powder-for-dogs",
-    "description": "Functional dental support powder for dogs. Positioned in the superfoods range as a daily oral care add-on.",
-    "price": 15.99,
-    "currency": "GBP",
+    "id": "mbcrusher-mb-s18-s4",
+    "title": "MB-S18 S4",
+    "slug": "mb-s18-s4",
+    "description": "Large screening bucket for excavators, positioned for screening different kinds of material before or after crushing. MB says it can reduce crushing time by up to 60 percent and is suited to quarry residue, dry soil, and river stone.",
+    "price": 0,
+    "currency": "EUR",
     "images": [
-      "https://www.vafo.com/wp-content/uploads/2025/05/arv00709.jpg"
+      "https://www.mbcrusher.com/media/10885/w-640/MB-S18_640x640.webp"
     ],
-    "category": "dog-dental-care",
+    "category": "screening-bucket",
     "tags": [
-      "dogs",
-      "dental",
-      "powder",
-      "superfoods",
-      "oral-care",
-      "supplements"
+      "screening-bucket",
+      "excavator",
+      "large-sites",
+      "pre-crushing",
+      "post-crushing",
+      "quarry-material"
     ],
-    "stock": 21,
-    "rating": 5.0,
-    "reviewCount": 26,
+    "stock": 65,
+    "rating": 4.1,
+    "reviewCount": 165,
     "metadata": {
-      "brand": "Pooch & Mutt",
-      "line": "Superfoods",
-      "type": "Dental Powder",
-      "format": "Powder Supplement",
-      "focus": "Dental care"
+      "brand": "MB Crusher",
+      "line": "MB-S Series",
+      "type": "Screening Bucket",
+      "format": "Excavator"
     }
   },
   {
-    "id": "poochandmutt-small-dog-complete-superfood",
-    "title": "Small Dog Complete Superfood",
-    "slug": "small-dog-complete-superfood",
-    "description": "Complete superfood product formulated for small dogs. Positioned as a wellbeing-focused food product tailored to smaller breeds.",
-    "price": 8.99,
-    "currency": "GBP",
-    "images": [],
-    "category": "dog-food-dry",
+    "id": "mbcrusher-mb-s23",
+    "title": "MB-S23",
+    "slug": "mb-s23",
+    "description": "MB describes the MB-S23 as the largest screening bucket in the world. It is intended for excavators above 35 tons and positioned for high-volume screening before or after crushing, including natural material such as quarry residue and river stone.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/10886/w-640/MB-S23_640x640.webp"
+    ],
+    "category": "screening-bucket",
     "tags": [
-      "dogs",
-      "small-dog",
-      "superfood",
-      "wellbeing",
-      "complete-food",
-      "tailored-nutrition"
+      "screening-bucket",
+      "excavator",
+      "high-volume",
+      "quarry",
+      "river-stone",
+      "largest-in-range"
+    ],
+    "stock": 47,
+    "rating": 4.5,
+    "reviewCount": 16,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-S Series",
+      "type": "Screening Bucket",
+      "format": "Excavator"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-hds207",
+    "title": "MB-HDS207",
+    "slug": "mb-hds207",
+    "description": "Compact shaft screener bucket for mini excavators and smaller backhoe applications. It is positioned around on-site material processing, simple maintenance, and easily replaceable shaft kits.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/10870/w-640/MB-HDS207.webp"
+    ],
+    "category": "shafts-screener",
+    "tags": [
+      "shafts-screener",
+      "mini-excavator",
+      "backhoe",
+      "onsite-processing",
+      "replaceable-shafts",
+      "compact"
+    ],
+    "stock": 32,
+    "rating": 4.5,
+    "reviewCount": 102,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-HDS Series",
+      "type": "Shaft Screener",
+      "format": "Excavator/Backhoe"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-hds212",
+    "title": "MB-HDS212",
+    "slug": "mb-hds212",
+    "description": "Shaft screener bucket for midi excavators, backhoe loaders, and skid steers. MB emphasizes productivity, maneuverability, on-site shaft replacement, and simple maintenance for different material-processing needs.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/10871/w-640/MB-HDS212.webp"
+    ],
+    "category": "shafts-screener",
+    "tags": [
+      "shafts-screener",
+      "midi-excavator",
+      "backhoe",
+      "skid-steer",
+      "productivity",
+      "onsite-maintenance"
+    ],
+    "stock": 47,
+    "rating": 4,
+    "reviewCount": 101,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-HDS Series",
+      "type": "Shaft Screener",
+      "format": "Excavator/Backhoe/Skid Steer"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-hds320",
+    "title": "MB-HDS320",
+    "slug": "mb-hds320",
+    "description": "Multi-purpose shaft screener designed to select and crush excavation and demolition materials, asphalt, coal, organics, wood, bark, and light plastics. MB highlights its ability to let operators change shafts safely on site.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/10875/w-640/MB-HDS320.webp"
+    ],
+    "category": "shafts-screener",
+    "tags": [
+      "shafts-screener",
+      "multi-purpose",
+      "excavation",
+      "demolition",
+      "asphalt",
+      "wood"
     ],
     "stock": 25,
-    "rating": 5.0,
-    "reviewCount": 20,
+    "rating": 4,
+    "reviewCount": 39,
     "metadata": {
-      "brand": "Pooch & Mutt",
-      "line": "Wellbeing",
-      "type": "Complete Superfood",
-      "format": "Dry Food",
-      "lifeStageOrSize": "Small Dog"
+      "brand": "MB Crusher",
+      "line": "MB-HDS Series",
+      "type": "Shaft Screener",
+      "format": "Excavator"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-hds523",
+    "title": "MB-HDS523",
+    "slug": "mb-hds523",
+    "description": "Heavy-duty shaft screener aimed mainly at mining and quarry work. It is positioned for moving, sifting, and aerating very large volumes of soil and material in excavation, trenching, and roadworks projects.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/10877/w-640/MB-HDS523-1.webp"
+    ],
+    "category": "shafts-screener",
+    "tags": [
+      "shafts-screener",
+      "mining",
+      "quarry",
+      "large-volumes",
+      "roadworks",
+      "trenching"
+    ],
+    "stock": 57,
+    "rating": 4.6,
+    "reviewCount": 169,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-HDS Series",
+      "type": "Shaft Screener",
+      "format": "Excavator"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-r500",
+    "title": "MB-R500",
+    "slug": "mb-r500",
+    "description": "The smallest drum cutter in the MB Crusher range. It is positioned for mini and midi excavators plus skid steer and backhoe applications, with precision grinding and on-site drum replacement in under an hour.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/5652/w-640/MB-R500_drumcutter_640x640.webp"
+    ],
+    "category": "drum-cutter",
+    "tags": [
+      "drum-cutter",
+      "compact",
+      "precision",
+      "mini-excavator",
+      "skid-steer",
+      "backhoe"
+    ],
+    "stock": 45,
+    "rating": 4.5,
+    "reviewCount": 132,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-R Series",
+      "type": "Drum Cutter",
+      "format": "Excavator/Backhoe/Skid Steer"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-r800",
+    "title": "MB-R800",
+    "slug": "mb-r800",
+    "description": "Drum cutter positioned for precise processing of natural materials such as rock and stone, along with levelling plasterwork, wall coatings, and concrete surfaces. MB emphasizes low noise and limited vibration for urban use.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/3569/w-640/MB_Materiali_Render_13feb_MB-R800.webp"
+    ],
+    "category": "drum-cutter",
+    "tags": [
+      "drum-cutter",
+      "precision",
+      "rock",
+      "stone",
+      "concrete",
+      "urban-sites"
+    ],
+    "stock": 80,
+    "rating": 4,
+    "reviewCount": 111,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-R Series",
+      "type": "Drum Cutter",
+      "format": "Excavator"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-r900",
+    "title": "MB-R900",
+    "slug": "mb-r900",
+    "description": "Largest drum cutter in the MB range, positioned for accurate processing of natural materials and levelling of wall coatings and concrete surfaces. MB highlights precision, power, and suitability for hard-material applications.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/3570/w-640/MB_Materiali_Render_13feb_MB-R900.webp"
+    ],
+    "category": "drum-cutter",
+    "tags": [
+      "drum-cutter",
+      "large",
+      "precision",
+      "hard-materials",
+      "rock",
+      "concrete"
+    ],
+    "stock": 22,
+    "rating": 4.3,
+    "reviewCount": 175,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-R Series",
+      "type": "Drum Cutter",
+      "format": "Excavator"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-g350-s4",
+    "title": "MB-G350 S4",
+    "slug": "mb-g350-s4",
+    "description": "Compact sorting grapple for mini excavators, designed to handle logs, rocks, debris, poles, and branches with precision. MB highlights its wide jaw opening, 360-degree rotation, and fall prevention valve.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/11655/w-640/MB-G350-S4_640x640.webp"
+    ],
+    "category": "sorting-grapple",
+    "tags": [
+      "sorting-grapple",
+      "mini-excavator",
+      "logs",
+      "rocks",
+      "debris",
+      "360-rotation"
+    ],
+    "stock": 91,
+    "rating": 4.6,
+    "reviewCount": 107,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-G Series",
+      "type": "Sorting Grapple",
+      "format": "Mini Excavator"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-g500-s4",
+    "title": "MB-G500 S4",
+    "slug": "mb-g500-s4",
+    "description": "Sorting grapple for midi excavators, positioned as compact and precise for handling logs, stones, debris, and brushwood on site. MB notes its wide opening, silent block, Hardox wear parts, and 360-degree rotation.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/11876/w-640/MB-G500.webp"
+    ],
+    "category": "sorting-grapple",
+    "tags": [
+      "sorting-grapple",
+      "midi-excavator",
+      "stones",
+      "debris",
+      "hardox",
+      "360-rotation"
+    ],
+    "stock": 85,
+    "rating": 4.1,
+    "reviewCount": 32,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-G Series",
+      "type": "Sorting Grapple",
+      "format": "Excavator"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-g1000-s4",
+    "title": "MB-G1000 S4",
+    "slug": "mb-g1000-s4",
+    "description": "High-performance sorting grapple for larger excavators. It is positioned for safely sorting materials of different shapes and weights, with strong closing force and precise movements across multiple construction scenarios.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/11643/w-640/MB-G1000-S4_640x640.webp"
+    ],
+    "category": "sorting-grapple",
+    "tags": [
+      "sorting-grapple",
+      "excavator",
+      "high-performance",
+      "material-handling",
+      "precise",
+      "construction"
+    ],
+    "stock": 17,
+    "rating": 4.4,
+    "reviewCount": 89,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-G Series",
+      "type": "Sorting Grapple",
+      "format": "Excavator"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-p160",
+    "title": "MB-P160",
+    "slug": "mb-p160",
+    "description": "Compact demolition pulverizer in MB Crusher's MB-P line, intended for smaller excavators and backhoe loaders. The public product data positions it for controlled demolition with 360-degree rotation and compact-machine compatibility.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/14088/w-640/1-2.webp"
+    ],
+    "category": "demolition-pulverizer",
+    "tags": [
+      "demolition-pulverizer",
+      "compact",
+      "excavator",
+      "backhoe",
+      "360-rotation",
+      "demolition"
+    ],
+    "stock": 22,
+    "rating": 4.6,
+    "reviewCount": 40,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-P Series",
+      "type": "Demolition Pulverizer",
+      "format": "Excavator/Backhoe"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-p380",
+    "title": "MB-P380",
+    "slug": "mb-p380",
+    "description": "Demolition pulverizer for compact excavators, backhoe loaders, and skid steer loaders. MB positions the MB-P line for precise primary and secondary crushing work with continuous hydraulic rotation and compact-carrier compatibility.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/14089/w-640/2-2.webp"
+    ],
+    "category": "demolition-pulverizer",
+    "tags": [
+      "demolition-pulverizer",
+      "compact",
+      "excavator",
+      "backhoe",
+      "skid-steer",
+      "primary-secondary-crushing"
+    ],
+    "stock": 60,
+    "rating": 4.1,
+    "reviewCount": 177,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-P Series",
+      "type": "Demolition Pulverizer",
+      "format": "Excavator/Backhoe/Skid Steer"
     }
   }
 ]

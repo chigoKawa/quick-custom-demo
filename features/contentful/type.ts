@@ -44,6 +44,8 @@ export interface IBaseButton extends Entry {
     variant: EntryFields.Symbol<
       "Primary" | "Secondary" | "Destructive" | "Ghost" | "Outline"
     >;
+    /** Optional per-market overrides for this button (e.g. label). Managed by the Market Override Helper app. */
+    marketOverride?: EntryFields.Object<JsonObject>;
   };
 }
 
@@ -117,6 +119,8 @@ export interface IHeroModule extends Entry {
     trackingName: EntryFields.Symbol;
     nt_experiences?: Entry<EntrySkeletonType>[];
     metricEventName?: EntryFields.Symbol;
+    /** JSON delta of per-market field overrides. Managed by the Market Override Helper app. */
+    marketOverride?: EntryFields.Object<JsonObject>;
   };
 }
 
@@ -467,19 +471,44 @@ export interface IProductStory extends Entry {
     internalName: EntryFields.Symbol;
     slug: EntryFields.Symbol;
     primaryProduct: EntryFields.Object<JsonObject>;
+    /**
+     * Optional override for the product name returned by the commerce API.
+     * Localized — each locale stores its own override. Empty means "use the
+     * API value". Further per-market overrides live in `marketOverride`.
+     */
+    productName?: EntryFields.Symbol;
+    /**
+     * Per-market overrides for whitelisted fields on this story. Managed by
+     * the Market Override Helper app. Localized so editors can vary US-Spanish
+     * from generic Spanish, etc.
+     */
+    marketOverride?: EntryFields.Object<JsonObject>;
+    /** @deprecated use topSections / bottomSections */
     additionalProducts?: EntryFields.Object<JsonObject>;
     heroModule?: EntryFields.EntryLink<
       HeroBannerSkeleton | HeroModuleSkeleton
     >;
-    sections?: EntryFields.Array<
+    /** @deprecated use images (direct Asset array) */
+    gallery?: EntryFields.Array<EntryFields.EntryLink<ImageWithFocalPointSkeleton>>;
+    images?: EntryFields.Array<EntryFields.AssetLink>;
+    description?: EntryFields.RichText;
+    topSections?: EntryFields.Array<
       EntryFields.EntryLink<
         | CtaSkeleton
         | HeroModuleSkeleton
         | ShelfModuleSkeleton
-        | AlertSkeleton
         | ProductCatalogSkeleton
         | FormEmbedSkeleton
-        | CalloutSkeleton
+        | MultiItemModuleSkeleton
+      >
+    >;
+    bottomSections?: EntryFields.Array<
+      EntryFields.EntryLink<
+        | CtaSkeleton
+        | HeroModuleSkeleton
+        | ShelfModuleSkeleton
+        | ProductCatalogSkeleton
+        | FormEmbedSkeleton
         | KbGroupSkeleton
         | MultiItemModuleSkeleton
       >

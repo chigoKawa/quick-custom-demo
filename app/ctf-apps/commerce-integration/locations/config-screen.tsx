@@ -1,32 +1,55 @@
 "use client";
 
+import {
+  Badge,
+  Box,
+  Button,
+  Checkbox,
+  Flex,
+  Form,
+  FormControl,
+  Heading,
+  List,
+  Note,
+  Paragraph,
+  Select,
+  Stack,
+  Subheading,
+  Text,
+  TextInput,
+} from "@contentful/f36-components";
 import type { ConfigAppSDK } from "@contentful/app-sdk";
 import { useSDK } from "@contentful/react-apps-toolkit";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { APP_NAME, PROVIDER_OPTIONS } from "../constants";
 import type { CommerceAppInstallationParameters } from "../types";
 import { getDefaultInstallationParams, validateProviderCredentials } from "../utils";
-import styles from "./config-screen.module.css";
 
 export default function ConfigScreen() {
   const sdk = useSDK<ConfigAppSDK>();
 
   const defaults = useMemo(
-    () => getDefaultInstallationParams(sdk.parameters.installation as any),
+    () =>
+      getDefaultInstallationParams(
+        sdk.parameters.installation as Partial<CommerceAppInstallationParameters>
+      ),
     [sdk.parameters.installation]
   );
 
   const [provider, setProvider] = useState(defaults.provider);
-  const [useMock, setUseMock] = useState(defaults.useMock);
-  const [simulateLatency, setSimulateLatency] = useState(defaults.simulateLatency);
+  const [useMock, setUseMock] = useState<boolean>(defaults.useMock ?? true);
+  const [simulateLatency, setSimulateLatency] = useState<boolean>(
+    defaults.simulateLatency ?? true
+  );
   const [storeUrl, setStoreUrl] = useState(defaults.credentials?.storeUrl || "");
-  const [accessToken, setAccessToken] = useState(defaults.credentials?.accessToken || "");
+  const [accessToken, setAccessToken] = useState(
+    defaults.credentials?.accessToken || ""
+  );
   const [apiKey, setApiKey] = useState(defaults.credentials?.apiKey || "");
   const [apiSecret, setApiSecret] = useState(defaults.credentials?.apiSecret || "");
 
   const credentialErrors = useMemo(() => {
     if (useMock) return [];
-    
     return validateProviderCredentials(provider, {
       storeUrl,
       accessToken,
@@ -42,7 +65,9 @@ export default function ConfigScreen() {
   const onConfigure = useCallback(async () => {
     if (!useMock && credentialErrors.length > 0) {
       sdk.notifier.error("Fix configuration errors before installing.");
-      return false as any;
+      return false as unknown as ReturnType<
+        Parameters<typeof sdk.app.onConfigure>[0]
+      >;
     }
 
     const parameters: CommerceAppInstallationParameters = {
@@ -60,7 +85,9 @@ export default function ConfigScreen() {
           },
     };
 
-    return { parameters } as any;
+    return { parameters } as unknown as ReturnType<
+      Parameters<typeof sdk.app.onConfigure>[0]
+    >;
   }, [
     sdk,
     provider,
@@ -74,7 +101,7 @@ export default function ConfigScreen() {
   ]);
 
   useEffect(() => {
-    sdk.app.onConfigure(onConfigure);
+    sdk.app.onConfigure(onConfigure as Parameters<typeof sdk.app.onConfigure>[0]);
   }, [sdk, onConfigure]);
 
   const showCredentials = !useMock;
@@ -82,257 +109,250 @@ export default function ConfigScreen() {
   const showCommerceToolsFields = showCredentials && provider === "commercetools";
   const showBigCommerceFields = showCredentials && provider === "bigcommerce";
 
+  const providerLabel =
+    PROVIDER_OPTIONS.find((p) => p.value === provider)?.label ?? provider;
+
+  const handleReset = () => {
+    const resetDefaults = getDefaultInstallationParams();
+    setProvider(resetDefaults.provider);
+    setUseMock(resetDefaults.useMock ?? true);
+    setSimulateLatency(resetDefaults.simulateLatency ?? true);
+    setStoreUrl("");
+    setAccessToken("");
+    setApiKey("");
+    setApiSecret("");
+    sdk.notifier.success("Reset to defaults.");
+  };
+
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <h1 className={styles.title}>🛍️ {APP_NAME}</h1>
-        <p className={styles.subtitle}>
-          Configure your commerce provider and credentials. Use mock mode for demos without
-          connecting to a real commerce backend.
-        </p>
-      </div>
+    <Box padding="spacingXl" style={{ maxWidth: 960, margin: "0 auto" }}>
+      <Heading>{APP_NAME}</Heading>
+      <Paragraph>
+        Configure your commerce provider and credentials. Use mock mode for
+        demos without connecting to a real commerce backend.
+      </Paragraph>
 
-      {/* Status Card */}
-      <div className={styles.statusCard}>
-        <div className={styles.statusGrid}>
-          <div className={styles.statusItem}>
-            <div className={styles.statusIcon}>🔌</div>
-            <div className={styles.statusLabel}>Provider</div>
-            <div className={styles.statusValue}>
-              {PROVIDER_OPTIONS.find(p => p.value === provider)?.label || provider}
-            </div>
-          </div>
-          <div className={styles.statusItem}>
-            <div className={styles.statusIcon}>{useMock ? "🎭" : "🌐"}</div>
-            <div className={styles.statusLabel}>Mode</div>
-            <div className={styles.statusValue}>{useMock ? "Mock" : "Live"}</div>
-          </div>
-          <div className={styles.statusItem}>
-            <div className={styles.statusIcon}>
-              {credentialErrors.length === 0 ? "✅" : "⚠️"}
-            </div>
-            <div className={styles.statusLabel}>Status</div>
-            <div className={styles.statusValue}>
-              {credentialErrors.length === 0 ? "Ready" : "Errors"}
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* ── Status summary ──────────────────────────────────────────── */}
+      <Box marginTop="spacingL">
+        <Flex gap="spacingS" flexWrap="wrap">
+          <Badge variant="secondary">Provider: {providerLabel}</Badge>
+          <Badge variant={useMock ? "warning" : "primary"}>
+            Mode: {useMock ? "Mock" : "Live"}
+          </Badge>
+          <Badge variant={credentialErrors.length === 0 ? "positive" : "negative"}>
+            {credentialErrors.length === 0 ? "Ready" : "Errors"}
+          </Badge>
+        </Flex>
+      </Box>
 
-      {/* Error/Success Banner */}
-      {credentialErrors.length > 0 ? (
-        <div className={styles.errorBanner}>
-          <div className={styles.errorTitle}>⚠️ Configuration Errors</div>
-          <ul className={styles.errorList}>
-            {credentialErrors.map((e) => (
-              <li key={e}>{e}</li>
-            ))}
-          </ul>
-        </div>
-      ) : (
-        <div className={styles.successBanner}>
-          <div className={styles.successIcon}>✅</div>
-          <div className={styles.successText}>Configuration looks good! Save to apply changes.</div>
-        </div>
-      )}
-
-      {/* Provider Selection */}
-      <div className={styles.formSection}>
-        <div className={styles.sectionTitle}>🏪 Commerce Provider</div>
-        <div className={styles.formGroup}>
-          <label className={styles.label}>
-            Select Provider <span className={styles.required}>*</span>
-          </label>
-          <select
-            className={styles.select}
-            value={provider}
-            onChange={(e) => setProvider(e.target.value as any)}
-          >
-            {PROVIDER_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-          <div className={styles.helpText}>
-            Choose your commerce backend. Mock mode is perfect for demos and testing.
-          </div>
-        </div>
-      </div>
-
-      {/* Mock Mode Settings */}
-      <div className={styles.formSection}>
-        <div className={styles.sectionTitle}>🎭 Demo Settings</div>
-        
-        <div className={styles.formGroup}>
-          <label className={styles.checkboxGroup}>
-            <input
-              type="checkbox"
-              className={styles.checkbox}
-              checked={useMock}
-              onChange={(e) => setUseMock(e.target.checked)}
-            />
-            <span className={styles.checkboxLabel}>
-              Use Mock Mode (Demo)
-              {useMock && <span className={styles.badge}>Active</span>}
-            </span>
-          </label>
-          <div className={styles.helpText}>
-            Enable to use mock data instead of connecting to a real provider. Perfect for
-            demos and testing without external dependencies.
-          </div>
-        </div>
-
-        {useMock && (
-          <div className={styles.formGroup}>
-            <label className={styles.checkboxGroup}>
-              <input
-                type="checkbox"
-                className={styles.checkbox}
-                checked={simulateLatency}
-                onChange={(e) => setSimulateLatency(e.target.checked)}
-              />
-              <span className={styles.checkboxLabel}>
-                Simulate Network Latency
-                {simulateLatency && <span className={styles.badge}>Active</span>}
-              </span>
-            </label>
-            <div className={styles.helpText}>
-              Add realistic delays (200-500ms) to mock API calls for more authentic demo experience.
-            </div>
-          </div>
+      {/* ── Banner ──────────────────────────────────────────────────── */}
+      <Box marginTop="spacingM">
+        {credentialErrors.length > 0 ? (
+          <Note variant="negative" title="Configuration errors">
+            <List>
+              {credentialErrors.map((e) => (
+                <List.Item key={e}>{e}</List.Item>
+              ))}
+            </List>
+          </Note>
+        ) : (
+          <Note variant="positive">
+            Configuration looks good. Save to apply changes.
+          </Note>
         )}
-      </div>
+      </Box>
 
-      {/* Credentials Section */}
-      {showCredentials && (
-        <div className={styles.formSection}>
-          <div className={styles.sectionTitle}>🔐 Provider Credentials</div>
-          
-          {showShopifyFields && (
-            <div className={styles.credentialsSection}>
-              <div className={styles.formGroup}>
-                <label className={styles.label}>
-                  Shopify Store URL <span className={styles.required}>*</span>
-                </label>
-                <input
-                  type="text"
-                  className={styles.input}
-                  value={storeUrl}
-                  onChange={(e) => setStoreUrl(e.target.value)}
-                  placeholder="your-store.myshopify.com"
-                />
-                <div className={styles.helpText}>
-                  Your Shopify store domain (e.g., mystore.myshopify.com)
-                </div>
-              </div>
+      <Form>
+        {/* ── Provider ──────────────────────────────────────────────── */}
+        <Box marginTop="spacingXl">
+          <Subheading>Commerce provider</Subheading>
+          <Paragraph>
+            Choose your commerce backend. Mock mode is perfect for demos and
+            testing without external dependencies.
+          </Paragraph>
+          <FormControl isRequired>
+            <FormControl.Label>Provider</FormControl.Label>
+            <Select
+              value={provider}
+              onChange={(e) =>
+                setProvider(
+                  e.target.value as CommerceAppInstallationParameters["provider"]
+                )
+              }
+            >
+              {PROVIDER_OPTIONS.map((opt) => (
+                <Select.Option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </Select.Option>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
 
-              <div className={styles.formGroup}>
-                <label className={styles.label}>
-                  Shopify Access Token <span className={styles.required}>*</span>
-                </label>
-                <input
-                  type="password"
-                  className={styles.input}
-                  value={accessToken}
-                  onChange={(e) => setAccessToken(e.target.value)}
-                  placeholder="shpat_..."
-                />
-                <div className={styles.helpText}>
-                  Admin API access token from your Shopify app settings
-                </div>
-              </div>
-            </div>
-          )}
+        {/* ── Demo settings ─────────────────────────────────────────── */}
+        <Box marginTop="spacingXl">
+          <Subheading>Demo settings</Subheading>
+          <Stack flexDirection="column" spacing="spacingM" alignItems="flex-start">
+            <Box>
+              <Checkbox
+                isChecked={useMock}
+                onChange={(e) => setUseMock(e.target.checked)}
+              >
+                <Flex gap="spacingXs" alignItems="center">
+                  <Text>Use mock mode (demo)</Text>
+                  {useMock && <Badge variant="primary">Active</Badge>}
+                </Flex>
+              </Checkbox>
+              <Box marginTop="spacingXs">
+                <Text fontColor="gray600" as="div">
+                  Enable to use mock data instead of connecting to a real
+                  provider. Perfect for demos and testing without external
+                  dependencies.
+                </Text>
+              </Box>
+            </Box>
 
-          {showCommerceToolsFields && (
-            <div className={styles.credentialsSection}>
-              <div className={styles.formGroup}>
-                <label className={styles.label}>
-                  commercetools API Key <span className={styles.required}>*</span>
-                </label>
-                <input
-                  type="text"
-                  className={styles.input}
-                  value={apiKey}
-                  onChange={(e) => setApiKey(e.target.value)}
-                  placeholder="Your API key"
-                />
-              </div>
+            {useMock && (
+              <Box>
+                <Checkbox
+                  isChecked={simulateLatency}
+                  onChange={(e) => setSimulateLatency(e.target.checked)}
+                >
+                  <Flex gap="spacingXs" alignItems="center">
+                    <Text>Simulate network latency</Text>
+                    {simulateLatency && <Badge variant="primary">Active</Badge>}
+                  </Flex>
+                </Checkbox>
+                <Box marginTop="spacingXs">
+                  <Text fontColor="gray600" as="div">
+                    Add realistic delays (200–500ms) to mock API calls for a
+                    more authentic demo experience.
+                  </Text>
+                </Box>
+              </Box>
+            )}
+          </Stack>
+        </Box>
 
-              <div className={styles.formGroup}>
-                <label className={styles.label}>
-                  commercetools API Secret <span className={styles.required}>*</span>
-                </label>
-                <input
-                  type="password"
-                  className={styles.input}
-                  value={apiSecret}
-                  onChange={(e) => setApiSecret(e.target.value)}
-                  placeholder="Your API secret"
-                />
-              </div>
-            </div>
-          )}
+        {/* ── Credentials ───────────────────────────────────────────── */}
+        {showCredentials && (
+          <Box marginTop="spacingXl">
+            <Subheading>Provider credentials</Subheading>
 
-          {showBigCommerceFields && (
-            <div className={styles.credentialsSection}>
-              <div className={styles.formGroup}>
-                <label className={styles.label}>
-                  BigCommerce Store URL <span className={styles.required}>*</span>
-                </label>
-                <input
-                  type="text"
-                  className={styles.input}
-                  value={storeUrl}
-                  onChange={(e) => setStoreUrl(e.target.value)}
-                  placeholder="store-abc123.mybigcommerce.com"
-                />
-              </div>
+            {showShopifyFields && (
+              <Stack
+                flexDirection="column"
+                spacing="spacingM"
+                alignItems="stretch"
+              >
+                <FormControl isRequired>
+                  <FormControl.Label>Shopify store URL</FormControl.Label>
+                  <TextInput
+                    value={storeUrl}
+                    onChange={(e) => setStoreUrl(e.target.value)}
+                    placeholder="your-store.myshopify.com"
+                  />
+                  <FormControl.HelpText>
+                    Your Shopify store domain (e.g. mystore.myshopify.com).
+                  </FormControl.HelpText>
+                </FormControl>
 
-              <div className={styles.formGroup}>
-                <label className={styles.label}>
-                  BigCommerce Access Token <span className={styles.required}>*</span>
-                </label>
-                <input
-                  type="password"
-                  className={styles.input}
-                  value={accessToken}
-                  onChange={(e) => setAccessToken(e.target.value)}
-                  placeholder="Your access token"
-                />
-              </div>
-            </div>
-          )}
+                <FormControl isRequired>
+                  <FormControl.Label>Shopify access token</FormControl.Label>
+                  <TextInput
+                    type="password"
+                    value={accessToken}
+                    onChange={(e) => setAccessToken(e.target.value)}
+                    placeholder="shpat_..."
+                  />
+                  <FormControl.HelpText>
+                    Admin API access token from your Shopify app settings.
+                  </FormControl.HelpText>
+                </FormControl>
+              </Stack>
+            )}
 
-          <div className={styles.infoBox}>
-            <p>
-              <strong>💡 Tip:</strong> Your credentials are stored securely in Contentful and never
-              exposed in your frontend code. They&apos;re only used server-side for API calls.
-            </p>
-          </div>
-        </div>
-      )}
+            {showCommerceToolsFields && (
+              <Stack
+                flexDirection="column"
+                spacing="spacingM"
+                alignItems="stretch"
+              >
+                <FormControl isRequired>
+                  <FormControl.Label>commercetools API key</FormControl.Label>
+                  <TextInput
+                    value={apiKey}
+                    onChange={(e) => setApiKey(e.target.value)}
+                    placeholder="Your API key"
+                  />
+                </FormControl>
 
-      {/* Actions */}
-      <div className={styles.actions}>
-        <button
-          className={styles.resetButton}
-          onClick={() => {
-            const resetDefaults = getDefaultInstallationParams();
-            setProvider(resetDefaults.provider);
-            setUseMock(resetDefaults.useMock);
-            setSimulateLatency(resetDefaults.simulateLatency);
-            setStoreUrl("");
-            setAccessToken("");
-            setApiKey("");
-            setApiSecret("");
-            sdk.notifier.success("Reset to defaults.");
-          }}
-        >
-          🔄 Reset to Defaults
-        </button>
-      </div>
-    </div>
+                <FormControl isRequired>
+                  <FormControl.Label>
+                    commercetools API secret
+                  </FormControl.Label>
+                  <TextInput
+                    type="password"
+                    value={apiSecret}
+                    onChange={(e) => setApiSecret(e.target.value)}
+                    placeholder="Your API secret"
+                  />
+                </FormControl>
+              </Stack>
+            )}
+
+            {showBigCommerceFields && (
+              <Stack
+                flexDirection="column"
+                spacing="spacingM"
+                alignItems="stretch"
+              >
+                <FormControl isRequired>
+                  <FormControl.Label>BigCommerce store URL</FormControl.Label>
+                  <TextInput
+                    value={storeUrl}
+                    onChange={(e) => setStoreUrl(e.target.value)}
+                    placeholder="store-abc123.mybigcommerce.com"
+                  />
+                </FormControl>
+
+                <FormControl isRequired>
+                  <FormControl.Label>
+                    BigCommerce access token
+                  </FormControl.Label>
+                  <TextInput
+                    type="password"
+                    value={accessToken}
+                    onChange={(e) => setAccessToken(e.target.value)}
+                    placeholder="Your access token"
+                  />
+                </FormControl>
+              </Stack>
+            )}
+
+            <Box marginTop="spacingM">
+              <Note variant="neutral">
+                Credentials are stored securely in Contentful and never
+                exposed in your frontend code. They&apos;re only used
+                server-side for API calls.
+              </Note>
+            </Box>
+          </Box>
+        )}
+
+        {/* ── Actions ───────────────────────────────────────────────── */}
+        <Box marginTop="spacingXl">
+          <Flex gap="spacingS" flexWrap="wrap" alignItems="center">
+            <Button variant="secondary" onClick={handleReset}>
+              Reset to defaults
+            </Button>
+            <Text fontColor="gray600">
+              Use the &quot;Install&quot; / &quot;Save&quot; button at the top
+              of the page to persist these settings.
+            </Text>
+          </Flex>
+        </Box>
+      </Form>
+    </Box>
   );
 }

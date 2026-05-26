@@ -1,5 +1,32 @@
 "use client";
 
+import {
+  Badge,
+  Box,
+  Button,
+  Card,
+  Flex,
+  FormControl,
+  Note,
+  Pill,
+  Select,
+  SkeletonContainer,
+  SkeletonBodyText,
+  Spinner,
+  Stack,
+  Subheading,
+  Text,
+  TextInput,
+} from "@contentful/f36-components";
+import {
+  ArrowClockwiseIcon,
+  MagnifyingGlassIcon,
+  PencilSimpleIcon,
+  PlusIcon,
+  ShoppingCartSimpleIcon,
+  TagIcon,
+  TrashSimpleIcon,
+} from "@contentful/f36-icons";
 import type { FieldAppSDK, DialogAppSDK } from "@contentful/app-sdk";
 import { locations } from "@contentful/app-sdk";
 import { useSDK } from "@contentful/react-apps-toolkit";
@@ -7,7 +34,6 @@ import React, { useEffect, useState, useCallback } from "react";
 import type { Product, ProductCategory } from "@/lib/integrations/commerce/commerce.interface";
 import type { ProductCatalogFieldValue } from "../types";
 import { fetchWithTimeout } from "../utils";
-import styles from "./product-catalog-field-v2.module.css";
 
 const SELECTION_MODES: ProductCatalogFieldValue["selectionMode"][] = [
   "single",
@@ -16,9 +42,9 @@ const SELECTION_MODES: ProductCatalogFieldValue["selectionMode"][] = [
 ];
 
 const MODE_LABELS: Record<ProductCatalogFieldValue["selectionMode"], string> = {
-  single: "Single Product",
-  multiple: "Multiple Products",
-  category: "Product Category",
+  single: "Single product",
+  multiple: "Multiple products",
+  category: "Product category",
 };
 
 function readInitialValue(value: unknown): ProductCatalogFieldValue {
@@ -44,7 +70,7 @@ function readInitialValue(value: unknown): ProductCatalogFieldValue {
 
 export default function ProductCatalogField() {
   const sdk = useSDK<FieldAppSDK | DialogAppSDK>();
-  
+
   const isDialog = sdk.location.is(locations.LOCATION_DIALOG);
   const fieldSdk = isDialog ? null : (sdk as FieldAppSDK);
 
@@ -53,10 +79,13 @@ export default function ProductCatalogField() {
   // Object → rich JSON field (e.g. products on productCatalog)
   const fieldType = fieldSdk?.field?.type as string | undefined;
   const isSymbolField = fieldType === "Symbol";
-  
+
   const [config, setConfig] = useState<ProductCatalogFieldValue>(() => {
     if (isDialog) {
-      const params = (sdk as DialogAppSDK).parameters?.invocation as any;
+      const params = (sdk as DialogAppSDK).parameters?.invocation as {
+        mode?: ProductCatalogFieldValue["selectionMode"];
+        selectedIds?: string[];
+      };
       return {
         version: 1,
         selectionMode: params?.mode || "single",
@@ -80,7 +109,9 @@ export default function ProductCatalogField() {
   const [error, setError] = useState<string | null>(null);
   const [tempSelection, setTempSelection] = useState<string[]>(() => {
     if (isDialog) {
-      const params = (sdk as DialogAppSDK).parameters?.invocation as any;
+      const params = (sdk as DialogAppSDK).parameters?.invocation as {
+        selectedIds?: string[];
+      };
       return params?.selectedIds || [];
     }
     return [];
@@ -166,7 +197,6 @@ export default function ProductCatalogField() {
   // Load products when component mounts in dialog mode
   useEffect(() => {
     if (isDialog) {
-      // Fetch products immediately
       const fetchProducts = async () => {
         setLoading(true);
         setError(null);
@@ -193,10 +223,10 @@ export default function ProductCatalogField() {
       };
       fetchProducts();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleOpenModal = useCallback(async () => {
-    // Use Contentful's dialog API to open modal outside iframe
     const result = await sdk.dialogs.openCurrentApp({
       title: "Select products",
       width: 1400,
@@ -205,15 +235,21 @@ export default function ProductCatalogField() {
       shouldCloseOnEscapePress: true,
       parameters: {
         mode: config.selectionMode,
-        selectedIds: config.selectionMode === "single" 
-          ? (config.selectedProduct?.id ? [config.selectedProduct.id] : [])
-          : (config.selectedProducts || []).map(p => p.id),
+        selectedIds:
+          config.selectionMode === "single"
+            ? config.selectedProduct?.id
+              ? [config.selectedProduct.id]
+              : []
+            : (config.selectedProducts || []).map((p) => p.id),
       },
     });
 
-    if (result && typeof result === 'object' && 'selectedProducts' in result) {
-      const data = result as { selectedProducts: any[], mode: string };
-      if (data.mode === "single" && data.selectedProducts.length > 0) {
+    if (result && typeof result === "object" && "selectedProducts" in result) {
+      const data = result as {
+        selectedProducts: ProductCatalogFieldValue["selectedProducts"];
+        mode: string;
+      };
+      if (data.mode === "single" && data.selectedProducts && data.selectedProducts.length > 0) {
         saveValue({
           version: 1,
           selectionMode: "single",
@@ -223,38 +259,42 @@ export default function ProductCatalogField() {
         saveValue({
           version: 1,
           selectionMode: "multiple",
-          selectedProducts: data.selectedProducts,
+          selectedProducts: data.selectedProducts || [],
         });
       }
     }
   }, [config, sdk, saveValue]);
 
-  
-  const handleDialogClose = useCallback((selectedProducts?: any[]) => {
-    if (isDialog) {
-      // Cast to any to access close method which exists on dialog SDK
-      (sdk as any).close({
-        selectedProducts: selectedProducts || [],
-        mode: config.selectionMode,
-      });
-    }
-  }, [sdk, isDialog, config.selectionMode]);
+  const handleDialogClose = useCallback(
+    (selectedProducts?: ProductCatalogFieldValue["selectedProducts"]) => {
+      if (isDialog) {
+        (sdk as unknown as { close: (data: unknown) => void }).close({
+          selectedProducts: selectedProducts || [],
+          mode: config.selectionMode,
+        });
+      }
+    },
+    [sdk, isDialog, config.selectionMode]
+  );
 
   const handleSearch = useCallback(() => {
     loadProducts(searchQuery);
   }, [searchQuery, loadProducts]);
 
-  const handleSelectProduct = useCallback((productId: string) => {
-    if (config.selectionMode === "single") {
-      setTempSelection([productId]);
-    } else {
-      setTempSelection(prev => 
-        prev.includes(productId)
-          ? prev.filter(id => id !== productId)
-          : [...prev, productId]
-      );
-    }
-  }, [config.selectionMode]);
+  const handleSelectProduct = useCallback(
+    (productId: string) => {
+      if (config.selectionMode === "single") {
+        setTempSelection([productId]);
+      } else {
+        setTempSelection((prev) =>
+          prev.includes(productId)
+            ? prev.filter((id) => id !== productId)
+            : [...prev, productId]
+        );
+      }
+    },
+    [config.selectionMode]
+  );
 
   const handleSave = useCallback(() => {
     if (tempSelection.length === 0) {
@@ -263,9 +303,9 @@ export default function ProductCatalogField() {
     }
 
     const selectedProds = tempSelection
-      .map(id => products.find(p => p.id === id))
+      .map((id) => products.find((p) => p.id === id))
       .filter((p): p is Product => p !== undefined)
-      .map(product => ({
+      .map((product) => ({
         id: product.id,
         title: product.title,
         price: product.price,
@@ -278,7 +318,10 @@ export default function ProductCatalogField() {
   }, [tempSelection, products, handleDialogClose]);
 
   const handleRemove = useCallback(() => {
-    const cleared: ProductCatalogFieldValue = { version: 1, selectionMode: config.selectionMode };
+    const cleared: ProductCatalogFieldValue = {
+      version: 1,
+      selectionMode: config.selectionMode,
+    };
     setConfig(cleared);
     if (fieldSdk?.field) {
       fieldSdk.field.removeValue().catch((err: unknown) => {
@@ -287,14 +330,15 @@ export default function ProductCatalogField() {
     }
   }, [config.selectionMode, fieldSdk]);
 
-  const handleToggleMode = useCallback(() => {
-    const idx = SELECTION_MODES.indexOf(config.selectionMode);
-    const newMode = SELECTION_MODES[(idx + 1) % SELECTION_MODES.length];
-    saveValue({
-      version: 1,
-      selectionMode: newMode,
-    });
-  }, [config.selectionMode, saveValue]);
+  const handleChangeMode = useCallback(
+    (mode: ProductCatalogFieldValue["selectionMode"]) => {
+      saveValue({
+        version: 1,
+        selectionMode: mode,
+      });
+    },
+    [saveValue]
+  );
 
   const handleSelectCategory = useCallback(
     (cat: ProductCategory) => {
@@ -305,7 +349,7 @@ export default function ProductCatalogField() {
         categoryDisplayLimit: config.categoryDisplayLimit ?? 10,
       });
     },
-    [saveValue, config.categoryDisplayLimit],
+    [saveValue, config.categoryDisplayLimit]
   );
 
   const handleCategoryLimitChange = useCallback(
@@ -315,9 +359,8 @@ export default function ProductCatalogField() {
         categoryDisplayLimit: limit,
       });
     },
-    [saveValue, config],
+    [saveValue, config]
   );
-
 
   const isSingleMode = config.selectionMode === "single";
   const isCategoryMode = config.selectionMode === "category";
@@ -330,166 +373,172 @@ export default function ProductCatalogField() {
       ? !!selectedProduct
       : selectedProducts.length > 0;
 
-  // If in dialog mode, show product selector directly
+  // ─── Dialog mode ───────────────────────────────────────────────────
   if (isDialog) {
     return (
-      <div className={styles.container} style={{ padding: 24 }}>
-        {/* Search */}
-        <div className={styles.modalSearch} style={{ padding: 0, marginBottom: 24, border: 'none' }}>
-          <input
-            type="text"
-            className={styles.searchInput}
-            placeholder="Search for a product..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-          />
-        </div>
+      <Box padding="spacingL">
+        <Box marginBottom="spacingM">
+          <Flex gap="spacingS" alignItems="center">
+            <Box style={{ flex: "1 1 auto", minWidth: 0 }}>
+              <TextInput
+                value={searchQuery}
+                placeholder="Search products by title, SKU, or category…"
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSearch();
+                }}
+              />
+            </Box>
+            <Button
+              variant="secondary"
+              startIcon={<MagnifyingGlassIcon />}
+              onClick={handleSearch}
+            >
+              Search
+            </Button>
+          </Flex>
+        </Box>
 
-        {/* Body */}
-        <div style={{ minHeight: 500 }}>
+        <Box style={{ minHeight: 460 }}>
           {loading && (
-            <div className={styles.loadingState}>
-              <div className={styles.spinner}></div>
-              <div>Loading products...</div>
-            </div>
+            <Flex
+              alignItems="center"
+              justifyContent="center"
+              style={{ minHeight: 320 }}
+              gap="spacingS"
+            >
+              <Spinner size="medium" />
+              <Text fontColor="gray600">Loading products…</Text>
+            </Flex>
           )}
 
           {error && (
-            <div className={styles.errorState}>
-              <div className={styles.errorTitle}>⚠️ Error Loading Products</div>
-              <div className={styles.errorMessage}>{error}</div>
-            </div>
+            <Note variant="negative" title="Error loading products">
+              {error}
+            </Note>
           )}
 
           {!loading && !error && products.length === 0 && (
-            <div className={styles.noResults}>
-              <div className={styles.noResultsIcon}>🔍</div>
-              <div className={styles.noResultsText}>
-                No products found. Try a different search.
-              </div>
-            </div>
+            <EmptyState
+              title="No products found"
+              description="Try a different search term."
+            />
           )}
 
           {!loading && !error && products.length > 0 && (
-            <div className={styles.productGrid}>
-              {products.map((product) => {
-                const isSelected = tempSelection.includes(product.id);
-                const imageUrl = product.images && product.images.length > 0 ? product.images[0] : null;
-                return (
-                  <div
-                    key={product.id}
-                    className={`${styles.productCard} ${
-                      isSelected ? styles.productCardSelected : ""
-                    }`}
-                    onClick={() => handleSelectProduct(product.id)}
-                  >
-                    <div className={styles.productImageWrapper}>
-                      {imageUrl ? (
-                        <img src={imageUrl} alt={product.title} />
-                      ) : (
-                        "📚"
-                      )}
-                      {isSelected && <div className={styles.selectedBadge}>✓</div>}
-                    </div>
-                    <div className={styles.productCardInfo}>
-                      <div className={styles.productCardTitle}>{product.title}</div>
-                      {product.sku && (
-                        <div className={styles.productCardSku}>
-                          Product ID: {product.sku}
-                        </div>
-                      )}
-                      <div className={styles.productCardPrice}>
-                        ${product.price.toFixed(2)}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <ProductGrid
+              products={products}
+              selectedIds={tempSelection}
+              onToggle={handleSelectProduct}
+            />
           )}
-        </div>
+        </Box>
 
-        {/* Footer */}
-        <div className={styles.modalFooter} style={{ padding: "16px 0", marginTop: 24 }}>
-          <button className={styles.cancelButton} onClick={() => handleDialogClose()}>
-            Cancel
-          </button>
-          <button
-            className={styles.saveButton}
-            onClick={handleSave}
-            disabled={tempSelection.length === 0}
-          >
-            Save {tempSelection.length > 0 ? `(${tempSelection.length})` : "products"}
-          </button>
-        </div>
-      </div>
+        <Flex
+          justifyContent="space-between"
+          alignItems="center"
+          marginTop="spacingL"
+          gap="spacingS"
+          flexWrap="wrap"
+        >
+          <Text fontColor="gray600">
+            {tempSelection.length === 0
+              ? "Nothing selected yet"
+              : `${tempSelection.length} selected`}
+          </Text>
+          <Flex gap="spacingS">
+            <Button variant="secondary" onClick={() => handleDialogClose()}>
+              Cancel
+            </Button>
+            <Button
+              variant="primary"
+              onClick={handleSave}
+              isDisabled={tempSelection.length === 0}
+            >
+              {tempSelection.length > 0
+                ? `Save (${tempSelection.length})`
+                : "Save"}
+            </Button>
+          </Flex>
+        </Flex>
+      </Box>
     );
   }
 
-  // Regular field view
+  // ─── Field view ────────────────────────────────────────────────────
   return (
-    <div className={styles.container}>
-      {/* Mode Toggle — hidden for Symbol fields (locked to category) */}
+    <Box>
+      {/* Mode toggle — hidden for Symbol fields (locked to category) */}
       {!isSymbolField && (
-        <div style={{ marginBottom: 16, display: "flex", alignItems: "center", gap: 12 }}>
-          <label style={{ fontSize: 14, fontWeight: 600, color: "#1e2329" }}>
-            Selection Mode:
-          </label>
-          <button
-            onClick={handleToggleMode}
-            style={{
-              padding: "6px 12px",
-              background: "white",
-              border: "2px solid #0066cc",
-              borderRadius: 6,
-              color: "#0066cc",
-              fontSize: 13,
-              fontWeight: 500,
-              cursor: "pointer",
-            }}
-          >
-            {MODE_LABELS[config.selectionMode]}
-          </button>
-        </div>
+        <Box marginBottom="spacingM">
+          <FormControl>
+            <FormControl.Label>Selection mode</FormControl.Label>
+            <Select
+              value={config.selectionMode}
+              onChange={(e) =>
+                handleChangeMode(
+                  e.target.value as ProductCatalogFieldValue["selectionMode"]
+                )
+              }
+            >
+              {SELECTION_MODES.map((mode) => (
+                <Select.Option key={mode} value={mode}>
+                  {MODE_LABELS[mode]}
+                </Select.Option>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
       )}
 
       {/* Category mode */}
       {isCategoryMode ? (
         selectedCategory ? (
-          <div>
-            <div className={styles.categoryCard}>
-              <div className={styles.categoryCardIcon}>🏷️</div>
-              <div className={styles.selectedProductInfo}>
-                <div className={styles.selectedProductTitle}>{selectedCategory.name}</div>
-                <div className={styles.selectedProductMeta}>
-                  ID: {selectedCategory.id} · {selectedCategory.productCount} product{selectedCategory.productCount !== 1 ? "s" : ""}
-                </div>
-              </div>
-              <button className={styles.removeButton} onClick={handleRemove}>
-                Remove
-              </button>
-            </div>
-            <div style={{ marginTop: 12, display: "flex", alignItems: "center", gap: 12 }}>
-              <label style={{ fontSize: 13, fontWeight: 600, color: "#1e2329" }}>
-                Display limit:
-              </label>
-              <select
-                value={config.categoryDisplayLimit ?? 10}
+          <Stack flexDirection="column" spacing="spacingS" alignItems="stretch">
+            <SelectionCard
+              title={selectedCategory.name}
+              contentType="Category"
+              description={`ID: ${selectedCategory.id} · ${selectedCategory.productCount} product${selectedCategory.productCount !== 1 ? "s" : ""}`}
+              thumbnail={
+                <Box
+                  style={{
+                    width: 70,
+                    height: 70,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: "#f7f9fa",
+                    borderRadius: 4,
+                  }}
+                >
+                  <TagIcon size="medium" variant="muted" />
+                </Box>
+              }
+            />
+            <Flex gap="spacingS" flexWrap="wrap">
+              <Button
+                variant="negative"
+                startIcon={<TrashSimpleIcon />}
+                onClick={handleRemove}
+              >
+                Remove category
+              </Button>
+            </Flex>
+            <Flex alignItems="center" gap="spacingS" flexWrap="wrap">
+              <Text fontColor="gray700">Display limit:</Text>
+              <Select
+                value={String(config.categoryDisplayLimit ?? 10)}
                 onChange={(e) => handleCategoryLimitChange(Number(e.target.value))}
-                style={{
-                  padding: "6px 10px",
-                  border: "2px solid #d3dce6",
-                  borderRadius: 6,
-                  fontSize: 13,
-                }}
+                style={{ maxWidth: 180 }}
               >
                 {[4, 8, 10, 12, 16, 20].map((n) => (
-                  <option key={n} value={n}>{n} products</option>
+                  <Select.Option key={n} value={String(n)}>
+                    {n} products
+                  </Select.Option>
                 ))}
-              </select>
-            </div>
-          </div>
+              </Select>
+            </Flex>
+          </Stack>
         ) : (
           <CategoryPicker
             categories={categories}
@@ -501,85 +550,326 @@ export default function ProductCatalogField() {
         )
       ) : hasSelection ? (
         isSingleMode && selectedProduct ? (
-        <div className={styles.selectedProductCard}>
-          <div className={styles.selectedProductImage}>
-            {selectedProduct.image ? (
-              <img src={selectedProduct.image} alt={selectedProduct.title} />
-            ) : (
-              "📚"
-            )}
-          </div>
-          <div className={styles.selectedProductInfo}>
-            <div className={styles.selectedProductTitle}>{selectedProduct.title}</div>
-            <div className={styles.selectedProductMeta}>
-              {selectedProduct.sku && `Product ID: ${selectedProduct.sku}`}
-              {selectedProduct.category && ` • ${selectedProduct.category}`}
-            </div>
-            <div className={styles.selectedProductPrice}>
-              ${selectedProduct.price.toFixed(2)}
-            </div>
-          </div>
-          <button className={styles.changeButton} onClick={handleOpenModal}>
-            Change
-          </button>
-          <button className={styles.removeButton} onClick={handleRemove}>
-            Remove
-          </button>
-        </div>
+          <Stack flexDirection="column" spacing="spacingS" alignItems="stretch">
+            <SelectionCard
+              title={selectedProduct.title}
+              contentType="Product"
+              description={[
+                selectedProduct.sku ? `Product ID: ${selectedProduct.sku}` : null,
+                selectedProduct.category || null,
+                `$${selectedProduct.price.toFixed(2)}`,
+              ]
+                .filter(Boolean)
+                .join(" · ")}
+              thumbnail={
+                <ProductThumbnail
+                  src={selectedProduct.image}
+                  alt={selectedProduct.title}
+                  size={70}
+                />
+              }
+            />
+            <Flex gap="spacingS" flexWrap="wrap">
+              <Button
+                variant="secondary"
+                startIcon={<PencilSimpleIcon />}
+                onClick={handleOpenModal}
+              >
+                Change
+              </Button>
+              <Button
+                variant="negative"
+                startIcon={<TrashSimpleIcon />}
+                onClick={handleRemove}
+              >
+                Remove
+              </Button>
+            </Flex>
+          </Stack>
         ) : (
-          <div>
-            <div style={{ marginBottom: 12, fontSize: 14, fontWeight: 600, color: "#1e2329" }}>
-              {selectedProducts.length} product{selectedProducts.length !== 1 ? "s" : ""} selected
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 }}>
+          <Stack flexDirection="column" spacing="spacingM" alignItems="stretch">
+            <Flex alignItems="center" gap="spacingS" flexWrap="wrap">
+              <Text fontWeight="fontWeightDemiBold">
+                {selectedProducts.length} product
+                {selectedProducts.length !== 1 ? "s" : ""} selected
+              </Text>
+              <Badge variant="secondary">Multiple</Badge>
+            </Flex>
+            <Box
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+                gap: 12,
+              }}
+            >
               {selectedProducts.map((product) => (
-                <div key={product.id} className={styles.selectedProductCard} style={{ flexDirection: "column", padding: 12 }}>
-                  <div className={styles.selectedProductImage} style={{ width: "100%", height: 120, marginBottom: 8 }}>
-                    {product.image ? (
-                      <img src={product.image} alt={product.title} />
-                    ) : (
-                      "📚"
-                    )}
-                  </div>
-                  <div className={styles.selectedProductInfo}>
-                    <div className={styles.selectedProductTitle} style={{ fontSize: 13 }}>{product.title}</div>
-                    <div className={styles.selectedProductPrice} style={{ fontSize: 14 }}>
+                <Card key={product.id} padding="none">
+                  <ProductThumbnail
+                    src={product.image}
+                    alt={product.title}
+                    size={120}
+                    fullWidth
+                  />
+                  <Box padding="spacingS">
+                    <Text
+                      fontWeight="fontWeightDemiBold"
+                      fontSize="fontSizeS"
+                      as="div"
+                      style={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {product.title}
+                    </Text>
+                    <Text fontColor="gray700" fontSize="fontSizeS" as="div">
                       ${product.price.toFixed(2)}
-                    </div>
-                  </div>
-                </div>
+                    </Text>
+                  </Box>
+                </Card>
               ))}
-            </div>
-            <div style={{ marginTop: 16, display: "flex", gap: 12 }}>
-              <button className={styles.changeButton} onClick={handleOpenModal}>
-                Change Selection
-              </button>
-              <button className={styles.removeButton} onClick={handleRemove}>
-                Remove All
-              </button>
-            </div>
-          </div>
+            </Box>
+            <Flex gap="spacingS" flexWrap="wrap">
+              <Button
+                variant="secondary"
+                startIcon={<PencilSimpleIcon />}
+                onClick={handleOpenModal}
+              >
+                Change selection
+              </Button>
+              <Button
+                variant="negative"
+                startIcon={<TrashSimpleIcon />}
+                onClick={handleRemove}
+              >
+                Remove all
+              </Button>
+            </Flex>
+          </Stack>
         )
       ) : (
-        <div className={styles.emptyState}>
-          <div className={styles.emptyIcon}>🛍️</div>
-          <div className={styles.emptyTitle}>No {isSingleMode ? "product" : "products"} selected</div>
-          <div className={styles.emptyText}>
-            Select {isSingleMode ? "a product" : "products"} from your catalog to feature in this content.
-          </div>
-          <button className={styles.selectButton} onClick={handleOpenModal}>
-            Select {isSingleMode ? "product" : "products"}
-          </button>
-        </div>
+        <EmptyState
+          icon={<ShoppingCartSimpleIcon size="medium" variant="muted" />}
+          title={`No ${isSingleMode ? "product" : "products"} selected`}
+          description={`Select ${isSingleMode ? "a product" : "products"} from your catalog to feature in this content.`}
+          action={
+            <Button
+              variant="primary"
+              startIcon={<PlusIcon />}
+              onClick={handleOpenModal}
+            >
+              Select {isSingleMode ? "product" : "products"}
+            </Button>
+          }
+        />
       )}
-
-    </div>
+    </Box>
   );
 }
 
-/* ------------------------------------------------------------------ */
-/*  Category Picker sub-component                                     */
-/* ------------------------------------------------------------------ */
+/* ─── Sub-components ──────────────────────────────────────────────── */
+
+function SelectionCard({
+  title,
+  contentType,
+  description,
+  thumbnail,
+}: {
+  title: string;
+  contentType: string;
+  description?: string;
+  thumbnail?: React.ReactNode;
+}) {
+  return (
+    <Box
+      style={{
+        border: "1px solid #e7ebee",
+        borderRadius: 6,
+        background: "#fff",
+        overflow: "hidden",
+      }}
+    >
+      <Box
+        padding="spacingXs"
+        style={{
+          background: "#fafbfc",
+          borderBottom: "1px solid #e7ebee",
+        }}
+      >
+        <Text fontColor="gray600" fontSize="fontSizeS">
+          {contentType}
+        </Text>
+      </Box>
+      <Flex
+        padding="spacingM"
+        gap="spacingM"
+        alignItems="center"
+        style={{ minWidth: 0 }}
+      >
+        <Box style={{ flex: "1 1 auto", minWidth: 0 }}>
+          <Subheading marginBottom="none">{title}</Subheading>
+          {description && (
+            <Box marginTop="spacing2Xs">
+              <Text fontColor="gray700">{description}</Text>
+            </Box>
+          )}
+        </Box>
+        {thumbnail && (
+          <Box style={{ flexShrink: 0 }}>{thumbnail}</Box>
+        )}
+      </Flex>
+    </Box>
+  );
+}
+
+function ProductGrid({
+  products,
+  selectedIds,
+  onToggle,
+}: {
+  products: Product[];
+  selectedIds: string[];
+  onToggle: (id: string) => void;
+}) {
+  return (
+    <Box
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+        gap: 16,
+      }}
+    >
+      {products.map((product) => {
+        const isSelected = selectedIds.includes(product.id);
+        const imageUrl = product.images?.[0];
+        return (
+          <Card
+            key={product.id}
+            padding="none"
+            isSelected={isSelected}
+            onClick={() => onToggle(product.id)}
+            style={{ cursor: "pointer", overflow: "hidden", textAlign: "left" }}
+          >
+            <Box style={{ position: "relative" }}>
+              <ProductThumbnail
+                src={imageUrl}
+                alt={product.title}
+                size={160}
+                fullWidth
+              />
+              {isSelected && (
+                <Box
+                  style={{
+                    position: "absolute",
+                    top: 8,
+                    right: 8,
+                  }}
+                >
+                  <Badge variant="positive">Selected</Badge>
+                </Box>
+              )}
+            </Box>
+            <Box padding="spacingS">
+              <Text
+                fontWeight="fontWeightDemiBold"
+                as="div"
+                style={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {product.title}
+              </Text>
+              {product.sku && (
+                <Text fontColor="gray600" fontSize="fontSizeS" as="div">
+                  ID: {product.sku}
+                </Text>
+              )}
+              <Text fontColor="gray800" fontSize="fontSizeS" as="div">
+                ${product.price.toFixed(2)}
+              </Text>
+            </Box>
+          </Card>
+        );
+      })}
+    </Box>
+  );
+}
+
+function ProductThumbnail({
+  src,
+  alt,
+  size = 64,
+  fullWidth = false,
+}: {
+  src?: string;
+  alt: string;
+  size?: number;
+  fullWidth?: boolean;
+}) {
+  const sharedStyle: React.CSSProperties = {
+    width: fullWidth ? "100%" : size,
+    height: size,
+    objectFit: "cover",
+    background: "#f0f3f5",
+    display: "block",
+  };
+
+  if (src) {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={src} alt={alt} style={sharedStyle} />;
+  }
+
+  return (
+    <Box
+      style={{
+        ...sharedStyle,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <ShoppingCartSimpleIcon size="medium" variant="muted" />
+    </Box>
+  );
+}
+
+function EmptyState({
+  icon,
+  title,
+  description,
+  action,
+}: {
+  icon?: React.ReactNode;
+  title: string;
+  description?: string;
+  action?: React.ReactNode;
+}) {
+  return (
+    <Box
+      padding="spacingXl"
+      style={{
+        border: "1px dashed #d3dce6",
+        borderRadius: 6,
+        background: "#fafbfc",
+        textAlign: "center",
+      }}
+    >
+      {icon && <Box marginBottom="spacingS">{icon}</Box>}
+      <Text fontWeight="fontWeightDemiBold" as="div">
+        {title}
+      </Text>
+      {description && (
+        <Box marginTop="spacingXs">
+          <Text fontColor="gray600">{description}</Text>
+        </Box>
+      )}
+      {action && <Box marginTop="spacingM">{action}</Box>}
+    </Box>
+  );
+}
 
 function CategoryPicker({
   categories,
@@ -605,50 +895,82 @@ function CategoryPicker({
 
   if (loading) {
     return (
-      <div className={styles.loadingState}>
-        <div className={styles.spinner}></div>
-        <div>Loading categories…</div>
-      </div>
+      <SkeletonContainer>
+        <SkeletonBodyText numberOfLines={4} />
+      </SkeletonContainer>
     );
   }
 
   if (error) {
     return (
-      <div className={styles.errorState}>
-        <div className={styles.errorTitle}>⚠️ Error Loading Categories</div>
-        <div className={styles.errorMessage}>{error}</div>
-      </div>
+      <Note variant="negative" title="Error loading categories">
+        <Flex
+          alignItems="center"
+          justifyContent="space-between"
+          gap="spacingS"
+          flexWrap="wrap"
+        >
+          <Text>{error}</Text>
+          <Button
+            variant="secondary"
+            startIcon={<ArrowClockwiseIcon />}
+            onClick={() => {
+              setLoaded(false);
+            }}
+          >
+            Retry
+          </Button>
+        </Flex>
+      </Note>
     );
   }
 
   if (categories.length === 0) {
     return (
-      <div className={styles.emptyState}>
-        <div className={styles.emptyIcon}>🏷️</div>
-        <div className={styles.emptyTitle}>No categories found</div>
-        <div className={styles.emptyText}>
-          Categories are derived from your product catalog. Add products with category values to see them here.
-        </div>
-      </div>
+      <EmptyState
+        icon={<TagIcon size="medium" variant="muted" />}
+        title="No categories found"
+        description="Categories are derived from your product catalog. Add products with category values to see them here."
+      />
     );
   }
 
   return (
-    <div className={styles.categoryGrid}>
+    <Box
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+        gap: 12,
+      }}
+    >
       {categories.map((cat) => (
-        <button
+        <Card
           key={cat.id}
-          type="button"
-          className={styles.categoryPickerCard}
+          padding="default"
           onClick={() => onSelect(cat)}
+          style={{ cursor: "pointer" }}
         >
-          <span className={styles.categoryPickerIcon}>🏷️</span>
-          <span className={styles.categoryPickerName}>{cat.name}</span>
-          <span className={styles.categoryPickerCount}>
-            {cat.productCount} product{cat.productCount !== 1 ? "s" : ""}
-          </span>
-        </button>
+          <Flex gap="spacingS" alignItems="center">
+            <TagIcon variant="muted" />
+            <Box style={{ minWidth: 0 }}>
+              <Text
+                fontWeight="fontWeightDemiBold"
+                as="div"
+                style={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {cat.name}
+              </Text>
+              <Pill
+                label={`${cat.productCount} product${cat.productCount !== 1 ? "s" : ""}`}
+              />
+            </Box>
+          </Flex>
+        </Card>
       ))}
-    </div>
+    </Box>
   );
 }

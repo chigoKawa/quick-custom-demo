@@ -1,41 +1,29 @@
 "use client";
 
 import { useState } from "react";
-import { Settings, ChevronDown, ChevronUp, Home, Search } from "lucide-react";
+import { Settings, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { demoPanelActions } from "./actions";
+import { MarketSwitcher } from "@/features/market-switcher/market-switcher";
+import type { MarketSummary } from "@/lib/markets";
 
-export function DemoPanel() {
+interface Props {
+  /** Published market entries. Sourced server-side in the layout. */
+  markets: MarketSummary[];
+  /** Configured i18n locales — needed by the switcher to parse paths. */
+  i18nLocales: string[];
+}
+
+export function DemoPanel({ markets, i18nLocales }: Props) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    /* Container is now fixed to the top right. 
-       'items-end' ensures the panel aligns with the right edge of the bar.
-    */
     <div className="fixed top-6 right-6 z-[20000] flex flex-col items-end gap-3">
-      {/* 1. THE FLOATING BAR (Pill Shape) */}
+      {/* Floating pill trigger */}
       <div className="flex items-center gap-1 p-1.5 bg-background/80 backdrop-blur-lg border rounded-full shadow-2xl">
         <TooltipProvider delayDuration={0}>
-          {/* <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full h-9 w-9">
-                <Home className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="bottom" align="end">Home</TooltipContent>
-          </Tooltip> */}
-
-     
-
-          {/* TOGGLE BUTTON */}
           <Button
             variant={isExpanded ? "secondary" : "ghost"}
             size="sm"
@@ -54,13 +42,13 @@ export function DemoPanel() {
         </TooltipProvider>
       </div>
 
-      {/* 2. THE PANEL (Floating underneath, aligned to the right) */}
+      {/* Expanded panel */}
       <div
         className={cn(
           "transition-all duration-300 ease-in-out origin-top-right",
           isExpanded
             ? "opacity-100 scale-100 translate-y-0"
-            : "opacity-0 scale-95 -translate-y-2 pointer-events-none",
+            : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
         )}
       >
         <div className="bg-background/95 backdrop-blur-md border rounded-2xl shadow-2xl p-4 w-80">
@@ -79,18 +67,26 @@ export function DemoPanel() {
               </Button>
             </div>
 
-            {/* Actions from registry */}
-            <div className="space-y-4">
-              {demoPanelActions.map((action) => (
-                <div
-                  key={action.id}
-                  className="p-3 border rounded-lg bg-muted/50"
-                >
-                  <p className="text-sm font-medium mb-2">{action.label}</p>
-                  {action.render()}
-                </div>
-              ))}
+            {/* Market switcher (always present — primary demo control) */}
+            <div className="p-3 border rounded-lg bg-muted/50">
+              <p className="text-sm font-medium mb-2">Market</p>
+              <MarketSwitcher markets={markets} i18nLocales={i18nLocales} />
             </div>
+
+            {/* Any other registered demo actions */}
+            {demoPanelActions.length > 0 && (
+              <div className="space-y-4">
+                {demoPanelActions.map((action) => (
+                  <div
+                    key={action.id}
+                    className="p-3 border rounded-lg bg-muted/50"
+                  >
+                    <p className="text-sm font-medium mb-2">{action.label}</p>
+                    {action.render()}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

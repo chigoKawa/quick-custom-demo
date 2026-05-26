@@ -8,6 +8,7 @@ import { extractContentfulAssetUrl } from "@/lib/utils";
 import { resolvePreviewMode } from "@/lib/preview";
 import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provider-wrapper";
 import { fetchRelatedBlogPosts } from "@/lib/related-stories";
+import { requireValidActiveMarket } from "@/lib/markets";
 
 // Get the homepage slug from environment variables
 const PAGE_SLUG = process.env.NEXT_PUBLIC_HOMEPAGE_SLUG! || "home";
@@ -25,6 +26,7 @@ export default async function IndexPage({ params, searchParams }: Props) {
 
   const resolvedSearchParams = await searchParams;
   const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSearchParams);
+  await requireValidActiveMarket({ isPreview, bypassInPreview: true });
 
   const entries = await getEntries<LandingPageSkeleton>(
     {

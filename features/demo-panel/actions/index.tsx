@@ -1,11 +1,11 @@
 "use client";
 
 import { DemoPanelAction } from "../types";
-import { VisitorRoleAction } from "./visitor-role-action";
 
 /**
  * Registry of demo panel actions.
- * Add new actions here to make them appear in the demo panel.
+ * Add new actions here to make them appear in the demo panel below the
+ * market switcher.
  *
  * Example of adding a new action:
  * {
@@ -14,16 +14,4 @@ import { VisitorRoleAction } from "./visitor-role-action";
  *   render: () => <ResetProfileAction />,
  * },
  */
-export const demoPanelActions: DemoPanelAction[] = [
-  {
-    id: "visitor-role",
-    label: "Visitor Role",
-    render: () => <VisitorRoleAction />,
-  },
-  // EXAMPLE: Add more actions below
-  // {
-  //   id: "example-action",
-  //   label: "Example Action",
-  //   render: () => <ExampleAction />,
-  // },
-];
+export const demoPanelActions: DemoPanelAction[] = [];

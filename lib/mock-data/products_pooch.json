@@ -1,0 +1,297 @@
+[
+  {
+    "id": "poochandmutt-primal-sprat-salmon-fish-jerky",
+    "title": "Primal Sprat & Salmon Fish Jerky",
+    "slug": "primal-sprat-salmon-fish-jerky",
+    "description": "Fish jerky dog treat made with 85% sprat, salmon and trout. Positioned as a high-value reward with omega support for skin and coat health and protein to help maintain muscle.",
+    "price": 3.99,
+    "currency": "GBP",
+    "images": [
+      "https://www.petbusinessworld.co.uk/wp-content/uploads/2026/05/HD-Fish-Chews-Lifestyle-cropped.jpg"
+    ],
+    "category": "dog-treats",
+    "tags": [
+      "dogs",
+      "treats",
+      "fish-jerky",
+      "primal",
+      "omega",
+      "skin-and-coat"
+    ],
+    "stock": 42,
+    "rating": 5.0,
+    "reviewCount": 31,
+    "metadata": {
+      "brand": "Pooch & Mutt",
+      "line": "Primal",
+      "type": "Fish Jerky",
+      "format": "Treat",
+      "primaryProtein": "Sprat, Salmon & Trout"
+    }
+  },
+  {
+    "id": "poochandmutt-puppy-fish-jerky",
+    "title": "Puppy Fish Jerky",
+    "slug": "puppy-fish-jerky",
+    "description": "Grain-free fish puppy jerky designed as a high-value training treat. Made with 85% sprat, salmon and trout and positioned for smaller puppy mouths.",
+    "price": 3.99,
+    "currency": "GBP",
+    "images": [
+      "https://www.petgazette.biz/wp-content/uploads/2025/09/38fed9ec59095c33d329c6b5d.png",
+      "https://www.petbusinessworld.co.uk/wp-content/uploads/2026/05/HD-Fish-Chews-Lifestyle-cropped.jpg"
+    ],
+    "category": "dog-treats",
+    "tags": [
+      "dogs",
+      "puppy",
+      "treats",
+      "fish-jerky",
+      "grain-free",
+      "training"
+    ],
+    "stock": 38,
+    "rating": 5.0,
+    "reviewCount": 24,
+    "metadata": {
+      "brand": "Pooch & Mutt",
+      "line": "Puppy",
+      "type": "Fish Jerky",
+      "format": "Treat",
+      "lifeStage": "Puppy"
+    }
+  },
+  {
+    "id": "poochandmutt-primal-venison-lamb-high-meat-dry-food",
+    "title": "Primal Venison & Lamb High Meat Dry Food",
+    "slug": "primal-venison-lamb-high-meat-dry-food",
+    "description": "High-meat dry dog food in the Primal range featuring venison and lamb. Positioned as a protein-forward dry food option for dogs.",
+    "price": 18.99,
+    "currency": "GBP",
+    "images": [],
+    "category": "dog-food-dry",
+    "tags": [
+      "dogs",
+      "dry-food",
+      "primal",
+      "venison",
+      "lamb",
+      "high-meat"
+    ],
+    "stock": 27,
+    "rating": 5.0,
+    "reviewCount": 19,
+    "metadata": {
+      "brand": "Pooch & Mutt",
+      "line": "Primal",
+      "type": "High Meat Dry Food",
+      "format": "Dry Food",
+      "primaryProtein": "Venison & Lamb"
+    }
+  },
+  {
+    "id": "poochandmutt-primal-long-lasting-fish-hide-chews",
+    "title": "Primal Long-Lasting Fish Hide Chews",
+    "slug": "primal-long-lasting-fish-hide-chews",
+    "description": "Long-lasting dog chews in the Primal range made from fish hide. Positioned as a durable chew treat option.",
+    "price": 4.99,
+    "currency": "GBP",
+    "images": [
+      "https://ladyandthescamps.com/wp-content/uploads/2023/12/img_1034-1.jpg"
+    ],
+    "category": "dog-chews",
+    "tags": [
+      "dogs",
+      "chews",
+      "fish-hide",
+      "primal",
+      "long-lasting",
+      "treats"
+    ],
+    "stock": 33,
+    "rating": 5.0,
+    "reviewCount": 17,
+    "metadata": {
+      "brand": "Pooch & Mutt",
+      "line": "Primal",
+      "type": "Fish Hide Chews",
+      "format": "Chew",
+      "primaryProtein": "Fish"
+    }
+  },
+  {
+    "id": "poochandmutt-calm-relaxed-dry-food",
+    "title": "Calm & Relaxed Dry Food",
+    "slug": "calm-relaxed-dry-food",
+    "description": "Dry dog food positioned for calm and relaxed wellbeing support. Part of the wellbeing-focused product range.",
+    "price": 8.49,
+    "currency": "GBP",
+    "images": [
+      "https://www.justdogsshop.co.uk/wp-content/uploads/2023/07/pm-calm-relax.jpg"
+    ],
+    "category": "dog-food-dry",
+    "tags": [
+      "dogs",
+      "dry-food",
+      "wellbeing",
+      "calming",
+      "adult-dogs",
+      "functional-nutrition"
+    ],
+    "stock": 29,
+    "rating": 5.0,
+    "reviewCount": 22,
+    "metadata": {
+      "brand": "Pooch & Mutt",
+      "line": "Wellbeing",
+      "type": "Functional Dry Food",
+      "format": "Dry Food",
+      "focus": "Calming"
+    }
+  },
+  {
+    "id": "poochandmutt-bionic-biotic",
+    "title": "Bionic Biotic",
+    "slug": "bionic-biotic",
+    "description": "Dog supplement positioned within the superfoods range. Marketed as a functional wellness product for daily support.",
+    "price": 10.99,
+    "currency": "GBP",
+    "images": [],
+    "category": "dog-supplements",
+    "tags": [
+      "dogs",
+      "supplements",
+      "superfoods",
+      "biotic",
+      "wellness",
+      "daily-support"
+    ],
+    "stock": 46,
+    "rating": 5.0,
+    "reviewCount": 28,
+    "metadata": {
+      "brand": "Pooch & Mutt",
+      "line": "Superfoods",
+      "type": "Supplement",
+      "format": "Powder or Daily Add-on",
+      "focus": "Digestive and daily wellness support"
+    }
+  },
+  {
+    "id": "poochandmutt-turkey-chicken-wet-food",
+    "title": "Turkey & Chicken Wet Food",
+    "slug": "turkey-chicken-wet-food",
+    "description": "Wet dog food featuring turkey and chicken. Positioned as a complete wet food product in the veterinary-led range shown on the homepage.",
+    "price": 2.49,
+    "currency": "GBP",
+    "images": [
+      "https://i0.wp.com/peexmart.com/wp-content/uploads/2024/01/7130870PL.jpg?fit=300%2C300&ssl=1"
+    ],
+    "category": "dog-food-wet",
+    "tags": [
+      "dogs",
+      "wet-food",
+      "turkey",
+      "chicken",
+      "veterinary",
+      "complete-food"
+    ],
+    "stock": 54,
+    "rating": 5.0,
+    "reviewCount": 18,
+    "metadata": {
+      "brand": "Pooch & Mutt",
+      "line": "Veterinary",
+      "type": "Wet Food",
+      "format": "Wet Food",
+      "primaryProtein": "Turkey & Chicken"
+    }
+  },
+  {
+    "id": "poochandmutt-gut-health-test",
+    "title": "Gut Health Test",
+    "slug": "gut-health-test",
+    "description": "At-home gut health testing product for dogs. Positioned as a premium diagnostic product within Pooch & Mutt's gut health offering.",
+    "price": 69.99,
+    "currency": "GBP",
+    "images": [
+      "https://www.vafo.com/wp-content/uploads/2025/08/pr-gut-health-pr-images-test-kit-open-1.jpg"
+    ],
+    "category": "dog-health-tests",
+    "tags": [
+      "dogs",
+      "gut-health",
+      "test",
+      "wellbeing",
+      "microbiome",
+      "diagnostics"
+    ],
+    "stock": 12,
+    "rating": 5.0,
+    "reviewCount": 14,
+    "metadata": {
+      "brand": "Pooch & Mutt",
+      "line": "Wellbeing",
+      "type": "Gut Health Test",
+      "format": "Home Test Kit",
+      "focus": "Gut microbiome"
+    }
+  },
+  {
+    "id": "poochandmutt-dental-powder-for-dogs",
+    "title": "Dental Powder For Dogs",
+    "slug": "dental-powder-for-dogs",
+    "description": "Functional dental support powder for dogs. Positioned in the superfoods range as a daily oral care add-on.",
+    "price": 15.99,
+    "currency": "GBP",
+    "images": [
+      "https://www.vafo.com/wp-content/uploads/2025/05/arv00709.jpg"
+    ],
+    "category": "dog-dental-care",
+    "tags": [
+      "dogs",
+      "dental",
+      "powder",
+      "superfoods",
+      "oral-care",
+      "supplements"
+    ],
+    "stock": 21,
+    "rating": 5.0,
+    "reviewCount": 26,
+    "metadata": {
+      "brand": "Pooch & Mutt",
+      "line": "Superfoods",
+      "type": "Dental Powder",
+      "format": "Powder Supplement",
+      "focus": "Dental care"
+    }
+  },
+  {
+    "id": "poochandmutt-small-dog-complete-superfood",
+    "title": "Small Dog Complete Superfood",
+    "slug": "small-dog-complete-superfood",
+    "description": "Complete superfood product formulated for small dogs. Positioned as a wellbeing-focused food product tailored to smaller breeds.",
+    "price": 8.99,
+    "currency": "GBP",
+    "images": ["https://images.ctfassets.net/5gwznsevsdag/5COvrbOOx0X7sIFWmOLLzF/ba4206b0c337f959b904def5e8586580/Small_Dog_Complete_Superfood_SF7.5SMALL_1.jpg"],
+    "category": "dog-food-dry",
+    "tags": [
+      "dogs",
+      "small-dog",
+      "superfood",
+      "wellbeing",
+      "complete-food",
+      "tailored-nutrition"
+    ],
+    "stock": 25,
+    "rating": 5.0,
+    "reviewCount": 20,
+    "metadata": {
+      "brand": "Pooch & Mutt",
+      "line": "Wellbeing",
+      "type": "Complete Superfood",
+      "format": "Dry Food",
+      "lifeStageOrSize": "Small Dog"
+    }
+  }
+]

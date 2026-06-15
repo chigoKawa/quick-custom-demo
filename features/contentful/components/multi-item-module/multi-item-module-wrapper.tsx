@@ -4,13 +4,13 @@ import React from "react";
 import { useContentfulLiveUpdates } from "@contentful/live-preview/react";
 import { Entry } from "contentful";
 
-import type { IMultiItemModule, IHeroModule, IBlogPostPage, ILandingPage, ILogo, IBaseButton, ICampaign, IAuction } from "../../type";
+import type { IMultiItemModule, IHeroModule, IBlogPostPage, ILandingPage, ILogo, IBaseButton, ICampaign, IAuction, ICallout, ICta } from "../../type";
 import { extractUrlFromTarget, localizeInternalPath } from "@/lib/utils";
 import { extractImageWithFocalPoint } from "@/lib/focal-point";
 import MultiItemModule, { type MultiItemModuleItem, type MultiItemLayout, type BackgroundTheme } from "./multi-item-module";
 import HeroModule, { type HeroModuleSlide } from "../hero-module/hero-module";
 
-type SupportedItemEntry = IHeroModule | IBlogPostPage | ILandingPage | ILogo | ICampaign | IAuction;
+type SupportedItemEntry = IHeroModule | IBlogPostPage | ILandingPage | ILogo | ICampaign | IAuction | ICallout | ICta;
 
 type LinkLocale = { locale?: string; defaultLocale?: string };
 
@@ -216,6 +216,80 @@ function extractItemFromAuction(entry: IAuction, linkLocale: LinkLocale): MultiI
   };
 }
 
+function extractItemFromCallout(entry: ICallout, linkLocale: LinkLocale): MultiItemModuleItem | null {
+  if (!entry?.sys?.id || !entry?.fields) return null;
+
+  const titleField = entry.fields.title;
+  const subtitleField = entry.fields.subtitle;
+
+  // Rich text: extract plain text from the first paragraph node
+  function richTextToPlain(rt: unknown): string | undefined {
+    if (!rt || typeof rt !== "object") return undefined;
+    const content = (rt as { content?: Array<{ content?: Array<{ value?: string }> }> }).content;
+    if (!Array.isArray(content)) return undefined;
+    return content
+      .flatMap((block) => block.content ?? [])
+      .map((n) => n.value ?? "")
+      .join("")
+      .trim() || undefined;
+  }
+
+  const title = richTextToPlain(titleField);
+  const description = richTextToPlain(subtitleField);
+
+  const mediaAsset = entry.fields.media as any;
+  const imageUrl = mediaAsset?.fields?.file?.url
+    ? `https:${mediaAsset.fields.file.url}`
+    : undefined;
+
+  const button = entry.fields.button;
+  const { locale, defaultLocale = "en-US" } = linkLocale;
+  const ctaLabel = button?.fields?.label;
+  const ctaHref = button?.fields?.target
+    ? extractUrlFromTarget(button.fields.target, { locale, defaultLocale })
+    : undefined;
+
+  return {
+    id: entry.sys.id,
+    contentType: "callout",
+    title,
+    description,
+    imageUrl,
+    imageAlt: title ?? undefined,
+    ctaLabel: ctaLabel ?? undefined,
+    ctaHref: ctaHref ?? undefined,
+  };
+}
+
+function extractItemFromCta(entry: ICta, linkLocale: LinkLocale): MultiItemModuleItem | null {
+  if (!entry?.sys?.id || !entry?.fields) return null;
+
+  const { locale, defaultLocale = "en-US" } = linkLocale;
+  const images = entry.fields.images as any[];
+  const firstImage = Array.isArray(images) ? images[0] : undefined;
+  const imageUrl = firstImage?.fields?.file?.url
+    ? `https:${firstImage.fields.file.url}`
+    : undefined;
+
+  const buttons = Array.isArray(entry.fields.actionButtons) ? entry.fields.actionButtons : [];
+  const firstButton = buttons[0] as IBaseButton | undefined;
+  const ctaLabel = firstButton?.fields?.label;
+  const ctaHref = firstButton?.fields?.target
+    ? extractUrlFromTarget(firstButton.fields.target, { locale, defaultLocale })
+    : undefined;
+
+  return {
+    id: entry.sys.id,
+    contentType: "cta",
+    title: entry.fields.title ?? undefined,
+    description: entry.fields.body ?? undefined,
+    imageUrl,
+    imageAlt: entry.fields.title ?? undefined,
+    ctaLabel: ctaLabel ?? undefined,
+    ctaHref: ctaHref ?? undefined,
+  };
+}
+
 function extractItem(entry: SupportedItemEntry, linkLocale: LinkLocale): MultiItemModuleItem | null {
   const contentType = getContentTypeId(entry);
 
@@ -232,6 +306,10 @@ function extractItem(entry: SupportedItemEntry, linkLocale: LinkLocale): MultiIt
       return extractItemFromCampaign(entry as ICampaign, linkLocale);
     case "auction":
       return extractItemFromAuction(entry as IAuction, linkLocale);
+    case "callout":
+      return extractItemFromCallout(entry as ICallout, linkLocale);
+    case "cta":
+      return extractItemFromCta(entry as ICta, linkLocale);
     default:
       if (process.env.NODE_ENV === "development") {
         console.warn(`[MultiItemModule] Unknown item content type: ${contentType}`);
@@ -267,12 +345,17 @@ export default function MultiItemModuleWrapper(
     return null;
   }
 
-  // Filter items to only include those matching the first item's content type
-  const filteredItems = rawItems.filter((item) => {
-    if (!item?.sys?.id) return false;
-    const itemContentType = getContentTypeId(item);
-    return itemContentType === firstItemContentType;
-  });
+  const layout = (entry.fields.layout ?? "carousel") as MultiItemLayout;
+
+  // For value-prop layout, allow mixed callout/cta types; otherwise keep same-type filter
+  const VALUE_PROP_TYPES = new Set(["callout", "cta"]);
+  const filteredItems =
+    layout === "value-prop" && VALUE_PROP_TYPES.has(firstItemContentType)
+      ? rawItems.filter((item) => item?.sys?.id && VALUE_PROP_TYPES.has(getContentTypeId(item) ?? ""))
+      : rawItems.filter((item) => {
+          if (!item?.sys?.id) return false;
+          return getContentTypeId(item) === firstItemContentType;
+        });
 
   if (filteredItems.length === 0) {
     return null;
@@ -307,8 +390,21 @@ export default function MultiItemModuleWrapper(
   }
 
   const isLogoContent = firstItemContentType === "logo";
-  const layout = (entry.fields.layout ?? "carousel") as MultiItemLayout;
   const backgroundTheme = (entry.fields.backgroundTheme ?? "default") as BackgroundTheme;
+
+  const rawActionButton = entry.fields.actionButton as IBaseButton | undefined;
+  let actionButton: { label: string; href: string; metricEventName?: string; entryId?: string } | undefined;
+  if (rawActionButton?.fields?.label) {
+    const href = extractUrlFromTarget(rawActionButton.fields.target, linkLocale);
+    if (href) {
+      actionButton = {
+        label: rawActionButton.fields.label,
+        href,
+        entryId: rawActionButton.sys?.id,
+        metricEventName: entry.fields.metricEventName ?? undefined,
+      };
+    }
+  }
 
   return (
     <MultiItemModule
@@ -324,6 +420,7 @@ export default function MultiItemModuleWrapper(
       showDots={entry.fields.showDots ?? true}
       backgroundTheme={backgroundTheme}
       isLogoContent={isLogoContent}
+      actionButton={actionButton}
     />
   );
 }

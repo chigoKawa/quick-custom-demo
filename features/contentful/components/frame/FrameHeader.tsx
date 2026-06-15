@@ -7,6 +7,7 @@ import { baseRichTextOptions } from "@/features/contentful/richtext";
 import { useContentfulInspectorMode, useContentfulLiveUpdates } from "@contentful/live-preview/react";
 import { Experience } from "@ninetailed/experience.js-react";
 import { ExperienceMapper } from "@ninetailed/experience.js-utils-contentful";
+import { stripNtFromMappedExperiences } from "@/lib/contentful-live-preview-shallow";
 
 function HeaderRender(entry: IFrameHeader) {
   const liveHeader = (useContentfulLiveUpdates(entry) as IFrameHeader) || entry;
@@ -65,7 +66,7 @@ export default function FrameHeader({ frame }: { frame: IFrame }) {
   type ExperiencesProp = NonNullable<
     React.ComponentProps<typeof Experience>["experiences"]
   >;
-  const experiencesForProp = mappedUnknown as unknown as ExperiencesProp;
+  const experiencesForProp = stripNtFromMappedExperiences(mappedUnknown) as unknown as ExperiencesProp;
 
   if (mappedUnknown.length > 0) {
     const HeaderComponent: React.ComponentType<IFrameHeader> = HeaderRender;

@@ -3,6 +3,7 @@
 import React from "react";
 import { Experience } from "@ninetailed/experience.js-react";
 import { ExperienceMapper } from "@ninetailed/experience.js-utils-contentful";
+import { stripNtFromMappedExperiences } from "@/lib/contentful-live-preview-shallow";
 import type { IMultiItemModule } from "../../type";
 import MultiItemModuleWrapper from "./multi-item-module-wrapper";
 import { useSiteChromeLocale } from "@/features/site-chrome-locale";
@@ -44,7 +45,7 @@ export default function PersonalizedMultiItemModule(entry: IMultiItemModule) {
   type ExperiencesProp = NonNullable<
     React.ComponentProps<typeof Experience>["experiences"]
   >;
-  const experiencesForProp = mappedExperiencesUnknown as unknown as ExperiencesProp;
+  const experiencesForProp = stripNtFromMappedExperiences(mappedExperiencesUnknown) as unknown as ExperiencesProp;
 
   return (
     <Experience

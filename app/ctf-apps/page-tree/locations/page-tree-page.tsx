@@ -4,13 +4,13 @@ import type { PageAppSDK } from "@contentful/app-sdk";
 import { useSDK } from "@contentful/react-apps-toolkit";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  BADGE_COLOURS,
+  getBadgeColour,
   DEFAULT_LOCALE,
 } from "../constants";
 import { fetchAllEntries } from "../cma-service";
 import type { PageTreeEntry, PageTreeInstallationParameters, PageTreeNode } from "../types";
 import { useDebouncedValue } from "../use-debounced-value";
-import { buildTree, getInitials, resolveContentTypes } from "../utils";
+import { buildTree, getInitials, resolveContentTypes, timeAgo, type TreeSortMode } from "../utils";
 import Pagination, { DEFAULT_PAGE_SIZE } from "./pagination";
 import { TableSkeleton } from "./skeleton";
 import styles from "./page-tree-page.module.css";
@@ -77,15 +77,13 @@ interface TreeRowProps {
 const TreeRow = memo(function TreeRow({ node, expanded, onToggle, onOpen, isOrphan, siteBaseUrl }: TreeRowProps) {
   const hasChildren = node.children.length > 0;
   const isExpanded = expanded.has(node.id);
-  const badgeColours = BADGE_COLOURS[node.contentTypeId] ?? BADGE_COLOURS.default;
+  const badgeColours = getBadgeColour(node.contentTypeId);
 
   return (
     <div
       className={styles.treeRow}
       style={{ paddingLeft: node.depth * 24 + 12 }}
     >
-      <span className={styles.dragHandle}>≡</span>
-
       <button
         className={styles.toggleBtn}
         onClick={(e) => {
@@ -117,6 +115,10 @@ const TreeRow = memo(function TreeRow({ node, expanded, onToggle, onOpen, isOrph
       <StatusBadge status={node.status} />
 
       <span className={styles.ctLabel}>{node.contentTypeId}</span>
+
+      <span className={styles.timeLabel} title={node.updatedAt}>
+        {timeAgo(node.updatedAt)}
+      </span>
 
       {isOrphan && (
         <span className={styles.orphanBadge}>orphan</span>
@@ -164,6 +166,7 @@ export default function PageTreePage() {
   const [activeTab, setActiveTab] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const [sortMode, setSortMode] = useState<TreeSortMode>("recent");
   const initialExpandDone = useRef(false);
 
   const loadEntries = useCallback(async () => {
@@ -194,7 +197,7 @@ export default function PageTreePage() {
     );
   }, [allEntries, activeTab]);
 
-  const { roots, orphans } = useMemo(() => buildTree(entries, homeSlug), [entries, homeSlug]);
+  const { roots, orphans } = useMemo(() => buildTree(entries, homeSlug, sortMode), [entries, homeSlug, sortMode]);
 
   // Per-type counts for tab badges
   const typeCounts = useMemo(() => {
@@ -349,6 +352,13 @@ export default function PageTreePage() {
               </button>
             </>
           )}
+          <button
+            className={styles.btnIcon}
+            onClick={() => setSortMode((m) => (m === "recent" ? "alpha" : "recent"))}
+            title={sortMode === "recent" ? "Sorted by recent — click for A-Z" : "Sorted A-Z — click for recent"}
+          >
+            {sortMode === "recent" ? "🕑" : "🔤"}
+          </button>
           <button className={styles.btnRefresh} onClick={loadEntries} disabled={loading}>
             {loading ? "..." : "Refresh"}
           </button>
@@ -369,7 +379,7 @@ export default function PageTreePage() {
             <span className={styles.tabCount}>{allEntries.length}</span>
           </button>
           {contentTypeConfigs.map((c) => {
-            const colours = BADGE_COLOURS[c.contentTypeId] ?? BADGE_COLOURS.default;
+            const colours = getBadgeColour(c.contentTypeId);
             return (
               <button
                 key={c.contentTypeId}
@@ -396,6 +406,7 @@ export default function PageTreePage() {
         <span className={styles.colPath}>Path</span>
         <span className={styles.colStatus}>Status</span>
         <span className={styles.colType}>Type</span>
+        <span className={styles.colTime}>Edited</span>
       </div>
 
       {/* Content */}

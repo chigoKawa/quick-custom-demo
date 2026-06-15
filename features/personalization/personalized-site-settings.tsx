@@ -3,6 +3,7 @@
 import React, { createContext, useContext } from "react";
 import { Experience } from "@ninetailed/experience.js-react";
 import { ExperienceMapper } from "@ninetailed/experience.js-utils-contentful";
+import { stripNtFromMappedExperiences } from "@/lib/contentful-live-preview-shallow";
 import type { Entry } from "contentful";
 import type { SiteSettingsSkeleton } from "@/lib/site-settings";
 import { Header } from "@/components/header";
@@ -81,7 +82,13 @@ export default function PersonalizedSiteSettings({
   type ExperiencesProp = NonNullable<
     React.ComponentProps<typeof Experience>["experiences"]
   >;
-  const experiencesForProp = mappedExperiencesUnknown as unknown as ExperiencesProp;
+  const experiencesForProp = stripNtFromMappedExperiences(mappedExperiencesUnknown) as unknown as ExperiencesProp;
+
+  // Strip nt_experiences / nt_variants before spreading into <Experience> —
+  // the resolved experience entries back-reference the baseline creating a
+  // circular JS object that JSON.stringify (Ninetailed preview postMessage) can't serialize.
+  const { nt_experiences: _ntExp, nt_variants: _ntVar, ...siteFields } = siteSettings.fields;
+  const baselineEntry = { sys: siteSettings.sys, fields: siteFields } as typeof siteSettings;
 
   return (
     <PageChildrenContext.Provider value={children}>
@@ -90,7 +97,7 @@ export default function PersonalizedSiteSettings({
         id={siteSettings.sys.id}
         component={SiteSettingsRenderer}
         experiences={experiencesForProp}
-        {...siteSettings}
+        {...baselineEntry}
       />
     </PageChildrenContext.Provider>
   );

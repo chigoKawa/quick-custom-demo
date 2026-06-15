@@ -5,12 +5,24 @@ import { useContentfulInspectorMode } from "@contentful/live-preview/react";
 import type { IHeroBanner } from "@/features/contentful/type";
 import { extractContentfulAssetUrl } from "@/lib/utils";
 import MobileButton from "./mobile-button";
+import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import { baseRichTextOptions } from "@/features/contentful/richtext";
+import type { Document } from "@contentful/rich-text-types";
+
+function richTextToPlain(doc: unknown): string {
+  if (!doc || typeof doc !== "object") return "";
+  const n = doc as { value?: string; content?: unknown[] };
+  if (n.value) return n.value;
+  if (Array.isArray(n.content)) return n.content.map(richTextToPlain).join("");
+  return "";
+}
 
 export default function MobileHeroBanner(entry: IHeroBanner) {
   const inspectorProps = useContentfulInspectorMode({ entryId: entry?.sys?.id ?? "" });
 
   if (!entry?.sys?.id || !entry?.fields) return null;
-  const headline = entry.fields.headline as string;
+  const headlineDoc = entry.fields.headline as Document | null | undefined;
+  const headlinePlain = richTextToPlain(headlineDoc);
   const body = entry.fields.body;
   const heroImage = entry.fields.heroImage ?? null;
   const imageUrl = extractContentfulAssetUrl(heroImage);
@@ -23,7 +35,7 @@ export default function MobileHeroBanner(entry: IHeroBanner) {
         <div className="w-full aspect-[16/10] bg-secondary">
           <img
             src={imageUrl}
-            alt={headline || ""}
+            alt={headlinePlain || ""}
             className="w-full h-full object-cover"
           />
         </div>
@@ -31,12 +43,12 @@ export default function MobileHeroBanner(entry: IHeroBanner) {
 
       {/* Content below image */}
       <div className="px-4 py-5">
-        {headline && (
+        {headlineDoc && (
           <h1
             {...inspectorProps({ fieldId: "headline" })}
             className="text-2xl font-bold tracking-tight mb-2 text-foreground"
           >
-            {headline}
+            {documentToReactComponents(headlineDoc, baseRichTextOptions)}
           </h1>
         )}
 

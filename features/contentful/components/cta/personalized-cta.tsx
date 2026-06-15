@@ -3,6 +3,7 @@
 import React from "react";
 import { Experience } from "@ninetailed/experience.js-react";
 import { ExperienceMapper } from "@ninetailed/experience.js-utils-contentful";
+import { stripNtFromMappedExperiences } from "@/lib/contentful-live-preview-shallow";
 import type { ICta } from "../../type";
 import CtaWrapper from "./cta-wrapper";
 
@@ -31,7 +32,7 @@ export default function PersonalizedCta(entry: ICta) {
   type ExperiencesProp = NonNullable<
     React.ComponentProps<typeof Experience>["experiences"]
   >;
-  const experiencesForProp = mappedExperiencesUnknown as unknown as ExperiencesProp;
+  const experiencesForProp = stripNtFromMappedExperiences(mappedExperiencesUnknown) as unknown as ExperiencesProp;
 
   return (
     <Experience

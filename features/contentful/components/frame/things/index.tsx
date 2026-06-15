@@ -12,6 +12,7 @@ import type {
 } from "@/features/contentful/type";
 import { Experience } from "@ninetailed/experience.js-react";
 import { ExperienceMapper } from "@ninetailed/experience.js-utils-contentful";
+import { stripNtFromMappedExperiences } from "@/lib/contentful-live-preview-shallow";
 
 type ThingEntry =
   | ICallout
@@ -56,9 +57,11 @@ export default function Thing({
   const experiences = (liveEntry as any)?.fields?.nt_experiences ?? [];
 
   const mapped = Array.isArray(experiences)
-    ? experiences
-        .filter(ExperienceMapper.isExperienceEntry)
-        .map(ExperienceMapper.mapExperience)
+    ? stripNtFromMappedExperiences(
+        experiences
+          .filter(ExperienceMapper.isExperienceEntry)
+          .map(ExperienceMapper.mapExperience)
+      )
     : [];
 
   if (mapped.length > 0) {

@@ -87,6 +87,8 @@ export async function getSiteSettings(
   preview?: boolean,
   timelineToken?: string | null
 ): Promise<Entry<SiteSettingsSkeleton> | null> {
+  // include:5 resolves siteSettings → nav → navLinkColumn → navLink → target page (slug).
+  // nt_experiences are stripped at the live-preview boundary, not at fetch time.
   const query: Record<string, unknown> = {
     content_type: "siteSettings",
     include: 5,
@@ -101,17 +103,7 @@ export async function getSiteSettings(
     timelineToken
   );
 
-  // With personalization variants there may be multiple siteSettings entries.
-  // The baseline (original) is the one that has nt_experiences linked;
-  // variant entries created by Ninetailed won't have that field populated.
-  // Fall back to the first (oldest) entry if none have experiences.
-  const baseline = entries.find(
-    (e) =>
-      Array.isArray((e.fields as Record<string, unknown>).nt_experiences) &&
-      ((e.fields as Record<string, unknown>).nt_experiences as unknown[]).length > 0
-  );
-
-  return baseline || entries[0] || null;
+  return entries[0] || null;
 }
 
 export type LocaleFieldPick = { locale?: string; defaultLocale?: string };

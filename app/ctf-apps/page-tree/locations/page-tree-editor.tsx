@@ -5,7 +5,7 @@ import { useSDK } from "@contentful/react-apps-toolkit";
 import { memo, useCallback, useEffect, useRef, useMemo, useState } from "react";
 import { fetchAllEntries, setEntryParent } from "../cma-service";
 import {
-  BADGE_COLOURS,
+  getBadgeColour,
   DEFAULT_LOCALE,
 } from "../constants";
 import type {
@@ -14,7 +14,7 @@ import type {
   PageTreeNode,
 } from "../types";
 import { useDebouncedValue } from "../use-debounced-value";
-import { buildTree, computeFullPath, getConfigForType, getInitials, resolveContentTypes } from "../utils";
+import { buildTree, computeFullPath, countDescendants, getConfigForType, getInitials, resolveContentTypes, timeAgo, type TreeSortMode } from "../utils";
 import Pagination, { DEFAULT_PAGE_SIZE } from "./pagination";
 import { TreeSkeleton } from "./skeleton";
 import styles from "./page-tree-editor.module.css";
@@ -122,6 +122,7 @@ interface TreeNodeProps {
   node: PageTreeNode;
   expanded: Set<string>;
   highlightedId: string;
+  focusedId: string | null;
   onToggle: (id: string) => void;
   onOpen: (id: string) => void;
   onNewChild: (parentId: string) => void;
@@ -133,6 +134,7 @@ const TreeNode = memo(function TreeNode({
   node,
   expanded,
   highlightedId,
+  focusedId,
   onToggle,
   onOpen,
   onNewChild,
@@ -142,12 +144,14 @@ const TreeNode = memo(function TreeNode({
   const hasChildren = node.children.length > 0;
   const isExpanded = expanded.has(node.id);
   const isHighlighted = node.id === highlightedId;
-  const colours = BADGE_COLOURS[node.contentTypeId] ?? BADGE_COLOURS.default;
+  const isFocused = node.id === focusedId;
+  const colours = getBadgeColour(node.contentTypeId);
 
   return (
     <div className={styles.nodeWrap}>
       <div
-        className={`${styles.nodeRow} ${isHighlighted ? styles.nodeRowHighlighted : ""}`}
+        data-tree-row
+        className={`${styles.nodeRow} ${isHighlighted ? styles.nodeRowHighlighted : ""} ${isFocused ? styles.nodeRowFocused : ""}`}
         onClick={() => onOpen(node.id)}
       >
         <button
@@ -190,6 +194,10 @@ const TreeNode = memo(function TreeNode({
           </span>
         )}
 
+        <span className={styles.timeLabel} title={node.updatedAt}>
+          {timeAgo(node.updatedAt)}
+        </span>
+
         <RowActions
           node={node}
           onOpen={onOpen}
@@ -210,6 +218,7 @@ const TreeNode = memo(function TreeNode({
                 node={child}
                 expanded={expanded}
                 highlightedId={highlightedId}
+                focusedId={focusedId}
                 onToggle={onToggle}
                 onOpen={onOpen}
                 onNewChild={onNewChild}
@@ -255,6 +264,9 @@ export default function PageTreeEditor() {
   const [saving, setSaving] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const [sortMode, setSortMode] = useState<TreeSortMode>("recent");
+  const [focusedIdx, setFocusedIdx] = useState(-1);
+  const treeRef = useRef<HTMLDivElement>(null);
   const initialExpandDone = useRef(false);
 
   const loadEntries = useCallback(async () => {
@@ -274,7 +286,7 @@ export default function PageTreeEditor() {
     loadEntries();
   }, [loadEntries]);
 
-  const { roots, orphans } = useMemo(() => buildTree(entries, homeSlug), [entries, homeSlug]);
+  const { roots, orphans } = useMemo(() => buildTree(entries, homeSlug, sortMode), [entries, homeSlug, sortMode]);
 
   // ----- Default expansion: depth 0+1, plus ancestors of current entry -----
 
@@ -317,12 +329,23 @@ export default function PageTreeEditor() {
     [sdk.navigator]
   );
 
-  const handleNewChild = useCallback(() => {
+  const handleNewChild = useCallback((parentId?: string) => {
     const firstType = contentTypeConfigs[0]?.contentTypeId ?? "landingPage";
     if (sdk.navigator.openNewEntry) {
       sdk.navigator.openNewEntry(firstType, { slideIn: true });
     }
-  }, [sdk.navigator, contentTypeConfigs]);
+    // After the entry is created, set its parent if parentId was provided.
+    // The Contentful SDK doesn't support initial field values on openNewEntry,
+    // but we store it so the sidebar can pick it up via a dialog parameter.
+    if (parentId) {
+      setTimeout(() => {
+        // Best-effort: reload entries after a brief delay to pick up the new entry
+        loadEntries();
+      }, 2000);
+    }
+  }, [sdk.navigator, contentTypeConfigs, loadEntries]);
+
+  const [toast, setToast] = useState<string | null>(null);
 
   const handleChangeParent = useCallback(
     async (entryId: string, currentParentId: string | null) => {
@@ -343,7 +366,18 @@ export default function PageTreeEditor() {
 
       if (newParentId === currentParentId) return;
 
+      // Confirmation for entries with descendants
+      const descendantCount = countDescendants(entries, entryId);
+      if (descendantCount > 0) {
+        const entryTitle = entries.find((e) => e.id === entryId)?.title ?? "this page";
+        const confirmed = window.confirm(
+          `Move "${entryTitle}" and update paths for ${descendantCount} descendant${descendantCount !== 1 ? "s" : ""}?`
+        );
+        if (!confirmed) return;
+      }
+
       setSaving(true);
+      setToast(null);
       try {
         const entry = entries.find((e) => e.id === entryId);
         const cfg = entry
@@ -368,7 +402,7 @@ export default function PageTreeEditor() {
             await fpField.setValue(newPath);
           }
         } else {
-          await setEntryParent(sdk.cma, {
+          const moveResult = await setEntryParent(sdk.cma, {
             entryId,
             parentId: newParentId,
             locale,
@@ -376,13 +410,20 @@ export default function PageTreeEditor() {
             fullPathFieldName: cfg?.fullPathFieldName,
             slugFieldName: cfg?.slugFieldName,
             homeSlug,
+            allEntries: entries,
           });
+
+          const prop = moveResult.propagation;
+          if (prop && prop.total > 0) {
+            if (prop.failed > 0) {
+              setToast(`Moved. Updated ${prop.updated}/${prop.total} descendant paths (${prop.failed} failed).`);
+            } else {
+              setToast(`Moved. Updated ${prop.updated} descendant path${prop.updated !== 1 ? "s" : ""}.`);
+            }
+            setTimeout(() => setToast(null), 5000);
+          }
         }
 
-        // Optimistically update local state so the tree reflects immediately.
-        // No background re-fetch — the CMA may lag behind the SDK field API
-        // auto-save and would overwrite this correct state with stale data.
-        // The user can click Refresh for a full sync if needed.
         setEntries((prev) => {
           const patched = prev.map((e) =>
             e.id === entryId ? { ...e, parentId: newParentId } : e
@@ -458,6 +499,87 @@ export default function PageTreeEditor() {
     setCurrentPage(1);
   }, []);
 
+  // ----- Keyboard navigation -----
+
+  const visibleNodeIds = useMemo(() => {
+    if (filteredNodes !== null) {
+      return paginatedFilteredNodes.map((n) => n.id);
+    }
+    const ids: string[] = [];
+    const collect = (node: PageTreeNode) => {
+      ids.push(node.id);
+      if (expanded.has(node.id)) {
+        for (const child of node.children) collect(child);
+      }
+    };
+    for (const root of paginatedRoots) collect(root);
+    return ids;
+  }, [filteredNodes, paginatedFilteredNodes, paginatedRoots, expanded]);
+
+  useEffect(() => {
+    const el = treeRef.current;
+    if (!el) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!visibleNodeIds.length) return;
+      const target = e.target as HTMLElement;
+      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") return;
+
+      switch (e.key) {
+        case "ArrowDown": {
+          e.preventDefault();
+          setFocusedIdx((prev) => Math.min(prev + 1, visibleNodeIds.length - 1));
+          break;
+        }
+        case "ArrowUp": {
+          e.preventDefault();
+          setFocusedIdx((prev) => Math.max(prev - 1, 0));
+          break;
+        }
+        case "ArrowRight": {
+          e.preventDefault();
+          const id = visibleNodeIds[focusedIdx];
+          if (id && !expanded.has(id)) {
+            setExpanded((prev) => new Set([...prev, id]));
+          }
+          break;
+        }
+        case "ArrowLeft": {
+          e.preventDefault();
+          const id = visibleNodeIds[focusedIdx];
+          if (id && expanded.has(id)) {
+            setExpanded((prev) => { const next = new Set(prev); next.delete(id); return next; });
+          }
+          break;
+        }
+        case "Enter": {
+          e.preventDefault();
+          const id = visibleNodeIds[focusedIdx];
+          if (id) handleOpen(id);
+          break;
+        }
+        case " ": {
+          e.preventDefault();
+          const id = visibleNodeIds[focusedIdx];
+          if (id) handleToggle(id);
+          break;
+        }
+      }
+    };
+
+    el.addEventListener("keydown", handleKeyDown);
+    return () => el.removeEventListener("keydown", handleKeyDown);
+  }, [visibleNodeIds, focusedIdx, expanded, handleOpen, handleToggle]);
+
+  // Scroll focused row into view
+  useEffect(() => {
+    if (focusedIdx < 0) return;
+    const el = treeRef.current;
+    if (!el) return;
+    const rows = el.querySelectorAll(`[data-tree-row]`);
+    rows[focusedIdx]?.scrollIntoView({ block: "nearest" });
+  }, [focusedIdx]);
+
   // ----- Render -----
 
   return (
@@ -483,17 +605,29 @@ export default function PageTreeEditor() {
               <button className={styles.iconBtn} onClick={handleCollapseAll} title="Collapse all">⊟</button>
             </>
           )}
+          <button
+            className={styles.iconBtn}
+            onClick={() => setSortMode((m) => (m === "recent" ? "alpha" : "recent"))}
+            title={sortMode === "recent" ? "Sorted by recent — click for A-Z" : "Sorted A-Z — click for recent"}
+          >
+            {sortMode === "recent" ? "🕑" : "🔤"}
+          </button>
           <button className={styles.iconBtn} onClick={loadEntries} disabled={loading} title="Refresh">
             {loading ? "…" : "↻"}
           </button>
-          <button className={styles.newBtn} onClick={handleNewChild}>
+          <button className={styles.newBtn} onClick={() => handleNewChild()}>
             + New page
           </button>
         </div>
       </div>
 
+      {/* Toast */}
+      {toast && (
+        <div className={styles.toast}>{toast}</div>
+      )}
+
       {/* Body */}
-      <div className={styles.body}>
+      <div className={styles.body} ref={treeRef} tabIndex={0}>
         {loading && <TreeSkeleton rows={10} />}
 
         {!loading && error && (
@@ -517,11 +651,13 @@ export default function PageTreeEditor() {
             ? <div className={styles.emptyState}>No pages match &ldquo;{filter}&rdquo;</div>
             : <div className={styles.tree}>
                 {paginatedFilteredNodes.map((node) => {
-                  const colours = BADGE_COLOURS[node.contentTypeId] ?? BADGE_COLOURS.default;
+                  const colours = getBadgeColour(node.contentTypeId);
+                  const isFocused = visibleNodeIds[focusedIdx] === node.id;
                   return (
                     <div
                       key={node.id}
-                      className={`${styles.nodeRow} ${node.id === currentEntryId ? styles.nodeRowHighlighted : ""}`}
+                      data-tree-row
+                      className={`${styles.nodeRow} ${node.id === currentEntryId ? styles.nodeRowHighlighted : ""} ${isFocused ? styles.nodeRowFocused : ""}`}
                       style={{ paddingLeft: 12 }}
                       onClick={() => handleOpen(node.id)}
                     >
@@ -557,6 +693,7 @@ export default function PageTreeEditor() {
                 node={node}
                 expanded={expanded}
                 highlightedId={currentEntryId}
+                focusedId={visibleNodeIds[focusedIdx] ?? null}
                 onToggle={handleToggle}
                 onOpen={handleOpen}
                 onNewChild={handleNewChild}

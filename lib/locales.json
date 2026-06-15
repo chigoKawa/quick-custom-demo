@@ -1,55 +1,22 @@
 [
   {
-    "code": "en-US",
-    "name": "English (United States)",
-    "default": true,
-    "fallbackCode": null,
-    "sys": {
-      "id": "046WccwcJzMSrJ6lSzWtGa",
-      "type": "Locale",
-      "version": 1
-    }
-  },
-  {
-    "code": "ar",
-    "name": "Arabic",
-    "default": false,
-    "fallbackCode": "en-US",
-    "sys": {
-      "id": "0NcFw4sahcjX7FYitGb1XU",
-      "type": "Locale",
-      "version": 1
-    }
-  },
-  {
-    "code": "de",
-    "name": "German",
-    "default": false,
-    "fallbackCode": "en-US",
-    "sys": {
-      "id": "0NG0qnnTd2ZAxWe1RyKnSm",
-      "type": "Locale",
-      "version": 1
-    }
-  },
-  {
-    "code": "es",
-    "name": "Spanish",
-    "default": false,
-    "fallbackCode": "en-US",
-    "sys": {
-      "id": "0ObJDxXE7guu8vKN4h1caB",
-      "type": "Locale",
-      "version": 1
-    }
-  },
-  {
     "code": "it-IT",
     "name": "Italian (Italy)",
     "default": false,
     "fallbackCode": "en-US",
     "sys": {
       "id": "0327kuta5C859avYsequT6",
+      "type": "Locale",
+      "version": 1
+    }
+  },
+  {
+    "code": "da",
+    "name": "Danish",
+    "default": false,
+    "fallbackCode": "en-US",
+    "sys": {
+      "id": "032SLFq1zRdmFSVeyW52lS",
       "type": "Locale",
       "version": 1
     }
@@ -88,12 +55,78 @@
     }
   },
   {
-    "code": "da",
-    "name": "Danish",
+    "code": "no",
+    "name": "Norwegian",
     "default": false,
     "fallbackCode": "en-US",
     "sys": {
-      "id": "032SLFq1zRdmFSVeyW52lS",
+      "id": "0337q4Yg51C71YAdJvVsGn",
+      "type": "Locale",
+      "version": 1
+    }
+  },
+  {
+    "code": "zh",
+    "name": "Chinese",
+    "default": false,
+    "fallbackCode": "en-US",
+    "sys": {
+      "id": "033cyuvDXzXqHc8pLRwXy5",
+      "type": "Locale",
+      "version": 1
+    }
+  },
+  {
+    "code": "nl",
+    "name": "Dutch",
+    "default": false,
+    "fallbackCode": "en-US",
+    "sys": {
+      "id": "033jWRybXGx2GNF2KjYA4y",
+      "type": "Locale",
+      "version": 1
+    }
+  },
+  {
+    "code": "en-US",
+    "name": "English (United States)",
+    "default": true,
+    "fallbackCode": null,
+    "sys": {
+      "id": "046WccwcJzMSrJ6lSzWtGa",
+      "type": "Locale",
+      "version": 1
+    }
+  },
+  {
+    "code": "de",
+    "name": "German",
+    "default": false,
+    "fallbackCode": "en-US",
+    "sys": {
+      "id": "0NG0qnnTd2ZAxWe1RyKnSm",
+      "type": "Locale",
+      "version": 1
+    }
+  },
+  {
+    "code": "ar",
+    "name": "Arabic",
+    "default": false,
+    "fallbackCode": "en-US",
+    "sys": {
+      "id": "0NcFw4sahcjX7FYitGb1XU",
+      "type": "Locale",
+      "version": 1
+    }
+  },
+  {
+    "code": "es",
+    "name": "Spanish",
+    "default": false,
+    "fallbackCode": "en-US",
+    "sys": {
+      "id": "0ObJDxXE7guu8vKN4h1caB",
       "type": "Locale",
       "version": 1
     }

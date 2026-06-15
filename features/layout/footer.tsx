@@ -26,6 +26,7 @@ import {
 } from "@/lib/site-settings";
 import { useSiteChromeLocale } from "@/features/site-chrome-locale";
 import { useContentfulInspectorMode, useContentfulLiveUpdates } from "@contentful/live-preview/react";
+import { stripNtFieldsForLivePreview } from "@/lib/contentful-live-preview-shallow";
 
 interface FooterProps {
   siteSettings: Entry<SiteSettingsSkeleton> | null;
@@ -51,7 +52,9 @@ const Footer = ({ siteSettings }: FooterProps) => {
   const [localesData, setLocalesData] = useState<Array<{ code: string; name?: string; default?: boolean }>>([]);
 
   // Contentful Live Preview
-  const liveSiteSettings = useContentfulLiveUpdates(siteSettings);
+  const liveSiteSettings = useContentfulLiveUpdates(
+    stripNtFieldsForLivePreview(siteSettings)
+  );
   const inspectorProps = useContentfulInspectorMode({
     entryId: liveSiteSettings?.sys.id
   });

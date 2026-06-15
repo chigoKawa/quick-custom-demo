@@ -3,11 +3,11 @@
 import type { HomeAppSDK } from "@contentful/app-sdk";
 import { useSDK } from "@contentful/react-apps-toolkit";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { BADGE_COLOURS, DEFAULT_LOCALE } from "../constants";
+import { getBadgeColour, DEFAULT_LOCALE } from "../constants";
 import { fetchAllEntries } from "../cma-service";
 import type { PageTreeEntry, PageTreeInstallationParameters, PageTreeNode } from "../types";
 import { useDebouncedValue } from "../use-debounced-value";
-import { buildTree, getInitials, resolveContentTypes } from "../utils";
+import { buildTree, getInitials, resolveContentTypes, timeAgo, type TreeSortMode } from "../utils";
 import Pagination, { DEFAULT_PAGE_SIZE } from "./pagination";
 import { StatsSkeleton, TreeSkeleton } from "./skeleton";
 import styles from "./page-tree-home.module.css";
@@ -16,19 +16,33 @@ import styles from "./page-tree-home.module.css";
 // Stat card
 // ---------------------------------------------------------------------------
 
+type StatFilter = "published" | "draft" | "changed" | "roots" | "orphans" | "noFullPath" | null;
+
 function StatCard({
   label,
   value,
   colour,
   sub,
+  filterId,
+  active,
+  onClick,
 }: {
   label: string;
   value: number | string;
   colour: string;
   sub?: string;
+  filterId?: StatFilter;
+  active?: boolean;
+  onClick?: (id: StatFilter) => void;
 }) {
+  const clickable = !!filterId && Number(value) > 0;
   return (
-    <div className={styles.statCard}>
+    <div
+      className={`${styles.statCard} ${clickable ? styles.statCardClickable : ""} ${active ? styles.statCardActive : ""}`}
+      onClick={() => clickable && onClick?.(filterId)}
+      role={clickable ? "button" : undefined}
+      tabIndex={clickable ? 0 : undefined}
+    >
       <div className={styles.statValue} style={{ color: colour }}>
         {value}
       </div>
@@ -65,7 +79,7 @@ interface TreeNodeProps {
 const TreeNode = memo(function TreeNode({ node, expanded, onToggle, onOpen, siteBaseUrl }: TreeNodeProps) {
   const hasChildren = node.children.length > 0;
   const isExpanded = expanded.has(node.id);
-  const colours = BADGE_COLOURS[node.contentTypeId] ?? BADGE_COLOURS.default;
+  const colours = getBadgeColour(node.contentTypeId);
 
   return (
     <div className={styles.nodeWrap}>
@@ -100,6 +114,10 @@ const TreeNode = memo(function TreeNode({ node, expanded, onToggle, onOpen, site
         {hasChildren && (
           <span className={styles.childCount}>{node.children.length}</span>
         )}
+
+        <span className={styles.timeLabel} title={node.updatedAt}>
+          {timeAgo(node.updatedAt)}
+        </span>
 
         {siteBaseUrl && (
           <a
@@ -247,6 +265,8 @@ export default function PageTreeHome() {
   const [activeTab, setActiveTab] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const [sortMode, setSortMode] = useState<TreeSortMode>("recent");
+  const [statFilter, setStatFilter] = useState<StatFilter>(null);
   const initialExpandDone = useRef(false);
 
   const loadEntries = useCallback(async () => {
@@ -276,7 +296,7 @@ export default function PageTreeHome() {
     );
   }, [allEntries, activeTab]);
 
-  const { roots, orphans } = useMemo(() => buildTree(entries, homeSlug), [entries, homeSlug]);
+  const { roots, orphans } = useMemo(() => buildTree(entries, homeSlug, sortMode), [entries, homeSlug, sortMode]);
   const stats = useMemo(() => computeStats(entries, roots, orphans), [entries, roots, orphans]);
 
   // Per-type counts for tab badges
@@ -355,9 +375,57 @@ export default function PageTreeHome() {
     );
   }, [debouncedFilter, roots, orphans]);
 
+  const handleFilterChange = useCallback((value: string) => {
+    setFilter(value);
+    setStatFilter(null);
+    setCurrentPage(1);
+  }, []);
+
+  const handlePageSizeChange = useCallback((size: number) => {
+    setPageSize(size);
+    setCurrentPage(1);
+  }, []);
+
+  const handleStatFilter = useCallback((id: StatFilter) => {
+    setStatFilter((prev) => (prev === id ? null : id));
+    setFilter("");
+    setCurrentPage(1);
+  }, []);
+
+  const statFilteredNodes = useMemo<PageTreeNode[] | null>(() => {
+    if (!statFilter) return null;
+    const all: PageTreeNode[] = [];
+    const traverse = (n: PageTreeNode) => { all.push(n); n.children.forEach(traverse); };
+    roots.forEach(traverse);
+    orphans.forEach(traverse);
+
+    switch (statFilter) {
+      case "published":
+        return all.filter((n) => n.status === "published");
+      case "draft":
+        return all.filter((n) => n.status === "draft");
+      case "changed":
+        return all.filter((n) => n.status === "changed");
+      case "roots":
+        return roots;
+      case "orphans":
+        return orphans;
+      case "noFullPath": {
+        const noPathIds = new Set(entries.filter((e) => !e.fullPath).map((e) => e.id));
+        return all.filter((n) => noPathIds.has(n.id));
+      }
+      default:
+        return null;
+    }
+  }, [statFilter, roots, orphans, entries]);
+
   // Pagination: for tree view paginate root nodes, for search paginate flat list
   const allRootsAndOrphans = useMemo(() => [...roots, ...orphans], [roots, orphans]);
-  const paginationTotal = filteredNodes !== null ? filteredNodes.length : allRootsAndOrphans.length;
+  const paginationTotal = filteredNodes !== null
+    ? filteredNodes.length
+    : statFilteredNodes !== null
+      ? statFilteredNodes.length
+      : allRootsAndOrphans.length;
 
   const paginatedRoots = useMemo(() => {
     if (filteredNodes !== null) return [];
@@ -375,16 +443,6 @@ export default function PageTreeHome() {
     () => new Set(orphans.map((n) => n.id)),
     [orphans]
   );
-
-  const handleFilterChange = useCallback((value: string) => {
-    setFilter(value);
-    setCurrentPage(1);
-  }, []);
-
-  const handlePageSizeChange = useCallback((size: number) => {
-    setPageSize(size);
-    setCurrentPage(1);
-  }, []);
 
   return (
     <div className={styles.container}>
@@ -414,7 +472,7 @@ export default function PageTreeHome() {
             <span className={styles.tabCount}>{allEntries.length}</span>
           </button>
           {contentTypeConfigs.map((c) => {
-            const colours = BADGE_COLOURS[c.contentTypeId] ?? BADGE_COLOURS.default;
+            const colours = getBadgeColour(c.contentTypeId);
             return (
               <button
                 key={c.contentTypeId}
@@ -440,16 +498,16 @@ export default function PageTreeHome() {
       {!loading && !error && (
         <div className={styles.statsRow}>
           <StatCard label="Total pages" value={stats.total} colour="#111827" />
-          <StatCard label="Published" value={stats.published} colour="#389e0d" sub={`${Math.round((stats.published / Math.max(stats.total, 1)) * 100)}%`} />
-          <StatCard label="Draft" value={stats.draft} colour="#d48806" sub={stats.draft > 0 ? "need publishing" : "all clean"} />
-          <StatCard label="Changed" value={stats.changed} colour="#0066cc" sub={stats.changed > 0 ? "unpublished edits" : undefined} />
-          <StatCard label="Root pages" value={stats.rootPages} colour="#6b7280" />
+          <StatCard label="Published" value={stats.published} colour="#389e0d" sub={`${Math.round((stats.published / Math.max(stats.total, 1)) * 100)}%`} filterId="published" active={statFilter === "published"} onClick={handleStatFilter} />
+          <StatCard label="Draft" value={stats.draft} colour="#d48806" sub={stats.draft > 0 ? "need publishing" : "all clean"} filterId="draft" active={statFilter === "draft"} onClick={handleStatFilter} />
+          <StatCard label="Changed" value={stats.changed} colour="#0066cc" sub={stats.changed > 0 ? "unpublished edits" : undefined} filterId="changed" active={statFilter === "changed"} onClick={handleStatFilter} />
+          <StatCard label="Root pages" value={stats.rootPages} colour="#6b7280" filterId="roots" active={statFilter === "roots"} onClick={handleStatFilter} />
           <StatCard label="Max depth" value={stats.maxDepth} colour="#6b7280" sub={`${stats.maxDepth + 1} level${stats.maxDepth !== 0 ? "s" : ""}`} />
           {stats.orphans > 0 && (
-            <StatCard label="Orphaned" value={stats.orphans} colour="#c2410c" sub="parent missing" />
+            <StatCard label="Orphaned" value={stats.orphans} colour="#c2410c" sub="parent missing" filterId="orphans" active={statFilter === "orphans"} onClick={handleStatFilter} />
           )}
           {stats.missingFullPath > 0 && (
-            <StatCard label="No fullPath" value={stats.missingFullPath} colour="#9ca3af" sub="use sidebar to fix" />
+            <StatCard label="No fullPath" value={stats.missingFullPath} colour="#9ca3af" sub="use sidebar to fix" filterId="noFullPath" active={statFilter === "noFullPath"} onClick={handleStatFilter} />
           )}
         </div>
       )}
@@ -485,6 +543,13 @@ export default function PageTreeHome() {
                 <button className={styles.iconBtn} onClick={handleCollapseAll} title="Collapse all">⊟</button>
               </>
             )}
+            <button
+              className={styles.iconBtn}
+              onClick={() => setSortMode((m) => (m === "recent" ? "alpha" : "recent"))}
+              title={sortMode === "recent" ? "Sorted by recent — click for A-Z" : "Sorted A-Z — click for recent"}
+            >
+              {sortMode === "recent" ? "🕑" : "🔤"}
+            </button>
           </div>
         </div>
 
@@ -512,7 +577,7 @@ export default function PageTreeHome() {
               ? <div className={styles.emptyState}>No pages match &ldquo;{filter}&rdquo;</div>
               : <div>
                   {paginatedFilteredNodes.map((node) => {
-                    const colours = BADGE_COLOURS[node.contentTypeId] ?? BADGE_COLOURS.default;
+                    const colours = getBadgeColour(node.contentTypeId);
                     return (
                       <div
                         key={node.id}
@@ -533,8 +598,42 @@ export default function PageTreeHome() {
                 </div>
           )}
 
+          {/* Stat-filtered flat list */}
+          {!loading && !error && filteredNodes === null && statFilteredNodes !== null && (
+            statFilteredNodes.length === 0
+              ? <div className={styles.emptyState}>No pages in this category.</div>
+              : <div>
+                  <div className={styles.statFilterBanner}>
+                    Showing: <strong>{statFilter}</strong> ({statFilteredNodes.length})
+                    <button className={styles.statFilterClear} onClick={() => setStatFilter(null)}>✕ Clear</button>
+                  </div>
+                  {statFilteredNodes.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((node) => {
+                    const colours = getBadgeColour(node.contentTypeId);
+                    return (
+                      <div
+                        key={node.id}
+                        className={styles.nodeRow}
+                        style={{ paddingLeft: 12 }}
+                        onClick={() => handleOpen(node.id)}
+                      >
+                        <span className={styles.toggleLeaf}>—</span>
+                        <span className={styles.typeBadge} style={{ background: colours.bg, color: colours.text }}>
+                          {getInitials(node.contentTypeId)}
+                        </span>
+                        <StatusDot status={node.status} />
+                        <span className={styles.nodeTitle}>{node.title}</span>
+                        <span className={styles.nodePath}>{node.computedPath}</span>
+                        <span className={styles.timeLabel} title={node.updatedAt}>
+                          {timeAgo(node.updatedAt)}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+          )}
+
           {/* Full nested tree (paginated by root nodes) */}
-          {!loading && !error && filteredNodes === null && entries.length > 0 && (
+          {!loading && !error && filteredNodes === null && statFilteredNodes === null && entries.length > 0 && (
             <div>
               {paginatedRoots.map((node) => (
                 <TreeNode

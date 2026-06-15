@@ -1,7 +1,11 @@
 "use client";
-import React, { ReactNode, useEffect, useMemo } from "react";
-import { ContentfulLivePreview } from "@contentful/live-preview";
+import React, { ReactNode, useMemo } from "react";
 import { ContentfulLivePreviewProvider } from "@contentful/live-preview/react";
+
+const CONTENTFUL_ORIGINS = [
+  "https://app.contentful.com",
+  "https://app.eu.contentful.com",
+];
 
 const LivePreviewProviderWrapper = ({
   children,
@@ -12,22 +16,8 @@ const LivePreviewProviderWrapper = ({
   locale: string;
   isPreviewEnabled: boolean;
 }) => {
-  useEffect(() => {
-    if (!isPreviewEnabled) return;
-    try {
-      ContentfulLivePreview.init({
-        locale,
-        enableInspectorMode: true,
-        enableLiveUpdates: true,
-        space: process.env.NEXT_PUBLIC_CTF_SPACE_ID,
-        environment: process.env.NEXT_PUBLIC_CTF_ENVIRONMENT,
-      });
-    } catch {
-      // non-fatal
-    }
-  }, [isPreviewEnabled, locale]);
-
-  const providerKey = useMemo(() => `${locale}:${isPreviewEnabled ? "preview" : "no-preview"}`,
+  const providerKey = useMemo(
+    () => `${locale}:${isPreviewEnabled ? "preview" : "no-preview"}`,
     [locale, isPreviewEnabled]
   );
 
@@ -39,6 +29,7 @@ const LivePreviewProviderWrapper = ({
       enableLiveUpdates={isPreviewEnabled}
       space={process.env.NEXT_PUBLIC_CTF_SPACE_ID}
       environment={process.env.NEXT_PUBLIC_CTF_ENVIRONMENT}
+      targetOrigin={CONTENTFUL_ORIGINS}
     >
       {children}
     </ContentfulLivePreviewProvider>

@@ -5,9 +5,10 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useContentfulInspectorMode } from "@contentful/live-preview/react";
+import { useTracking } from "@/features/tracking/use-tracking";
 import { cn } from "@/lib/utils";
 
-export type MultiItemLayout = "carousel" | "grid" | "strip" | "list";
+export type MultiItemLayout = "carousel" | "grid" | "strip" | "list" | "value-prop";
 export type BackgroundTheme = "default" | "brand" | "alt" | "none";
 
 export type MultiItemModuleItem = {
@@ -19,6 +20,16 @@ export type MultiItemModuleItem = {
   imageUrl?: string;
   imageAlt?: string;
   href?: string;
+  icon?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+};
+
+type ActionButton = {
+  label: string;
+  href: string;
+  metricEventName?: string;
+  entryId?: string;
 };
 
 type Props = {
@@ -34,6 +45,7 @@ type Props = {
   showDots?: boolean;
   backgroundTheme?: BackgroundTheme;
   isLogoContent?: boolean;
+  actionButton?: ActionButton;
 };
 
 const backgroundThemeClasses: Record<BackgroundTheme, string> = {
@@ -56,9 +68,11 @@ export default function MultiItemModule({
   showDots = true,
   backgroundTheme = "default",
   isLogoContent = false,
+  actionButton,
 }: Props) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const inspectorProps = useContentfulInspectorMode({ entryId: entryId || "" });
+  const { trackMetric } = useTracking();
 
   const safeItems = Array.isArray(items) ? items.filter((item) => item && item.id) : [];
 
@@ -163,6 +177,21 @@ export default function MultiItemModule({
     );
   };
 
+  const renderValueProp = () => {
+    const gridCols = {
+      2: "grid-cols-1 sm:grid-cols-2",
+      3: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+      4: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4",
+    };
+    return (
+      <div className={cn("grid gap-8", gridCols[Math.min(columns, 4) as keyof typeof gridCols] || gridCols[3])}>
+        {safeItems.map((item) => (
+          <ValuePropCard key={item.id} item={item} />
+        ))}
+      </div>
+    );
+  };
+
   const renderContent = () => {
     // Logos always use marquee scrolling regardless of layout setting
     if (isLogoContent) {
@@ -177,6 +206,8 @@ export default function MultiItemModule({
         return renderStrip();
       case "list":
         return renderList();
+      case "value-prop":
+        return renderValueProp();
       default:
         return renderGrid();
     }
@@ -210,6 +241,25 @@ export default function MultiItemModule({
           </div>
         )}
         {renderContent()}
+        {actionButton && (
+          <div className="flex justify-center mt-10">
+            <Button asChild variant="default" size="lg">
+              <Link
+                href={actionButton.href}
+                onClick={() => {
+                  trackMetric("module_cta_clicked", {
+                    entryId: actionButton.entryId ?? entryId ?? "",
+                    label: actionButton.label,
+                    href: actionButton.href,
+                    ...(actionButton.metricEventName ? { metricEventName: actionButton.metricEventName } : {}),
+                  });
+                }}
+              >
+                {actionButton.label}
+              </Link>
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   );
@@ -386,6 +436,48 @@ function LogoItem({ item, darkBg = false }: { item: MultiItemModuleItem; darkBg?
   }
 
   return content;
+}
+
+function ValuePropCard({ item }: { item: MultiItemModuleItem }) {
+  const content = (
+    <div className="flex flex-col items-center text-center gap-4 p-6">
+      {item.icon ? (
+        <div className="flex items-center justify-center w-14 h-14 rounded-full bg-primary/10 text-primary">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={item.icon} alt="" aria-hidden="true" className="w-8 h-8 object-contain" />
+        </div>
+      ) : item.imageUrl ? (
+        <div className="flex items-center justify-center w-14 h-14 rounded-full bg-primary/10 overflow-hidden">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={item.imageUrl} alt={item.imageAlt || ""} className="w-full h-full object-cover" />
+        </div>
+      ) : null}
+      {item.title && (
+        <h3 className="font-semibold text-lg leading-snug">{item.title}</h3>
+      )}
+      {item.description && (
+        <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
+      )}
+      {(item.ctaLabel && item.ctaHref) && (
+        <Link
+          href={item.ctaHref}
+          className="text-sm font-medium text-primary underline-offset-4 hover:underline mt-auto"
+        >
+          {item.ctaLabel}
+        </Link>
+      )}
+    </div>
+  );
+
+  if (item.href) {
+    return (
+      <Link href={item.href} className="rounded-2xl border bg-card shadow-sm hover:shadow-md transition-shadow block">
+        {content}
+      </Link>
+    );
+  }
+
+  return <div className="rounded-2xl border bg-card shadow-sm">{content}</div>;
 }
 
 function ListItem({ item }: { item: MultiItemModuleItem }) {

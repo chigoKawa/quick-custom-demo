@@ -7,6 +7,9 @@ import { notFound } from "next/navigation";
 import { resolvePreviewMode } from "@/lib/preview";
 import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provider-wrapper";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 // Get the homepage slug from environment variables
 const PAGE_SLUG = "blog";
 const INCLUDES_COUNT = 6;

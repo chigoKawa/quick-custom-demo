@@ -193,6 +193,11 @@
   flex-shrink: 0;
 }
 
+.colTime {
+  width: 80px;
+  flex-shrink: 0;
+}
+
 .treeBody {
   flex: 1;
   overflow-y: auto;
@@ -215,13 +220,6 @@
   background: #f9fafb;
 }
 
-.dragHandle {
-  color: #d1d5db;
-  font-size: 14px;
-  cursor: grab;
-  flex-shrink: 0;
-  user-select: none;
-}
 
 .toggleBtn {
   background: none;
@@ -298,6 +296,14 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.timeLabel {
+  width: 80px;
+  flex-shrink: 0;
+  font-size: 11px;
+  color: #9ca3af;
+  white-space: nowrap;
 }
 
 .orphanBadge {

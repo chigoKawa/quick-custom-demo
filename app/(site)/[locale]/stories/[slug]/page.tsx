@@ -10,6 +10,7 @@ import {
   getAllProductStorySlugs,
   mapProductStoryToProps,
 } from "@/lib/product-story";
+import { fetchRelatedProductStories } from "@/lib/related-product-stories";
 import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provider-wrapper";
 import ProductStoryPage from "@/features/contentful/components/product-story/product-story-page";
 
@@ -40,13 +41,30 @@ export default async function StoryRoute({ params, searchParams }: Props) {
 
   const pageData = mapProductStoryToProps(entry);
 
+  // Related product stories share at least one taxonomy concept with this
+  // entry. Fetched server-side so they're cached alongside the page render
+  // and serializable for the client component.
+  const relatedProducts = await fetchRelatedProductStories({
+    entry,
+    locale: effectiveLocale,
+    defaultLocale,
+    isPreview: !!preview,
+    timelineToken,
+    limit: 4,
+  });
+
   return (
     <LivePreviewProviderWrapper
       locale={effectiveLocale}
       isPreviewEnabled={!!preview}
     >
       
-      <ProductStoryPage entry={pageData} locale={effectiveLocale} microcopy={microcopy} />
+      <ProductStoryPage
+        entry={pageData}
+        locale={effectiveLocale}
+        microcopy={microcopy}
+        relatedProducts={relatedProducts}
+      />
     </LivePreviewProviderWrapper>
   );
 }

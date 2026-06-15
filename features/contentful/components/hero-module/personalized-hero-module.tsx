@@ -3,6 +3,7 @@
 import React from "react";
 import { Experience } from "@ninetailed/experience.js-react";
 import { ExperienceMapper } from "@ninetailed/experience.js-utils-contentful";
+import { stripNtFromMappedExperiences } from "@/lib/contentful-live-preview-shallow";
 import type { IHeroModule } from "../../type";
 import HeroModuleWrapper from "./hero-module-wrapper";
 import { useSiteChromeLocale } from "@/features/site-chrome-locale";
@@ -43,7 +44,11 @@ export default function PersonalizedHeroModule(entry: IHeroModule) {
   type ExperiencesProp = NonNullable<
     React.ComponentProps<typeof Experience>["experiences"]
   >;
-  const experiencesForProp = mappedExperiencesUnknown as unknown as ExperiencesProp;
+  const experiencesForProp = stripNtFromMappedExperiences(mappedExperiencesUnknown) as unknown as ExperiencesProp;
+
+  // Spread baseline without nt_experiences — resolved experiences create circular refs
+  const { nt_experiences: _ntExp, nt_variants: _ntVar, ...heroFields } = entry.fields;
+  const baselineEntry = { sys: entry.sys, fields: heroFields } as IHeroModule;
 
   return (
     <Experience
@@ -51,7 +56,7 @@ export default function PersonalizedHeroModule(entry: IHeroModule) {
       id={entry.sys.id}
       component={HeroModuleWithLocale}
       experiences={experiencesForProp}
-      {...entry}
+      {...baselineEntry}
     />
   );
 }

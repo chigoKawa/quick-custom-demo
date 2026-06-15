@@ -1,6 +1,7 @@
 import { createClient } from "contentful";
 import type { EntryCollection, EntrySkeletonType, Entry, CreateClientParams } from "contentful";
 import { parseTimelinePreviewToken } from "@contentful/timeline-preview";
+import { toJsonSafe } from "./json-safe";
 
 const client = createClient({
   space: process.env.NEXT_PUBLIC_CTF_SPACE_ID!,
@@ -99,7 +100,11 @@ export const getEntries = async <T extends EntrySkeletonType>(
     const entries: EntryCollection<T> = await clientInstance.getEntries<T>(
       options as Record<string, unknown>
     );
-    return entries.items;
+    // Defensive: SDK link resolution can produce true circular references
+    // (e.g. Ninetailed A/B baseline ↔ experiment). Normalize to a JSON-safe
+    // graph so any downstream serialization (RSC props, Live Preview, Ninetailed
+    // preview) never throws "Converting circular structure to JSON".
+    return toJsonSafe(entries.items);
   } catch (error) {
     // When timeline preview fails (e.g. release not scheduled, 404), fall back
     // to standard preview so the page still renders content instead of a 404.
@@ -113,7 +118,7 @@ export const getEntries = async <T extends EntrySkeletonType>(
           await previewClient.getEntries<T>(
             options as Record<string, unknown>
           );
-        return fallbackEntries.items;
+        return toJsonSafe(fallbackEntries.items);
       } catch (fallbackError) {
         console.error(
           "[Contentful] Standard preview fallback also failed:",
@@ -157,7 +162,7 @@ export const getEntriesInEnvironment = async <T extends EntrySkeletonType>(
     const entries: EntryCollection<T> = await clientInstance.getEntries<T>(
       params.options as Record<string, unknown>
     );
-    return entries.items;
+    return toJsonSafe(entries.items);
   } catch (error) {
     console.error("Error fetching entries from Contentful:", error);
     return [];

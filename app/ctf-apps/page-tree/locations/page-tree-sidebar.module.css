@@ -196,3 +196,59 @@
   border-radius: 3px;
   font-family: monospace;
 }
+
+/* ── Children list ── */
+
+.childrenList {
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.childItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #f3f4f6;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.childItem:last-child {
+  border-bottom: none;
+}
+
+.childItem:hover {
+  background: #f9fafb;
+}
+
+.childTitle {
+  color: #111827;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.childSlug {
+  font-family: monospace;
+  font-size: 10px;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.childOverflow {
+  padding: 5px 10px;
+  font-size: 11px;
+  color: #6b7280;
+  text-align: center;
+  background: #f9fafb;
+}

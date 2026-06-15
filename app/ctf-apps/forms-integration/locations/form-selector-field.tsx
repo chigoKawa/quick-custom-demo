@@ -1,5 +1,25 @@
 "use client";
 
+import {
+  Badge,
+  Box,
+  Button,
+  Card,
+  Flex,
+  Note,
+  Pill,
+  Spinner,
+  Stack,
+  Subheading,
+  Text,
+  TextInput,
+} from "@contentful/f36-components";
+import {
+  MagnifyingGlassIcon,
+  PencilSimpleIcon,
+  PlusIcon,
+  TrashSimpleIcon,
+} from "@contentful/f36-icons";
 import type { FieldAppSDK, DialogAppSDK } from "@contentful/app-sdk";
 import { locations } from "@contentful/app-sdk";
 import { useSDK } from "@contentful/react-apps-toolkit";
@@ -21,13 +41,15 @@ function readInitialValue(value: unknown): FormSelectorFieldValue {
 
 export default function FormSelectorField() {
   const sdk = useSDK<FieldAppSDK | DialogAppSDK>();
-  
+
   const isDialog = sdk.location.is(locations.LOCATION_DIALOG);
   const fieldSdk = isDialog ? null : (sdk as FieldAppSDK);
-  
+
   const [config, setConfig] = useState<FormSelectorFieldValue>(() => {
     if (isDialog) {
-      const params = (sdk as DialogAppSDK).parameters?.invocation as any;
+      const params = (sdk as DialogAppSDK).parameters?.invocation as {
+        selectedForm?: Form;
+      };
       return {
         version: 1,
         selectedForm: params?.selectedForm,
@@ -35,14 +57,16 @@ export default function FormSelectorField() {
     }
     return readInitialValue(fieldSdk?.field?.getValue());
   });
-  
+
   const [searchQuery, setSearchQuery] = useState("");
   const [forms, setForms] = useState<Form[]>([]);
   const [loading, setLoading] = useState(isDialog);
   const [error, setError] = useState<string | null>(null);
   const [tempSelection, setTempSelection] = useState<string | null>(() => {
     if (isDialog) {
-      const params = (sdk as DialogAppSDK).parameters?.invocation as any;
+      const params = (sdk as DialogAppSDK).parameters?.invocation as {
+        selectedForm?: Form;
+      };
       return params?.selectedForm?.id || null;
     }
     return null;
@@ -98,6 +122,7 @@ export default function FormSelectorField() {
     if (isDialog) {
       loadForms();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleOpenModal = useCallback(async () => {
@@ -112,7 +137,7 @@ export default function FormSelectorField() {
       } as unknown as Record<string, string>,
     });
 
-    if (result && typeof result === 'object' && 'selectedForm' in result) {
+    if (result && typeof result === "object" && "selectedForm" in result) {
       const data = result as { selectedForm: Form };
       saveValue({
         version: 1,
@@ -121,31 +146,37 @@ export default function FormSelectorField() {
     }
   }, [config, sdk, saveValue]);
 
-  const handleDialogClose = useCallback((selectedForm?: Form) => {
-    if (isDialog) {
-      (sdk as any).close({
-        selectedForm: selectedForm || null,
-      });
-    }
-  }, [sdk, isDialog]);
+  const handleDialogClose = useCallback(
+    (selectedForm?: Form) => {
+      if (isDialog) {
+        (sdk as unknown as { close: (data: unknown) => void }).close({
+          selectedForm: selectedForm || null,
+        });
+      }
+    },
+    [sdk, isDialog]
+  );
 
   const handleSearch = useCallback(() => {
     loadForms(searchQuery);
   }, [loadForms, searchQuery]);
 
-  const handleSelectForm = useCallback((form: Form) => {
-    if (isDialog) {
-      setTempSelection(form.id);
-    } else {
-      saveValue({
-        version: 1,
-        selectedForm: form,
-      });
-    }
-  }, [isDialog, saveValue]);
+  const handleSelectForm = useCallback(
+    (form: Form) => {
+      if (isDialog) {
+        setTempSelection(form.id);
+      } else {
+        saveValue({
+          version: 1,
+          selectedForm: form,
+        });
+      }
+    },
+    [isDialog, saveValue]
+  );
 
   const handleConfirmSelection = useCallback(() => {
-    const selectedForm = forms.find(f => f.id === tempSelection);
+    const selectedForm = forms.find((f) => f.id === tempSelection);
     handleDialogClose(selectedForm);
   }, [forms, tempSelection, handleDialogClose]);
 
@@ -155,241 +186,270 @@ export default function FormSelectorField() {
 
   const selectedForm = config.selectedForm;
 
-  // Dialog mode - show form selector
+  // ─── Dialog mode ───────────────────────────────────────────────────
   if (isDialog) {
     return (
-      <div style={{ padding: 24 }}>
-        {/* Search */}
-        <div style={{ marginBottom: 24 }}>
-          <input
-            type="text"
-            placeholder="Search forms..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-            style={{
-              width: "100%",
-              padding: "12px 16px",
-              fontSize: 14,
-              border: "1px solid #e5e7eb",
-              borderRadius: 8,
-              outline: "none",
-            }}
-          />
-        </div>
+      <Box padding="spacingL">
+        <Box marginBottom="spacingM">
+          <Flex gap="spacingS" alignItems="center">
+            <Box style={{ flex: "1 1 auto", minWidth: 0 }}>
+              <TextInput
+                value={searchQuery}
+                placeholder="Search forms by name or title…"
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSearch();
+                }}
+              />
+            </Box>
+            <Button
+              variant="secondary"
+              startIcon={<MagnifyingGlassIcon />}
+              onClick={handleSearch}
+            >
+              Search
+            </Button>
+          </Flex>
+        </Box>
 
-        {/* Forms List */}
-        <div style={{ minHeight: 400 }}>
+        <Box style={{ minHeight: 400 }}>
           {loading && (
-            <div style={{ textAlign: "center", padding: 40, color: "#6b7280" }}>
-              Loading forms...
-            </div>
+            <Flex
+              alignItems="center"
+              justifyContent="center"
+              style={{ minHeight: 320 }}
+              gap="spacingS"
+            >
+              <Spinner size="medium" />
+              <Text fontColor="gray600">Loading forms…</Text>
+            </Flex>
           )}
 
           {error && (
-            <div style={{ padding: 20, backgroundColor: "#fef2f2", borderRadius: 8, color: "#dc2626" }}>
-              <strong>Error:</strong> {error}
-            </div>
+            <Note variant="negative" title="Error loading forms">
+              {error}
+            </Note>
           )}
 
           {!loading && !error && forms.length === 0 && (
-            <div style={{ textAlign: "center", padding: 40, color: "#6b7280" }}>
-              No forms found
-            </div>
+            <EmptyState
+              title="No forms found"
+              description="Try a different search term."
+            />
           )}
 
           {!loading && !error && forms.length > 0 && (
-            <div style={{ display: "grid", gap: 12 }}>
+            <Stack
+              flexDirection="column"
+              spacing="spacingS"
+              alignItems="stretch"
+            >
               {forms.map((form) => {
                 const isSelected = tempSelection === form.id;
                 return (
-                  <div
+                  <Card
                     key={form.id}
+                    padding="default"
+                    isSelected={isSelected}
                     onClick={() => handleSelectForm(form)}
-                    style={{
-                      padding: 16,
-                      borderRadius: 8,
-                      border: `2px solid ${isSelected ? "#3b82f6" : "#e5e7eb"}`,
-                      backgroundColor: isSelected ? "#eff6ff" : "#fff",
-                      cursor: "pointer",
-                      transition: "all 0.15s ease",
-                    }}
+                    style={{ cursor: "pointer", textAlign: "left" }}
                   >
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                      <div>
-                        <div style={{ fontWeight: 600, fontSize: 16, marginBottom: 4 }}>
-                          {form.title}
-                        </div>
-                        <div style={{ fontSize: 13, color: "#6b7280", marginBottom: 8 }}>
-                          {form.description || form.name}
-                        </div>
-                        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                          {form.category && (
-                            <span style={{
-                              fontSize: 11,
-                              padding: "2px 8px",
-                              borderRadius: 12,
-                              backgroundColor: "#f3f4f6",
-                              color: "#6b7280",
-                            }}>
-                              {form.category}
-                            </span>
-                          )}
-                          <span style={{
-                            fontSize: 11,
-                            padding: "2px 8px",
-                            borderRadius: 12,
-                            backgroundColor: "#dbeafe",
-                            color: "#1d4ed8",
-                          }}>
-                            {form.fields.length} fields
-                          </span>
-                        </div>
-                      </div>
+                    <Flex
+                      alignItems="flex-start"
+                      justifyContent="space-between"
+                      gap="spacingS"
+                      flexWrap="wrap"
+                    >
+                      <Box style={{ flex: "1 1 auto", minWidth: 0 }}>
+                        <Subheading marginBottom="none">{form.title}</Subheading>
+                        <Box marginTop="spacing2Xs">
+                          <Text fontColor="gray600">
+                            {form.description || form.name}
+                          </Text>
+                        </Box>
+                        <Box marginTop="spacingXs">
+                          <Flex gap="spacingXs" flexWrap="wrap">
+                            {form.category && (
+                              <Pill label={form.category} />
+                            )}
+                            <Pill label={`${form.fields.length} fields`} />
+                          </Flex>
+                        </Box>
+                      </Box>
                       {isSelected && (
-                        <span style={{ color: "#3b82f6", fontSize: 20 }}>✓</span>
+                        <Badge variant="primary">Selected</Badge>
                       )}
-                    </div>
-                  </div>
+                    </Flex>
+                  </Card>
                 );
               })}
-            </div>
+            </Stack>
           )}
-        </div>
+        </Box>
 
-        {/* Footer */}
-        <div style={{ 
-          marginTop: 24, 
-          paddingTop: 16, 
-          borderTop: "1px solid #e5e7eb",
-          display: "flex",
-          justifyContent: "flex-end",
-          gap: 12,
-        }}>
-          <button
-            onClick={() => handleDialogClose()}
-            style={{
-              padding: "10px 20px",
-              borderRadius: 6,
-              border: "1px solid #e5e7eb",
-              backgroundColor: "#fff",
-              cursor: "pointer",
-              fontSize: 14,
-            }}
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleConfirmSelection}
-            disabled={!tempSelection}
-            style={{
-              padding: "10px 20px",
-              borderRadius: 6,
-              border: "none",
-              backgroundColor: tempSelection ? "#3b82f6" : "#e5e7eb",
-              color: tempSelection ? "#fff" : "#9ca3af",
-              cursor: tempSelection ? "pointer" : "not-allowed",
-              fontSize: 14,
-              fontWeight: 500,
-            }}
-          >
-            Select Form
-          </button>
-        </div>
-      </div>
+        <Flex
+          justifyContent="space-between"
+          alignItems="center"
+          marginTop="spacingL"
+          gap="spacingS"
+          flexWrap="wrap"
+        >
+          <Text fontColor="gray600">
+            {tempSelection
+              ? `${forms.find((f) => f.id === tempSelection)?.title ?? "1 form"} selected`
+              : "Nothing selected yet"}
+          </Text>
+          <Flex gap="spacingS">
+            <Button variant="secondary" onClick={() => handleDialogClose()}>
+              Cancel
+            </Button>
+            <Button
+              variant="primary"
+              onClick={handleConfirmSelection}
+              isDisabled={!tempSelection}
+            >
+              Select form
+            </Button>
+          </Flex>
+        </Flex>
+      </Box>
     );
   }
 
-  // Field mode - show selected form or picker button
+  // ─── Field view ────────────────────────────────────────────────────
   return (
-    <div style={{ padding: 8 }}>
+    <Box>
       {selectedForm ? (
-        <div style={{
-          padding: 16,
-          borderRadius: 8,
-          border: "1px solid #e5e7eb",
-          backgroundColor: "#f9fafb",
-        }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-            <div>
-              <div style={{ fontWeight: 600, fontSize: 15, marginBottom: 4 }}>
-                📝 {selectedForm.title}
-              </div>
-              <div style={{ fontSize: 13, color: "#6b7280" }}>
-                {selectedForm.description || selectedForm.name}
-              </div>
-              <div style={{ marginTop: 8, display: "flex", gap: 8 }}>
+        <Stack flexDirection="column" spacing="spacingS" alignItems="stretch">
+          <SelectionCard
+            contentType="Form"
+            title={selectedForm.title}
+            description={selectedForm.description || selectedForm.name}
+            badges={
+              <>
                 {selectedForm.category && (
-                  <span style={{
-                    fontSize: 11,
-                    padding: "2px 8px",
-                    borderRadius: 12,
-                    backgroundColor: "#e5e7eb",
-                    color: "#6b7280",
-                  }}>
-                    {selectedForm.category}
-                  </span>
+                  <Pill label={selectedForm.category} />
                 )}
-                <span style={{
-                  fontSize: 11,
-                  padding: "2px 8px",
-                  borderRadius: 12,
-                  backgroundColor: "#dbeafe",
-                  color: "#1d4ed8",
-                }}>
-                  {selectedForm.fields.length} fields
-                </span>
-              </div>
-            </div>
-            <div style={{ display: "flex", gap: 8 }}>
-              <button
-                onClick={handleOpenModal}
-                style={{
-                  padding: "6px 12px",
-                  borderRadius: 4,
-                  border: "1px solid #e5e7eb",
-                  backgroundColor: "#fff",
-                  cursor: "pointer",
-                  fontSize: 12,
-                }}
-              >
-                Change
-              </button>
-              <button
-                onClick={handleRemoveForm}
-                style={{
-                  padding: "6px 12px",
-                  borderRadius: 4,
-                  border: "1px solid #fecaca",
-                  backgroundColor: "#fef2f2",
-                  color: "#dc2626",
-                  cursor: "pointer",
-                  fontSize: 12,
-                }}
-              >
-                Remove
-              </button>
-            </div>
-          </div>
-        </div>
+                <Pill label={`${selectedForm.fields.length} fields`} />
+              </>
+            }
+          />
+          <Flex gap="spacingS" flexWrap="wrap">
+            <Button
+              variant="secondary"
+              startIcon={<PencilSimpleIcon />}
+              onClick={handleOpenModal}
+            >
+              Change
+            </Button>
+            <Button
+              variant="negative"
+              startIcon={<TrashSimpleIcon />}
+              onClick={handleRemoveForm}
+            >
+              Remove
+            </Button>
+          </Flex>
+        </Stack>
       ) : (
-        <button
-          onClick={handleOpenModal}
-          style={{
-            width: "100%",
-            padding: 16,
-            borderRadius: 8,
-            border: "2px dashed #e5e7eb",
-            backgroundColor: "#f9fafb",
-            cursor: "pointer",
-            fontSize: 14,
-            color: "#6b7280",
-            transition: "all 0.15s ease",
-          }}
-        >
-          📝 Select a form...
-        </button>
+        <EmptyState
+          title="No form selected"
+          description="Pick a form from your library to embed in this entry."
+          action={
+            <Button
+              variant="primary"
+              startIcon={<PlusIcon />}
+              onClick={handleOpenModal}
+            >
+              Select a form
+            </Button>
+          }
+        />
       )}
-    </div>
+    </Box>
+  );
+}
+
+/* ─── Sub-components ──────────────────────────────────────────────── */
+
+function SelectionCard({
+  contentType,
+  title,
+  description,
+  badges,
+}: {
+  contentType: string;
+  title: string;
+  description?: string;
+  badges?: React.ReactNode;
+}) {
+  return (
+    <Box
+      style={{
+        border: "1px solid #e7ebee",
+        borderRadius: 6,
+        background: "#fff",
+        overflow: "hidden",
+      }}
+    >
+      <Box
+        padding="spacingXs"
+        style={{
+          background: "#fafbfc",
+          borderBottom: "1px solid #e7ebee",
+        }}
+      >
+        <Text fontColor="gray600" fontSize="fontSizeS">
+          {contentType}
+        </Text>
+      </Box>
+      <Box padding="spacingM">
+        <Subheading marginBottom="none">{title}</Subheading>
+        {description && (
+          <Box marginTop="spacing2Xs">
+            <Text fontColor="gray700">{description}</Text>
+          </Box>
+        )}
+        {badges && (
+          <Box marginTop="spacingS">
+            <Flex gap="spacingXs" flexWrap="wrap">
+              {badges}
+            </Flex>
+          </Box>
+        )}
+      </Box>
+    </Box>
+  );
+}
+
+function EmptyState({
+  title,
+  description,
+  action,
+}: {
+  title: string;
+  description?: string;
+  action?: React.ReactNode;
+}) {
+  return (
+    <Box
+      padding="spacingXl"
+      style={{
+        border: "1px dashed #d3dce6",
+        borderRadius: 6,
+        background: "#fafbfc",
+        textAlign: "center",
+      }}
+    >
+      <Text fontWeight="fontWeightDemiBold" as="div">
+        {title}
+      </Text>
+      {description && (
+        <Box marginTop="spacingXs">
+          <Text fontColor="gray600">{description}</Text>
+        </Box>
+      )}
+      {action && <Box marginTop="spacingM">{action}</Box>}
+    </Box>
   );
 }

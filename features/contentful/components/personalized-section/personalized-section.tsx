@@ -2,6 +2,7 @@
 import React, { FC } from "react";
 import { Experience } from "@ninetailed/experience.js-react";
 import { ExperienceMapper } from "@ninetailed/experience.js-utils-contentful";
+import { stripNtFromMappedExperiences } from "@/lib/contentful-live-preview-shallow";
 import { IPersonalizedSection } from "../../type";
 import { sectionsComponentMap } from "../../component-maps/sections";
 
@@ -66,7 +67,7 @@ export default function PersonalizedSection(entry: IPersonalizedSection) {
       key={entry.sys.id}
       id={entry.sys.id}
       component={VariantDispatcher}
-      experiences={mappedExperiences as unknown as ExperiencesProp}
+      experiences={stripNtFromMappedExperiences(mappedExperiences) as unknown as ExperiencesProp}
       {...baseline}
     />
   );

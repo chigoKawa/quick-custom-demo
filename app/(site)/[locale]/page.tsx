@@ -10,6 +10,9 @@ import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provi
 import { fetchRelatedBlogPosts } from "@/lib/related-stories";
 import { requireValidActiveMarket } from "@/lib/markets";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 // Get the homepage slug from environment variables
 const PAGE_SLUG = process.env.NEXT_PUBLIC_HOMEPAGE_SLUG! || "home";
 const INCLUDES_COUNT = 6;

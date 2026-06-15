@@ -12,7 +12,8 @@ export type MetricEventName =
   | "application_submitted"
   | "form_completed"
   | "paid_campaign_converted"
-  | "kb_search";
+  | "kb_search"
+  | "module_cta_clicked";
 
 export function useTracking() {
   const { track } = useNinetailed();

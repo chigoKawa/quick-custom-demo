@@ -108,13 +108,36 @@ export type ImageWithFocalPointSkeleton = {
   fields: IImageWithFocalPoint["fields"];
 };
 
+export type TextContrastOption =
+  | "Light on dark"
+  | "Dark on light"
+  | "Light (no scrim)"
+  | "Dark (no scrim)"
+  | "Transparent"
+  | "Dark Transparent";
+
+export interface TextAnchorValue extends JsonObject {
+  /** Horizontal position as a 0–1 fraction of the banner width, origin left. */
+  x: number;
+  /** Vertical position as a 0–1 fraction of the banner height, origin top. */
+  y: number;
+  version: 1;
+}
+
+export type HeroSizeOption = "Small" | "Medium" | "Large";
+
 export interface IHeroModule extends Entry {
   fields: {
     internalTitle: EntryFields.Symbol;
     headline?: EntryFields.Symbol;
     subCopy?: EntryFields.Text;
     image?: EntryFields.EntryLink<ImageWithFocalPointSkeleton>;
-    imagePlacement?: EntryFields.Symbol<"Left" | "Right">;
+    /** Managed by the Content Anchor app. Replaces imagePlacement. */
+    textAnchor?: EntryFields.Object<TextAnchorValue>;
+    /** Controls text colour and background scrim behind the text block. */
+    textContrast?: EntryFields.Symbol<TextContrastOption>;
+    /** Controls the banner aspect ratio. Small=4:1, Medium=3:1 (default), Large=2:1. */
+    size?: EntryFields.Symbol<HeroSizeOption>;
     buttons?: EntryFields.Array<IBaseButton>;
     trackingName: EntryFields.Symbol;
     nt_experiences?: Entry<EntrySkeletonType>[];
@@ -443,16 +466,18 @@ export interface IMultiItemModule extends Entry {
     subtitle?: EntryFields.Symbol;
     items: EntryFields.Array<
       EntryFields.EntryLink<
-        HeroModuleSkeleton | BlogPostPageSkeleton | LandingPageSkeleton | LogoSkeleton | CampaignSkeleton
+        HeroModuleSkeleton | BlogPostPageSkeleton | LandingPageSkeleton | LogoSkeleton | CampaignSkeleton | CalloutSkeleton | CtaSkeleton
       >
     >;
-    layout: EntryFields.Symbol<"carousel" | "grid" | "strip" | "list">;
+    layout: EntryFields.Symbol<"carousel" | "grid" | "strip" | "list" | "value-prop">;
     columns?: EntryFields.Integer;
     autoplay?: EntryFields.Boolean;
     autoplayDelayMs?: EntryFields.Integer;
     showArrows?: EntryFields.Boolean;
     showDots?: EntryFields.Boolean;
     backgroundTheme?: EntryFields.Symbol<"default" | "brand" | "alt" | "none">;
+    actionButton?: IBaseButton;
+    metricEventName?: EntryFields.Symbol;
     nt_experiences?: Entry<EntrySkeletonType>[];
   };
 }

@@ -11,6 +11,9 @@ import { extractContentfulAssetUrl } from "@/lib/utils";
 import { resolvePreviewMode } from "@/lib/preview";
 import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provider-wrapper";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 const INCLUDES_COUNT = 6;
 
 type Props = {

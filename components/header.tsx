@@ -27,6 +27,7 @@ import {
 } from "@/lib/site-settings";
 import { useSiteChromeLocale } from "@/features/site-chrome-locale";
 import { useContentfulInspectorMode, useContentfulLiveUpdates } from "@contentful/live-preview/react";
+import { stripNtFieldsForLivePreview } from "@/lib/contentful-live-preview-shallow";
 
 interface HeaderProps {
   siteSettings: Entry<SiteSettingsSkeleton> | null;
@@ -46,8 +47,10 @@ export function Header({ siteSettings }: HeaderProps) {
   const [microcopyLoading, setMicrocopyLoading] = useState(true);
   const pathname = usePathname();
 
-  // Contentful Live Preview
-  const liveSiteSettings = useContentfulLiveUpdates(siteSettings);
+  // Live preview: strip nt_experiences only (nav targets must keep slug; include is capped at 3 server-side)
+  const liveSiteSettings = useContentfulLiveUpdates(
+    stripNtFieldsForLivePreview(siteSettings)
+  );
   const inspectorProps = useContentfulInspectorMode({
     entryId: liveSiteSettings?.sys.id
   });
@@ -94,7 +97,7 @@ export function Header({ siteSettings }: HeaderProps) {
     null,
     localePick
   );
-  const liveNavEntry = useContentfulLiveUpdates(navEntry);
+  const liveNavEntry = useContentfulLiveUpdates(stripNtFieldsForLivePreview(navEntry));
   
   // Get main navigation links from headerMainNavigation
   const mainNavLinks = useMemo(() => {

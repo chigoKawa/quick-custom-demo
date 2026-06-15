@@ -77,7 +77,7 @@ async function fetchEntriesForType(
         content_type: contentTypeId,
         skip,
         limit,
-        order: "sys.updatedAt",
+        order: "-sys.updatedAt",
       },
     });
 
@@ -252,6 +252,9 @@ async function computePath(
  * Update an entry's parent link and recompute its fullPath, persisting
  * both via the CMA client from the Contentful App SDK (`sdk.cma`).
  *
+ * Also propagates updated fullPath to all descendants so child paths
+ * stay consistent when a parent is moved.
+ *
  * Returns `{ id, fullPath }` on success.
  */
 export async function setEntryParent(
@@ -264,8 +267,9 @@ export async function setEntryParent(
     fullPathFieldName?: string;
     slugFieldName?: string;
     homeSlug?: string;
+    allEntries?: PageTreeEntry[];
   }
-): Promise<{ id: string; fullPath: string }> {
+): Promise<{ id: string; fullPath: string; propagation?: PropagationResult }> {
   const {
     entryId,
     parentId,
@@ -274,6 +278,7 @@ export async function setEntryParent(
     fullPathFieldName = "fullPath",
     slugFieldName = "slug",
     homeSlug = "home",
+    allEntries,
   } = opts;
 
   if (parentId === entryId) {
@@ -312,5 +317,63 @@ export async function setEntryParent(
     { ...entry, fields }
   );
 
-  return { id: updated.sys.id, fullPath: newPath };
+  // Propagate fullPath to descendants
+  let propagationResult: PropagationResult | undefined;
+  if (allEntries && allEntries.length > 0) {
+    propagationResult = await propagateFullPathToDescendants(
+      cma, entryId, newPath, locale, slugFieldName, fullPathFieldName, allEntries
+    );
+  }
+
+  return { id: updated.sys.id, fullPath: newPath, propagation: propagationResult };
+}
+
+export interface PropagationResult {
+  updated: number;
+  failed: number;
+  total: number;
+}
+
+async function propagateFullPathToDescendants(
+  cma: CMAClient,
+  parentId: string,
+  parentPath: string,
+  locale: string,
+  slugFieldName: string,
+  fullPathFieldName: string,
+  allEntries: PageTreeEntry[]
+): Promise<PropagationResult> {
+  const result: PropagationResult = { updated: 0, failed: 0, total: 0 };
+
+  const children = allEntries.filter((e) => e.parentId === parentId);
+  result.total += children.length;
+
+  for (const child of children) {
+    try {
+      const entry = await cma.entry.get({ entryId: child.id });
+      const fields = entry.fields as Record<string, Record<string, unknown>>;
+      const slug = (getLocalized<string>(
+        fields[slugFieldName] as Record<string, string> | undefined,
+        locale
+      ) ?? child.id) as string;
+
+      const childPath = parentPath === "/" ? "/" + slug : parentPath + "/" + slug;
+      fields[fullPathFieldName] = { [locale]: childPath };
+
+      await cma.entry.update({ entryId: child.id }, { ...entry, fields });
+      result.updated++;
+
+      // Recurse
+      const subResult = await propagateFullPathToDescendants(
+        cma, child.id, childPath, locale, slugFieldName, fullPathFieldName, allEntries
+      );
+      result.updated += subResult.updated;
+      result.failed += subResult.failed;
+      result.total += subResult.total;
+    } catch {
+      result.failed++;
+    }
+  }
+
+  return result;
 }

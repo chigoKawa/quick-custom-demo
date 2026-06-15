@@ -3,7 +3,7 @@
 import type { DialogAppSDK } from "@contentful/app-sdk";
 import { useSDK } from "@contentful/react-apps-toolkit";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { BADGE_COLOURS, DEFAULT_LOCALE } from "../constants";
+import { getBadgeColour, DEFAULT_LOCALE } from "../constants";
 import { fetchAllEntries } from "../cma-service";
 import type { PageTreeInstallationParameters, PageTreeEntry, PageTreeNode } from "../types";
 import { buildTree, computeFullPath, getInitials, resolveContentTypes } from "../utils";
@@ -139,7 +139,7 @@ export default function ParentPickerDialog() {
   }, [sdk]);
 
   const getBadgeStyle = (ctId: string) => {
-    const colours = BADGE_COLOURS[ctId] ?? BADGE_COLOURS.default;
+    const colours = getBadgeColour(ctId);
     return { background: colours.bg, color: colours.text };
   };
 

@@ -5,7 +5,8 @@ import { LongText } from "@/features/contentful/components/long-text";
 interface IProps {
   alignRight?: boolean; // Optional prop to align the text and buttons to the right side
   entryId: string; // Unique ID for the entry used for live preview inspector mode
-  title: string; // The main heading of the hero banner
+  title: ReactNode; // The main heading of the hero banner
+  titlePlain?: string; // Plain-text version for alt attributes
   body?: string; // Optional subtext for additional information
   image: { url: string; alt: string }; // Background image with alt text for accessibility
   buttons: ReactNode; // Buttons passed as children (can be multiple buttons from Contentful)
@@ -13,6 +14,7 @@ interface IProps {
 
 const VariantWithBgImage: FC<IProps> = ({
   title,
+  titlePlain,
   body,
   image,
   buttons,
@@ -51,7 +53,7 @@ const VariantWithBgImage: FC<IProps> = ({
               {image.url ? (
                 <img
                   src={image.url}
-                  alt={image.alt || title}
+                  alt={image.alt || titlePlain || ""}
                   className="w-full h-full object-cover"
                 />
               ) : null}

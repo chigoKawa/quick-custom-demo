@@ -3,6 +3,7 @@
 import React from "react";
 import { Experience } from "@ninetailed/experience.js-react";
 import { ExperienceMapper } from "@ninetailed/experience.js-utils-contentful";
+import { stripNtFromMappedExperiences } from "@/lib/contentful-live-preview-shallow";
 import type { IInteractiveMap } from "../../type";
 import InteractiveMapSection from "./interactive-map-section";
 
@@ -30,7 +31,7 @@ export default function PersonalizedInteractiveMap(entry: IInteractiveMap) {
   type ExperiencesProp = NonNullable<
     React.ComponentProps<typeof Experience>["experiences"]
   >;
-  const experiencesForProp = mappedExperiencesUnknown as unknown as ExperiencesProp;
+  const experiencesForProp = stripNtFromMappedExperiences(mappedExperiencesUnknown) as unknown as ExperiencesProp;
 
   return (
     <Experience

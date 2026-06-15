@@ -5,6 +5,17 @@ import { useContentfulInspectorMode } from "@contentful/live-preview/react";
 import type { IMultiItemModule } from "@/features/contentful/type";
 import { extractContentfulAssetUrl } from "@/lib/utils";
 
+/** Safely extract plain text from a field that might be a Rich Text Document or a plain string. */
+function toPlainText(field: unknown): string {
+  if (!field) return "";
+  if (typeof field === "string") return field;
+  if (typeof field !== "object") return "";
+  const node = field as { value?: string; content?: unknown[] };
+  if (node.value) return node.value;
+  if (Array.isArray(node.content)) return node.content.map(toPlainText).join("").trim();
+  return "";
+}
+
 export default function MobileMultiItemModule(entry: IMultiItemModule) {
   const inspectorProps = useContentfulInspectorMode({ entryId: entry?.sys?.id ?? "" });
 
@@ -37,10 +48,10 @@ export default function MobileMultiItemModule(entry: IMultiItemModule) {
             .map((item: any, i: number) => {
               const contentTypeId = item?.sys?.contentType?.sys?.id;
               const itemTitle =
-                (item?.fields?.headline as string) ||
-                (item?.fields?.title as string) ||
-                (item?.fields?.name as string) ||
-                (item?.fields?.internalName as string) ||
+                toPlainText(item?.fields?.headline) ||
+                toPlainText(item?.fields?.title) ||
+                toPlainText(item?.fields?.name) ||
+                toPlainText(item?.fields?.internalName) ||
                 "";
 
               // Try to extract an image from common fields

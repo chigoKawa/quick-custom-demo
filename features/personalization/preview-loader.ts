@@ -9,6 +9,7 @@ import {
   type ExperienceEntryLike,
   type AudienceEntryLike,
 } from "@ninetailed/experience.js-utils-contentful";
+import { stripNtFromMappedExperiences } from "@/lib/contentful-live-preview-shallow";
 // Keep PreviewData payloads as unknown to avoid coupling to plugin's internal types
 
 export type PreviewData = {
@@ -31,9 +32,11 @@ export async function loadPreviewData(): Promise<PreviewData> {
       environment,
     });
 
-    const experiences = (expEntries as unknown as ExperienceEntryLike[])
-      .filter(ExperienceMapper.isExperienceEntry)
-      .map(ExperienceMapper.mapExperience);
+    const experiences = stripNtFromMappedExperiences(
+      (expEntries as unknown as ExperienceEntryLike[])
+        .filter(ExperienceMapper.isExperienceEntry)
+        .map(ExperienceMapper.mapExperience)
+    );
 
     const audEntries = await getEntriesInEnvironment({
       options: {

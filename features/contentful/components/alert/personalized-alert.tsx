@@ -3,6 +3,7 @@
 import React from "react";
 import { Experience } from "@ninetailed/experience.js-react";
 import { ExperienceMapper } from "@ninetailed/experience.js-utils-contentful";
+import { stripNtFromMappedExperiences } from "@/lib/contentful-live-preview-shallow";
 import AlertWrapper from "./alert-wrapper";
 import { IAlert } from "../../type";
 
@@ -28,7 +29,7 @@ export default function PersonalizedAlert(entry: IAlert) {
   type ExperiencesProp = NonNullable<
     React.ComponentProps<typeof Experience>["experiences"]
   >;
-  const experiencesForProp = mappedExperiencesUnknown as unknown as ExperiencesProp;
+  const experiencesForProp = stripNtFromMappedExperiences(mappedExperiencesUnknown) as unknown as ExperiencesProp;
 
   // If there are no experiences configured, render baseline as-is
   if (!mappedExperiencesUnknown || mappedExperiencesUnknown.length === 0) {

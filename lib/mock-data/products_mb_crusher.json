@@ -1,0 +1,582 @@
+[
+  {
+    "id": "mbcrusher-bf90-3",
+    "title": "BF90.3 Bucket Crusher",
+    "slug": "bf90-3-bucket-crusher",
+    "description": "Flagship crusher bucket from MB Crusher, first introduced in 2001 and positioned for medium- to large-sized companies. It is described as compact, versatile, and built to handle difficult on-site conditions while processing inert material.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/3814/w-640/MB_Materiali_Render_13feb_BF90.3-S4.webp"
+    ],
+    "category": "crusher-bucket",
+    "tags": [
+      "crusher-bucket",
+      "excavator",
+      "flagship",
+      "inert-material",
+      "recycling",
+      "medium-large-sites"
+    ],
+    "stock": 93,
+    "rating": 4,
+    "reviewCount": 85,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "BF Series",
+      "type": "Crusher Bucket",
+      "format": "Excavator"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-l120-s2",
+    "title": "MB-L120 S2",
+    "slug": "mb-l120-s2",
+    "description": "Compact crusher bucket designed for small yards and limited spaces. MB describes it as easy to carry, handy, low-maintenance, and suitable for skid steers, backhoes, loaders, and excavators.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/2652/w-640/MB_Materiali_Render_13feb_MB-L120-S2.webp"
+    ],
+    "category": "crusher-bucket",
+    "tags": [
+      "crusher-bucket",
+      "compact",
+      "small-sites",
+      "skid-steer",
+      "backhoe",
+      "loader"
+    ],
+    "stock": 43,
+    "rating": 4.1,
+    "reviewCount": 41,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-L Series",
+      "type": "Crusher Bucket",
+      "format": "Excavator/Loader/Backhoe/Skid Steer"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-l140-s2",
+    "title": "MB-L140 S2",
+    "slug": "mb-l140-s2",
+    "description": "Small, compact crusher bucket positioned as a practical combination of versatility, performance, and productivity. It is suitable for excavators, backhoes, loaders, telehandlers, and skid steers in lighter weight classes.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/2653/w-640/MB_Materiali_Render_13feb_MB-L140-S2.webp"
+    ],
+    "category": "crusher-bucket",
+    "tags": [
+      "crusher-bucket",
+      "compact",
+      "versatile",
+      "telehandler",
+      "loader",
+      "backhoe"
+    ],
+    "stock": 81,
+    "rating": 4,
+    "reviewCount": 123,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-L Series",
+      "type": "Crusher Bucket",
+      "format": "Excavator/Loader/Backhoe/Skid Steer"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-l160-s2",
+    "title": "MB-L160 S2",
+    "slug": "mb-l160-s2",
+    "description": "Crusher bucket focused on balancing efficiency and mobility for compact carriers. MB positions it for skid steers and backhoes while retaining the power and productivity of the wider MB range.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/2654/w-640/MB_Materiali_Render_13feb_MB-L160-S2.webp"
+    ],
+    "category": "crusher-bucket",
+    "tags": [
+      "crusher-bucket",
+      "efficiency",
+      "mobility",
+      "skid-steer",
+      "backhoe",
+      "compact-sites"
+    ],
+    "stock": 16,
+    "rating": 3.9,
+    "reviewCount": 70,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-L Series",
+      "type": "Crusher Bucket",
+      "format": "Excavator/Loader/Backhoe/Skid Steer"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-l200-s2",
+    "title": "MB-L200 S2",
+    "slug": "mb-l200-s2",
+    "description": "Crusher bucket built with the same materials and technology as MB's larger bucket crushers, but adapted for specific skid steer and backhoe work requirements. It is positioned as compact, durable, and high-performing.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/2655/w-640/MB_Materiali_Render_13feb_MB-L200-S2.webp"
+    ],
+    "category": "crusher-bucket",
+    "tags": [
+      "crusher-bucket",
+      "skid-steer",
+      "backhoe",
+      "compact",
+      "durable",
+      "high-performance"
+    ],
+    "stock": 41,
+    "rating": 4.3,
+    "reviewCount": 21,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-L Series",
+      "type": "Crusher Bucket",
+      "format": "Excavator/Loader/Backhoe/Skid Steer"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-s14-s4",
+    "title": "MB-S14 S4",
+    "slug": "mb-s14-s4",
+    "description": "Screening bucket designed for small and medium-scale sites. MB describes it as compact, easy to transport, and effective for volumetric separation with interchangeable modular panels.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/10884/w-640/MB-S14_640x640.webp"
+    ],
+    "category": "screening-bucket",
+    "tags": [
+      "screening-bucket",
+      "excavator",
+      "small-sites",
+      "medium-sites",
+      "volumetric-separation",
+      "modular-panels"
+    ],
+    "stock": 83,
+    "rating": 4.1,
+    "reviewCount": 154,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-S Series",
+      "type": "Screening Bucket",
+      "format": "Excavator"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-s18-s4",
+    "title": "MB-S18 S4",
+    "slug": "mb-s18-s4",
+    "description": "Large screening bucket for excavators, positioned for screening different kinds of material before or after crushing. MB says it can reduce crushing time by up to 60 percent and is suited to quarry residue, dry soil, and river stone.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/10885/w-640/MB-S18_640x640.webp"
+    ],
+    "category": "screening-bucket",
+    "tags": [
+      "screening-bucket",
+      "excavator",
+      "large-sites",
+      "pre-crushing",
+      "post-crushing",
+      "quarry-material"
+    ],
+    "stock": 65,
+    "rating": 4.1,
+    "reviewCount": 165,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-S Series",
+      "type": "Screening Bucket",
+      "format": "Excavator"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-s23",
+    "title": "MB-S23",
+    "slug": "mb-s23",
+    "description": "MB describes the MB-S23 as the largest screening bucket in the world. It is intended for excavators above 35 tons and positioned for high-volume screening before or after crushing, including natural material such as quarry residue and river stone.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/10886/w-640/MB-S23_640x640.webp"
+    ],
+    "category": "screening-bucket",
+    "tags": [
+      "screening-bucket",
+      "excavator",
+      "high-volume",
+      "quarry",
+      "river-stone",
+      "largest-in-range"
+    ],
+    "stock": 47,
+    "rating": 4.5,
+    "reviewCount": 16,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-S Series",
+      "type": "Screening Bucket",
+      "format": "Excavator"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-hds207",
+    "title": "MB-HDS207",
+    "slug": "mb-hds207",
+    "description": "Compact shaft screener bucket for mini excavators and smaller backhoe applications. It is positioned around on-site material processing, simple maintenance, and easily replaceable shaft kits.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/10870/w-640/MB-HDS207.webp"
+    ],
+    "category": "shafts-screener",
+    "tags": [
+      "shafts-screener",
+      "mini-excavator",
+      "backhoe",
+      "onsite-processing",
+      "replaceable-shafts",
+      "compact"
+    ],
+    "stock": 32,
+    "rating": 4.5,
+    "reviewCount": 102,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-HDS Series",
+      "type": "Shaft Screener",
+      "format": "Excavator/Backhoe"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-hds212",
+    "title": "MB-HDS212",
+    "slug": "mb-hds212",
+    "description": "Shaft screener bucket for midi excavators, backhoe loaders, and skid steers. MB emphasizes productivity, maneuverability, on-site shaft replacement, and simple maintenance for different material-processing needs.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/10871/w-640/MB-HDS212.webp"
+    ],
+    "category": "shafts-screener",
+    "tags": [
+      "shafts-screener",
+      "midi-excavator",
+      "backhoe",
+      "skid-steer",
+      "productivity",
+      "onsite-maintenance"
+    ],
+    "stock": 47,
+    "rating": 4,
+    "reviewCount": 101,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-HDS Series",
+      "type": "Shaft Screener",
+      "format": "Excavator/Backhoe/Skid Steer"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-hds320",
+    "title": "MB-HDS320",
+    "slug": "mb-hds320",
+    "description": "Multi-purpose shaft screener designed to select and crush excavation and demolition materials, asphalt, coal, organics, wood, bark, and light plastics. MB highlights its ability to let operators change shafts safely on site.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/10875/w-640/MB-HDS320.webp"
+    ],
+    "category": "shafts-screener",
+    "tags": [
+      "shafts-screener",
+      "multi-purpose",
+      "excavation",
+      "demolition",
+      "asphalt",
+      "wood"
+    ],
+    "stock": 25,
+    "rating": 4,
+    "reviewCount": 39,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-HDS Series",
+      "type": "Shaft Screener",
+      "format": "Excavator"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-hds523",
+    "title": "MB-HDS523",
+    "slug": "mb-hds523",
+    "description": "Heavy-duty shaft screener aimed mainly at mining and quarry work. It is positioned for moving, sifting, and aerating very large volumes of soil and material in excavation, trenching, and roadworks projects.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/10877/w-640/MB-HDS523-1.webp"
+    ],
+    "category": "shafts-screener",
+    "tags": [
+      "shafts-screener",
+      "mining",
+      "quarry",
+      "large-volumes",
+      "roadworks",
+      "trenching"
+    ],
+    "stock": 57,
+    "rating": 4.6,
+    "reviewCount": 169,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-HDS Series",
+      "type": "Shaft Screener",
+      "format": "Excavator"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-r500",
+    "title": "MB-R500",
+    "slug": "mb-r500",
+    "description": "The smallest drum cutter in the MB Crusher range. It is positioned for mini and midi excavators plus skid steer and backhoe applications, with precision grinding and on-site drum replacement in under an hour.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/5652/w-640/MB-R500_drumcutter_640x640.webp"
+    ],
+    "category": "drum-cutter",
+    "tags": [
+      "drum-cutter",
+      "compact",
+      "precision",
+      "mini-excavator",
+      "skid-steer",
+      "backhoe"
+    ],
+    "stock": 45,
+    "rating": 4.5,
+    "reviewCount": 132,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-R Series",
+      "type": "Drum Cutter",
+      "format": "Excavator/Backhoe/Skid Steer"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-r800",
+    "title": "MB-R800",
+    "slug": "mb-r800",
+    "description": "Drum cutter positioned for precise processing of natural materials such as rock and stone, along with levelling plasterwork, wall coatings, and concrete surfaces. MB emphasizes low noise and limited vibration for urban use.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/3569/w-640/MB_Materiali_Render_13feb_MB-R800.webp"
+    ],
+    "category": "drum-cutter",
+    "tags": [
+      "drum-cutter",
+      "precision",
+      "rock",
+      "stone",
+      "concrete",
+      "urban-sites"
+    ],
+    "stock": 80,
+    "rating": 4,
+    "reviewCount": 111,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-R Series",
+      "type": "Drum Cutter",
+      "format": "Excavator"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-r900",
+    "title": "MB-R900",
+    "slug": "mb-r900",
+    "description": "Largest drum cutter in the MB range, positioned for accurate processing of natural materials and levelling of wall coatings and concrete surfaces. MB highlights precision, power, and suitability for hard-material applications.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/3570/w-640/MB_Materiali_Render_13feb_MB-R900.webp"
+    ],
+    "category": "drum-cutter",
+    "tags": [
+      "drum-cutter",
+      "large",
+      "precision",
+      "hard-materials",
+      "rock",
+      "concrete"
+    ],
+    "stock": 22,
+    "rating": 4.3,
+    "reviewCount": 175,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-R Series",
+      "type": "Drum Cutter",
+      "format": "Excavator"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-g350-s4",
+    "title": "MB-G350 S4",
+    "slug": "mb-g350-s4",
+    "description": "Compact sorting grapple for mini excavators, designed to handle logs, rocks, debris, poles, and branches with precision. MB highlights its wide jaw opening, 360-degree rotation, and fall prevention valve.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/11655/w-640/MB-G350-S4_640x640.webp"
+    ],
+    "category": "sorting-grapple",
+    "tags": [
+      "sorting-grapple",
+      "mini-excavator",
+      "logs",
+      "rocks",
+      "debris",
+      "360-rotation"
+    ],
+    "stock": 91,
+    "rating": 4.6,
+    "reviewCount": 107,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-G Series",
+      "type": "Sorting Grapple",
+      "format": "Mini Excavator"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-g500-s4",
+    "title": "MB-G500 S4",
+    "slug": "mb-g500-s4",
+    "description": "Sorting grapple for midi excavators, positioned as compact and precise for handling logs, stones, debris, and brushwood on site. MB notes its wide opening, silent block, Hardox wear parts, and 360-degree rotation.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/11876/w-640/MB-G500.webp"
+    ],
+    "category": "sorting-grapple",
+    "tags": [
+      "sorting-grapple",
+      "midi-excavator",
+      "stones",
+      "debris",
+      "hardox",
+      "360-rotation"
+    ],
+    "stock": 85,
+    "rating": 4.1,
+    "reviewCount": 32,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-G Series",
+      "type": "Sorting Grapple",
+      "format": "Excavator"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-g1000-s4",
+    "title": "MB-G1000 S4",
+    "slug": "mb-g1000-s4",
+    "description": "High-performance sorting grapple for larger excavators. It is positioned for safely sorting materials of different shapes and weights, with strong closing force and precise movements across multiple construction scenarios.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/11643/w-640/MB-G1000-S4_640x640.webp"
+    ],
+    "category": "sorting-grapple",
+    "tags": [
+      "sorting-grapple",
+      "excavator",
+      "high-performance",
+      "material-handling",
+      "precise",
+      "construction"
+    ],
+    "stock": 17,
+    "rating": 4.4,
+    "reviewCount": 89,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-G Series",
+      "type": "Sorting Grapple",
+      "format": "Excavator"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-p160",
+    "title": "MB-P160",
+    "slug": "mb-p160",
+    "description": "Compact demolition pulverizer in MB Crusher's MB-P line, intended for smaller excavators and backhoe loaders. The public product data positions it for controlled demolition with 360-degree rotation and compact-machine compatibility.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/14088/w-640/1-2.webp"
+    ],
+    "category": "demolition-pulverizer",
+    "tags": [
+      "demolition-pulverizer",
+      "compact",
+      "excavator",
+      "backhoe",
+      "360-rotation",
+      "demolition"
+    ],
+    "stock": 22,
+    "rating": 4.6,
+    "reviewCount": 40,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-P Series",
+      "type": "Demolition Pulverizer",
+      "format": "Excavator/Backhoe"
+    }
+  },
+  {
+    "id": "mbcrusher-mb-p380",
+    "title": "MB-P380",
+    "slug": "mb-p380",
+    "description": "Demolition pulverizer for compact excavators, backhoe loaders, and skid steer loaders. MB positions the MB-P line for precise primary and secondary crushing work with continuous hydraulic rotation and compact-carrier compatibility.",
+    "price": 0,
+    "currency": "EUR",
+    "images": [
+      "https://www.mbcrusher.com/media/14089/w-640/2-2.webp"
+    ],
+    "category": "demolition-pulverizer",
+    "tags": [
+      "demolition-pulverizer",
+      "compact",
+      "excavator",
+      "backhoe",
+      "skid-steer",
+      "primary-secondary-crushing"
+    ],
+    "stock": 60,
+    "rating": 4.1,
+    "reviewCount": 177,
+    "metadata": {
+      "brand": "MB Crusher",
+      "line": "MB-P Series",
+      "type": "Demolition Pulverizer",
+      "format": "Excavator/Backhoe/Skid Steer"
+    }
+  }
+]

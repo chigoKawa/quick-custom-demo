@@ -15,26 +15,15 @@ interface IProps {
   relatedPosts?: RelatedStoryPost[];
 }
 
+import { shallowEntryFields } from "@/lib/contentful-live-preview-shallow";
+
 // Strips deeply-nested linked entries from a section's fields so that
 // useContentfulLiveUpdates' lodash isEqual doesn't recurse into include:6 depth.
 // Scalar fields and asset refs are kept; Entry links are replaced with bare sys stubs.
+// nt_experiences / nt_variants are omitted (circular back-references).
 function shallowSection(s: any): any {
   if (!s?.sys?.id || !s?.fields) return s;
-  const shallowFields: Record<string, any> = {};
-  for (const [k, v] of Object.entries(s.fields)) {
-    if (Array.isArray(v)) {
-      shallowFields[k] = (v as any[]).map((item) =>
-        item?.sys?.type === "Entry" || item?.sys?.contentType
-          ? { sys: item.sys }
-          : item
-      );
-    } else if (v && typeof v === "object" && ((v as any).sys?.type === "Entry" || (v as any).sys?.contentType)) {
-      shallowFields[k] = { sys: (v as any).sys };
-    } else {
-      shallowFields[k] = v;
-    }
-  }
-  return { sys: s.sys, fields: shallowFields };
+  return { sys: s.sys, fields: shallowEntryFields(s.fields) };
 }
 
 // Index every entry in the server-fetched tree by sys.id.
@@ -82,9 +71,12 @@ const ContentfulLandingPage: FC<IProps> = ({ entry: publishedEntry, relatedPosts
   const shallowSections = Array.isArray(publishedSections)
     ? publishedSections.map(shallowSection)
     : [];
+  // Strip nt_experiences / nt_variants — they contain circular back-references
+  // that cause JSON.stringify to blow up when live preview tries to postMessage.
+  const { nt_experiences: _ntExp, nt_variants: _ntVar, sections: _sec, ...scalarFields } = publishedEntry.fields as any;
   const shallowEntry = {
     sys: publishedEntry.sys,
-    fields: { ...publishedEntry.fields, sections: shallowSections },
+    fields: { ...scalarFields, sections: shallowSections },
   } as unknown as ILandingPage;
 
   const liveEntry = useContentfulLiveUpdates(shallowEntry);

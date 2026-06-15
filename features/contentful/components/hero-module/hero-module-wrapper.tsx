@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
+import { useContentfulLiveUpdates } from "@contentful/live-preview/react";
 
 import type { IHeroModule, IBaseButton } from "../../type";
 import { extractUrlFromTarget } from "@/lib/utils";
@@ -67,15 +68,27 @@ export default function HeroModuleWrapper(
 
   const title = resolvedFields.headline ?? "";
   const description = resolvedFields.subCopy;
-  const imagePlacement = resolvedFields.imagePlacement;
+  const textAnchor = resolvedFields.textAnchor;
+  const textContrast = resolvedFields.textContrast;
+  const bannerSize = resolvedFields.size;
 
   const imageEntry = resolvedFields.image;
+  // Subscribe to live updates on the nested imageWithFocalPoint entry so focal
+  // point changes appear without a reload. Pass only sys+fields to avoid the
+  // deep-equality stack overflow that useContentfulLiveUpdates triggers on
+  // deeply-nested include:6 data.
+  const liveImageEntry = useContentfulLiveUpdates(
+    imageEntry && typeof imageEntry === "object" && (imageEntry as Record<string, unknown>).sys
+      ? { sys: (imageEntry as Record<string, unknown>).sys, fields: (imageEntry as Record<string, unknown>).fields }
+      : null
+  ) ?? imageEntry;
   const {
     url: imageUrl,
     alt: imageAlt,
     objectPosition,
+    focalPoint: imageFocalPoint,
     entryId: imageEntryId,
-  } = extractImageWithFocalPoint(imageEntry);
+  } = extractImageWithFocalPoint(liveImageEntry);
 
   const buttons = mapButtons(resolvedFields.buttons, linkLocale, marketCode);
 
@@ -86,21 +99,22 @@ export default function HeroModuleWrapper(
     imageAlt: imageAlt || title,
     imageObjectPosition: objectPosition,
     imageEntryId,
-    imagePlacement: imagePlacement === "Left" ? "Left" : "Right",
+    imageFocalPoint,
+    textAnchor: textAnchor ?? undefined,
+    textContrast: textContrast ?? undefined,
+    bannerSize: bannerSize ?? undefined,
     buttons: buttons.length > 0 ? buttons.slice(0, 2) : undefined,
   };
 
   if (!slide.title) return null;
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <HeroModule
-        slides={[slide]}
-        entryId={entry?.sys?.id}
-        metricEventName={
-          (resolvedFields as unknown as { metricEventName?: string })?.metricEventName as never
-        }
-      />
-    </div>
+    <HeroModule
+      slides={[slide]}
+      entryId={entry?.sys?.id}
+      metricEventName={
+        (resolvedFields as unknown as { metricEventName?: string })?.metricEventName as never
+      }
+    />
   );
 }

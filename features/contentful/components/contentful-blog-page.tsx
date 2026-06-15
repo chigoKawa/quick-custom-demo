@@ -88,8 +88,9 @@ export const richTextOptions: Options = {
 // Main Blog Page Component
 const ContentfulBlogPage: FC<IProps> = ({ entry: publishedEntry }) => {
   // Use live updates for Contentful preview mode
+  const { nt_experiences: _ntExp, nt_variants: _ntVar, ...blogFields } = publishedEntry.fields as any;
   const entry: IBlogPostPage =
-    useContentfulLiveUpdates({ sys: publishedEntry.sys, fields: publishedEntry.fields } as IBlogPostPage) || publishedEntry;
+    useContentfulLiveUpdates({ sys: publishedEntry.sys, fields: blogFields } as IBlogPostPage) || publishedEntry;
   const { title, publishedDate, summary, body, featuredImage, author } =
     entry.fields;
 

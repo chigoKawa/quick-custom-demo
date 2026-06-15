@@ -19,14 +19,17 @@ import {
   MARKET_OVERRIDE_FIELD_ID,
 } from "@/lib/market-overrides";
 import { useActiveMarket } from "@/lib/market-overrides/react";
+import RelatedProductsSection from "./related-products-section";
+import type { RelatedProductStory } from "@/lib/related-product-stories";
 
 interface Props {
   entry: IProductStory;
   locale: string;
   microcopy?: MicrocopyDataMap | null;
+  relatedProducts?: RelatedProductStory[];
 }
 
-export default function ProductStoryPage({ entry: published, locale, microcopy }: Props) {
+export default function ProductStoryPage({ entry: published, locale, microcopy, relatedProducts = [] }: Props) {
   const entry = useContentfulLiveUpdates(published) || published;
   const t = useMicrocopyHelper(microcopy);
   const inspectorProps = useContentfulInspectorMode({ entryId: entry.sys.id });
@@ -206,6 +209,11 @@ export default function ProductStoryPage({ entry: published, locale, microcopy }
             <SectionFromEntry key={(s?.sys as Record<string, unknown>)?.id as string ?? `bottom-${i}`} entry={s} />
           ))}
         </div>
+      )}
+
+      {/* ── Related products (shared taxonomy concepts) ── */}
+      {relatedProducts.length > 0 && (
+        <RelatedProductsSection products={relatedProducts} microcopy={microcopy} />
       )}
     </div>
   );

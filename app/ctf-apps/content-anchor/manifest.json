@@ -1,0 +1,15 @@
+{
+  "name": "Content Anchor",
+  "src": "app/ctf-apps/content-anchor/page.tsx",
+  "locations": [
+    {
+      "location": "app-config",
+      "src": "app/ctf-apps/content-anchor/locations/config-screen.tsx"
+    },
+    {
+      "location": "entry-field",
+      "src": "app/ctf-apps/content-anchor/locations/content-anchor-field.tsx",
+      "fieldTypes": [{ "type": "Object" }]
+    }
+  ]
+}

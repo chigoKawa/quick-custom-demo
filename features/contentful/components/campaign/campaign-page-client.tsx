@@ -49,7 +49,8 @@ export default function CampaignPageClient({
   locale,
   isPreview,
 }: CampaignPageClientProps) {
-  const entry = useContentfulLiveUpdates({ sys: serverEntry.sys, fields: serverEntry.fields } as ICampaign) || serverEntry;
+  const { nt_experiences: _ntExp, nt_variants: _ntVar, ...campaignFields } = serverEntry.fields as any;
+  const entry = useContentfulLiveUpdates({ sys: serverEntry.sys, fields: campaignFields } as ICampaign) || serverEntry;
   const inspectorProps = useContentfulInspectorMode({ entryId: entry.sys.id });
 
   const active = isCampaignActive(entry);

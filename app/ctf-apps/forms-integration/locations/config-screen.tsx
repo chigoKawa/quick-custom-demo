@@ -1,8 +1,23 @@
 "use client";
 
+import {
+  Badge,
+  Box,
+  Card,
+  Checkbox,
+  Flex,
+  Form,
+  Heading,
+  List,
+  Note,
+  Paragraph,
+  Stack,
+  Subheading,
+  Text,
+} from "@contentful/f36-components";
 import type { AppExtensionSDK } from "@contentful/app-sdk";
 import { useSDK } from "@contentful/react-apps-toolkit";
-import React, { useCallback, useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface AppInstallationParameters {
   provider?: string;
@@ -20,6 +35,7 @@ const PROVIDERS = [
 
 export default function ConfigScreen() {
   const sdk = useSDK<AppExtensionSDK>();
+
   const [parameters, setParameters] = useState<AppInstallationParameters>({
     provider: "mock",
     useMock: true,
@@ -27,12 +43,10 @@ export default function ConfigScreen() {
   const [isInstalled, setIsInstalled] = useState(false);
   const parametersRef = useRef(parameters);
 
-  // Keep ref in sync
   useEffect(() => {
     parametersRef.current = parameters;
   }, [parameters]);
 
-  // Initialize from existing params
   useEffect(() => {
     const currentParams = sdk.parameters.installation as AppInstallationParameters;
     if (currentParams && Object.keys(currentParams).length > 0) {
@@ -41,15 +55,12 @@ export default function ConfigScreen() {
     }
   }, [sdk]);
 
-  // Set up onConfigure handler
   useEffect(() => {
     sdk.app.onConfigure(() => {
       return {
         parameters: parametersRef.current,
       };
     });
-
-    // Mark app as ready
     sdk.app.setReady();
   }, [sdk]);
 
@@ -70,158 +81,134 @@ export default function ConfigScreen() {
 
   const selectedProvider = parameters.provider || "mock";
   const useMock = parameters.useMock ?? true;
+  const providerLabel =
+    PROVIDERS.find((p) => p.id === selectedProvider)?.name ?? selectedProvider;
 
   return (
-    <div style={{ padding: 24, maxWidth: 800, margin: "0 auto" }}>
-      {/* Header */}
-      <div style={{ marginBottom: 32 }}>
-        <h1 style={{ fontSize: 24, fontWeight: 600, marginBottom: 8 }}>
-          📝 Forms Integration
-        </h1>
-        <p style={{ color: "#6b7280", fontSize: 14 }}>
-          Connect your form provider to embed forms in your content entries.
-        </p>
-      </div>
+    <Box padding="spacingXl" style={{ maxWidth: 800, margin: "0 auto" }}>
+      <Heading>Forms Integration</Heading>
+      <Paragraph>
+        Connect your form provider to embed forms in your content entries.
+      </Paragraph>
 
-      {/* Status Banner */}
-      <div
-        style={{
-          padding: 16,
-          borderRadius: 8,
-          marginBottom: 24,
-          backgroundColor: isInstalled ? "#ecfdf5" : "#fef3c7",
-          border: `1px solid ${isInstalled ? "#10b981" : "#f59e0b"}`,
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span>{isInstalled ? "✅" : "⚠️"}</span>
-          <span style={{ fontWeight: 500 }}>
-            {isInstalled ? "App Configured" : "Configuration Required"}
-          </span>
-        </div>
-        <p style={{ fontSize: 13, color: "#6b7280", marginTop: 4 }}>
+      {/* ── Status summary ──────────────────────────────────────────── */}
+      <Box marginTop="spacingL">
+        <Flex gap="spacingS" flexWrap="wrap">
+          <Badge variant="secondary">Provider: {providerLabel}</Badge>
+          <Badge variant={useMock ? "warning" : "primary"}>
+            Mode: {useMock ? "Mock" : "Live"}
+          </Badge>
+          <Badge variant={isInstalled ? "positive" : "warning"}>
+            {isInstalled ? "Configured" : "Configuration required"}
+          </Badge>
+        </Flex>
+      </Box>
+
+      <Box marginTop="spacingM">
+        <Note variant={isInstalled ? "positive" : "warning"}>
           {isInstalled
-            ? `Using ${PROVIDERS.find((p) => p.id === selectedProvider)?.name || selectedProvider}`
-            : "Select a form provider to get started"}
-        </p>
-      </div>
+            ? `Using ${providerLabel}. Save to apply any changes.`
+            : "Select a form provider to get started, then save the configuration."}
+        </Note>
+      </Box>
 
-      {/* Provider Selection */}
-      <div style={{ marginBottom: 24 }}>
-        <h2 style={{ fontSize: 16, fontWeight: 600, marginBottom: 12 }}>
-          Form Provider
-        </h2>
-        <div style={{ display: "grid", gap: 12 }}>
-          {PROVIDERS.map((provider) => (
-            <label
-              key={provider.id}
-              style={{
-                display: "flex",
-                alignItems: "flex-start",
-                gap: 12,
-                padding: 16,
-                borderRadius: 8,
-                border: `2px solid ${
-                  selectedProvider === provider.id ? "#3b82f6" : "#e5e7eb"
-                }`,
-                backgroundColor:
-                  selectedProvider === provider.id ? "#eff6ff" : "#fff",
-                cursor: "pointer",
-                transition: "all 0.15s ease",
-              }}
-            >
-              <input
-                type="radio"
-                name="provider"
-                value={provider.id}
-                checked={selectedProvider === provider.id}
-                onChange={() => handleProviderChange(provider.id)}
-                style={{ marginTop: 2 }}
-              />
-              <div>
-                <div style={{ fontWeight: 500 }}>{provider.name}</div>
-                <div style={{ fontSize: 13, color: "#6b7280" }}>
-                  {provider.description}
-                </div>
-              </div>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {/* Mock Mode Toggle */}
-      {selectedProvider !== "mock" && (
-        <div style={{ marginBottom: 24 }}>
-          <h2 style={{ fontSize: 16, fontWeight: 600, marginBottom: 12 }}>
-            Demo Settings
-          </h2>
-          <label
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 12,
-              padding: 16,
-              borderRadius: 8,
-              border: "1px solid #e5e7eb",
-              cursor: "pointer",
-            }}
+      <Form>
+        {/* ── Provider selection ────────────────────────────────────── */}
+        <Box marginTop="spacingXl">
+          <Subheading>Form provider</Subheading>
+          <Paragraph>
+            Pick the backend the field editor should query for forms. Mock
+            mode uses bundled demo forms without any external connection.
+          </Paragraph>
+          <Stack
+            flexDirection="column"
+            spacing="spacingS"
+            alignItems="stretch"
           >
-            <input
-              type="checkbox"
-              checked={useMock}
-              onChange={(e) => handleMockToggle(e.target.checked)}
-            />
-            <div>
-              <div style={{ fontWeight: 500 }}>Use Mock Data</div>
-              <div style={{ fontSize: 13, color: "#6b7280" }}>
-                Use sample forms instead of connecting to the real provider
-              </div>
-            </div>
-          </label>
-        </div>
-      )}
+            {PROVIDERS.map((provider) => {
+              const isSelected = selectedProvider === provider.id;
+              return (
+                <Card
+                  key={provider.id}
+                  padding="default"
+                  isSelected={isSelected}
+                  onClick={() => handleProviderChange(provider.id)}
+                  style={{ cursor: "pointer", textAlign: "left" }}
+                >
+                  <Flex
+                    alignItems="center"
+                    justifyContent="space-between"
+                    gap="spacingS"
+                    flexWrap="wrap"
+                  >
+                    <Box style={{ flex: "1 1 auto", minWidth: 0 }}>
+                      <Text fontWeight="fontWeightDemiBold" as="div">
+                        {provider.name}
+                      </Text>
+                      <Text fontColor="gray600" fontSize="fontSizeS" as="div">
+                        {provider.description}
+                      </Text>
+                    </Box>
+                    {isSelected && (
+                      <Badge variant="primary">Selected</Badge>
+                    )}
+                  </Flex>
+                </Card>
+              );
+            })}
+          </Stack>
+        </Box>
 
-      {/* Provider Credentials (placeholder) */}
-      {selectedProvider !== "mock" && !useMock && (
-        <div style={{ marginBottom: 24 }}>
-          <h2 style={{ fontSize: 16, fontWeight: 600, marginBottom: 12 }}>
-            Provider Credentials
-          </h2>
-          <div
-            style={{
-              padding: 16,
-              borderRadius: 8,
-              backgroundColor: "#f9fafb",
-              border: "1px solid #e5e7eb",
-            }}
-          >
-            <p style={{ fontSize: 13, color: "#6b7280" }}>
-              Credentials configuration for {PROVIDERS.find((p) => p.id === selectedProvider)?.name} 
-              would appear here. For demo purposes, use Mock Data mode.
-            </p>
-          </div>
-        </div>
-      )}
+        {/* ── Demo settings ─────────────────────────────────────────── */}
+        {selectedProvider !== "mock" && (
+          <Box marginTop="spacingXl">
+            <Subheading>Demo settings</Subheading>
+            <Box>
+              <Checkbox
+                isChecked={useMock}
+                onChange={(e) => handleMockToggle(e.target.checked)}
+              >
+                <Flex gap="spacingXs" alignItems="center">
+                  <Text>Use mock data</Text>
+                  {useMock && <Badge variant="primary">Active</Badge>}
+                </Flex>
+              </Checkbox>
+              <Box marginTop="spacingXs">
+                <Text fontColor="gray600" as="div">
+                  Use sample forms instead of connecting to {providerLabel}.
+                  Useful for demos and local development.
+                </Text>
+              </Box>
+            </Box>
+          </Box>
+        )}
 
-      {/* Help Section */}
-      <div
-        style={{
-          padding: 16,
-          borderRadius: 8,
-          backgroundColor: "#f0f9ff",
-          border: "1px solid #0ea5e9",
-        }}
-      >
-        <h3 style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>
-          💡 How to use
-        </h3>
-        <ol style={{ fontSize: 13, color: "#6b7280", paddingLeft: 20, margin: 0 }}>
-          <li>Select a form provider above</li>
-          <li>Add a JSON field to your content type</li>
-          <li>Set the field appearance to use this app</li>
-          <li>Select forms when editing entries</li>
-        </ol>
-      </div>
-    </div>
+        {/* ── Credentials (placeholder) ─────────────────────────────── */}
+        {selectedProvider !== "mock" && !useMock && (
+          <Box marginTop="spacingXl">
+            <Subheading>Provider credentials</Subheading>
+            <Note variant="neutral">
+              Credentials configuration for {providerLabel} would appear
+              here. For demo purposes, enable mock data above.
+            </Note>
+          </Box>
+        )}
+
+        {/* ── Help ──────────────────────────────────────────────────── */}
+        <Box marginTop="spacingXl">
+          <Subheading>How to use</Subheading>
+          <List>
+            <List.Item>Select a form provider above.</List.Item>
+            <List.Item>
+              Add a JSON (Object) field to your content type.
+            </List.Item>
+            <List.Item>
+              Set the field&apos;s appearance to <strong>Forms Integration</strong>.
+            </List.Item>
+            <List.Item>Select a form when editing entries.</List.Item>
+          </List>
+        </Box>
+      </Form>
+    </Box>
   );
 }

@@ -1,0 +1,610 @@
+[
+  {
+    "id": "gant-stretch-oxford-shirt-light-blue",
+    "title": "Stretch Oxford Shirt — Light Blue",
+    "slug": "stretch-oxford-shirt-light-blue",
+    "description": "Our classic Slim Fit Stretch Oxford Shirt is crafted in a premium cotton quality, exclusively developed for Gant with added stretch. This shirt features a point collar, curved hem, our signature locker loop at the back and our iconic shield logo embroidered at the chest.",
+    "price": 128.0,
+    "currency": "USD",
+    "images": [
+      "https://gant.com/dw/image/v2/BFLN_PRD/on/demandware.static/-/Sites-gant-master/default/dw94b02908/PhotoStudio/time__1769783127__202601-4300141-455-model-fv-1.jpg?sw=800"
+    ],
+    "category": "shirts",
+    "tags": [
+      "shirts",
+      "oxford",
+      "preppy",
+      "gant",
+      "new-arrivals"
+    ],
+    "stock": 78,
+    "rating": 4.5,
+    "reviewCount": 224,
+    "metadata": {
+      "brand": "GANT",
+      "articleNumber": "4300141-455",
+      "type": "Stretch Oxford Shirt",
+      "color": "Light Blue",
+      "fit": "Slim fit",
+      "material": "97% Cotton",
+      "originalPrice": 160.0
+    }
+  },
+  {
+    "id": "gant-stretch-oxford-shirt-white",
+    "title": "Stretch Oxford Shirt — White",
+    "slug": "stretch-oxford-shirt-white",
+    "description": "Our classic Slim Fit Stretch Oxford Shirt is crafted in a premium cotton quality, exclusively developed for Gant with added stretch. This shirt features a point collar, curved hem, our signature locker loop at the back and our iconic shield logo embroidered at the chest.",
+    "price": 96.0,
+    "currency": "USD",
+    "images": [
+      "https://gant.com/dw/image/v2/BFLN_PRD/on/demandware.static/-/Sites-gant-master/default/dwf5fb66e4/PhotoStudio/time__1769782812__202601-4300141-110-model-fv-1.jpg?sw=800"
+    ],
+    "category": "shirts",
+    "tags": [
+      "shirts",
+      "oxford",
+      "preppy",
+      "gant",
+      "new-arrivals"
+    ],
+    "stock": 89,
+    "rating": 4.7,
+    "reviewCount": 366,
+    "metadata": {
+      "brand": "GANT",
+      "articleNumber": "4300141-110",
+      "type": "Stretch Oxford Shirt",
+      "color": "White",
+      "fit": "Slim fit",
+      "material": "97% Cotton",
+      "originalPrice": 120.0
+    }
+  },
+  {
+    "id": "gant-regular-fit-classic-oxford-shirt-persian-blue",
+    "title": "Regular Fit Classic Oxford Shirt — Persian Blue",
+    "slug": "regular-fit-classic-oxford-shirt-persian-blue",
+    "description": "Versatile, foundational and smart-casual appropriate, the Classic Oxford Shirt features our iconic Archive Shield embroidery. Crafted from durable cotton, this design is cut for a regular fit and features a button-down collar, a curved hem, adjustable cuffs and a box pleat with our signature locker loop at the back.",
+    "price": 120.0,
+    "currency": "USD",
+    "images": [
+      "https://gant.com/dw/image/v2/BFLN_PRD/on/demandware.static/-/Sites-gant-master/default/dw01971824/PhotoStudio/time__1769786117__202601-3000200-423-model-fv-1.jpg?sw=800"
+    ],
+    "category": "shirts",
+    "tags": [
+      "shirts",
+      "oxford",
+      "preppy",
+      "gant",
+      "new-arrivals"
+    ],
+    "stock": 22,
+    "rating": 4.6,
+    "reviewCount": 216,
+    "metadata": {
+      "brand": "GANT",
+      "articleNumber": "3000200-423",
+      "type": "Classic Oxford Shirt",
+      "color": "Persian Blue",
+      "material": "58% Regenerative Cotton",
+      "originalPrice": 150.0
+    }
+  },
+  {
+    "id": "gant-classic-oxford-short-sleeve-shirt-white",
+    "title": "Classic Oxford Short Sleeve Shirt — White",
+    "slug": "classic-oxford-short-sleeve-shirt-white",
+    "description": "Versatile, foundational and smart-casual appropriate, the Classic Oxford Shirt is crafted from a durable cotton. Cut for a regular fit, this shirt is designed with short sleeves for the warmer, summer months. It features a button-down collar, curved hem, a chest pocket with shield embroidery and a box pleat with a locker loop at the back.",
+    "price": 136.5,
+    "currency": "USD",
+    "images": [
+      "https://gant.com/dw/image/v2/BFLN_PRD/on/demandware.static/-/Sites-gant-master/default/dw0dca3da3/PhotoStudio/time__1765377710__202601-3000201-110-model-fv-1.jpg?sw=800"
+    ],
+    "category": "shirts",
+    "tags": [
+      "shirts",
+      "oxford",
+      "preppy",
+      "gant",
+      "new-arrivals"
+    ],
+    "stock": 114,
+    "rating": 4.8,
+    "reviewCount": 203,
+    "metadata": {
+      "brand": "GANT",
+      "articleNumber": "3000201-110",
+      "type": "Short Sleeve Oxford Shirt",
+      "color": "White",
+      "fit": "Regular fit",
+      "material": "58% Regenerative Cotton",
+      "originalPrice": 195.0
+    }
+  },
+  {
+    "id": "gant-slub-cotton-blend-polo-sweater-hazelnut-melange",
+    "title": "Slub Cotton Blend Polo Sweater — Hazelnut Melange",
+    "slug": "slub-cotton-blend-polo-sweater-hazelnut-melange",
+    "description": "This sweater is knitted from a slub cotton-linen blend giving it a textural finish and melange color effect. It has a regular fit and features a polo collar with corozo buttons, tonal embroidery at the chest and rib endings at the hem and cuffs.",
+    "price": 250.0,
+    "currency": "USD",
+    "images": [
+      "https://gant.com/dw/image/v2/BFLN_PRD/on/demandware.static/-/Sites-gant-master/default/dw933750a3/PhotoStudio/time__1763991908__202601-8050297-292-model-fv-1.jpg?sw=800"
+    ],
+    "category": "knitwear",
+    "tags": [
+      "knitwear",
+      "sweater",
+      "layering",
+      "gant",
+      "new-arrivals"
+    ],
+    "stock": 51,
+    "rating": 4.7,
+    "reviewCount": 177,
+    "metadata": {
+      "brand": "GANT",
+      "articleNumber": "8050297-292",
+      "type": "Polo Sweater",
+      "color": "Hazelnut Melange",
+      "fit": "Regular fit",
+      "material": "70% Cotton"
+    }
+  },
+  {
+    "id": "gant-striped-polo-sweater-vintage-blue",
+    "title": "Striped Polo Sweater — Vintage Blue",
+    "slug": "striped-polo-sweater-vintage-blue",
+    "description": "Crafted in an airy textured cotton knit, this polo sweater is a preppy, comfortable addition to your wardrobe. Featuring a sleek striped pattern and regular fit, it is designed with a polo collar and full buttoned placket, corozo buttons and ribbed endings at the hem and sleeve cuffs.",
+    "price": 143.5,
+    "currency": "USD",
+    "images": [
+      "https://gant.com/dw/image/v2/BFLN_PRD/on/demandware.static/-/Sites-gant-master/default/dw1f5a2c05/PhotoStudio/time__1768211414__202601-8040251-442-model-fv-1.jpg?sw=800"
+    ],
+    "category": "knitwear",
+    "tags": [
+      "knitwear",
+      "sweater",
+      "layering",
+      "gant",
+      "new-arrivals"
+    ],
+    "stock": 48,
+    "rating": 4.7,
+    "reviewCount": 378,
+    "metadata": {
+      "brand": "GANT",
+      "articleNumber": "8040251-442",
+      "type": "Polo Sweater",
+      "color": "Vintage Blue",
+      "fit": "Regular fit",
+      "material": "100% Cotton",
+      "originalPrice": 205.0
+    }
+  },
+  {
+    "id": "gant-cotton-cable-knit-half-zip-sweater-oat-melange",
+    "title": "Cotton Cable Knit Half-Zip Sweater — Oat Melange",
+    "slug": "cotton-cable-knit-half-zip-sweater-oat-melange",
+    "description": "Designed in cotton with an all-over cable knit structure, this soft sweater has a regular fit and a half-zip collar. A preppy essential, it is detailed with our iconic Archive Shield graphic embroidered at the chest and features rib endings at the neck, hem and cuffs.",
+    "price": 150.5,
+    "currency": "USD",
+    "images": [
+      "https://gant.com/dw/image/v2/BFLN_PRD/on/demandware.static/-/Sites-gant-master/default/dw0fbec073/PhotoStudio/time__1763992219__202601-8050603-198-model-fv-1.jpg?sw=800"
+    ],
+    "category": "knitwear",
+    "tags": [
+      "knitwear",
+      "sweater",
+      "layering",
+      "gant",
+      "new-arrivals"
+    ],
+    "stock": 80,
+    "rating": 4.8,
+    "reviewCount": 168,
+    "metadata": {
+      "brand": "GANT",
+      "articleNumber": "8050603-198",
+      "type": "Half-Zip Sweater",
+      "color": "Oat Melange",
+      "fit": "Regular fit",
+      "material": "100% Cotton",
+      "originalPrice": 215.0
+    }
+  },
+  {
+    "id": "gant-cable-knit-crew-neck-sweater-light-blue",
+    "title": "Cable Knit Crew Neck Sweater — Light Blue",
+    "slug": "cable-knit-crew-neck-sweater-light-blue",
+    "description": "An American sportswear classic, the cable knit sweater has roots with the Aran Islands and Irish fisherman, but has been adored by everyone from Hollywood film stars to boarding school students around the world. Crafted from a soft cotton elastane blend for a slim yet stretchy fit, our version keeps it crisp and versatile with ribbed details, a classic crew neck, and our signature shield graphic embroidered at the chest. Plus, in a range of neutrals and vibrant seasonal hues, you can justify one in every color.",
+    "price": 157.5,
+    "currency": "USD",
+    "images": [
+      "https://gant.com/dw/image/v2/BFLN_PRD/on/demandware.static/-/Sites-gant-master/default/dwfb146873/PhotoStudio/time__1765380689__202601-4800100-455-model-fv-1.jpg?sw=800"
+    ],
+    "category": "knitwear",
+    "tags": [
+      "knitwear",
+      "sweater",
+      "layering",
+      "gant",
+      "new-arrivals"
+    ],
+    "stock": 103,
+    "rating": 4.9,
+    "reviewCount": 80,
+    "metadata": {
+      "brand": "GANT",
+      "articleNumber": "4800100-455",
+      "type": "Crew Neck Sweater",
+      "color": "Light Blue",
+      "fit": "Slim fit",
+      "material": "88% Organic Cotton",
+      "originalPrice": 225.0
+    }
+  },
+  {
+    "id": "gant-indigo-cable-knit-sweater-rich-navy",
+    "title": "Indigo Cable Knit Sweater — Rich Navy",
+    "slug": "indigo-cable-knit-sweater-rich-navy",
+    "description": "This sweater is made using indigo-dyed cotton yarn that's been knitted in a textured cable structure. It's designed for a regular fit and has a ribbed crew neck with a rolled edge.",
+    "price": 295.0,
+    "currency": "USD",
+    "images": [
+      "https://gant.com/dw/image/v2/BFLN_PRD/on/demandware.static/-/Sites-gant-master/default/dw023922d4/PhotoStudio/time__1765375211__202601-8030279-432-model-fv-1.jpg?sw=800"
+    ],
+    "category": "knitwear",
+    "tags": [
+      "knitwear",
+      "sweater",
+      "layering",
+      "gant",
+      "new-arrivals"
+    ],
+    "stock": 33,
+    "rating": 4.3,
+    "reviewCount": 286,
+    "metadata": {
+      "brand": "GANT",
+      "articleNumber": "8030279-432",
+      "type": "Cable Knit Sweater",
+      "color": "Rich Navy",
+      "fit": "Regular fit",
+      "material": "100% Cotton"
+    }
+  },
+  {
+    "id": "gant-regular-fit-polo-shirt-black",
+    "title": "Regular Fit Polo Shirt — Black",
+    "slug": "regular-fit-polo-shirt-black",
+    "description": "For impromptu tennis matches and alfresco dining to casual Fridays and everything in between –the versatile piqué polo shirt is a staple for a reason (meaning you can justify one in every color). Our polo shirt keeps it easy, simple, and classic. With a regular fit and a traditional flat knit collar, details include a two-button placket, small side slits, and our signature Gant logo embroidered at the chest.",
+    "price": 121.5,
+    "currency": "USD",
+    "images": [
+      "https://gant.com/dw/image/v2/BFLN_PRD/on/demandware.static/-/Sites-gant-master/default/dw2548fd1a/PhotoStudio/time__1769778605__202601-2210-005-model-fv-1.jpg?sw=800"
+    ],
+    "category": "polos",
+    "tags": [
+      "polo",
+      "casual",
+      "preppy",
+      "gant",
+      "new-arrivals"
+    ],
+    "stock": 103,
+    "rating": 4.3,
+    "reviewCount": 358,
+    "metadata": {
+      "brand": "GANT",
+      "articleNumber": "2210-5",
+      "type": "Regular Fit Polo Shirt",
+      "color": "Black",
+      "fit": "Regular fit",
+      "material": "100% Regenerative Cotton"
+    }
+  },
+  {
+    "id": "gant-regular-fit-shield-pique-polo-shirt-dk-jeansblue-melange",
+    "title": "Regular Fit Polo Shirt — Dk Jeansblue Melange",
+    "slug": "regular-fit-shield-pique-polo-shirt-dk-jeansblue-melange",
+    "description": "For impromptu tennis matches and alfresco dining to casual Fridays and everything in between –the versatile piqué polo shirt is a staple for a reason (meaning you can justify one in every color). Our polo shirt keeps it easy, simple, and classic. With a regular fit and a traditional flat knit collar, details include a two-button placket, small side slits, and our signature Gant logo embroidered at the chest.",
+    "price": 121.5,
+    "currency": "USD",
+    "images": [
+      "https://gant.com/dw/image/v2/BFLN_PRD/on/demandware.static/-/Sites-gant-master/default/dw31ea5396/PhotoStudio/time__1765374999__202601-2210-902-model-fv-1.jpg?sw=800"
+    ],
+    "category": "polos",
+    "tags": [
+      "polo",
+      "casual",
+      "preppy",
+      "gant",
+      "new-arrivals"
+    ],
+    "stock": 74,
+    "rating": 4.4,
+    "reviewCount": 100,
+    "metadata": {
+      "brand": "GANT",
+      "articleNumber": "2210-902",
+      "type": "Regular Fit Polo Shirt",
+      "color": "Dk Jeansblue Melange",
+      "fit": "Regular fit",
+      "material": "100% Regenerative Cotton"
+    }
+  },
+  {
+    "id": "gant-slim-fit-polo-shirt-white",
+    "title": "Slim Fit Polo Shirt — White",
+    "slug": "slim-fit-polo-shirt-white",
+    "description": "For impromptu tennis matches and alfresco dining to casual Fridays and everything in between –the versatile piqué polo shirt is a staple for a reason (meaning you can justify one in every color). Our polo shirt keeps it easy, simple, and classic. With a slim fit and a traditional flat knit collar, details include a two-button placket, small side slits, and our signature small-scale shield graphic embroidered at the chest.",
+    "price": 120.5,
+    "currency": "USD",
+    "images": [
+      "https://gant.com/dw/image/v2/BFLN_PRD/on/demandware.static/-/Sites-gant-master/default/dwaf6efbe3/PhotoStudio/time__1763988908__202601-2220-110-model-fv-1.jpg?sw=800"
+    ],
+    "category": "polos",
+    "tags": [
+      "polo",
+      "casual",
+      "preppy",
+      "gant",
+      "new-arrivals"
+    ],
+    "stock": 78,
+    "rating": 4.6,
+    "reviewCount": 229,
+    "metadata": {
+      "brand": "GANT",
+      "articleNumber": "2220-110",
+      "type": "Slim Fit Polo Shirt",
+      "color": "White",
+      "fit": "Slim fit",
+      "material": "100% Regenerative Cotton"
+    }
+  },
+  {
+    "id": "gant-long-sleeve-polo-shirt-white",
+    "title": "Long Sleeve Polo Shirt — White",
+    "slug": "long-sleeve-polo-shirt-white",
+    "description": "Crafted from soft and breathable cotton, this long-sleeved polo shirt features a two-button placket and small slits at the sides.",
+    "price": 165.0,
+    "currency": "USD",
+    "images": [
+      "https://gant.com/dw/image/v2/BFLN_PRD/on/demandware.static/-/Sites-gant-master/default/dwe2cbcfbf/PhotoStudio/time__1769779509__202601-2230-110-model-fv-1.jpg?sw=800"
+    ],
+    "category": "polos",
+    "tags": [
+      "polo",
+      "casual",
+      "preppy",
+      "gant",
+      "new-arrivals"
+    ],
+    "stock": 23,
+    "rating": 4.7,
+    "reviewCount": 132,
+    "metadata": {
+      "brand": "GANT",
+      "articleNumber": "2230-110",
+      "type": "Long Sleeve Polo Shirt",
+      "color": "White",
+      "fit": "Regular fit",
+      "material": "100% Regenerative Cotton"
+    }
+  },
+  {
+    "id": "gant-reversible-lightweight-coat-oat-beige",
+    "title": "Reversible Lightweight Coat — Oat Beige",
+    "slug": "reversible-lightweight-coat-oat-beige",
+    "description": "Inspired by the Gant archives and classic wind coat styles, this outerwear piece is a versatile icon. Crafted in a cotton poplin blend and embracing a relaxed fit, it is fully reversible with a contrasting checked pattern at the interior. This coat is treated with a water-repellent finish and features a corduroy collar, welt and patch pockets, button adjusters at the cuffs and a branded locker loop at the back. This garment is intended for a relaxed fit. For a closer fit, we recommend sizing down.\\n\\nThis coat features a Durable Water Repellent (DWR) treatment which will help to shed water in light weather conditions.",
+    "price": 577.5,
+    "currency": "USD",
+    "images": [
+      "https://gant.com/dw/image/v2/BFLN_PRD/on/demandware.static/-/Sites-gant-master/default/dw0ce1873e/PhotoStudio/time__1765379755__202601-7006592-200-model-fv-1.jpg?sw=800"
+    ],
+    "category": "outerwear",
+    "tags": [
+      "outerwear",
+      "jacket",
+      "layering",
+      "gant",
+      "new-arrivals"
+    ],
+    "stock": 65,
+    "rating": 4.9,
+    "reviewCount": 282,
+    "metadata": {
+      "brand": "GANT",
+      "articleNumber": "7006592-200",
+      "type": "Reversible Lightweight Coat",
+      "color": "Oat Beige",
+      "material": "80% Cotton",
+      "originalPrice": 825.0
+    }
+  },
+  {
+    "id": "gant-quilted-windcheater-mid-length-jacket-black",
+    "title": "Quilted Windcheater Mid-Length Jacket — Black",
+    "slug": "quilted-windcheater-mid-length-jacket-black",
+    "description": "Crafted in a diamond quilting structure, this windcheater jacket is made entirely from recycled polyester and treated with a water-repellent finish. Cut for a mid-length and a regular fit, it features a stand collar and center front placket with press buttons and a hidden zip closure underneath. Other design elements include side hand-warming pockets, lower flap packets and two interior pockets. This jacket is complete with branded embroidery at the chest and at the back locker loop.    This jacket features a Durable Water Repellent (DWR) treatment which will help to shed water in light weather conditions.",
+    "price": 280.0,
+    "currency": "USD",
+    "images": [
+      "https://gant.com/dw/image/v2/BFLN_PRD/on/demandware.static/-/Sites-gant-master/default/dw482c234b/PhotoStudio/time__1769785817__202601-7006497-005-model-fv-1.jpg?sw=800"
+    ],
+    "category": "outerwear",
+    "tags": [
+      "outerwear",
+      "jacket",
+      "layering",
+      "gant",
+      "new-arrivals"
+    ],
+    "stock": 77,
+    "rating": 4.6,
+    "reviewCount": 74,
+    "metadata": {
+      "brand": "GANT",
+      "articleNumber": "7006497-5",
+      "type": "Quilted Windcheater Jacket",
+      "color": "Black",
+      "material": "100% Recycled Polyester",
+      "originalPrice": 400.0
+    }
+  },
+  {
+    "id": "gant-short-leather-trench-coat-black",
+    "title": "Short Leather Trench Coat — Black",
+    "slug": "short-leather-trench-coat-black",
+    "description": "Sure to become the most-loved piece in your outerwear collection, this short trench coat is crafted from super soft lamb's leather for a premium feel. Designed with a relaxed-fitting silhouette, it has raglan sleeves and a length that finishes right at the hips. Fully lined, it features welt pockets, an interior pocket, branded imitation horn buttons and a removable belt at the waist to accentuate and define your shape. This garment is intended for a relaxed fit. For a closer fit, we recommend sizing down. ",
+    "price": 1158.0,
+    "currency": "USD",
+    "images": [
+      "https://gant.com/dw/image/v2/BFLN_PRD/on/demandware.static/-/Sites-gant-master/default/dwd57f1cf7/PhotoStudio/time__1765379131__202601-4740049-005-model-fv-1.jpg?sw=800"
+    ],
+    "category": "outerwear",
+    "tags": [
+      "outerwear",
+      "jacket",
+      "layering",
+      "gant",
+      "new-arrivals"
+    ],
+    "stock": 108,
+    "rating": 4.8,
+    "reviewCount": 364,
+    "metadata": {
+      "brand": "GANT",
+      "articleNumber": "4740049-5",
+      "type": "Short Leather Trench Coat",
+      "color": "Black",
+      "material": "100% Viscose",
+      "originalPrice": 1930.0
+    }
+  },
+  {
+    "id": "gant-quilted-windcheater-mid-length-jacket-evening-blue",
+    "title": "Quilted Windcheater Mid-Length Jacket — Evening Blue",
+    "slug": "quilted-windcheater-mid-length-jacket-evening-blue",
+    "description": "Crafted in a diamond quilting structure, this windcheater jacket is made entirely from recycled polyester and treated with a water-repellent finish. Cut for a mid-length and a regular fit, it features a stand collar and center front placket with press buttons and a hidden zip closure underneath. Other design elements include side hand-warming pockets, lower flap packets and two interior pockets. This jacket is complete with branded embroidery at the chest and at the back locker loop.    This jacket features a Durable Water Repellent (DWR) treatment which will help to shed water in light weather conditions.",
+    "price": 280.0,
+    "currency": "USD",
+    "images": [
+      "https://gant.com/dw/image/v2/BFLN_PRD/on/demandware.static/-/Sites-gant-master/default/dw1754fd71/PhotoStudio/time__1769784306__202601-7006497-433-model-fv-1.jpg?sw=800"
+    ],
+    "category": "outerwear",
+    "tags": [
+      "outerwear",
+      "jacket",
+      "layering",
+      "gant",
+      "new-arrivals"
+    ],
+    "stock": 21,
+    "rating": 4.5,
+    "reviewCount": 126,
+    "metadata": {
+      "brand": "GANT",
+      "articleNumber": "7006497-433",
+      "type": "Quilted Windcheater Jacket",
+      "color": "Evening Blue",
+      "material": "100% Recycled Polyester",
+      "originalPrice": 400.0
+    }
+  },
+  {
+    "id": "gant-light-down-jacket-warm-khaki",
+    "title": "Light Down Jacket — Warm Khaki",
+    "slug": "light-down-jacket-warm-khaki",
+    "description": "An easy, year-round layering piece with 90% down and 10% feathers, the Light Down Jacket is made from super light and certified recycled polyester with a water-repellent finish. The piece has a regular fit with a straight hem and a slightly shorter length that makes it ideal to be worn alone over shirts or under heavier coats on colder days. A stand collar, lacquered snaps, angled welt pockets, a two-way zipper, and a printed logo at the chest complete the piece.  This jacket features a Durable Water Repellent (DWR) treatment which will help to shed water in light weather conditions.",
+    "price": 297.5,
+    "currency": "USD",
+    "images": [
+      "https://gant.com/dw/image/v2/BFLN_PRD/on/demandware.static/-/Sites-gant-master/default/dw7ee7ece6/PhotoStudio/time__1770026107__202504-4700481-213-flat-fv-1.jpg?sw=800"
+    ],
+    "category": "outerwear",
+    "tags": [
+      "outerwear",
+      "jacket",
+      "layering",
+      "gant",
+      "new-arrivals"
+    ],
+    "stock": 28,
+    "rating": 4.4,
+    "reviewCount": 282,
+    "metadata": {
+      "brand": "GANT",
+      "articleNumber": "4700481-213",
+      "type": "Light Down Jacket",
+      "color": "Warm Khaki",
+      "material": "90% down and",
+      "originalPrice": 425.0
+    }
+  },
+  {
+    "id": "gant-linen-cap-sleeve-shirt-dress-fresh-soil",
+    "title": "Linen Cap Sleeve Shirt Dress — Fresh Soil",
+    "slug": "linen-cap-sleeve-shirt-dress-fresh-soil",
+    "description": "Made from certified European flax linen, a naturally breathable and lightweight fiber, this dress is designed for a relaxed fit and a mid-thigh length. It has folded cap sleeves, side seam pockets, and a point collar with a hidden front placket. This dress can be cinched at the waist with a self-tie belt. This garment is intended for a relaxed fit. For a closer fit, we recommend sizing down.",
+    "price": 295.0,
+    "currency": "USD",
+    "images": [
+      "https://gant.com/dw/image/v2/BFLN_PRD/on/demandware.static/-/Sites-gant-master/default/dw3c92ef7c/PhotoStudio/time__1768209340__202601-4503514-226-model-fv-1.jpg?sw=800"
+    ],
+    "category": "womens-dresses",
+    "tags": [
+      "womens",
+      "dress",
+      "linen",
+      "spring",
+      "gant",
+      "new-arrivals"
+    ],
+    "stock": 102,
+    "rating": 4.3,
+    "reviewCount": 136,
+    "metadata": {
+      "brand": "GANT",
+      "articleNumber": "4503514-226",
+      "type": "Cap Sleeve Shirt Dress",
+      "color": "Fresh Soil",
+      "fit": "Relaxed fit",
+      "material": "100% Linen"
+    }
+  },
+  {
+    "id": "gant-popover-linen-dress-white",
+    "title": "Popover Linen Dress — White",
+    "slug": "popover-linen-dress-white",
+    "description": "Made from certified European flax linen, a naturally breathable and lightweight fiber, this dress is designed for a relaxed fit and has a length that skims just above the knees. It has a spread collar with a popover style and wide front placket. Other features include three-quarter length sleeves with wide cuffs and slits at the back. This garment is intended for a relaxed fit. For a closer fit, we recommend sizing down.",
+    "price": 280.0,
+    "currency": "USD",
+    "images": [
+      "https://gant.com/dw/image/v2/BFLN_PRD/on/demandware.static/-/Sites-gant-master/default/dwad230a60/PhotoStudio/time__1768208727__202601-4503508-110-model-fv-1.jpg?sw=800"
+    ],
+    "category": "womens-dresses",
+    "tags": [
+      "womens",
+      "dress",
+      "linen",
+      "spring",
+      "gant",
+      "new-arrivals"
+    ],
+    "stock": 115,
+    "rating": 4.8,
+    "reviewCount": 124,
+    "metadata": {
+      "brand": "GANT",
+      "articleNumber": "4503508-110",
+      "type": "Popover Linen Dress",
+      "color": "White",
+      "fit": "Relaxed fit",
+      "material": "100% Linen"
+    }
+  }
+]

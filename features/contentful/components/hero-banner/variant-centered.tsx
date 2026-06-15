@@ -4,12 +4,13 @@ import { LongText } from "@/features/contentful/components/long-text";
 
 interface IProps {
   entryId: string; // Unique ID for the entry used for live preview inspector mode
-  title: string; // The main heading of the hero banner
+  title: ReactNode; // The main heading of the hero banner
+  titlePlain?: string; // Plain-text version for alt attributes
   body?: string; // Optional subtext for additional information
   image?: { url: string; alt: string }; // Background image with alt text for accessibility
   buttons: ReactNode; // Buttons passed as children (can be multiple buttons from Contentful)
 }
-const VariantCentered: FC<IProps> = ({ title, body, buttons, entryId, image }) => {
+const VariantCentered: FC<IProps> = ({ title, titlePlain, body, buttons, entryId, image }) => {
   const inspectorProps = useContentfulInspectorMode({ entryId });
   return (
     <section className="relative overflow-hidden">
@@ -44,7 +45,7 @@ const VariantCentered: FC<IProps> = ({ title, body, buttons, entryId, image }) =
                 {image.url ? (
                   <img
                     src={image.url}
-                    alt={image.alt || title}
+                    alt={image.alt || titlePlain || ""}
                     className="w-full h-full object-cover"
                   />
                 ) : null}

@@ -256,6 +256,14 @@
   flex-shrink: 0;
 }
 
+.timeLabel {
+  font-size: 11px;
+  color: #9ca3af;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 50px;
+}
+
 /* ── Children nesting ── */
 
 .childrenWrap {
@@ -429,4 +437,37 @@
   text-align: center;
   font-size: 14px;
   color: #9ca3af;
+}
+
+/* ── Toast ── */
+
+.toast {
+  position: sticky;
+  top: 48px;
+  z-index: 9;
+  margin: 8px 16px 0;
+  padding: 8px 14px;
+  background: #065f46;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 6px;
+  animation: toastIn 0.2s ease;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Keyboard focus ── */
+
+.nodeRowFocused {
+  outline: 2px solid #0066cc;
+  outline-offset: -2px;
+  background: #f0f7ff;
+}
+
+.body:focus {
+  outline: none;
 }

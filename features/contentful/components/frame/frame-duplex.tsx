@@ -13,6 +13,7 @@ import { extractContentfulAssetUrl } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { Experience } from "@ninetailed/experience.js-react";
 import { ExperienceMapper } from "@ninetailed/experience.js-utils-contentful";
+import { stripNtFromMappedExperiences } from "@/lib/contentful-live-preview-shallow";
 import BaseButtonWrapper from "../base-button/base-button-wrapper";
 import type {
   ICallout,
@@ -361,7 +362,7 @@ export default function FrameDuplex({ frame }: FrameDuplexProps) {
   type ExperiencesProp = NonNullable<
     React.ComponentProps<typeof Experience>["experiences"]
   >;
-  const experiencesForProp = mappedUnknown as unknown as ExperiencesProp;
+  const experiencesForProp = stripNtFromMappedExperiences(mappedUnknown) as unknown as ExperiencesProp;
 
   if (mappedUnknown.length > 0) {
     return (

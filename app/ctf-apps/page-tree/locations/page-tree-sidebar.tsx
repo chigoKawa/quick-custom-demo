@@ -219,6 +219,11 @@ export default function PageTreeSidebar() {
     return chain;
   }, [currentParentId, liveEntries]);
 
+  const children = useMemo(
+    () => liveEntries.filter((e) => e.parentId === currentEntryId),
+    [liveEntries, currentEntryId]
+  );
+
   const parentEntry = useMemo(
     () => liveEntries.find((e) => e.id === currentParentId) ?? null,
     [liveEntries, currentParentId]
@@ -361,6 +366,29 @@ export default function PageTreeSidebar() {
           {saving ? "Saving..." : "Change parent"}
         </button>
       </div>
+
+      {children.length > 0 && (
+        <div className={styles.section}>
+          <div className={styles.sectionLabel}>Children ({children.length})</div>
+          <div className={styles.childrenList}>
+            {children.slice(0, 10).map((child) => (
+              <button
+                key={child.id}
+                className={styles.childItem}
+                onClick={() => sdk.navigator.openEntry(child.id, { slideIn: true })}
+              >
+                <span className={styles.childTitle}>{child.title}</span>
+                <span className={styles.childSlug}>/{child.slug}</span>
+              </button>
+            ))}
+            {children.length > 10 && (
+              <div className={styles.childOverflow}>
+                +{children.length - 10} more
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {error && <div className={styles.errorBanner}>{error}</div>}
 

@@ -42,8 +42,6 @@ function extractHeroModuleSlide(entry: IHeroModule, linkLocale: LinkLocale): Her
   if (!title) return null;
 
   const description = entry.fields.subCopy ?? undefined;
-  const imagePlacement = entry.fields.imagePlacement;
-
   const imageEntry = entry.fields.image;
   const {
     url: imageUrl,
@@ -61,7 +59,6 @@ function extractHeroModuleSlide(entry: IHeroModule, linkLocale: LinkLocale): Her
     imageAlt: imageAlt || title,
     imageObjectPosition: objectPosition,
     imageEntryId,
-    imagePlacement: imagePlacement === "Left" ? "Left" : "Right",
     buttons: buttons.length > 0 ? buttons.slice(0, 2) : undefined,
   };
 }

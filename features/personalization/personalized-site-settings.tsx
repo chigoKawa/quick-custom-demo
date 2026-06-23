@@ -87,7 +87,7 @@ export default function PersonalizedSiteSettings({
   // Strip nt_experiences / nt_variants before spreading into <Experience> —
   // the resolved experience entries back-reference the baseline creating a
   // circular JS object that JSON.stringify (Ninetailed preview postMessage) can't serialize.
-  const { nt_experiences: _ntExp, nt_variants: _ntVar, ...siteFields } = siteSettings.fields;
+  const { nt_experiences: _ntExp, nt_variants: _ntVar, ...siteFields } = siteSettings.fields as Record<string, unknown>;
   const baselineEntry = { sys: siteSettings.sys, fields: siteFields } as typeof siteSettings;
 
   return (

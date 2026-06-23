@@ -47,7 +47,7 @@ export default function PersonalizedHeroModule(entry: IHeroModule) {
   const experiencesForProp = stripNtFromMappedExperiences(mappedExperiencesUnknown) as unknown as ExperiencesProp;
 
   // Spread baseline without nt_experiences — resolved experiences create circular refs
-  const { nt_experiences: _ntExp, nt_variants: _ntVar, ...heroFields } = entry.fields;
+  const { nt_experiences: _ntExp, nt_variants: _ntVar, ...heroFields } = entry.fields as Record<string, unknown>;
   const baselineEntry = { sys: entry.sys, fields: heroFields } as IHeroModule;
 
   return (

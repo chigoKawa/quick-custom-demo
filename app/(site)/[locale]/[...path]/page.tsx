@@ -58,7 +58,8 @@ async function tryContentType<S extends { contentTypeId: string; fields: Record<
   lastSlug: string,
   locale: string,
   isPreview: boolean,
-  timelineToken?: string | null
+  timelineToken?: string | null,
+  environmentId?: string | null
 ): Promise<Entry<S> | undefined> {
   try {
     const byFullPath = await getEntries<S>(
@@ -70,7 +71,8 @@ async function tryContentType<S extends { contentTypeId: string; fields: Record<
         limit: 1,
       },
       isPreview,
-      timelineToken
+      timelineToken,
+      environmentId
     );
     if (byFullPath[0]) return byFullPath[0];
   } catch {
@@ -87,7 +89,8 @@ async function tryContentType<S extends { contentTypeId: string; fields: Record<
         limit: 1,
       },
       isPreview,
-      timelineToken
+      timelineToken,
+      environmentId
     );
     if (bySlug[0]) return bySlug[0];
   } catch {
@@ -106,7 +109,8 @@ async function resolvePageEntry(
   pathSegments: string[],
   locale: string,
   isPreview: boolean,
-  timelineToken?: string | null
+  timelineToken?: string | null,
+  environmentId?: string | null
 ): Promise<ResolvedPage | undefined> {
   if (pathSegments.length < 2) return undefined;
 
@@ -114,12 +118,12 @@ async function resolvePageEntry(
   const lastSlug = pathSegments[pathSegments.length - 1];
 
   const landing = await tryContentType<LandingPageSkeleton>(
-    "landingPage", fullPath, lastSlug, locale, isPreview, timelineToken
+    "landingPage", fullPath, lastSlug, locale, isPreview, timelineToken, environmentId
   );
   if (landing) return { contentType: "landingPage", entry: landing as ILandingPage };
 
   const blog = await tryContentType<BlogPostPageSkeleton>(
-    "blogPost", fullPath, lastSlug, locale, isPreview, timelineToken
+    "blogPost", fullPath, lastSlug, locale, isPreview, timelineToken, environmentId
   );
   if (blog) return { contentType: "blogPost", entry: blog as IBlogPostPage };
 
@@ -128,17 +132,17 @@ async function resolvePageEntry(
 
 export default async function NestedPage({ params, searchParams }: Props) {
   const resolvedSp = await searchParams;
-  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSp);
+  const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSp);
   await requireValidActiveMarket({ isPreview, bypassInPreview: true });
   const { locale, path: pathSegments } = await params;
 
-  const resolved = await resolvePageEntry(pathSegments, locale, isPreview, timelineToken);
+  const resolved = await resolvePageEntry(pathSegments, locale, isPreview, timelineToken, environmentId);
 
   if (!resolved) notFound();
 
   const { defaultLocale } = await getI18nConfig();
   const relatedPosts = resolved.contentType === "landingPage"
-    ? await fetchRelatedBlogPosts({ entry: resolved.entry, locale, defaultLocale, isPreview, timelineToken })
+    ? await fetchRelatedBlogPosts({ entry: resolved.entry, locale, defaultLocale, isPreview, timelineToken, environmentId })
     : undefined;
 
   return (
@@ -159,10 +163,10 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const resolvedSp = await searchParams;
-  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSp);
+  const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSp);
   const { locale, path: pathSegments } = await params;
 
-  const resolved = await resolvePageEntry(pathSegments, locale, isPreview, timelineToken);
+  const resolved = await resolvePageEntry(pathSegments, locale, isPreview, timelineToken, environmentId);
   const pageEntry = resolved?.entry;
   const previousImages = (await parent).openGraph?.images || [];
 

@@ -3,9 +3,17 @@
 import React from "react";
 import { Experience } from "@ninetailed/experience.js-react";
 import { ExperienceMapper } from "@ninetailed/experience.js-utils-contentful";
+import { useContentfulLiveUpdates } from "@contentful/live-preview/react";
 import { stripNtFromMappedExperiences } from "@/lib/contentful-live-preview-shallow";
 import type { IPropertyListings } from "../../type";
 import PropertyListingsWrapper from "./property-listings-wrapper";
+
+function PropertyListingsWithLiveUpdates(props: IPropertyListings) {
+  const { nt_experiences: _ntExp, nt_variants: _ntVar, ...safeFields } = (props?.fields ?? {}) as Record<string, unknown>;
+  const safeEntry = props?.sys ? { sys: props.sys, fields: safeFields } as unknown as IPropertyListings : props;
+  const entry = useContentfulLiveUpdates(safeEntry) || props;
+  return <PropertyListingsWrapper {...entry} />;
+}
 
 export default function PersonalizedPropertyListings(entry: IPropertyListings) {
   if (!entry?.sys?.id || !entry?.fields) {
@@ -25,7 +33,7 @@ export default function PersonalizedPropertyListings(entry: IPropertyListings) {
   }
 
   if (!mappedExperiencesUnknown || mappedExperiencesUnknown.length === 0) {
-    return <PropertyListingsWrapper {...entry} />;
+    return <PropertyListingsWithLiveUpdates {...entry} />;
   }
 
   type ExperiencesProp = NonNullable<
@@ -37,7 +45,7 @@ export default function PersonalizedPropertyListings(entry: IPropertyListings) {
     <Experience
       key={entry.sys.id}
       id={entry.sys.id}
-      component={PropertyListingsWrapper}
+      component={PropertyListingsWithLiveUpdates}
       experiences={experiencesForProp}
       {...entry}
     />

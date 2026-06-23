@@ -20,7 +20,7 @@ type Props = {
 export default async function NotificationPreviewPage({ params, searchParams }: Props) {
   const { locale, slug } = await params;
   const resolvedSp = await searchParams;
-  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSp);
+  const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSp);
 
   const entries = await getEntries<NotificationTemplateSkeleton>(
     {
@@ -31,6 +31,7 @@ export default async function NotificationPreviewPage({ params, searchParams }: 
     },
     isPreview,
     timelineToken,
+    environmentId,
   );
 
   const entry = entries[0] as unknown as INotificationTemplate | undefined;
@@ -53,7 +54,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { locale, slug } = await params;
   const resolvedSp = await searchParams;
-  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSp);
+  const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSp);
 
   const entries = await getEntries<NotificationTemplateSkeleton>(
     {
@@ -64,6 +65,7 @@ export async function generateMetadata(
     },
     isPreview,
     timelineToken,
+    environmentId,
   );
 
   const entry = entries[0] as unknown as INotificationTemplate | undefined;

@@ -21,7 +21,7 @@ type Props = {
 
 export default async function PropertyRoute({ params, searchParams }: Props) {
   const resolvedSearchParams = await searchParams;
-  const { isPreview: preview, timelineToken } = await resolvePreviewMode(resolvedSearchParams);
+  const { isPreview: preview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSearchParams);
   const { locale, id } = await params;
   const { locales, defaultLocale } = await getI18nConfig();
   const effectiveLocale = locales.includes(locale as string) ? locale : defaultLocale;
@@ -34,7 +34,7 @@ export default async function PropertyRoute({ params, searchParams }: Props) {
         console.error("[PropertyRoute] PMS fetch error", err);
         return null;
       }),
-    getPmsPropertyEntryById(id, effectiveLocale, !!preview, timelineToken).catch(
+    getPmsPropertyEntryById(id, effectiveLocale, !!preview, timelineToken, environmentId).catch(
       () => null
     ),
   ]);

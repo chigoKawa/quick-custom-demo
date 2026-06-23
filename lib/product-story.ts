@@ -14,7 +14,8 @@ export async function getProductStoryBySlug(
   slug: string,
   locale?: string,
   preview = false,
-  timelineToken?: string | null
+  timelineToken?: string | null,
+  environmentId?: string | null
 ): Promise<IProductStory | null> {
   try {
     const entries = await getEntries<ProductStorySkeleton>(
@@ -26,7 +27,8 @@ export async function getProductStoryBySlug(
         ...(locale ? { locale } : {}),
       },
       preview,
-      timelineToken
+      timelineToken,
+      environmentId
     );
     return (entries[0] as IProductStory | undefined) ?? null;
   } catch (err) {

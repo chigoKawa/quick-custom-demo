@@ -29,7 +29,7 @@ function isCampaignActive(entry: ICampaign): boolean {
 export default async function CampaignPage({ params, searchParams }: Props) {
   const { locale, slug } = await params;
   const resolvedSp = await searchParams;
-  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSp);
+  const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSp);
 
   const entries = await getEntries<CampaignSkeleton>(
     {
@@ -40,6 +40,7 @@ export default async function CampaignPage({ params, searchParams }: Props) {
     },
     isPreview,
     timelineToken,
+    environmentId,
   );
 
   const entry = entries[0] as unknown as ICampaign | undefined;
@@ -65,7 +66,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { locale, slug } = await params;
   const resolvedSp = await searchParams;
-  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSp);
+  const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSp);
 
   const entries = await getEntries<CampaignSkeleton>(
     {
@@ -76,6 +77,7 @@ export async function generateMetadata(
     },
     isPreview,
     timelineToken,
+    environmentId,
   );
 
   const entry = entries[0] as unknown as ICampaign | undefined;

@@ -24,13 +24,17 @@ export default async function LocaleLayout({
   const isPreview =
     isDraftMode || headersList.get("x-contentful-preview") === "1";
   const timelineToken = headersList.get("x-contentful-timeline") || null;
+  const environmentId = isPreview
+    ? headersList.get("x-contentful-env") || null
+    : null;
 
   let siteSettings = null;
   try {
     siteSettings = await getSiteSettings(
       locale,
       isPreview,
-      timelineToken || undefined
+      timelineToken || undefined,
+      environmentId || undefined
     );
   } catch (error) {
     console.error("Failed to fetch site settings:", error);

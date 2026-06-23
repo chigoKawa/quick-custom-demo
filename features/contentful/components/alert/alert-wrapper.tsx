@@ -25,8 +25,10 @@ const variantIcons = {
   default: AlertCircle,
 };
 
-const AlertWrapper = (entry: IAlert) => {
-  const liveEntry = useContentfulLiveUpdates(entry) || entry;
+const AlertWrapper = (props: IAlert) => {
+  const { nt_experiences: _ntExp, nt_variants: _ntVar, ...safeFields } = (props?.fields ?? {}) as Record<string, unknown>;
+  const safeEntry = props?.sys ? { sys: props.sys, fields: safeFields } as unknown as IAlert : props;
+  const liveEntry = useContentfulLiveUpdates(safeEntry) || props;
   const [isDismissed, setIsDismissed] = useState(false);
 
   // Guard against undefined entry or missing sys

@@ -48,7 +48,7 @@ const SmoothCta: FC<IProps> = ({ title, body, images, buttons, entryId, imagePla
                 className="text-base md:text-lg text-muted-foreground mb-6 max-w-md leading-relaxed"
               />
             )}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 [&>*]:w-full [&>*]:sm:w-auto">
+            <div className="flex flex-wrap items-center gap-3">
               {buttons}
             </div>
           </div>

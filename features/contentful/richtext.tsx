@@ -2,6 +2,7 @@ import React from "react";
 import type { Options } from "@contentful/rich-text-react-renderer";
 import { BLOCKS, INLINES } from "@contentful/rich-text-types";
 import { MergeTag } from "@ninetailed/experience.js-react";
+import { renderEmbeddedEntry } from "./component-maps/embedded-entries";
 
 export const baseRichTextOptions: Options = {
   renderNode: {
@@ -27,6 +28,7 @@ export const baseRichTextOptions: Options = {
         {children}
       </blockquote>
     ),
+    [BLOCKS.EMBEDDED_ENTRY]: (node) => renderEmbeddedEntry(node?.data?.target),
     [BLOCKS.EMBEDDED_ASSET]: (node) => {
       const fileUrl = node?.data?.target?.fields?.file?.url as string | undefined;
       const title = (node?.data?.target?.fields?.title as string) || "Embedded Image";
@@ -66,12 +68,11 @@ export const baseRichTextOptions: Options = {
         if (id) {
           return <MergeTag id={id} fallback={fallback} />;
         }
-        // If no id provided, render the fallback string directly so authors still see content
         if (fallback) {
           return <span>{fallback}</span>;
         }
       }
-      return null;
+      return renderEmbeddedEntry(target, { isInline: true });
     },
   },
   renderText: (text) => text,

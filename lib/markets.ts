@@ -63,6 +63,7 @@ interface FetchMarketsOptions {
   locale?: string;
   isPreview?: boolean;
   timelineToken?: string | null;
+  environmentId?: string | null;
 }
 
 /**
@@ -83,7 +84,8 @@ export async function getMarkets(
         ...(options.locale ? { locale: options.locale } : {}),
       },
       Boolean(options.isPreview),
-      options.timelineToken ?? null
+      options.timelineToken ?? null,
+      options.environmentId ?? null
     );
     return (entries as IMarket[])
       .map(toSummary)

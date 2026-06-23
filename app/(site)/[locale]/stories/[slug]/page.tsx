@@ -25,14 +25,14 @@ type Props = {
 
 export default async function StoryRoute({ params, searchParams }: Props) {
   const resolvedSearchParams = await searchParams;
-  const { isPreview: preview, timelineToken } = await resolvePreviewMode(resolvedSearchParams);
+  const { isPreview: preview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSearchParams);
   const { locale, slug } = await params;
   const { locales, defaultLocale } = await getI18nConfig();
   const effectiveLocale = locales.includes(locale as string) ? locale : defaultLocale;
 
   const [entry, microcopy] = await Promise.all([
-    getProductStoryBySlug(slug, effectiveLocale, !!preview, timelineToken),
-    getMicrocopyWithIds(effectiveLocale, !!preview, timelineToken),
+    getProductStoryBySlug(slug, effectiveLocale, !!preview, timelineToken, environmentId),
+    getMicrocopyWithIds(effectiveLocale, !!preview, timelineToken, environmentId),
   ]);
 
   if (!entry) {
@@ -50,6 +50,7 @@ export default async function StoryRoute({ params, searchParams }: Props) {
     defaultLocale,
     isPreview: !!preview,
     timelineToken,
+    environmentId,
     limit: 4,
   });
 
@@ -76,12 +77,12 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const resolvedSp = await searchParams;
-  const { isPreview: preview, timelineToken } = await resolvePreviewMode(resolvedSp);
+  const { isPreview: preview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSp);
   const { locale, slug } = await params;
   const { locales, defaultLocale } = await getI18nConfig();
   const effectiveLocale = locales.includes(locale as string) ? locale : defaultLocale;
 
-  const entry = await getProductStoryBySlug(slug, effectiveLocale, !!preview, timelineToken);
+  const entry = await getProductStoryBySlug(slug, effectiveLocale, !!preview, timelineToken, environmentId);
   const previousImages = (await parent).openGraph?.images || [];
 
   const title = entry?.fields?.internalName ?? slug;

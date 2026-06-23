@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
+import { useContentfulLiveUpdates } from "@contentful/live-preview/react";
 
 import type { IShelfModule } from "../../type";
 import type { BookListItem, SearchResponse } from "@/lib/open-library.types";
@@ -60,7 +61,10 @@ function toShelfCard(item: BookListItem): ShelfBookCard {
   };
 }
 
-export default function ShelfModuleWrapper(entry: IShelfModule) {
+export default function ShelfModuleWrapper(props: IShelfModule) {
+  const { nt_experiences: _ntExp, nt_variants: _ntVar, ...safeFields } = (props?.fields ?? {}) as Record<string, unknown>;
+  const safeEntry = props?.sys ? { sys: props.sys, fields: safeFields } as unknown as IShelfModule : props;
+  const entry = useContentfulLiveUpdates(safeEntry) || props;
   const shelfApp = entry?.fields?.shelfApp as any;
 
   const title =

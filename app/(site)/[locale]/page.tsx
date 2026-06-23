@@ -28,7 +28,7 @@ export default async function IndexPage({ params, searchParams }: Props) {
   const { locale } = await params;
 
   const resolvedSearchParams = await searchParams;
-  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSearchParams);
+  const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSearchParams);
   await requireValidActiveMarket({ isPreview, bypassInPreview: true });
 
   const entries = await getEntries<LandingPageSkeleton>(
@@ -39,7 +39,8 @@ export default async function IndexPage({ params, searchParams }: Props) {
       locale,
     },
     isPreview,
-    timelineToken
+    timelineToken,
+    environmentId
   );
 
   // Get the first entry and cast it to ILandingPage type
@@ -49,7 +50,7 @@ export default async function IndexPage({ params, searchParams }: Props) {
   }
 
   const { defaultLocale } = await getI18nConfig();
-  const relatedPosts = await fetchRelatedBlogPosts({ entry: pageEntry, locale, defaultLocale, isPreview, timelineToken });
+  const relatedPosts = await fetchRelatedBlogPosts({ entry: pageEntry, locale, defaultLocale, isPreview, timelineToken, environmentId });
 
   return (
     <div>
@@ -70,7 +71,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const sp = await searchParams;
-  const { isPreview, timelineToken } = await resolvePreviewMode(sp);
+  const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(sp);
   const { locale } = await params;
 
   const entries = await getEntries<LandingPageSkeleton>(
@@ -81,7 +82,8 @@ export async function generateMetadata(
       locale,
     },
     isPreview,
-    timelineToken
+    timelineToken,
+    environmentId
   );
 
   // Get the first entry and cast it to ILandingPage type

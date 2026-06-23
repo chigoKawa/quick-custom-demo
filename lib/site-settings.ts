@@ -85,7 +85,8 @@ export interface HeaderNavigationSkeleton {
 export async function getSiteSettings(
   locale?: string,
   preview?: boolean,
-  timelineToken?: string | null
+  timelineToken?: string | null,
+  environmentId?: string | null
 ): Promise<Entry<SiteSettingsSkeleton> | null> {
   // include:5 resolves siteSettings → nav → navLinkColumn → navLink → target page (slug).
   // nt_experiences are stripped at the live-preview boundary, not at fetch time.
@@ -100,7 +101,8 @@ export async function getSiteSettings(
   const entries = await getEntries<SiteSettingsSkeleton>(
     query,
     preview || false,
-    timelineToken
+    timelineToken,
+    environmentId
   );
 
   return entries[0] || null;

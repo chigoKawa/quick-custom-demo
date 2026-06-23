@@ -13,9 +13,9 @@ export default async function LoginPage(
   const searchParams = await props.searchParams;
   const { locales, defaultLocale } = await getI18nConfig();
   const effectiveLocale = locales.includes(locale as string) ? locale : defaultLocale;
-  const { isPreview, timelineToken } = await resolvePreviewMode(searchParams);
+  const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(searchParams);
 
-  const microcopy = await getMicrocopyWithIds(effectiveLocale, isPreview, timelineToken);
+  const microcopy = await getMicrocopyWithIds(effectiveLocale, isPreview, timelineToken, environmentId);
 
   return <LoginForm microcopy={microcopy} locale={effectiveLocale} />;
 }

@@ -21,11 +21,11 @@ export default async function KnowledgeBasePage({
 }) {
   const { locale = "en-US" } = await params;
   const resolvedSearchParams = await searchParams;
-  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSearchParams);
+  const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSearchParams);
 
   let landing: ILandingPage | undefined;
   let microcopy: Record<string, { value: string; entryId: string }> = {};
-  
+
   try {
     const [entries, microcopyData] = await Promise.all([
       getEntries<LandingPageSkeleton>(
@@ -36,9 +36,10 @@ export default async function KnowledgeBasePage({
           locale,
         },
         isPreview,
-        timelineToken
+        timelineToken,
+        environmentId
       ),
-      getMicrocopyWithIds(locale, isPreview, timelineToken),
+      getMicrocopyWithIds(locale, isPreview, timelineToken, environmentId),
     ]);
     landing = entries?.[0] as ILandingPage | undefined;
     microcopy = microcopyData;

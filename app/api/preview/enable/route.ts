@@ -23,6 +23,7 @@ export async function GET(request: NextRequest) {
   const secret = searchParams.get("secret");
   const rawPath = searchParams.get("path") || searchParams.get("slug") || "/";
   const locale = searchParams.get("locale");
+  const env = searchParams.get("env");
 
   const expectedSecret =
     process.env.CONTENTFUL_PREVIEW_SECRET ||
@@ -52,6 +53,12 @@ export async function GET(request: NextRequest) {
   // Always append ?preview so the page route, middleware, and resolvePreviewMode
   // all detect preview mode — draftMode cookies alone can be lost during redirects.
   redirectUrl.searchParams.set("preview", "");
+
+  // Forward the environment override when provided so the target page fetches
+  // content from the correct Contentful environment.
+  if (env) {
+    redirectUrl.searchParams.set("env", env);
+  }
 
   return NextResponse.redirect(redirectUrl);
 }

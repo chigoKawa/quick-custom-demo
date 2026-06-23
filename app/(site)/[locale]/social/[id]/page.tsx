@@ -20,7 +20,7 @@ type Props = {
 export default async function SocialVariantPreviewPage({ params, searchParams }: Props) {
   const { locale, id } = await params;
   const resolvedSp = await searchParams;
-  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSp);
+  const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSp);
 
   const entries = await getEntries<SocialVariantSkeleton>(
     {
@@ -31,6 +31,7 @@ export default async function SocialVariantPreviewPage({ params, searchParams }:
     },
     isPreview,
     timelineToken,
+    environmentId,
   );
 
   const entry = entries[0] as unknown as ISocialVariant | undefined;
@@ -53,7 +54,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { locale, id } = await params;
   const resolvedSp = await searchParams;
-  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSp);
+  const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSp);
 
   const entries = await getEntries<SocialVariantSkeleton>(
     {
@@ -64,6 +65,7 @@ export async function generateMetadata(
     },
     isPreview,
     timelineToken,
+    environmentId,
   );
 
   const entry = entries[0] as unknown as ISocialVariant | undefined;

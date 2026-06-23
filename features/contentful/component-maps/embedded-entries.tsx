@@ -198,9 +198,13 @@ export function renderEmbeddedEntry(
     ];
   if (!Component) return null;
 
-  return options?.isInline ? (
-    <Component isInline={true} {...(entry as any)} />
-  ) : (
-    <Component {...(entry as any)} />
+  if (options?.isInline) {
+    return <Component isInline={true} {...(entry as any)} />;
+  }
+
+  return (
+    <div className="not-prose my-8 -mx-4 sm:mx-0 sm:rounded-xl sm:overflow-hidden">
+      <Component {...(entry as any)} />
+    </div>
   );
 }

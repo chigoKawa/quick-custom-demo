@@ -26,7 +26,7 @@ type Props = {
 export default async function IndexPage({ params, searchParams }: Props) {
   // preview search param is used to enable preview mode e.g localhost:3000/de/home?preview=true
   const resolvedSearchParams = await searchParams;
-  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSearchParams);
+  const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSearchParams);
   const { locale, blogSlug } = await params;
 
   const entries = await getEntries<BlogPostPageSkeleton>(
@@ -37,7 +37,8 @@ export default async function IndexPage({ params, searchParams }: Props) {
       locale,
     },
     isPreview,
-    timelineToken
+    timelineToken,
+    environmentId
   );
 
   // Get the first entry and cast it to ILandingPage type
@@ -66,7 +67,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const resolvedSp = await searchParams;
-  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSp);
+  const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSp);
   const { locale, blogSlug } = await params;
 
   const entries = await getEntries<BlogPostPageSkeleton>(
@@ -77,7 +78,8 @@ export async function generateMetadata(
       locale,
     },
     isPreview,
-    timelineToken
+    timelineToken,
+    environmentId
   );
 
   // Get the first entry and cast it to ILandingPage type

@@ -3,6 +3,7 @@
 import React from "react";
 import { Experience } from "@ninetailed/experience.js-react";
 import { ExperienceMapper } from "@ninetailed/experience.js-utils-contentful";
+import { useContentfulLiveUpdates } from "@contentful/live-preview/react";
 import { stripNtFromMappedExperiences } from "@/lib/contentful-live-preview-shallow";
 import type { IFormEmbed } from "../../type";
 import FormEmbedSection from "./form-embed-section";
@@ -11,9 +12,12 @@ import FormEmbedSection from "./form-embed-section";
 // <Experience> receives the same component reference across renders.
 // Otherwise React unmounts/remounts the tree on every profile change,
 // causing images to flash.
-const FormEmbedExperienceComponent = (props: IFormEmbed) => (
-  <FormEmbedSection entry={props} />
-);
+const FormEmbedExperienceComponent = (props: IFormEmbed) => {
+  const { nt_experiences: _ntExp, nt_variants: _ntVar, ...safeFields } = (props?.fields ?? {}) as Record<string, unknown>;
+  const safeEntry = props?.sys ? { sys: props.sys, fields: safeFields } as unknown as IFormEmbed : props;
+  const entry = useContentfulLiveUpdates(safeEntry) || props;
+  return <FormEmbedSection entry={entry} />;
+};
 
 export default function PersonalizedFormEmbed(entry: IFormEmbed) {
   // Guard against undefined entry or missing sys/fields

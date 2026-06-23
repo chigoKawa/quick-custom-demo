@@ -24,7 +24,7 @@ type Props = {
 export default async function IndexPage({ params, searchParams }: Props) {
   const { locale } = await params;
   const resolvedSearchParams = await searchParams;
-  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSearchParams);
+  const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSearchParams);
 
   const entries = await getEntries<LandingPageSkeleton>(
     {
@@ -34,7 +34,8 @@ export default async function IndexPage({ params, searchParams }: Props) {
       locale,
     },
     isPreview,
-    timelineToken
+    timelineToken,
+    environmentId
   );
 
   // Get the first entry and cast it to ILandingPage type
@@ -63,7 +64,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const resolvedSp = await searchParams;
-  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSp);
+  const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSp);
   const { locale } = await params;
 
   const entries = await getEntries<LandingPageSkeleton>(
@@ -74,7 +75,8 @@ export async function generateMetadata(
       locale,
     },
     isPreview,
-    timelineToken
+    timelineToken,
+    environmentId
   );
 
   // Get the first entry and cast it to ILandingPage type

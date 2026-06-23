@@ -24,6 +24,7 @@ interface FetchRelatedProductStoriesParams {
   defaultLocale: string;
   isPreview: boolean;
   timelineToken?: string | null;
+  environmentId?: string | null;
   /** Max number of related stories to return. */
   limit?: number;
 }
@@ -42,6 +43,7 @@ export async function fetchRelatedProductStories({
   defaultLocale,
   isPreview,
   timelineToken,
+  environmentId,
   limit = 6,
 }: FetchRelatedProductStoriesParams): Promise<RelatedProductStory[]> {
   const conceptIds: string[] = (
@@ -67,7 +69,8 @@ export async function fetchRelatedProductStories({
         limit: limit + 1,
       } as unknown as Record<string, unknown>,
       isPreview,
-      timelineToken
+      timelineToken,
+      environmentId
     )) as unknown as IProductStory[];
 
     return stories

@@ -44,10 +44,14 @@ function mapButtons(
 export default function HeroModuleWrapper(
   props: IHeroModule & { locale?: string; defaultLocale?: string }
 ) {
-  const { locale, defaultLocale: defaultLocaleProp, ...entry } = props;
+  const { locale, defaultLocale: defaultLocaleProp, ...rawEntry } = props;
   const defaultLocale = defaultLocaleProp ?? "en-US";
   const linkLocale = { locale, defaultLocale };
   const marketCode = useActiveMarket();
+
+  const { nt_experiences: _ntExp, nt_variants: _ntVar, ...safeFields } = (rawEntry?.fields ?? {}) as Record<string, unknown>;
+  const safeEntry = rawEntry?.sys ? { sys: rawEntry.sys, fields: safeFields } as unknown as typeof rawEntry : rawEntry;
+  const entry = useContentfulLiveUpdates(safeEntry) || rawEntry;
 
   // Resolve the hero's own fields against the active market BEFORE mapping
   // to presentational props. Buttons are resolved separately inside

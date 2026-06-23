@@ -8,6 +8,7 @@ interface FetchRelatedBlogPostsParams {
   defaultLocale: string;
   isPreview: boolean;
   timelineToken?: string | null;
+  environmentId?: string | null;
 }
 
 /**
@@ -20,6 +21,7 @@ export async function fetchRelatedBlogPosts({
   defaultLocale,
   isPreview,
   timelineToken,
+  environmentId,
 }: FetchRelatedBlogPostsParams): Promise<RelatedStoryPost[]> {
   const conceptIds: string[] = ((entry as any).metadata?.concepts ?? [])
     .map((c: any) => c?.sys?.id)
@@ -39,7 +41,8 @@ export async function fetchRelatedBlogPosts({
         limit: 6,
       },
       isPreview,
-      timelineToken
+      timelineToken,
+      environmentId
     ) as unknown as IBlogPostPage[];
 
     return posts

@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { useContentfulLiveUpdates } from "@contentful/live-preview/react";
 import SimpleCta from "./simple-cta";
 import SmoothCta from "./smooth-cta";
 
@@ -7,7 +10,13 @@ import ActionButtonRender from "@/features/contentful/components/hero-banner/act
 import { extractContentfulAssetUrl } from "@/lib/utils";
 import { ICta } from "../../type";
 
-const CtaWrapper = (entry: ICta) => {
+const CtaWrapper = (props: ICta) => {
+  // Strip nt_experiences/nt_variants before live updates — they contain circular
+  // back-references that blow the stack in isEqual diffing.
+  const { nt_experiences: _ntExp, nt_variants: _ntVar, ...safeFields } = (props?.fields ?? {}) as Record<string, unknown>;
+  const safeEntry = props?.sys ? { sys: props.sys, fields: safeFields } as unknown as ICta : props;
+  const entry = useContentfulLiveUpdates(safeEntry) || props;
+
   // Guard against undefined entry or missing sys
   if (!entry?.sys?.id || !entry?.fields) {
     return null;
@@ -42,18 +51,15 @@ const CtaWrapper = (entry: ICta) => {
   }
 
   return (
-    <div className="relative ">
-      
-      <SimpleCta
-        entryId={entry.sys.id}
-        title={title}
-        body={body}
-        images={Array.isArray(extractedImageUrls) ? extractedImageUrls : []}
-        imagePlacement={imagePlacement === "Left" ? "Left" : "Right"}
-        backgroundColor={backgroundColor}
-        buttons={buttons ? <ActionButtonRender buttons={buttons} metricEventName={metricEventName as any} /> : <></>}
-      />
-    </div>
+    <SimpleCta
+      entryId={entry.sys.id}
+      title={title}
+      body={body}
+      images={Array.isArray(extractedImageUrls) ? extractedImageUrls : []}
+      imagePlacement={imagePlacement === "Left" ? "Left" : "Right"}
+      backgroundColor={backgroundColor}
+      buttons={buttons ? <ActionButtonRender buttons={buttons} metricEventName={metricEventName as any} /> : <></>}
+    />
   );
 };
 

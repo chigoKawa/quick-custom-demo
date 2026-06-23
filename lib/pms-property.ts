@@ -14,7 +14,8 @@ export async function getPmsPropertyEntryById(
   propertyId: string,
   locale?: string,
   preview = false,
-  timelineToken?: string | null
+  timelineToken?: string | null,
+  environmentId?: string | null
 ): Promise<IPmsPropertyEntry | null> {
   try {
     const entries = await getEntries<PmsPropertyEntrySkeleton>(
@@ -26,7 +27,8 @@ export async function getPmsPropertyEntryById(
         ...(locale ? { locale } : {}),
       },
       preview,
-      timelineToken
+      timelineToken,
+      environmentId
     );
     return (entries[0] as IPmsPropertyEntry | undefined) ?? null;
   } catch (err) {

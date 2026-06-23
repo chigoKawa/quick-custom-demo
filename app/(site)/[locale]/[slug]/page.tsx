@@ -36,7 +36,7 @@ type Props = {
 
 export default async function IndexPage({ params, searchParams }: Props) {
   const resolvedSearchParams = await searchParams;
-  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSearchParams);
+  const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSearchParams);
   await requireValidActiveMarket({ isPreview, bypassInPreview: true });
 
   const { locale, slug } = await params;
@@ -53,7 +53,8 @@ export default async function IndexPage({ params, searchParams }: Props) {
         locale,
       },
       isPreview,
-      timelineToken
+      timelineToken,
+      environmentId
     );
     landingPage = entries[0] as ILandingPage | undefined;
   } catch (err) {
@@ -70,7 +71,8 @@ export default async function IndexPage({ params, searchParams }: Props) {
           locale,
         },
         isPreview,
-        timelineToken
+        timelineToken,
+        environmentId
       );
       blogPost = entries[0] as IBlogPostPage | undefined;
     } catch (err) {
@@ -84,7 +86,7 @@ export default async function IndexPage({ params, searchParams }: Props) {
 
   const { defaultLocale } = await getI18nConfig();
   const relatedPosts = landingPage
-    ? await fetchRelatedBlogPosts({ entry: landingPage, locale, defaultLocale, isPreview, timelineToken })
+    ? await fetchRelatedBlogPosts({ entry: landingPage, locale, defaultLocale, isPreview, timelineToken, environmentId })
     : undefined;
 
   return (
@@ -109,7 +111,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const resolvedSp = await searchParams;
-  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSp);
+  const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSp);
   const { locale, slug } = await params;
 
   let pageEntry: ILandingPage | IBlogPostPage | undefined;
@@ -122,7 +124,8 @@ export async function generateMetadata(
         locale,
       },
       isPreview,
-      timelineToken
+      timelineToken,
+      environmentId
     );
     pageEntry = entries[0] as ILandingPage | undefined;
   } catch (err) {
@@ -139,7 +142,8 @@ export async function generateMetadata(
           locale,
         },
         isPreview,
-        timelineToken
+        timelineToken,
+        environmentId
       );
       pageEntry = entries[0] as IBlogPostPage | undefined;
     } catch (err) {

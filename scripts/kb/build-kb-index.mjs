@@ -50,11 +50,18 @@ async function fetchAllArticles(locale) {
   const data = await res.json();
   const items = Array.isArray(data.items) ? data.items : [];
 
+  // Build a map of included entries by ID so we can resolve reference links
+  const includedEntries = Array.isArray(data.includes?.Entry) ? data.includes.Entry : [];
+  const includedById = new Map();
+  for (const inc of includedEntries) {
+    if (inc?.sys?.id) includedById.set(inc.sys.id, inc);
+  }
+
   const conceptIds = collectConceptIds(items);
   const conceptSlugsById = await fetchConceptSlugsById(conceptIds);
 
   const docs = items
-    .map((it) => mapEntryToDoc(it, { conceptSlugsById }, locale))
+    .map((it) => mapEntryToDoc(it, { conceptSlugsById, includedById }, locale))
     .filter(Boolean);
   return docs;
 }
@@ -149,7 +156,7 @@ function richTextToPlain(node) {
   return "";
 }
 
-function mapEntryToDoc(entry, { conceptSlugsById }, locale) {
+function mapEntryToDoc(entry, { conceptSlugsById, includedById }, locale) {
   try {
     const { sys, fields } = entry || {};
     const id = sys?.id;
@@ -161,19 +168,47 @@ function mapEntryToDoc(entry, { conceptSlugsById }, locale) {
     const bodyRt = getLocalizedField(fields, "body", locale);
     const body = bodyRt ? richTextToPlain(bodyRt) : "";
 
+    // Resolve groups from the `groups` reference field (links to kbGroup entries)
+    const groups = [];
+    const groupLinks = fields?.groups;
+    if (Array.isArray(groupLinks)) {
+      for (const link of groupLinks) {
+        const linkedId = link?.sys?.id;
+        if (!linkedId) continue;
+        const resolved = includedById?.get?.(linkedId);
+        if (resolved?.fields) {
+          const groupSlug = getLocalizedField(resolved.fields, "slug", locale);
+          if (groupSlug) groups.push(groupSlug);
+        }
+      }
+    }
+
+    // Resolve categories from the `categories` reference field (links to kbCategory entries)
+    const categories = [];
+    const catLinks = fields?.categories;
+    if (Array.isArray(catLinks)) {
+      for (const link of catLinks) {
+        const linkedId = link?.sys?.id;
+        if (!linkedId) continue;
+        const resolved = includedById?.get?.(linkedId);
+        if (resolved?.fields) {
+          const catSlug = getLocalizedField(resolved.fields, "slug", locale);
+          if (catSlug) categories.push(catSlug);
+        }
+      }
+    }
+
+    // Supplement from taxonomy concepts (secondary source)
     const concepts = entry?.metadata?.concepts;
     const conceptLinks = Array.isArray(concepts) ? concepts : concepts ? [concepts] : [];
-
-    // Hard cut: taxonomy-only classification
-    const categories = [];
-    const groups = [];
     for (const c of conceptLinks) {
       const conceptId = c?.sys?.id;
       if (!conceptId) continue;
       const slugFromConcept = conceptSlugsById?.get?.(conceptId) || null;
       if (!slugFromConcept) continue;
-      if (String(conceptId).startsWith("kbCat")) categories.push(slugFromConcept);
-      if (String(conceptId).startsWith("kbTopic")) groups.push(slugFromConcept);
+      if (!categories.includes(slugFromConcept) && !groups.includes(slugFromConcept)) {
+        groups.push(slugFromConcept);
+      }
     }
 
     const updatedAt = entry?.sys?.updatedAt || null;

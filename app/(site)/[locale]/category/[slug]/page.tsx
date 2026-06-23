@@ -32,7 +32,7 @@ type Props = {
 export default async function CategoryPage({ params, searchParams }: Props) {
   const { locale, slug } = await params;
   const resolvedSearchParams = await searchParams;
-  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSearchParams);
+  const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSearchParams);
 
   const entries = await getEntries<CategoryPageSkeleton>(
     {
@@ -42,7 +42,8 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       locale,
     },
     isPreview,
-    timelineToken
+    timelineToken,
+    environmentId
   );
 
   const entry = entries[0] as unknown as ICategoryPage | undefined;
@@ -97,7 +98,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { locale, slug } = await params;
   const resolvedSp = await searchParams;
-  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSp);
+  const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSp);
 
   const entries = await getEntries<CategoryPageSkeleton>(
     {
@@ -107,7 +108,8 @@ export async function generateMetadata(
       locale,
     },
     isPreview,
-    timelineToken
+    timelineToken,
+    environmentId
   );
   const entry = entries[0] as unknown as ICategoryPage | undefined;
   if (!entry) return {};

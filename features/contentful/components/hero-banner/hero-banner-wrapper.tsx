@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { useContentfulLiveUpdates } from "@contentful/live-preview/react";
 import { IHeroBanner } from "../../type";
 import VariantPrimary from "./variant-primary";
 import VariantCentered from "./variant-centered";
@@ -22,7 +25,13 @@ function richTextToPlain(doc: Document | null | undefined): string {
   return extractText(doc).trim();
 }
 
-const HerobannerWrapper = (entry: IHeroBanner) => {
+const HerobannerWrapper = (props: IHeroBanner) => {
+  // Strip nt_experiences/nt_variants before live updates — they contain circular
+  // back-references that blow the stack in isEqual diffing.
+  const { nt_experiences: _ntExp, nt_variants: _ntVar, ...safeFields } = (props?.fields ?? {}) as Record<string, unknown>;
+  const safeEntry = props?.sys ? { sys: props.sys, fields: safeFields } as unknown as IHeroBanner : props;
+  const entry = useContentfulLiveUpdates(safeEntry) || props;
+
   // Guard against undefined entry or missing sys
   if (!entry?.sys?.id || !entry?.fields) {
     return null;

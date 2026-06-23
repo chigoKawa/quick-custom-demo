@@ -97,6 +97,10 @@ function buildRequestHeaders(
     if (timeline) {
       requestHeaders.set("x-contentful-timeline", timeline);
     }
+    const env = request.nextUrl.searchParams.get("env") ?? "";
+    if (env) {
+      requestHeaders.set("x-contentful-env", env);
+    }
   }
 
   if (marketCode) {

@@ -20,21 +20,48 @@ const previewClient = createClient({
 const deliveryClientByEnv = new Map<string, ReturnType<typeof createClient>>();
 const previewClientByEnv = new Map<string, ReturnType<typeof createClient>>();
 
+function isEnvironmentNotFound(error: unknown): boolean {
+  if (!error || typeof error !== "object") return false;
+  const err = error as { sys?: { id?: string }; details?: { type?: string }; name?: string };
+  if (err.details?.type === "Environment") return true;
+  if (err.name === "NotFound") {
+    const msg = (error as { message?: string }).message ?? "";
+    if (msg.includes('"type":"Environment"') || msg.includes('"type": "Environment"')) return true;
+  }
+  const msg = (error as { message?: string }).message ?? "";
+  return msg.includes("The resource could not be found") && msg.includes("Environment");
+}
+
 /**
  * Build a Contentful Preview client with Timeline support.
- * Returns the standard preview client when no token is provided.
+ * When `environmentId` is provided it overrides the configured default environment.
+ * Returns the standard preview client when no token/environment is provided.
  */
 function getPreviewClient(
-  timelineToken?: string | null
+  timelineToken?: string | null,
+  environmentId?: string | null
 ): ReturnType<typeof createClient> {
-  if (!timelineToken) return previewClient;
+  const environment =
+    environmentId ||
+    process.env.NEXT_PUBLIC_CTF_ENVIRONMENT ||
+    "master";
+
+  // If only the environment differs (no timeline), use the per-env cache.
+  if (!timelineToken) {
+    if (environment === (process.env.NEXT_PUBLIC_CTF_ENVIRONMENT || "master")) {
+      return previewClient;
+    }
+    return getClientForEnvironment({ environment, preview: true });
+  }
 
   try {
     const { releaseId, timestamp } = parseTimelinePreviewToken(timelineToken);
 
     if (!releaseId && !timestamp) {
       console.warn("[Contentful] Timeline token parsed but contained no releaseId or timestamp. Falling back to standard preview.");
-      return previewClient;
+      return environmentId
+        ? getClientForEnvironment({ environment, preview: true })
+        : previewClient;
     }
 
     const timelinePreview: CreateClientParams["timelinePreview"] = releaseId
@@ -45,12 +72,14 @@ function getPreviewClient(
       space: process.env.NEXT_PUBLIC_CTF_SPACE_ID!,
       accessToken: process.env.NEXT_PUBLIC_CTF_PREVIEW_TOKEN!,
       host: "preview.contentful.com",
-      environment: process.env.NEXT_PUBLIC_CTF_ENVIRONMENT || "master",
+      environment,
       timelinePreview,
     });
   } catch (error) {
     console.error("[Contentful] Failed to parse timeline token. Falling back to standard preview.", error);
-    return previewClient;
+    return environmentId
+      ? getClientForEnvironment({ environment, preview: true })
+      : previewClient;
   }
 }
 
@@ -78,7 +107,8 @@ function getClientForEnvironment(params: {
 export const getEntries = async <T extends EntrySkeletonType>(
   options: unknown,
   isPreviewEnabled: boolean = false,
-  timelineToken?: string | null
+  timelineToken?: string | null,
+  environmentId?: string | null
 ): Promise<Entry<T>[]> => {
   try {
     const isPlainObject =
@@ -95,8 +125,10 @@ export const getEntries = async <T extends EntrySkeletonType>(
       return [];
     }
     const clientInstance = isPreviewEnabled
-      ? getPreviewClient(timelineToken)
-      : client;
+      ? getPreviewClient(timelineToken, environmentId)
+      : environmentId
+        ? getClientForEnvironment({ environment: environmentId, preview: false })
+        : client;
     const entries: EntryCollection<T> = await clientInstance.getEntries<T>(
       options as Record<string, unknown>
     );
@@ -106,6 +138,29 @@ export const getEntries = async <T extends EntrySkeletonType>(
     // preview) never throws "Converting circular structure to JSON".
     return toJsonSafe(entries.items);
   } catch (error) {
+    // When an explicit environment doesn't exist (404 on Environment resource),
+    // fall back to the default environment so the page still renders.
+    if (environmentId && isEnvironmentNotFound(error)) {
+      console.warn(
+        `[Contentful] Environment "${environmentId}" not found. Falling back to default environment.`
+      );
+      try {
+        const fallbackClient = isPreviewEnabled
+          ? getPreviewClient(timelineToken)
+          : client;
+        const fallbackEntries: EntryCollection<T> =
+          await fallbackClient.getEntries<T>(
+            options as Record<string, unknown>
+          );
+        return toJsonSafe(fallbackEntries.items);
+      } catch (fallbackError) {
+        console.error(
+          "[Contentful] Default environment fallback also failed:",
+          fallbackError
+        );
+        return [];
+      }
+    }
     // When timeline preview fails (e.g. release not scheduled, 404), fall back
     // to standard preview so the page still renders content instead of a 404.
     if (timelineToken && isPreviewEnabled) {
@@ -114,8 +169,11 @@ export const getEntries = async <T extends EntrySkeletonType>(
         error instanceof Error ? error.message : error
       );
       try {
+        const fallbackClient = environmentId
+          ? getClientForEnvironment({ environment: environmentId, preview: true })
+          : previewClient;
         const fallbackEntries: EntryCollection<T> =
-          await previewClient.getEntries<T>(
+          await fallbackClient.getEntries<T>(
             options as Record<string, unknown>
           );
         return toJsonSafe(fallbackEntries.items);
@@ -191,13 +249,16 @@ export const getLocales = async () => {
 export const getAllPageSlugs = async <T extends EntrySkeletonType>(
   options: Record<string, unknown>,
   isPreviewEnabled: boolean = false,
-  timelineToken?: string | null
+  timelineToken?: string | null,
+  environmentId?: string | null
 ): Promise<string[]> => {
   try {
     const allSlugs: string[] = [];
     const clientInstance = isPreviewEnabled
-      ? getPreviewClient(timelineToken)
-      : client;
+      ? getPreviewClient(timelineToken, environmentId)
+      : environmentId
+        ? getClientForEnvironment({ environment: environmentId, preview: false })
+        : client;
 
     const isPlainObject =
       !!options &&

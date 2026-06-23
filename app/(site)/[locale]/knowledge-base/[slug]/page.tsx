@@ -41,7 +41,7 @@ export default async function KbArticlePage({
 }) {
   const { locale = "en-US", slug = "" } = await params;
   const resolvedSearchParams = await searchParams;
-  const { isPreview, timelineToken } = await resolvePreviewMode(resolvedSearchParams);
+  const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSearchParams);
   const [entry] = await Promise.all([
     getEntries<any>(
       {
@@ -52,7 +52,8 @@ export default async function KbArticlePage({
         include: INCLUDES_COUNT,
       },
       isPreview,
-      timelineToken
+      timelineToken,
+      environmentId
     ).then((items) => items?.[0] ?? null),
   ]);
   if (!entry) return notFound();
@@ -69,7 +70,8 @@ export default async function KbArticlePage({
         include: INCLUDES_COUNT,
       },
       isPreview,
-      timelineToken
+      timelineToken,
+      environmentId
     );
 
     const marketCode = (

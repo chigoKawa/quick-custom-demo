@@ -1,7 +1,75 @@
 {
-  "version": 1781559596037,
+  "version": 1782121535603,
   "locale": "es-MX",
   "docs": [
+    {
+      "id": "5BiSp3yfX2I5bddx68CRaI",
+      "slug": "access-partner-resources-and-support-tools",
+      "title": "How to access partner resources and support tools",
+      "summary": "Find approved partner collateral, portal access, and support paths without emailing your account manager.",
+      "body": "document",
+      "categories": [
+        "ysoft-partner-access-onboarding"
+      ],
+      "groups": [
+        "ysoft-portal-access"
+      ],
+      "updatedAt": "2026-06-21T21:35:15.270Z",
+      "locale": "es-MX",
+      "categoriesJoined": "ysoft-partner-access-onboarding",
+      "groupsJoined": "ysoft-portal-access"
+    },
+    {
+      "id": "1V7IhuzC9oq9msE6hptR9o",
+      "slug": "partner-cannot-find-right-collateral",
+      "title": "What to do if a partner cannot find the right collateral",
+      "summary": "Self-service steps when a partner team cannot locate the collateral they need for a customer conversation.",
+      "body": "document",
+      "categories": [
+        "ysoft-partner-access-onboarding"
+      ],
+      "groups": [
+        "ysoft-portal-access"
+      ],
+      "updatedAt": "2026-06-21T21:23:31.388Z",
+      "locale": "es-MX",
+      "categoriesJoined": "ysoft-partner-access-onboarding",
+      "groupsJoined": "ysoft-portal-access"
+    },
+    {
+      "id": "1QtKiufm8BEiotu4qSCgsz",
+      "slug": "get-started-partner-learning-and-certification",
+      "title": "How to get started with partner learning and certification",
+      "summary": "Access partner learning paths and certification without migrating LMS content into the CMS.",
+      "body": "",
+      "categories": [
+        "ysoft-partner-access-onboarding"
+      ],
+      "groups": [
+        "ysoft-training-certification"
+      ],
+      "updatedAt": "2026-06-21T21:23:31.320Z",
+      "locale": "es-MX",
+      "categoriesJoined": "ysoft-partner-access-onboarding",
+      "groupsJoined": "ysoft-training-certification"
+    },
+    {
+      "id": "vWxjVHj66mRSf77hf58yc",
+      "slug": "find-safeq-release-notes-and-documentation",
+      "title": "Where to find SAFEQ release notes and product documentation",
+      "summary": "Locate SAFEQ release notes, technical documentation, and product update summaries in one place.",
+      "body": "document",
+      "categories": [
+        "ysoft-product-updates"
+      ],
+      "groups": [
+        "ysoft-safeq-support"
+      ],
+      "updatedAt": "2026-06-21T21:23:31.253Z",
+      "locale": "es-MX",
+      "categoriesJoined": "ysoft-product-updates",
+      "groupsJoined": "ysoft-safeq-support"
+    },
     {
       "id": "6JvRxln8XJNEGO4RrXfNAF",
       "slug": "how-to-return-an-item",
@@ -47,12 +115,16 @@
       "title": "Manage Billing and Invoices",
       "summary": "Manage billing settings and invoices in your account.",
       "body": "document",
-      "categories": [],
-      "groups": [],
+      "categories": [
+        "accounts-billing"
+      ],
+      "groups": [
+        "product-guides"
+      ],
       "updatedAt": "2026-02-17T17:40:28.428Z",
       "locale": "es-MX",
-      "categoriesJoined": "",
-      "groupsJoined": ""
+      "categoriesJoined": "accounts-billing",
+      "groupsJoined": "product-guides"
     },
     {
       "id": "4gOe6pPsTPm5ZiWjU5XPxx",
@@ -60,12 +132,16 @@
       "title": "Why isn’t my card working?",
       "summary": "Common reasons a card payment may fail and how to fix it quickly.",
       "body": "If your card payment fails, start by checking your balance, payment limits, and whether the merchant supports your card type. Then verify your card isn’t frozen and that your billing address matches what the merchant expects. If the issue persists, try a smaller amount, retry after a few minutes, and confirm there are no security blocks on your account.",
-      "categories": [],
-      "groups": [],
+      "categories": [
+        "payments"
+      ],
+      "groups": [
+        "payments"
+      ],
       "updatedAt": "2026-02-17T17:40:08.954Z",
       "locale": "es-MX",
-      "categoriesJoined": "",
-      "groupsJoined": ""
+      "categoriesJoined": "payments",
+      "groupsJoined": "payments"
     },
     {
       "id": "1ChapOs4CK8erH92PCN7YO",
@@ -73,12 +149,16 @@
       "title": "Getting Started Overview",
       "summary": "Learn how to get started quickly.",
       "body": "This article walks you through the basics of getting started.",
-      "categories": [],
-      "groups": [],
+      "categories": [
+        "getting-started"
+      ],
+      "groups": [
+        "product-guides"
+      ],
       "updatedAt": "2026-02-17T17:39:51.138Z",
       "locale": "es-MX",
-      "categoriesJoined": "",
-      "groupsJoined": ""
+      "categoriesJoined": "getting-started",
+      "groupsJoined": "product-guides"
     },
     {
       "id": "7FYb79TnrOGlB55n9K3xa5",
@@ -86,12 +166,16 @@
       "title": "Update your profile information",
       "summary": "Change your name, contact details, and preferences from your account settings.",
       "body": "Open Account settings to update your personal details. Some fields may require re-verification for security reasons. After saving changes, confirm they appear correctly across your profile and notifications.",
-      "categories": [],
-      "groups": [],
+      "categories": [
+        "getting-started-basics"
+      ],
+      "groups": [
+        "my-account"
+      ],
       "updatedAt": "2026-02-17T17:36:13.412Z",
       "locale": "es-MX",
-      "categoriesJoined": "",
-      "groupsJoined": ""
+      "categoriesJoined": "getting-started-basics",
+      "groupsJoined": "my-account"
     },
     {
       "id": "5atsbC9RGcxuPrK5HoaeJt",
@@ -99,12 +183,16 @@
       "title": "Getting started overview",
       "summary": "A quick checklist to get set up and ready to go.",
       "body": "",
-      "categories": [],
-      "groups": [],
+      "categories": [
+        "getting-started-basics"
+      ],
+      "groups": [
+        "products"
+      ],
       "updatedAt": "2026-02-17T17:35:47.455Z",
       "locale": "es-MX",
-      "categoriesJoined": "",
-      "groupsJoined": ""
+      "categoriesJoined": "getting-started-basics",
+      "groupsJoined": "products"
     },
     {
       "id": "4xOOnBhwzuoZC5W7NSLIMA",
@@ -112,12 +200,17 @@
       "title": "Resetting your password",
       "summary": "Steps to reset your password and regain access to your account.",
       "body": "document",
-      "categories": [],
-      "groups": [],
+      "categories": [
+        "security"
+      ],
+      "groups": [
+        "my-account",
+        "security"
+      ],
       "updatedAt": "2026-02-17T17:35:29.943Z",
       "locale": "es-MX",
-      "categoriesJoined": "",
-      "groupsJoined": ""
+      "categoriesJoined": "security",
+      "groupsJoined": "my-account security"
     }
   ]
 }

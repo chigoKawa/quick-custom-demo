@@ -84,8 +84,7 @@ export interface SiteTheme {
 export function themeToCSS(theme: SiteTheme | null | undefined): string {
   if (!theme) return "";
 
-  // Import inline to keep this file usable in both server and app contexts.
-  // The registry itself has no side-effects.
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { getFontVariable } = require("./font-registry") as typeof import("./font-registry");
 
   const vars: string[] = [];

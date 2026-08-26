@@ -1,0 +1,10 @@
+{
+  "generatedAt": "2026-08-26T17:04:19.941Z",
+  "redirects": [
+    {
+      "from": "/campaigns/the-gearbox-collection",
+      "to": "/",
+      "code": 307
+    }
+  ]
+}

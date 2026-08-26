@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { getI18nConfig } from "./i18n-config";
 import { match as matchLocale } from "@formatjs/intl-localematcher";
 import Negotiator from "negotiator";
+import {
+  getRedirectMap,
+  isAbsoluteUrl,
+  resolveRedirect,
+  stripLocalePrefix,
+} from "./lib/redirect-lookup";
 
 function sanitizeLanguageTags(tags: string[]): string[] {
   return tags.filter((tag) => {
@@ -134,6 +140,32 @@ export async function middleware(request: NextRequest) {
   const pathname = pathWithoutMarket;
   const hasMarket = marketCode !== null;
 
+  // 0) Contentful-driven redirects. Sources are matched locale- and
+  //    market-agnostically, then the incoming locale prefix and /market/<code>
+  //    segment are re-applied to the destination. `?preview` bypasses redirects
+  //    entirely so an editor can still preview a page they have redirected away
+  //    from (mirrors the !isPreview gate below).
+  if (!isPreview) {
+    const { locale: pathLocale, rest } = stripLocalePrefix(pathname, locales);
+    const rule = resolveRedirect(
+      await getRedirectMap(request.nextUrl.origin),
+      rest
+    );
+    if (rule) {
+      if (isAbsoluteUrl(rule.to)) {
+        return NextResponse.redirect(rule.to, rule.code);
+      }
+      // clone() carries the incoming search params, so query strings survive.
+      const url = request.nextUrl.clone();
+      const prefix =
+        pathLocale && pathLocale !== defaultLocale ? `/${pathLocale}` : "";
+      const market = hasMarket ? `/market/${marketCode}` : "";
+      const target = rule.to === "/" ? "" : rule.to;
+      url.pathname = `${prefix}${market}${target}` || "/";
+      return NextResponse.redirect(url, rule.code);
+    }
+  }
+
   const startsWithLocale = locales.find(
     (loc) => pathname === `/${loc}` || pathname.startsWith(`/${loc}/`)
   );
@@ -194,8 +226,10 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Ignore API routes and Next.js static assets
+  // Ignore API routes, Next.js static assets, and the non-localized top-level
+  // tool routes (setup, ctf-apps, platform, mock, design) — those live outside
+  // the (site)/[locale] route group and must not be locale-negotiated.
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|setup|ctf-apps|platform|mock|.*\\..*).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|setup|ctf-apps|platform|mock|design|.*\\..*).*)",
   ],
 };

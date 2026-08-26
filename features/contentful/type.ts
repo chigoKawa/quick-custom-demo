@@ -935,3 +935,35 @@ export type PersonalizedSectionSkeleton = {
   contentTypeId: "personalizedSection";
   fields: IPersonalizedSection["fields"];
 };
+
+// -----------------------------
+// Redirect
+// -----------------------------
+
+export type RedirectStatus = "active" | "disabled";
+export type RedirectStatusCode = 301 | 302 | 307 | 308;
+
+/**
+ * An editor-managed URL redirect.
+ *
+ * Exactly one source (`fromPath` OR `fromEntry`) and exactly one destination
+ * (`toEntry` OR `toExternalUrl`) must be set — Contentful validations cannot
+ * express that, so it is enforced in `lib/redirects.ts` when building the map.
+ */
+export interface IRedirect extends Entry {
+  fields: {
+    internalName: EntryFields.Symbol;
+    fromPath?: EntryFields.Symbol;
+    fromEntry?: Entry;
+    toEntry?: Entry;
+    toExternalUrl?: EntryFields.Symbol;
+    statusCode: EntryFields.Integer;
+    status: EntryFields.Symbol<RedirectStatus>;
+    notes?: EntryFields.Text;
+  };
+}
+
+export type RedirectSkeleton = {
+  contentTypeId: "redirect";
+  fields: IRedirect["fields"];
+};

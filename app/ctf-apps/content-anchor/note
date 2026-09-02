@@ -1,0 +1,24 @@
+git subtree split --prefix=app/ctf-apps/content-anchor -b content-anchor-public
+
+Whenever you make changes in your main repository, you can update the public repo with:
+git subtree split --prefix=app/ctf-apps/content-anchor -b content-anchor-public
+git push public content-anchor-public:main
+
+
+Add the new remote
+git remote add public https://github.com/chigoKawa/Content-Anchor---Contentful-App.git
+git push public content-anchor-public:main
+
+
+ Usage
+
+  # Build only
+  npm run ctf-app:build  -- auto-translate-article
+  npm run ctf-app:build  -- compliance-review
+
+  # Build + upload (needs env vars)
+  npm run ctf-app:upload -- auto-translate-article
+  npm run ctf-app:upload -- compliance-review
+
+  # List available apps
+  npm run ctf-app:build

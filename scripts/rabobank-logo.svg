@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 56" role="img" aria-label="Rabobank">
+  <g>
+    <!-- Orange brand mark: rounded square with abstract white flag/sail -->
+    <rect x="0" y="4" width="48" height="48" rx="8" fill="#F36717"/>
+    <path d="M12 40 C20 14 30 12 38 14 C30 18 26 26 24 40 Z" fill="#FFFFFF"/>
+    <path d="M22 40 C28 22 34 20 40 22 C34 26 31 32 30 40 Z" fill="#FFFFFF" opacity="0.55"/>
+  </g>
+  <text x="60" y="38" font-family="Inter, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" letter-spacing="-0.5" fill="#2C3696">Rabobank</text>
+</svg>

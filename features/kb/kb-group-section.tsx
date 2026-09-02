@@ -1,25 +1,12 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useContentfulLiveUpdates } from "@contentful/live-preview/react";
+import { useSiteChromeLocale } from "@/features/site-chrome-locale";
+import { localizeInternalPath } from "@/lib/utils";
 import type { IKbGroup } from "@/features/contentful/type";
 import type { KbHit } from "./use-kb-search";
-
-function useEffectiveLocaleFromPath() {
-  const pathname = usePathname();
-  const info = useMemo(() => {
-    const parts = (pathname || "").split("/").filter(Boolean);
-    const first = parts[0] || "";
-    const looksPrefixed = /^[a-z]{2}-[A-Z]{2}$/.test(first);
-    return {
-      locale: looksPrefixed ? first : "en-US",
-      isDefaultCleanPath: !looksPrefixed, // default locale path without prefix
-    } as const;
-  }, [pathname]);
-  return info;
-}
 
 function getLocalizedStringField(
   value: unknown,
@@ -40,7 +27,7 @@ function getLocalizedStringField(
 
 export default function KbGroupSection(groupEntry: IKbGroup) {
   const entry = useContentfulLiveUpdates(groupEntry) || groupEntry;
-  const { locale, isDefaultCleanPath } = useEffectiveLocaleFromPath();
+  const { locale, defaultLocale } = useSiteChromeLocale();
 
   const name = getLocalizedStringField((entry?.fields as any)?.name, locale);
   const slug = getLocalizedStringField((entry?.fields as any)?.slug, locale);
@@ -102,11 +89,11 @@ export default function KbGroupSection(groupEntry: IKbGroup) {
             {hits.map((h) => (
               <li key={h.id} className="h-full">
                 <Link
-                  href={
-                    isDefaultCleanPath
-                      ? `/knowledge-base/${encodeURIComponent(h.slug)}`
-                      : `/${locale}/knowledge-base/${encodeURIComponent(h.slug)}`
-                  }
+                  href={localizeInternalPath(
+                    `/knowledge-base/${encodeURIComponent(h.slug)}`,
+                    locale === defaultLocale ? undefined : locale,
+                    defaultLocale
+                  )}
                   className="group block h-full rounded-xl border bg-background p-5 transition-colors transition-shadow hover:border-primary hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <div className="flex h-full flex-col justify-between gap-2">

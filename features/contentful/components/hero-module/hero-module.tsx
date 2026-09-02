@@ -13,7 +13,7 @@ import { type FocalPoint } from "@/lib/focal-point";
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type HeroModuleSlide = {
-  title: string;
+  title?: string;
   subtitle?: string;
   description?: string;
   imageUrl?: string;
@@ -25,6 +25,12 @@ export type HeroModuleSlide = {
   textContrast?: TextContrastOption;
   bannerSize?: HeroSizeOption;
   buttons?: Array<{ label: string; href: string }>;
+  /** Entry that currently sources the title (hero itself, or an overriding generalTopic). */
+  titleEntryId?: string;
+  titleFieldId?: "headline" | "title";
+  /** Entry that currently sources the description (hero itself, or an overriding generalTopic). */
+  descriptionEntryId?: string;
+  descriptionFieldId?: "subCopy" | "body";
 };
 
 type Props = {
@@ -185,9 +191,11 @@ function anchorToStyle(
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function HeroModule({ slides, entryId, metricEventName }: Props) {
-  const safeSlides = Array.isArray(slides) ? slides.filter((s) => s && s.title) : [];
+  // Keep slides that have at least one displayable signal — title, description, or image.
+  const safeSlides = Array.isArray(slides)
+    ? slides.filter((s) => s && (s.title || s.description || s.imageUrl))
+    : [];
   const [current, setCurrent] = useState(0);
-  const inspectorProps = useContentfulInspectorMode({ entryId: entryId || "" });
   const { trackMetric } = useTracking();
 
   useEffect(() => {
@@ -207,6 +215,13 @@ export default function HeroModule({ slides, entryId, metricEventName }: Props) 
   const contrast = resolveContrast(slide.textContrast);
   const textStyle = anchorToStyle(slide.textAnchor, sizeConfig.textBlockMaxH);
   const imageInspectorProps = useContentfulInspectorMode({ entryId: slide?.imageEntryId || "" });
+  // When a generalTopic overrides the hero's headline/subCopy, the inspector
+  // overlay must point at the topic entry — not the hero — so clicks open the
+  // right entry in Contentful. Falls back to the hero's own entry+field.
+  const titleInspectorProps = useContentfulInspectorMode({ entryId: slide?.titleEntryId || entryId || "" });
+  const descriptionInspectorProps = useContentfulInspectorMode({ entryId: slide?.descriptionEntryId || entryId || "" });
+  const titleFieldId = slide?.titleFieldId || "headline";
+  const descriptionFieldId = slide?.descriptionFieldId || "subCopy";
   const bannerImageUrl = buildBannerImageUrl(slide.imageUrl, slide.imageFocalPoint, sizeConfig.imageW, sizeConfig.imageH);
 
   const handleCtaClick = (params: {
@@ -272,18 +287,20 @@ export default function HeroModule({ slides, entryId, metricEventName }: Props) 
                 {slide.subtitle}
               </p>
             ) : null}
-            <h2
-              {...inspectorProps({ fieldId: "headline" })}
-              className={`font-semibold tracking-tight mb-2 ${contrast.textClass}`}
-              style={{ fontSize: "clamp(1.5rem, 2.4vw, 3rem)", lineHeight: 1.15 }}
-            >
-              {slide.title}
-            </h2>
+            {slide.title ? (
+              <h2
+                {...titleInspectorProps({ fieldId: titleFieldId })}
+                className={`font-semibold tracking-tight mb-2 ${contrast.textClass}`}
+                style={{ fontSize: "clamp(1.5rem, 2.4vw, 3rem)", lineHeight: 1.15 }}
+              >
+                {slide.title}
+              </h2>
+            ) : null}
             {slide.description ? (
               <div style={{ fontSize: "clamp(0.8rem, 1.1vw, 1rem)" }}>
                 <LongText
                   text={slide.description}
-                  inspectorProps={inspectorProps({ fieldId: "subCopy" })}
+                  inspectorProps={descriptionInspectorProps({ fieldId: descriptionFieldId })}
                   className={`mb-4 leading-relaxed ${contrast.bodyClass}`}
                 />
               </div>
@@ -357,16 +374,18 @@ export default function HeroModule({ slides, entryId, metricEventName }: Props) 
           {slide.subtitle ? (
             <p className="text-accent font-medium text-sm mb-1">{slide.subtitle}</p>
           ) : null}
-          <h2
-            {...inspectorProps({ fieldId: "headline" })}
-            className="text-2xl font-semibold tracking-tight mb-2 text-balance"
-          >
-            {slide.title}
-          </h2>
+          {slide.title ? (
+            <h2
+              {...titleInspectorProps({ fieldId: titleFieldId })}
+              className="text-2xl font-semibold tracking-tight mb-2 text-balance"
+            >
+              {slide.title}
+            </h2>
+          ) : null}
           {slide.description ? (
             <LongText
               text={slide.description}
-              inspectorProps={inspectorProps({ fieldId: "subCopy" })}
+              inspectorProps={descriptionInspectorProps({ fieldId: descriptionFieldId })}
               className="text-sm text-muted-foreground mb-4 leading-relaxed"
             />
           ) : null}

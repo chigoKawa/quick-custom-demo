@@ -21,7 +21,6 @@ export default async function LotPage({ params, searchParams }: Props) {
   const allCtfEntries = await getEntriesInEnvironment<LotReferenceSkeleton>({
     options: { content_type: "lotReference", include: 2, locale },
     isPreviewEnabled: isPreview,
-    environment: "christies",
   }) as unknown as ILotReference[];
 
   // Build a concept → externalLotIds map so the client can find related lots by concept

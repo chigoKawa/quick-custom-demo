@@ -4,13 +4,13 @@ import React from "react";
 import { useContentfulLiveUpdates } from "@contentful/live-preview/react";
 import { Entry } from "contentful";
 
-import type { IMultiItemModule, IHeroModule, IBlogPostPage, ILandingPage, ILogo, IBaseButton, ICampaign, IAuction, ICallout, ICta } from "../../type";
+import type { IMultiItemModule, IHeroModule, IBlogPostPage, ILandingPage, ILogo, IBaseButton, ICampaign, IAuction, ICallout, ICta, IGeneralTopic } from "../../type";
 import { extractUrlFromTarget, localizeInternalPath } from "@/lib/utils";
 import { extractImageWithFocalPoint } from "@/lib/focal-point";
 import MultiItemModule, { type MultiItemModuleItem, type MultiItemLayout, type BackgroundTheme } from "./multi-item-module";
 import HeroModule, { type HeroModuleSlide } from "../hero-module/hero-module";
 
-type SupportedItemEntry = IHeroModule | IBlogPostPage | ILandingPage | ILogo | ICampaign | IAuction | ICallout | ICta;
+type SupportedItemEntry = IHeroModule | IBlogPostPage | ILandingPage | ILogo | ICampaign | IAuction | ICallout | ICta | IGeneralTopic;
 
 type LinkLocale = { locale?: string; defaultLocale?: string };
 
@@ -287,6 +287,51 @@ function extractItemFromCta(entry: ICta, linkLocale: LinkLocale): MultiItemModul
   };
 }
 
+function richTextToPlain(rt: unknown): string | undefined {
+  if (!rt || typeof rt !== "object") return undefined;
+  const content = (rt as { content?: Array<{ content?: Array<{ value?: string }> }> }).content;
+  if (!Array.isArray(content)) return undefined;
+  const text = content
+    .map((block) =>
+      (block.content ?? [])
+        .map((n) => n.value ?? "")
+        .join("")
+    )
+    .filter(Boolean)
+    .join("\n\n")
+    .trim();
+  return text || undefined;
+}
+
+function extractItemFromGeneralTopic(entry: IGeneralTopic): MultiItemModuleItem | null {
+  if (!entry?.sys?.id || !entry?.fields) return null;
+
+  const media = entry.fields.media as { fields?: { file?: { url?: string }; title?: string } } | undefined;
+  const mediaUrl = media?.fields?.file?.url;
+  const imageUrl = mediaUrl
+    ? (mediaUrl.startsWith("//") ? `https:${mediaUrl}` : mediaUrl)
+    : undefined;
+
+  const description = richTextToPlain(entry.fields.body) ?? entry.fields.tagline;
+
+  // Attach a shallow {sys, fields} snapshot so ItemCard can subscribe to live
+  // updates and overlay edits without a reload. Pass through fields directly
+  // since generalTopic carries scalar values + a single Asset link, none of
+  // which trigger the include:6 deep-equality issue.
+  return {
+    id: entry.sys.id,
+    contentType: "generalTopic",
+    title: entry.fields.title ?? undefined,
+    description: description ?? undefined,
+    imageUrl,
+    imageAlt: media?.fields?.title ?? entry.fields.title ?? undefined,
+    liveEntry: {
+      sys: { id: entry.sys.id, contentType: { sys: { id: "generalTopic" } } },
+      fields: entry.fields as unknown as Record<string, unknown>,
+    },
+  };
+}
+
 function extractItem(entry: SupportedItemEntry, linkLocale: LinkLocale): MultiItemModuleItem | null {
   const contentType = getContentTypeId(entry);
 
@@ -307,6 +352,8 @@ function extractItem(entry: SupportedItemEntry, linkLocale: LinkLocale): MultiIt
       return extractItemFromCallout(entry as ICallout, linkLocale);
     case "cta":
       return extractItemFromCta(entry as ICta, linkLocale);
+    case "generalTopic":
+      return extractItemFromGeneralTopic(entry as IGeneralTopic);
     default:
       if (process.env.NODE_ENV === "development") {
         console.warn(`[MultiItemModule] Unknown item content type: ${contentType}`);

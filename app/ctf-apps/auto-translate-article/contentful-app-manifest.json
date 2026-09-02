@@ -1,0 +1,13 @@
+{
+  "name": "Auto Translate Article",
+  "functions": [
+    {
+      "id": "autoTranslateHandler",
+      "name": "Auto Translate Handler",
+      "description": "Invoked by a Workflow Automation. Reads the entry, invokes the configured AI Action once per (field × target locale), and writes translations back as a draft.",
+      "path": "functions/auto-translate-handler.js",
+      "entryFile": "functions/auto-translate-handler.ts",
+      "accepts": ["appaction.call"]
+    }
+  ]
+}

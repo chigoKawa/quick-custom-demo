@@ -1,0 +1,535 @@
+[
+  {
+    "id": "oura-ring-5-silver",
+    "title": "Oura Ring 5 — Silver",
+    "slug": "ring-5-silver",
+    "description": "Oura Ring 5 in Silver. The latest generation smart ring, crafted in lightweight titanium with recessed sensors and a fully round interior for all-day comfort. Tracks sleep, activity, stress, heart health, and cycle insights through the Oura App. HSA/FSA eligible, with a free trial month of Oura Membership for new members.",
+    "price": 399.0,
+    "currency": "USD",
+    "images": [
+      "https://ourahealth.imgix.net/lineItem/or5-silver.png?ixlib=js-3.8.0&auto=format&fit=max&fm=png&q=70&w=640&s=17d60f1723c61d8e59edec34e63aeaea"
+    ],
+    "category": "rings",
+    "tags": [
+      "wearables",
+      "smart-ring",
+      "oura-ring-5",
+      "sleep",
+      "bestseller"
+    ],
+    "stock": 640,
+    "rating": 9.4,
+    "reviewCount": 2841,
+    "metadata": {
+      "brand": "Oura",
+      "articleNumber": "OR5-SILVER",
+      "type": "Oura Ring 5",
+      "color": "Silver",
+      "material": "Titanium",
+      "warranty": "1 year"
+    }
+  },
+  {
+    "id": "oura-ring-5-black",
+    "title": "Oura Ring 5 — Black",
+    "slug": "ring-5-black",
+    "description": "Oura Ring 5 in Black. A matte titanium finish on Oura's newest smart ring, built for accuracy and continuous background sensing. Delivers holistic insights across sleep, recovery, activity, and heart health, with battery optimisation that adapts to how you wear it.",
+    "price": 399.0,
+    "currency": "USD",
+    "images": [
+      "https://ourahealth.imgix.net/lineItem/or5-black.png?ixlib=js-3.8.0&auto=format&fit=max&fm=png&q=70&w=640&s=e96e46800a85eaafa10bb73c6dae11cc"
+    ],
+    "category": "rings",
+    "tags": [
+      "wearables",
+      "smart-ring",
+      "oura-ring-5",
+      "sleep",
+      "bestseller"
+    ],
+    "stock": 585,
+    "rating": 9.4,
+    "reviewCount": 2612,
+    "metadata": {
+      "brand": "Oura",
+      "articleNumber": "OR5-BLACK",
+      "type": "Oura Ring 5",
+      "color": "Black",
+      "material": "Titanium",
+      "warranty": "1 year"
+    }
+  },
+  {
+    "id": "oura-ring-5-gold",
+    "title": "Oura Ring 5 — Gold",
+    "slug": "ring-5-gold",
+    "description": "Oura Ring 5 in Gold, a redesigned finish for the latest generation. Combines a premium titanium build with advanced multi-signal sensing that finds the best reading for your unique finger in any situation. Tracks sleep, stress, activity, and cycle trends around the clock.",
+    "price": 499.0,
+    "currency": "USD",
+    "images": [
+      "https://ourahealth.imgix.net/lineItem/or5-gold.png?ixlib=js-3.8.0&auto=format&fit=max&fm=png&q=70&w=640&s=c33f03f0e61b62eeefdcede2572a30a9"
+    ],
+    "category": "rings",
+    "tags": [
+      "wearables",
+      "smart-ring",
+      "oura-ring-5",
+      "sleep",
+      "premium"
+    ],
+    "stock": 310,
+    "rating": 9.5,
+    "reviewCount": 1204,
+    "metadata": {
+      "brand": "Oura",
+      "articleNumber": "OR5-GOLD",
+      "type": "Oura Ring 5",
+      "color": "Gold",
+      "material": "Titanium",
+      "finish": "Redesigned Finish",
+      "warranty": "1 year"
+    }
+  },
+  {
+    "id": "oura-ring-5-deep-rose",
+    "title": "Oura Ring 5 — Deep Rose",
+    "slug": "ring-5-deep-rose",
+    "description": "Oura Ring 5 in Deep Rose, a new finish for the latest generation. Lightweight titanium inside and out, gentle even on sensitive skin, with continuous sensing that builds a complete picture of your sleep, recovery, and daily readiness.",
+    "price": 499.0,
+    "currency": "USD",
+    "images": [
+      "https://ourahealth.imgix.net/lineItem/or5-deep-rose.png?ixlib=js-3.8.0&auto=format&fit=max&fm=png&q=70&w=640&s=63c13eb77fcaf52ae65b28f7810fd0f5"
+    ],
+    "category": "rings",
+    "tags": [
+      "wearables",
+      "smart-ring",
+      "oura-ring-5",
+      "sleep",
+      "premium"
+    ],
+    "stock": 225,
+    "rating": 9.3,
+    "reviewCount": 487,
+    "metadata": {
+      "brand": "Oura",
+      "articleNumber": "OR5-DEEP-ROSE",
+      "type": "Oura Ring 5",
+      "color": "Deep Rose",
+      "material": "Titanium",
+      "finish": "New Finish",
+      "warranty": "1 year"
+    }
+  },
+  {
+    "id": "oura-ring-5-stealth",
+    "title": "Oura Ring 5 — Stealth",
+    "slug": "ring-5-stealth",
+    "description": "Oura Ring 5 in Stealth. A discreet, low-sheen titanium finish paired with Oura's newest sensor platform. Provides continuous data across sleep, activity, stress, and heart health while working in the background to preserve battery life.",
+    "price": 499.0,
+    "currency": "USD",
+    "images": [
+      "https://ourahealth.imgix.net/lineItem/or5-stealth.png?ixlib=js-3.8.0&auto=format&fit=max&fm=png&q=70&w=640&s=e7d79de382b98bea2c41516ad8f67b2b"
+    ],
+    "category": "rings",
+    "tags": [
+      "wearables",
+      "smart-ring",
+      "oura-ring-5",
+      "sleep",
+      "premium"
+    ],
+    "stock": 402,
+    "rating": 9.4,
+    "reviewCount": 963,
+    "metadata": {
+      "brand": "Oura",
+      "articleNumber": "OR5-STEALTH",
+      "type": "Oura Ring 5",
+      "color": "Stealth",
+      "material": "Titanium",
+      "warranty": "1 year"
+    }
+  },
+  {
+    "id": "oura-ring-5-brushed-silver",
+    "title": "Oura Ring 5 — Brushed Silver",
+    "slug": "ring-5-brushed-silver",
+    "description": "Oura Ring 5 in Brushed Silver. A softly textured titanium finish over the latest generation of Oura's health sensing platform, delivering sleep, recovery, stress, and cycle insights through the Oura App.",
+    "price": 499.0,
+    "currency": "USD",
+    "images": [
+      "https://ourahealth.imgix.net/lineItem/or5-brushed-silver.png?ixlib=js-3.8.0&auto=format&fit=max&fm=png&q=70&w=640&s=b8d82715c68ff294d7b8fd2af6e5868c"
+    ],
+    "category": "rings",
+    "tags": [
+      "wearables",
+      "smart-ring",
+      "oura-ring-5",
+      "sleep",
+      "premium"
+    ],
+    "stock": 288,
+    "rating": 9.3,
+    "reviewCount": 715,
+    "metadata": {
+      "brand": "Oura",
+      "articleNumber": "OR5-BRUSHED-SILVER",
+      "type": "Oura Ring 5",
+      "color": "Brushed Silver",
+      "material": "Titanium",
+      "warranty": "1 year"
+    }
+  },
+  {
+    "id": "oura-ring-4-silver",
+    "title": "Oura Ring 4 — Silver",
+    "slug": "ring-4-silver",
+    "description": "Oura Ring 4 in Silver. Titanium smart ring with recessed sensors and a fully round interior for comfortable all-day wear. Tracks sleep, activity, stress, heart health, and cycle insights, with battery life optimised in the background.",
+    "price": 349.0,
+    "currency": "USD",
+    "images": [
+      "https://ourahealth.imgix.net/lineItem/or4-silver.png?ixlib=js-3.8.0&auto=format&fit=max&fm=png&q=70&w=640&s=2eaeaa8882287a7e04960bc00f66e414"
+    ],
+    "category": "rings",
+    "tags": [
+      "wearables",
+      "smart-ring",
+      "oura-ring-4",
+      "sleep",
+      "bestseller"
+    ],
+    "stock": 910,
+    "rating": 9.2,
+    "reviewCount": 8412,
+    "metadata": {
+      "brand": "Oura",
+      "articleNumber": "OR4-SILVER",
+      "type": "Oura Ring 4",
+      "color": "Silver",
+      "material": "Titanium",
+      "warranty": "1 year"
+    }
+  },
+  {
+    "id": "oura-ring-4-stealth",
+    "title": "Oura Ring 4 — Stealth",
+    "slug": "ring-4-stealth",
+    "description": "Oura Ring 4 in Stealth. A matte, understated titanium finish on Oura's fourth-generation smart ring. Provides continuous holistic health data across sleep, recovery, activity, stress, and heart health, delivered through the Oura App.",
+    "price": 349.0,
+    "currency": "USD",
+    "images": [
+      "https://ourahealth.imgix.net/lineItem/or4-stealth.png?ixlib=js-3.8.0&auto=format&fit=max&fm=png&q=70&w=640&s=cd76e82be8cf4fdd1826251deb2cfd31"
+    ],
+    "category": "rings",
+    "tags": [
+      "wearables",
+      "smart-ring",
+      "oura-ring-4",
+      "sleep",
+      "sale"
+    ],
+    "stock": 730,
+    "rating": 9.2,
+    "reviewCount": 6034,
+    "metadata": {
+      "brand": "Oura",
+      "articleNumber": "OR4-STEALTH",
+      "type": "Oura Ring 4",
+      "color": "Stealth",
+      "material": "Titanium",
+      "originalPrice": 399.0,
+      "warranty": "1 year"
+    }
+  },
+  {
+    "id": "oura-ring-4-gold",
+    "title": "Oura Ring 4 — Gold",
+    "slug": "ring-4-gold",
+    "description": "Oura Ring 4 in Gold. A polished premium finish on the fourth-generation titanium smart ring, engineered for accuracy and comfort with sensors that adapt to find the best signal on your finger.",
+    "price": 399.0,
+    "currency": "USD",
+    "images": [
+      "https://ourahealth.imgix.net/lineItem/or4-gold.png?ixlib=js-3.8.0&auto=format&fit=max&fm=png&q=70&w=640&s=31fa792430985ba7c0f5eab4437c89ae"
+    ],
+    "category": "rings",
+    "tags": [
+      "wearables",
+      "smart-ring",
+      "oura-ring-4",
+      "sleep",
+      "premium",
+      "sale"
+    ],
+    "stock": 355,
+    "rating": 9.3,
+    "reviewCount": 3178,
+    "metadata": {
+      "brand": "Oura",
+      "articleNumber": "OR4-GOLD",
+      "type": "Oura Ring 4",
+      "color": "Gold",
+      "material": "Titanium",
+      "originalPrice": 499.0,
+      "warranty": "1 year"
+    }
+  },
+  {
+    "id": "oura-ring-4-ceramic-midnight",
+    "title": "Oura Ring 4 Ceramic — Midnight",
+    "slug": "ring-4-ceramic-midnight",
+    "description": "Oura Ring 4 Ceramic in Midnight. A ceramic exterior over the Oura Ring 4 platform for a distinct, scratch-resistant look. Tracks sleep, activity, stress, heart health, and cycle trends with the same continuous sensing as the titanium models.",
+    "price": 399.0,
+    "currency": "USD",
+    "images": [
+      "https://ourahealth.imgix.net/jade-pop/midnight-front-view.png?ixlib=js-3.8.0&auto=format&fit=max&fm=png&q=70&w=640&s=7e88351f154b6a43925e904e36ccaea3"
+    ],
+    "category": "rings",
+    "tags": [
+      "wearables",
+      "smart-ring",
+      "oura-ring-4",
+      "ceramic",
+      "sale"
+    ],
+    "stock": 190,
+    "rating": 9.1,
+    "reviewCount": 612,
+    "metadata": {
+      "brand": "Oura",
+      "articleNumber": "OR4C-MIDNIGHT",
+      "type": "Oura Ring 4 Ceramic",
+      "color": "Midnight",
+      "material": "Ceramic",
+      "originalPrice": 499.0,
+      "warranty": "1 year"
+    }
+  },
+  {
+    "id": "oura-ring-4-ceramic-cloud",
+    "title": "Oura Ring 4 Ceramic — Cloud",
+    "slug": "ring-4-ceramic-cloud",
+    "description": "Oura Ring 4 Ceramic in Cloud. A light, pale ceramic finish paired with Oura Ring 4's sensor platform. Comfortable and gentle on sensitive skin, with continuous tracking across sleep, recovery, and daily activity.",
+    "price": 399.0,
+    "currency": "USD",
+    "images": [
+      "https://ourahealth.imgix.net/jade-pop/cloud-front-view.png?ixlib=js-3.8.0&auto=format&fit=max&fm=png&q=70&w=640&s=3d1b5c8468d13e96bc2444330660377d"
+    ],
+    "category": "rings",
+    "tags": [
+      "wearables",
+      "smart-ring",
+      "oura-ring-4",
+      "ceramic",
+      "sale"
+    ],
+    "stock": 165,
+    "rating": 9.1,
+    "reviewCount": 548,
+    "metadata": {
+      "brand": "Oura",
+      "articleNumber": "OR4C-CLOUD",
+      "type": "Oura Ring 4 Ceramic",
+      "color": "Cloud",
+      "material": "Ceramic",
+      "originalPrice": 499.0,
+      "warranty": "1 year"
+    }
+  },
+  {
+    "id": "oura-ring-5-charging-case",
+    "title": "Oura Ring 5 Charging Case",
+    "slug": "ring-5-charging-case",
+    "description": "Oura Ring 5 Charging Case. Portable charging case that holds up to five full charges, letting you top up your Oura Ring 5 away from an outlet. Designed for travel and everyday carry.",
+    "price": 99.0,
+    "currency": "USD",
+    "images": [
+      "https://ourahealth.imgix.net/product/or5-charging-case.png?ixlib=js-3.8.0&auto=format&fit=crop&fm=png&crop=focalpoint&fp-x=0.5&fp-y=0.5&fp-z=1&q=70&w=3840&s=0091f2fa766d23bfd18262ea11aa0175"
+    ],
+    "category": "accessories",
+    "tags": [
+      "accessories",
+      "charging",
+      "oura-ring-5",
+      "travel"
+    ],
+    "stock": 1150,
+    "rating": 9.0,
+    "reviewCount": 342,
+    "metadata": {
+      "brand": "Oura",
+      "articleNumber": "OR5-CHARGING-CASE",
+      "type": "Charging Case",
+      "compatibility": "Oura Ring 5",
+      "capacity": "Up to 5 charges",
+      "warranty": "1 year"
+    }
+  },
+  {
+    "id": "oura-ring-4-charging-case",
+    "title": "Oura Ring 4 Charging Case",
+    "slug": "ring-4-charging-case",
+    "description": "Oura Ring 4 Charging Case. Compact case that stores up to five charges for your Oura Ring 4, keeping tracking uninterrupted on the road or overnight away from home.",
+    "price": 99.0,
+    "currency": "USD",
+    "images": [
+      "https://ourahealth.imgix.net/product/or4-charging-case.png?ixlib=js-3.8.0&auto=format&fit=crop&fm=png&crop=focalpoint&fp-x=0.5&fp-y=0.5&fp-z=1&q=70&w=3840&s=1c239252f3e0619abf3841ad5dea3658"
+    ],
+    "category": "accessories",
+    "tags": [
+      "accessories",
+      "charging",
+      "oura-ring-4",
+      "travel"
+    ],
+    "stock": 1320,
+    "rating": 9.0,
+    "reviewCount": 891,
+    "metadata": {
+      "brand": "Oura",
+      "articleNumber": "OR4-CHARGING-CASE",
+      "type": "Charging Case",
+      "compatibility": "Oura Ring 4",
+      "capacity": "Up to 5 charges",
+      "warranty": "1 year"
+    }
+  },
+  {
+    "id": "oura-ring-5-charger",
+    "title": "Oura Ring 5 Charger",
+    "slug": "ring-5-charger",
+    "description": "Oura Ring 5 Charger. Replacement or spare charging dock for the Oura Ring 5, supplied with a USB cable. Useful as a second charger for the office or when travelling.",
+    "price": 59.0,
+    "currency": "USD",
+    "images": [
+      "https://ourahealth.imgix.net/product/or5-charger.png?ixlib=js-3.8.0&auto=format&fit=crop&fm=png&crop=focalpoint&fp-x=0.5&fp-y=0.5&fp-z=1.245&q=70&w=3840&s=1d0ba9bb6b87821bd48433819a7b72a1"
+    ],
+    "category": "accessories",
+    "tags": [
+      "accessories",
+      "charging",
+      "oura-ring-5"
+    ],
+    "stock": 1680,
+    "rating": 8.9,
+    "reviewCount": 207,
+    "metadata": {
+      "brand": "Oura",
+      "articleNumber": "OR5-CHARGER",
+      "type": "Charger",
+      "compatibility": "Oura Ring 5",
+      "includes": "USB cable",
+      "warranty": "1 year"
+    }
+  },
+  {
+    "id": "oura-ring-4-charger",
+    "title": "Oura Ring 4 Charger",
+    "slug": "ring-4-charger",
+    "description": "Oura Ring 4 Charger. Spare charging dock for the Oura Ring 4, including a USB cable. Keep one at home and one in your bag so your ring never runs flat.",
+    "price": 59.0,
+    "currency": "USD",
+    "images": [
+      "https://ourahealth.imgix.net/product/or4-charger.png?ixlib=js-3.8.0&auto=format&fit=crop&fm=png&crop=focalpoint&fp-x=0.5&fp-y=0.5&fp-z=1.1&q=70&w=3840&s=f257666dd43f5642cdc9236a769169fd"
+    ],
+    "category": "accessories",
+    "tags": [
+      "accessories",
+      "charging",
+      "oura-ring-4"
+    ],
+    "stock": 2040,
+    "rating": 8.9,
+    "reviewCount": 634,
+    "metadata": {
+      "brand": "Oura",
+      "articleNumber": "OR4-CHARGER",
+      "type": "Charger",
+      "compatibility": "Oura Ring 4",
+      "includes": "USB cable",
+      "warranty": "1 year"
+    }
+  },
+  {
+    "id": "oura-ring-gen3-charger",
+    "title": "Oura Ring Gen3 Charger",
+    "slug": "ring-gen3-charger",
+    "description": "Oura Ring Gen3 Charger. Replacement charging dock for third-generation Oura Rings, supplied with a USB cable.",
+    "price": 59.0,
+    "currency": "USD",
+    "images": [
+      "https://ourahealth.imgix.net/product/charger_set_gen3_2.png?ixlib=js-3.8.0&auto=format&fit=crop&fm=png&crop=focalpoint&fp-x=0.5&fp-y=0.5&fp-z=1.&q=70&w=3840&s=76a1562634b339a24b520cc29f0a0a12"
+    ],
+    "category": "accessories",
+    "tags": [
+      "accessories",
+      "charging",
+      "gen3"
+    ],
+    "stock": 870,
+    "rating": 8.7,
+    "reviewCount": 1129,
+    "metadata": {
+      "brand": "Oura",
+      "articleNumber": "OR3-CHARGER",
+      "type": "Charger",
+      "compatibility": "Oura Ring Gen3",
+      "includes": "USB cable",
+      "warranty": "1 year"
+    }
+  },
+  {
+    "id": "oura-stelo-glucose-biosensor",
+    "title": "Stelo Glucose Biosensor",
+    "slug": "stelo-glucose-biosensor",
+    "description": "Stelo Glucose Biosensor by Dexcom, sold through the Oura Store as a two-pack. Continuous glucose biosensor that pairs with Oura to add metabolic context alongside your sleep, activity, and recovery data.",
+    "price": 99.0,
+    "currency": "USD",
+    "images": [
+      "https://ourahealth.imgix.net/product/dexcom-stelo.png?ixlib=js-3.8.0&auto=format&fit=crop&fm=png&crop=focalpoint&fp-x=0.5&fp-y=0.5&fp-z=2&q=70&w=3840&s=f2bad81ecb23c53cf2a7862bda1afd41"
+    ],
+    "category": "biosensors",
+    "tags": [
+      "wellness",
+      "glucose",
+      "biosensor",
+      "metabolic-health",
+      "dexcom"
+    ],
+    "stock": 430,
+    "rating": 8.8,
+    "reviewCount": 158,
+    "metadata": {
+      "brand": "Dexcom",
+      "articleNumber": "STELO-2PK",
+      "type": "Glucose Biosensor",
+      "pieces": "2"
+    }
+  },
+  {
+    "id": "oura-gift-cards",
+    "title": "Oura Gift Cards",
+    "slug": "gift-cards",
+    "description": "Oura Gift Cards. Digital gift cards starting at $25, redeemable across rings, accessories, and membership in the Oura Store. Delivered by email for the ones you love.",
+    "price": 25.0,
+    "currency": "USD",
+    "images": [
+      "https://ourahealth.imgix.net/product/gift_card.png?ixlib=js-3.8.0&auto=format&fit=max&fm=png&q=70&w=3840&s=9d8ccbe34ca253adda69732bb4ed13f8"
+    ],
+    "category": "gift-cards",
+    "tags": [
+      "gifting",
+      "gift-card",
+      "digital"
+    ],
+    "stock": 5000,
+    "rating": 9.2,
+    "reviewCount": 73,
+    "metadata": {
+      "brand": "Oura",
+      "articleNumber": "OURA-GIFTCARD",
+      "type": "Digital Gift Card",
+      "minimumValue": "$25"
+    }
+  }
+]

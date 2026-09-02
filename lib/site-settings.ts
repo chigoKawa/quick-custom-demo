@@ -24,6 +24,11 @@ export interface SiteSettingsSkeleton {
     themeSecondary?: string;
     themeAccent?: string;
     theme?: import("./theme").SiteTheme;
+    /** Feature flag — when false, hides the shopping cart icon in the site
+     *  header. Not every demo customer is an e-commerce brand. Defaults to
+     *  true when the field is absent (backward compat for entries that
+     *  pre-date this field). */
+    enableCart?: boolean;
     nt_experiences?: Entry<EntrySkeletonType>[];
   };
 }

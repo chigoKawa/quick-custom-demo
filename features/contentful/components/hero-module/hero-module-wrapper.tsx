@@ -3,7 +3,7 @@
 import React, { useMemo } from "react";
 import { useContentfulLiveUpdates } from "@contentful/live-preview/react";
 
-import type { IHeroModule, IBaseButton } from "../../type";
+import type { IHeroModule, IBaseButton, IGeneralTopic } from "../../type";
 import { extractUrlFromTarget } from "@/lib/utils";
 import HeroModule, { type HeroModuleSlide } from "./hero-module";
 import { extractImageWithFocalPoint } from "@/lib/focal-point";
@@ -12,6 +12,25 @@ import {
   MARKET_OVERRIDE_FIELD_ID,
 } from "@/lib/market-overrides";
 import { useActiveMarket } from "@/lib/market-overrides/react";
+
+// Flatten a Contentful RichText document to plain text (paragraphs joined by
+// newlines). The hero's `subCopy` is a plain Text field — when we pull body
+// from a generalTopic (RichText) we need a scalar string.
+function richTextToPlain(rt: unknown): string | undefined {
+  if (!rt || typeof rt !== "object") return undefined;
+  const content = (rt as { content?: Array<{ content?: Array<{ value?: string }> }> }).content;
+  if (!Array.isArray(content)) return undefined;
+  const text = content
+    .map((block) =>
+      (block.content ?? [])
+        .map((n) => n.value ?? "")
+        .join("")
+    )
+    .filter(Boolean)
+    .join("\n\n")
+    .trim();
+  return text || undefined;
+}
 
 function mapButtons(
   buttons: unknown,
@@ -70,8 +89,28 @@ export default function HeroModuleWrapper(
     return null;
   }
 
-  const title = resolvedFields.headline ?? "";
-  const description = resolvedFields.subCopy;
+  // Subscribe live to the optional generalTopic — its title/body override the
+  // hero's own headline/subCopy. Shallow {sys, fields} only per the include:6
+  // call-stack rule.
+  const topicEntry = resolvedFields.topic as IGeneralTopic | undefined;
+  const topicRecord = topicEntry as unknown as Record<string, unknown> | undefined;
+  const liveTopic = useContentfulLiveUpdates(
+    topicRecord && topicRecord.sys
+      ? { sys: topicRecord.sys, fields: topicRecord.fields }
+      : null
+  ) ?? topicEntry;
+  const topicFields = (liveTopic as IGeneralTopic | undefined)?.fields;
+  const topicTitle = topicFields?.title;
+  const topicBody = topicFields?.body;
+  const topicBodyText = richTextToPlain(topicBody);
+
+  // Topic fields take precedence when present; otherwise fall back to the
+  // hero's own headline/subCopy. Empty strings count as "absent".
+  const topicSysId = (liveTopic as { sys?: { id?: string } } | undefined)?.sys?.id;
+  const titleFromTopic = Boolean(topicTitle && topicTitle.trim());
+  const descriptionFromTopic = Boolean(topicBodyText);
+  const title = titleFromTopic ? topicTitle!.trim() : resolvedFields.headline || "";
+  const description = descriptionFromTopic ? topicBodyText : resolvedFields.subCopy;
   const textAnchor = resolvedFields.textAnchor;
   const textContrast = resolvedFields.textContrast;
   const bannerSize = resolvedFields.size;
@@ -108,9 +147,16 @@ export default function HeroModuleWrapper(
     textContrast: textContrast ?? undefined,
     bannerSize: bannerSize ?? undefined,
     buttons: buttons.length > 0 ? buttons.slice(0, 2) : undefined,
+    titleEntryId: titleFromTopic && topicSysId ? topicSysId : entry.sys.id,
+    titleFieldId: titleFromTopic ? "title" : "headline",
+    descriptionEntryId: descriptionFromTopic && topicSysId ? topicSysId : entry.sys.id,
+    descriptionFieldId: descriptionFromTopic ? "body" : "subCopy",
   };
 
-  if (!slide.title) return null;
+  // Render the hero if there's anything to show — title, description, or image.
+  // Headline/subCopy were previously required; the optional topic override
+  // lets editors keep them empty.
+  if (!slide.title && !slide.description && !slide.imageUrl) return null;
 
   return (
     <HeroModule

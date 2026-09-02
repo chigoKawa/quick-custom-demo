@@ -116,4 +116,20 @@ Current target content types: `externalLink`, `landingPage`, `blogPost`, `catego
 - URL building for internal paths: `extractUrlFromTarget` in `lib/utils.ts`
 - Locale-aware path prefix: `localizeInternalPath` in `lib/utils.ts`
 - Default locale (`en-US`) uses clean URLs (no prefix); others are prefixed (e.g. `/da/...`)
-- Contentful space: `ace0ba6p9v98`, environment: `christies`
+
+---
+
+## Contentful space & environment
+
+**Never hardcode a Contentful environment.** The environment is configuration, not a constant — the same codebase is pointed at different demo environments.
+
+- Space and environment come from env vars: `NEXT_PUBLIC_CTF_SPACE_ID` and `NEXT_PUBLIC_CTF_ENVIRONMENT` (see `.env`)
+- `lib/contentful.ts` exports `DEFAULT_CTF_ENVIRONMENT` — the single resolved value (`NEXT_PUBLIC_CTF_ENVIRONMENT || "master"`). Import it instead of re-reading the env var or writing a literal
+- `getEntriesInEnvironment({ options, isPreviewEnabled, environment? })` — `environment` is an **optional** override; omit it to use the configured environment
+- For a request-scoped environment override (env switcher / preview), use `getClientForEnvironment({ environment, preview })` in `lib/contentful.ts` — do not create ad-hoc `createClient` calls
+- When writing to Contentful via the MCP tools, resolve the target environment first (`list_environments`) rather than assuming a name. Note the MCP token may only authorize one environment, and `master` is often an **alias** pointing at the real environment
+
+A hardcoded environment breaks `next build`, not just runtime: if the token cannot
+reach the pinned environment, page-data collection for that route fails and the whole
+build aborts. The two auction routes used to pin `environment: "christies"` this way
+and did exactly that — both now use the configured environment.

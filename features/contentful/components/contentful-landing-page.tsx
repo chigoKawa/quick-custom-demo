@@ -7,6 +7,7 @@ import { ILandingPage } from "../type";
 import { useContentfulLiveUpdates } from "@contentful/live-preview/react";
 import { sectionsComponentMap } from "../component-maps/sections";
 import RelatedStoriesSection, { type RelatedStoryPost } from "./landing-page/related-stories-section";
+import { RevealSection } from "@/features/animations/in-view";
 
 // Define the props interface for the ContentfulLandingPage component
 interface IProps {
@@ -128,11 +129,17 @@ const ContentfulLandingPage: FC<IProps> = ({ entry: publishedEntry, relatedPosts
               return null;
             }
 
-            return <Component key={`${sectionEntry.sys.id}-${index}`} {...sectionEntry} />;
+            return (
+              <RevealSection key={`${sectionEntry.sys.id}-${index}`} index={index}>
+                <Component {...sectionEntry} />
+              </RevealSection>
+            );
           })
         : null}
       {relatedPosts && relatedPosts.length > 0 && (
-        <RelatedStoriesSection posts={relatedPosts} />
+        <RevealSection index={1}>
+          <RelatedStoriesSection posts={relatedPosts} />
+        </RevealSection>
       )}
     </div>
   );

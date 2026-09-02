@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+**/node_modules
 /.pnp
 .pnp.*
 .yarn/*
@@ -19,6 +20,8 @@
 
 # production
 /build
+# Contentful App Function compiled output (per-app build/ dirs)
+app/ctf-apps/*/build/
 
 # misc
 .DS_Store

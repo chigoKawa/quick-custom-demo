@@ -1,0 +1,12 @@
+ Usage
+
+  # Build only
+  npm run ctf-app:build  -- auto-translate-article
+  npm run ctf-app:build  -- compliance-review
+
+  # Build + upload (needs env vars)
+  npm run ctf-app:upload -- auto-translate-article
+  npm run ctf-app:upload -- compliance-review
+
+  # List available apps
+  npm run ctf-app:build

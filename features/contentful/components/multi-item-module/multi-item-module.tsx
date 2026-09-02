@@ -4,7 +4,8 @@ import React, { useEffect, useState, useCallback, useRef } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useContentfulInspectorMode } from "@contentful/live-preview/react";
+import { useContentfulInspectorMode, useContentfulLiveUpdates } from "@contentful/live-preview/react";
+import { RevealItem } from "@/features/animations/in-view";
 import { useTracking } from "@/features/tracking/use-tracking";
 import { cn } from "@/lib/utils";
 
@@ -23,6 +24,11 @@ export type MultiItemModuleItem = {
   icon?: string;
   ctaLabel?: string;
   ctaHref?: string;
+  /** Shallow {sys, fields} snapshot of the source entry. When present,
+   *  the rendered card subscribes to live updates on this entry and
+   *  overrides displayed fields on the fly. Only populated for content
+   *  types we want to keep editor-live (e.g. generalTopic). */
+  liveEntry?: { sys: { id: string; contentType?: { sys: { id: string } } }; fields: Record<string, unknown> };
 };
 
 type ActionButton = {
@@ -128,8 +134,10 @@ export default function MultiItemModule({
 
     return (
       <div className={cn("grid gap-6", gridCols[columns as keyof typeof gridCols] || gridCols[3])}>
-        {safeItems.map((item) => (
-          <ItemCard key={item.id} item={item} />
+        {safeItems.map((item, idx) => (
+          <RevealItem key={item.id} index={idx}>
+            <ItemCard item={item} />
+          </RevealItem>
         ))}
       </div>
     );
@@ -170,8 +178,10 @@ export default function MultiItemModule({
   const renderList = () => {
     return (
       <div className="flex flex-col gap-4">
-        {safeItems.map((item) => (
-          <ListItem key={item.id} item={item} />
+        {safeItems.map((item, idx) => (
+          <RevealItem key={item.id} index={idx}>
+            <ListItem item={item} />
+          </RevealItem>
         ))}
       </div>
     );
@@ -185,8 +195,10 @@ export default function MultiItemModule({
     };
     return (
       <div className={cn("grid gap-8", gridCols[Math.min(columns, 4) as keyof typeof gridCols] || gridCols[3])}>
-        {safeItems.map((item) => (
-          <ValuePropCard key={item.id} item={item} />
+        {safeItems.map((item, idx) => (
+          <RevealItem key={item.id} index={idx}>
+            <ValuePropCard item={item} />
+          </RevealItem>
         ))}
       </div>
     );
@@ -372,15 +384,69 @@ function CarouselTrack({
   );
 }
 
+function flattenRichTextNodes(rt: unknown): string | undefined {
+  if (!rt || typeof rt !== "object") return undefined;
+  const content = (rt as { content?: Array<{ content?: Array<{ value?: string }> }> }).content;
+  if (!Array.isArray(content)) return undefined;
+  const text = content
+    .map((block) =>
+      (block.content ?? [])
+        .map((n) => n.value ?? "")
+        .join("")
+    )
+    .filter(Boolean)
+    .join("\n\n")
+    .trim();
+  return text || undefined;
+}
+
 function ItemCard({ item }: { item: MultiItemModuleItem }) {
+  // Inspector-mode props pinned to the source entry (e.g. generalTopic) when
+  // we have one, so clicking a tile opens the right entry for editing.
+  const inspectorEntryId = item.liveEntry?.sys?.id ?? item.id;
+  const inspectorProps = useContentfulInspectorMode({ entryId: inspectorEntryId });
+
+  // Subscribe to live updates on the source entry. For content types with no
+  // liveEntry (heroModule, blogPost, etc.) this no-ops on a null subscription.
+  const live = useContentfulLiveUpdates(item.liveEntry ?? null) as
+    | { fields?: Record<string, unknown> }
+    | null;
+
+  // Overlay live field values onto the seeded data. Only fields the renderer
+  // reads matter; we map by content type so the right source-entry field
+  // wins over the seeded value.
+  let title = item.title;
+  let description = item.description;
+  let imageUrl = item.imageUrl;
+  let imageAlt = item.imageAlt;
+
+  if (live?.fields) {
+    if (item.contentType === "generalTopic") {
+      const liveTitle = live.fields.title as string | undefined;
+      const liveTagline = live.fields.tagline as string | undefined;
+      const liveBody = flattenRichTextNodes(live.fields.body);
+      const liveMedia = live.fields.media as { fields?: { file?: { url?: string }; title?: string } } | undefined;
+      const liveMediaUrl = liveMedia?.fields?.file?.url;
+      const fullLiveMediaUrl = liveMediaUrl?.startsWith("//") ? `https:${liveMediaUrl}` : liveMediaUrl;
+
+      if (liveTitle !== undefined) title = liveTitle;
+      // generalTopic.tagline maps to card description (matches the
+      // wrapper's initial extraction below).
+      if (liveBody !== undefined) description = liveBody;
+      else if (liveTagline !== undefined) description = liveTagline;
+      if (fullLiveMediaUrl !== undefined) imageUrl = fullLiveMediaUrl;
+      if (liveMedia?.fields?.title !== undefined) imageAlt = liveMedia.fields.title;
+    }
+  }
+
   const content = (
     <div className="group relative overflow-hidden rounded-xl bg-card border shadow-sm transition-all duration-300 hover:shadow-lg">
       <div className="aspect-[16/10] overflow-hidden">
-        {item.imageUrl ? (
+        {imageUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={item.imageUrl}
-            alt={item.imageAlt || item.title || ""}
+            src={imageUrl}
+            alt={imageAlt || title || ""}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             loading="lazy"
           />
@@ -389,14 +455,24 @@ function ItemCard({ item }: { item: MultiItemModuleItem }) {
         )}
       </div>
       <div className="p-4">
-        {item.title && (
-          <h3 className="font-semibold text-lg mb-1 line-clamp-2">{item.title}</h3>
+        {title && (
+          <h3
+            {...inspectorProps({ fieldId: "title" })}
+            className="font-semibold text-lg mb-1 line-clamp-2"
+          >
+            {title}
+          </h3>
         )}
         {item.subtitle && (
           <p className="text-sm text-muted-foreground mb-2">{item.subtitle}</p>
         )}
-        {item.description && (
-          <p className="text-sm text-muted-foreground line-clamp-3">{item.description}</p>
+        {description && (
+          <p
+            {...inspectorProps({ fieldId: item.contentType === "generalTopic" ? "body" : "description" })}
+            className="text-sm text-muted-foreground line-clamp-3"
+          >
+            {description}
+          </p>
         )}
       </div>
     </div>

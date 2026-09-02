@@ -36,12 +36,17 @@ export async function GET(request: NextRequest) {
   const draft = await draftMode();
   draft.enable();
 
-  // Normalize: strip protocol/host, collapse leading slashes to one
+  // Normalize: strip protocol/host, strip surrounding quotes (Contentful template
+  // tokens occasionally land wrapped in quotes), collapse leading slashes to one.
   let pathname = rawPath.replace(/^https?:\/\/[^/]*/, "");
+  pathname = pathname.replace(/^"+|"+$/g, "");
   pathname = "/" + pathname.replace(/^\/+/, "");
 
-  // Prefix with locale when it differs from the default (default uses clean URLs)
-  if (locale) {
+  // Routes outside the (site)/[locale]/... tree (e.g. /mock/app/*) don't use a
+  // locale path prefix — they read the locale from a `?locale=` query param.
+  const isLocalePrefixedRoute = !/^\/(mock|api|setup|ctf-apps|platform)(\/|$)/.test(pathname);
+
+  if (locale && isLocalePrefixedRoute) {
     const { defaultLocale } = await getI18nConfig();
     if (locale !== defaultLocale) {
       pathname = `/${locale}${pathname}`;
@@ -53,6 +58,12 @@ export async function GET(request: NextRequest) {
   // Always append ?preview so the page route, middleware, and resolvePreviewMode
   // all detect preview mode — draftMode cookies alone can be lost during redirects.
   redirectUrl.searchParams.set("preview", "");
+
+  // For non-locale-prefixed routes, forward the locale as a query param so the
+  // target page knows which language to fetch.
+  if (locale && !isLocalePrefixedRoute) {
+    redirectUrl.searchParams.set("locale", locale);
+  }
 
   // Forward the environment override when provided so the target page fetches
   // content from the correct Contentful environment.

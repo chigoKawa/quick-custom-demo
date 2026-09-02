@@ -1,0 +1,572 @@
+[
+  {
+    "id": "biltema-fully-synthetic-motor-oil-5w-40-acea-c3-a3-b3-a3-b4-1-litre",
+    "title": "Fully synthetic motor oil 5W-40, ACEA C3, A3/B3, A3/B4, 1 litre",
+    "slug": "fully-synthetic-motor-oil-5w-40-acea-c3-a3-b3-a3-b4-1-litre",
+    "description": "Fully synthetic motor oil 5W-40, ACEA C3, A3/B3, A3/B4, 1 litre from Biltema. Fully synthetic formula for modern petrol and diesel engines. Meets strict ACEA specifications for extended drain intervals and engine protection in Nordic climates.",
+    "price": 99.9,
+    "currency": "SEK",
+    "images": [
+      "https://productimages.biltema.com/v1/Image/product/xlarge/2000051987/1"
+    ],
+    "category": "car-care",
+    "tags": [
+      "biltema",
+      "spring",
+      "DIY",
+      "car-service",
+      "fluids"
+    ],
+    "stock": 75,
+    "rating": 4.0,
+    "reviewCount": 475,
+    "metadata": {
+      "brand": "Biltema",
+      "articleNumber": "34-856",
+      "type": "Fully synthetic motor oil 5W-40",
+      "unit": "L",
+      "volume": "1 litre",
+      "viscosity": "5W-40",
+      "specification": "ACEA C3, A3/B3, A3/B4"
+    }
+  },
+  {
+    "id": "biltema-fully-synthetic-motor-oil-5w-40-acea-c3-a3-b3-a3-b4-4-litre",
+    "title": "Fully synthetic motor oil 5W-40, ACEA C3, A3/B3, A3/B4, 4 litre",
+    "slug": "fully-synthetic-motor-oil-5w-40-acea-c3-a3-b3-a3-b4-4-litre",
+    "description": "Fully synthetic motor oil 5W-40, ACEA C3, A3/B3, A3/B4, 4 litre from Biltema. Fully synthetic formula for modern petrol and diesel engines. Meets strict ACEA specifications for extended drain intervals and engine protection in Nordic climates.",
+    "price": 329.0,
+    "currency": "SEK",
+    "images": [
+      "https://productimages.biltema.com/v1/Image/product/xlarge/2000051988/1"
+    ],
+    "category": "car-care",
+    "tags": [
+      "biltema",
+      "spring",
+      "DIY",
+      "car-service",
+      "fluids"
+    ],
+    "stock": 76,
+    "rating": 4.1,
+    "reviewCount": 396,
+    "metadata": {
+      "brand": "Biltema",
+      "articleNumber": "34-857",
+      "type": "Fully synthetic motor oil 5W-40",
+      "unit": "L",
+      "volume": "4 litre",
+      "viscosity": "5W-40",
+      "specification": "ACEA C3, A3/B3, A3/B4"
+    }
+  },
+  {
+    "id": "biltema-car-shampoo-bio-1-litre",
+    "title": "Car shampoo BIO, 1 litre",
+    "slug": "car-shampoo-bio-1-litre",
+    "description": "Car shampoo BIO, 1 litre — pH-neutral, biodegradable car shampoo from Biltema. Removes road grime and traffic film without stripping wax. Produces rich foam for a streak-free finish.",
+    "price": 49.9,
+    "currency": "SEK",
+    "images": [
+      "https://productimages.biltema.com/v1/Image/product/xlarge/2000037223/1"
+    ],
+    "category": "car-care",
+    "tags": [
+      "biltema",
+      "spring",
+      "DIY",
+      "car-wash"
+    ],
+    "stock": 325,
+    "rating": 4.0,
+    "reviewCount": 305,
+    "metadata": {
+      "brand": "Biltema",
+      "articleNumber": "36-1736",
+      "type": "Car shampoo BIO",
+      "unit": "L",
+      "volume": "1 litre"
+    }
+  },
+  {
+    "id": "biltema-ready-mixed-wiper-fluid-3-5-litre",
+    "title": "Ready-Mixed Wiper Fluid, 3,5 litre",
+    "slug": "ready-mixed-wiper-fluid-3-5-litre",
+    "description": "Ready-Mixed Wiper Fluid, 3,5 litre from Biltema. Ready-to-use windshield washer fluid formulated for Nordic conditions. Cleans insects, road salt and light frost residue without streaking.",
+    "price": 39.9,
+    "currency": "SEK",
+    "images": [
+      "https://productimages.biltema.com/v1/Image/product/xlarge/2000051051/1"
+    ],
+    "category": "car-care",
+    "tags": [
+      "biltema",
+      "spring",
+      "DIY",
+      "car-service"
+    ],
+    "stock": 192,
+    "rating": 4.7,
+    "reviewCount": 52,
+    "metadata": {
+      "brand": "Biltema",
+      "articleNumber": "36-5052",
+      "type": "Ready-Mixed Wiper Fluid",
+      "unit": "L",
+      "volume": "3,5 litre"
+    }
+  },
+  {
+    "id": "biltema-concentrated-wiper-fluid-4-litre",
+    "title": "Concentrated Wiper Fluid, 4 litre",
+    "slug": "concentrated-wiper-fluid-4-litre",
+    "description": "Concentrated Wiper Fluid, 4 litre from Biltema. Concentrated windshield washer fluid — dilute before use for economical seasonal top-ups. Effective cleaning in variable Nordic weather.",
+    "price": 99.9,
+    "currency": "SEK",
+    "images": [
+      "https://productimages.biltema.com/v1/Image/product/xlarge/2000051672/1"
+    ],
+    "category": "car-care",
+    "tags": [
+      "biltema",
+      "spring",
+      "DIY",
+      "car-service"
+    ],
+    "stock": 92,
+    "rating": 4.7,
+    "reviewCount": 372,
+    "metadata": {
+      "brand": "Biltema",
+      "articleNumber": "36-5036",
+      "type": "Concentrated Wiper Fluid",
+      "unit": "L",
+      "volume": "4 litre"
+    }
+  },
+  {
+    "id": "biltema-glycol-g12-g12-long-life-ready-mixed-1-kg",
+    "title": "Glycol (G12/G12+), Long-life, ready-mixed, 1 kg",
+    "slug": "glycol-g12-g12-long-life-ready-mixed-1-kg",
+    "description": "Glycol (G12/G12+), Long-life, ready-mixed, 1 kg from Biltema. Long-life coolant/antifreeze for year-round engine protection. Pre-mixed and ready to pour — protects against freezing and overheating.",
+    "price": 49.9,
+    "currency": "SEK",
+    "images": [
+      "https://productimages.biltema.com/v1/Image/product/xlarge/2000052696/1"
+    ],
+    "category": "car-care",
+    "tags": [
+      "biltema",
+      "spring",
+      "DIY",
+      "car-service"
+    ],
+    "stock": 349,
+    "rating": 4.4,
+    "reviewCount": 389,
+    "metadata": {
+      "brand": "Biltema",
+      "articleNumber": "36-0603",
+      "type": "Glycol (G12/G12+)",
+      "unit": "KG",
+      "weight": "1 kg"
+    }
+  },
+  {
+    "id": "biltema-high-pressure-shampoo-4-litre",
+    "title": "High pressure shampoo, 4 litre",
+    "slug": "high-pressure-shampoo-4-litre",
+    "description": "High pressure shampoo, 4 litre from Biltema. Car shampoo formulated for use with pressure washers. Lifts dirt quickly and rinses clean without residue.",
+    "price": 99.9,
+    "currency": "SEK",
+    "images": [
+      "https://productimages.biltema.com/v1/Image/product/xlarge/2000064245/1"
+    ],
+    "category": "car-care",
+    "tags": [
+      "biltema",
+      "spring",
+      "DIY",
+      "car-wash"
+    ],
+    "stock": 286,
+    "rating": 4.1,
+    "reviewCount": 446,
+    "metadata": {
+      "brand": "Biltema",
+      "articleNumber": "37-1024",
+      "type": "High pressure shampoo",
+      "unit": "L",
+      "volume": "4 litre"
+    }
+  },
+  {
+    "id": "biltema-oil-filters",
+    "title": "Oil filters",
+    "slug": "oil-filters",
+    "description": "Oil filters from Biltema. Replacement oil filter for passenger cars. Essential for routine oil changes — traps contaminants and protects engine components.",
+    "price": 39.9,
+    "currency": "SEK",
+    "images": [
+      "https://productimages.biltema.com/v1/Image/product/xlarge/2000038020/1"
+    ],
+    "category": "car-parts",
+    "tags": [
+      "biltema",
+      "spring",
+      "DIY",
+      "car-service",
+      "workshop",
+      "fluids"
+    ],
+    "stock": 198,
+    "rating": 4.3,
+    "reviewCount": 138,
+    "metadata": {
+      "brand": "Biltema",
+      "articleNumber": "50-178",
+      "type": "Oil filters",
+      "originalPrice": 69.9,
+      "warranty": "1 year",
+      "fitment": "Universal passenger car"
+    }
+  },
+  {
+    "id": "biltema-funnels-set-of-3",
+    "title": "Funnels, set of 3",
+    "slug": "funnels-set-of-3",
+    "description": "Funnels, set of 3 from Biltema. Practical workshop accessory for clean, spill-free fluid changes. Durable construction for garage and driveway use.",
+    "price": 39.9,
+    "currency": "SEK",
+    "images": [
+      "https://productimages.biltema.com/v1/Image/product/xlarge/2000044178/1"
+    ],
+    "category": "car-parts",
+    "tags": [
+      "biltema",
+      "spring",
+      "DIY",
+      "car-service",
+      "workshop"
+    ],
+    "stock": 238,
+    "rating": 4.3,
+    "reviewCount": 178,
+    "metadata": {
+      "brand": "Biltema",
+      "articleNumber": "19-1667",
+      "type": "Funnels"
+    }
+  },
+  {
+    "id": "biltema-paper-funnel",
+    "title": "Paper funnel",
+    "slug": "paper-funnel",
+    "description": "Paper funnel from Biltema. Practical workshop accessory for clean, spill-free fluid changes. Durable construction for garage and driveway use.",
+    "price": 4.0,
+    "currency": "SEK",
+    "images": [
+      "https://productimages.biltema.com/v1/Image/product/xlarge/2000050311/1"
+    ],
+    "category": "car-parts",
+    "tags": [
+      "biltema",
+      "spring",
+      "DIY",
+      "car-service",
+      "workshop"
+    ],
+    "stock": 324,
+    "rating": 4.9,
+    "reviewCount": 544,
+    "metadata": {
+      "brand": "Biltema",
+      "articleNumber": "34-043",
+      "type": "Paper funnel"
+    }
+  },
+  {
+    "id": "biltema-paper-towel-roll-100-meters",
+    "title": "Paper towel roll, 100 meters",
+    "slug": "paper-towel-roll-100-meters",
+    "description": "Paper towel roll, 100 meters from Biltema. Absorbent workshop paper roll for spills, cleaning and general garage use. Perforated for easy tearing.",
+    "price": 24.9,
+    "currency": "SEK",
+    "images": [
+      "https://productimages.biltema.com/v1/Image/product/xlarge/2000033949/1"
+    ],
+    "category": "car-parts",
+    "tags": [
+      "biltema",
+      "spring",
+      "DIY",
+      "car-service",
+      "workshop"
+    ],
+    "stock": 123,
+    "rating": 4.8,
+    "reviewCount": 223,
+    "metadata": {
+      "brand": "Biltema",
+      "articleNumber": "26-667",
+      "type": "Paper towel roll"
+    }
+  },
+  {
+    "id": "biltema-oil-filter-pliers-60-76-mm",
+    "title": "Oil filter pliers, 60-76 mm",
+    "slug": "oil-filter-pliers-60-76-mm",
+    "description": "Oil filter pliers, 60-76 mm from Biltema. Specialist grip tool for removing and fitting spin-on oil filters. Adjustable jaw range covers the most common filter diameters in home garage servicing.",
+    "price": 69.9,
+    "currency": "SEK",
+    "images": [
+      "https://productimages.biltema.com/v1/Image/product/xlarge/2000024002/1"
+    ],
+    "category": "car-parts",
+    "tags": [
+      "biltema",
+      "spring",
+      "DIY",
+      "car-service",
+      "workshop",
+      "fluids"
+    ],
+    "stock": 297,
+    "rating": 4.2,
+    "reviewCount": 57,
+    "metadata": {
+      "brand": "Biltema",
+      "articleNumber": "19-1530",
+      "type": "Oil filter pliers",
+      "fitment": "Universal passenger car"
+    }
+  },
+  {
+    "id": "biltema-kettle-grill-57-cm",
+    "title": "Kettle grill, 57 cm",
+    "slug": "kettle-grill-57-cm",
+    "description": "Kettle grill, 57 cm from Biltema. Classic charcoal kettle grill for backyard barbecues. Ventilated lid and ash catcher for even heat and easy cleanup.",
+    "price": 799.0,
+    "currency": "SEK",
+    "images": [
+      "https://productimages.biltema.com/v1/Image/product/xlarge/2000036032/1"
+    ],
+    "category": "grills",
+    "tags": [
+      "biltema",
+      "summer",
+      "outdoor",
+      "grilling",
+      "leisure"
+    ],
+    "stock": 42,
+    "rating": 4.2,
+    "reviewCount": 487,
+    "metadata": {
+      "brand": "Biltema",
+      "articleNumber": "50-085",
+      "type": "Kettle grill",
+      "size": "57 cm"
+    }
+  },
+  {
+    "id": "biltema-kettle-grill-43-cm",
+    "title": "Kettle grill, 43 cm",
+    "slug": "kettle-grill-43-cm",
+    "description": "Kettle grill, 43 cm from Biltema. Classic charcoal kettle grill for backyard barbecues. Ventilated lid and ash catcher for even heat and easy cleanup.",
+    "price": 299.0,
+    "currency": "SEK",
+    "images": [
+      "https://productimages.biltema.com/v1/Image/product/xlarge/2000018014/1"
+    ],
+    "category": "grills",
+    "tags": [
+      "biltema",
+      "summer",
+      "outdoor",
+      "grilling",
+      "leisure"
+    ],
+    "stock": 71,
+    "rating": 4.6,
+    "reviewCount": 491,
+    "metadata": {
+      "brand": "Biltema",
+      "articleNumber": "26-414",
+      "type": "Kettle grill",
+      "originalPrice": 349.0,
+      "warranty": "1 year",
+      "size": "43 cm"
+    }
+  },
+  {
+    "id": "biltema-kettle-grill-37-cm",
+    "title": "Kettle Grill, 37 cm",
+    "slug": "kettle-grill-37-cm",
+    "description": "Kettle Grill, 37 cm from Biltema. Classic charcoal kettle grill for backyard barbecues. Ventilated lid and ash catcher for even heat and easy cleanup.",
+    "price": 189.0,
+    "currency": "SEK",
+    "images": [
+      "https://productimages.biltema.com/v1/Image/product/xlarge/2000017498/1"
+    ],
+    "category": "grills",
+    "tags": [
+      "biltema",
+      "summer",
+      "outdoor",
+      "grilling",
+      "leisure"
+    ],
+    "stock": 73,
+    "rating": 4.8,
+    "reviewCount": 493,
+    "metadata": {
+      "brand": "Biltema",
+      "articleNumber": "26-413",
+      "type": "Kettle Grill",
+      "warranty": "1 year",
+      "size": "37 cm"
+    }
+  },
+  {
+    "id": "biltema-camping-grill-stainless",
+    "title": "Camping grill stainless",
+    "slug": "camping-grill-stainless",
+    "description": "Camping grill stainless from Biltema. Compact portable grill for camping trips and picnics. Stainless steel construction — folds or packs down for transport.",
+    "price": 369.0,
+    "currency": "SEK",
+    "images": [
+      "https://productimages.biltema.com/v1/Image/product/xlarge/2000018483/1"
+    ],
+    "category": "grills",
+    "tags": [
+      "biltema",
+      "summer",
+      "outdoor",
+      "grilling",
+      "leisure"
+    ],
+    "stock": 58,
+    "rating": 4.3,
+    "reviewCount": 318,
+    "metadata": {
+      "brand": "Biltema",
+      "articleNumber": "26-463",
+      "type": "Camping grill stainless",
+      "warranty": "1 year"
+    }
+  },
+  {
+    "id": "biltema-oil-mat-40-x-50-cm-2-pcs",
+    "title": "Oil Mat, 40 x 50 cm, 2 pcs.",
+    "slug": "oil-mat-40-x-50-cm-2-pcs",
+    "description": "Oil Mat, 40 x 50 cm, 2 pcs. from Biltema. Absorbent mat for catching oil drips under engines, boats or workshop equipment. Disposable and easy to replace.",
+    "price": 64.9,
+    "currency": "SEK",
+    "images": [
+      "https://productimages.biltema.com/v1/Image/product/xlarge/2000018493/1"
+    ],
+    "category": "boat",
+    "tags": [
+      "biltema",
+      "summer",
+      "boating",
+      "marine",
+      "fluids"
+    ],
+    "stock": 154,
+    "rating": 4.9,
+    "reviewCount": 494,
+    "metadata": {
+      "brand": "Biltema",
+      "articleNumber": "36-2571",
+      "type": "Oil Mat",
+      "warranty": "1 year",
+      "size": "40 x 50 cm"
+    }
+  },
+  {
+    "id": "biltema-fender-560-x-125-mm-grey",
+    "title": "Fender, 560 x 125 mm, grey",
+    "slug": "fender-560-x-125-mm-grey",
+    "description": "Fender, 560 x 125 mm, grey from Biltema. Marine fender to protect your boat hull when mooring. Durable PVC construction with rope eyes for secure attachment.",
+    "price": 149.0,
+    "currency": "SEK",
+    "images": [
+      "https://productimages.biltema.com/v1/Image/product/xlarge/2000043666/1"
+    ],
+    "category": "boat",
+    "tags": [
+      "biltema",
+      "summer",
+      "boating",
+      "marine"
+    ],
+    "stock": 150,
+    "rating": 4.5,
+    "reviewCount": 470,
+    "metadata": {
+      "brand": "Biltema",
+      "articleNumber": "30-015",
+      "type": "Fender",
+      "color": "Grey"
+    }
+  },
+  {
+    "id": "biltema-chain-oil-wet-75-ml",
+    "title": "Chain oil WET, 75 ml",
+    "slug": "chain-oil-wet-75-ml",
+    "description": "Chain oil WET, 75 ml from Biltema. Wet-conditions bicycle chain lubricant. Penetrates links to reduce wear, repel moisture and keep your drivetrain running smoothly.",
+    "price": 69.9,
+    "currency": "SEK",
+    "images": [
+      "https://productimages.biltema.com/v1/Image/product/xlarge/2000045260/1"
+    ],
+    "category": "bike-service",
+    "tags": [
+      "biltema",
+      "spring",
+      "cycling",
+      "maintenance",
+      "fluids"
+    ],
+    "stock": 197,
+    "rating": 4.2,
+    "reviewCount": 197,
+    "metadata": {
+      "brand": "Biltema",
+      "articleNumber": "27-0602",
+      "type": "Chain oil WET",
+      "volume": "75 ml"
+    }
+  },
+  {
+    "id": "biltema-garden-hose-3-4-20-m",
+    "title": "Garden Hose 3/4\", 20 m",
+    "slug": "garden-hose-3-4-20-m",
+    "description": "Garden Hose 3/4\", 20 m from Biltema. Reinforced PVC garden hose for watering lawns, beds and patios. Flexible in cold weather with brass-compatible fittings.",
+    "price": 229.0,
+    "currency": "SEK",
+    "images": [
+      "https://productimages.biltema.com/v1/Image/product/xlarge/2000058259/1"
+    ],
+    "category": "garden",
+    "tags": [
+      "biltema",
+      "summer",
+      "outdoor",
+      "garden",
+      "watering"
+    ],
+    "stock": 138,
+    "rating": 4.3,
+    "reviewCount": 158,
+    "metadata": {
+      "brand": "Biltema",
+      "articleNumber": "14-1927",
+      "type": "Garden Hose 3/4\"",
+      "length": "20 m"
+    }
+  }
+]

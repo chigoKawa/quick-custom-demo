@@ -17,7 +17,7 @@ import { getI18nConfig } from "@/i18n-config";
 import type { MicrocopyDataMap } from "@/lib/microcopy";
 import { createMicrocopyHelper } from "@/hooks/use-microcopy";
 import { Skeleton } from "./ui/skeleton";
-import type { Entry } from "contentful";
+import type { Entry, Asset } from "contentful";
 import type { SiteSettingsSkeleton } from "@/lib/site-settings";
 import {
   resolveNavLinkUrl,
@@ -28,9 +28,43 @@ import {
 import { useSiteChromeLocale } from "@/features/site-chrome-locale";
 import { useContentfulInspectorMode, useContentfulLiveUpdates } from "@contentful/live-preview/react";
 import { stripNtFieldsForLivePreview } from "@/lib/contentful-live-preview-shallow";
+import SiteNav, { type NavNode } from "@/components/nav/site-nav";
 
 interface HeaderProps {
   siteSettings: Entry<SiteSettingsSkeleton> | null;
+}
+
+/**
+ * Mobile-menu render for a NavNode. No flyouts on mobile — children are
+ * indented inline (recursive) so editors get the same hierarchy visible.
+ */
+function MobileNavNode({ node, depth }: { node: NavNode; depth: number }) {
+  return (
+    <>
+      <a
+        href={node.href}
+        target={node.openInNewTab ? "_blank" : undefined}
+        rel={node.rel}
+        className={
+          depth === 0
+            ? "text-lg font-medium py-2 border-b border-border/50 hover:text-primary transition-colors"
+            : "text-sm text-muted-foreground py-1 hover:text-primary transition-colors"
+        }
+        style={{ paddingLeft: depth * 16 }}
+        data-contentful-entry-id={node.entryId}
+        data-contentful-field-id="label"
+      >
+        {node.label}
+      </a>
+      {node.children?.map((child, i) => (
+        <MobileNavNode
+          key={`mnav-${depth}-${i}-${child.entryId}`}
+          node={child}
+          depth={depth + 1}
+        />
+      ))}
+    </>
+  );
 }
 
 export function Header({ siteSettings }: HeaderProps) {
@@ -99,33 +133,95 @@ export function Header({ siteSettings }: HeaderProps) {
   );
   const liveNavEntry = useContentfulLiveUpdates(stripNtFieldsForLivePreview(navEntry));
   
-  // Get main navigation links from headerMainNavigation
-  const mainNavLinks = useMemo(() => {
+  // Build a recursive navigation tree from headerMainNavigation.menuItems.
+  // Contentful content types involved:
+  //   - `navLink`          → leaf link (no children)
+  //   - `navigationItem`   → hierarchical item; `subNavigationItems` array
+  //                          may contain further `navigationItem`s
+  //
+  // Depth cap: 3 levels total (top → sub → sub-sub). The desktop flyout
+  // component (`SiteNav`) renders level 3 as an inline stacked list rather
+  // than opening a third popover — the recursion is complete but rendering
+  // stays visually sane.
+  const mainNavTree = useMemo<NavNode[]>(() => {
     if (!liveNavEntry) return [];
-    
+
+    // Recursive walker — reads label / target / children off any item that
+    // looks like a resolved entry. Missing sys.id or fields → treated as
+    // an unresolved link stub and dropped, same defensive filter the footer
+    // now uses.
+    const buildNode = (entry: Entry<any> | null | undefined, depth: number): NavNode | null => {
+      if (!entry?.sys?.id || !entry.fields) return null;
+      // Data depth cap: allow 5 levels of navigationItem so the mega-menu
+      // has enough tree to render up to 4 visible levels (see SiteNav).
+      if (depth > 5) return null;
+
+      const label = getEntryField(entry, "label", "", localePick);
+      if (!label) return null;
+
+      const openInNewTab = getEntryField(entry, "openInNewTab", false, localePick);
+      const rel = getEntryField(entry, "rel", "", localePick);
+      const href = resolveNavLinkUrl(entry, localePick);
+
+      // Optional fields on `navigationItem` — content model was extended
+      // after some entries were created, so both may be absent. `getEntryField`
+      // returns the default when the field key isn't present.
+      const description = getEntryField<string>(entry, "description", "", localePick);
+      const featuredImageAsset = getEntryField<Asset | null>(
+        entry,
+        "featuredImage",
+        null,
+        localePick
+      );
+      const imageUrl = featuredImageAsset ? getAssetUrl(featuredImageAsset, localePick) : null;
+      const imageAlt = featuredImageAsset
+        ? getEntryField<string>(featuredImageAsset as unknown as Entry<any>, "title", "", localePick)
+        : "";
+
+      // navigationItem carries subNavigationItems; navLink doesn't. Reading
+      // via getEntryFieldArray returns [] when absent, so the branch is safe
+      // to run against both content types.
+      const rawChildren = getEntryFieldArray<Entry<any>>(entry, "subNavigationItems", localePick);
+      const children = rawChildren
+        .map((c) => buildNode(c, depth + 1))
+        .filter((c): c is NavNode => c !== null);
+
+      return {
+        label,
+        href,
+        entryId: entry.sys.id,
+        openInNewTab,
+        rel: rel || undefined,
+        description: description || undefined,
+        imageUrl: imageUrl || undefined,
+        imageAlt: imageAlt || label,
+        imageEntryId: featuredImageAsset?.sys?.id,
+        children: children.length > 0 ? children : undefined,
+      };
+    };
+
     const menuItems = getEntryFieldArray<Entry<any>>(liveNavEntry, "menuItems", localePick);
-    
     return menuItems
-      .filter((item) => item?.fields) // Filter out unresolved links
-      .map((item) => {
-        const label = getEntryField(item, "label", "", localePick);
-        const openInNewTab = getEntryField(item, "openInNewTab", false, localePick);
-        const rel = getEntryField(item, "rel", "", localePick);
-        return {
-          label,
-          href: resolveNavLinkUrl(item, localePick),
-          entryId: item.sys?.id,
-          openInNewTab,
-          rel,
-        };
-      });
+      .map((item) => buildNode(item, 1))
+      .filter((n): n is NavNode => n !== null);
   }, [liveNavEntry, localePick]);
+
 
   // Extract site settings fields with safe accessors
   const logoAsset = getEntryField<any>(liveSiteSettings, "logo", null, localePick);
   const logoUrl = logoAsset ? getAssetUrl(logoAsset, localePick) : null;
   const logoAlt = getEntryField(liveSiteSettings, "logoAlt", "Logo", localePick);
   const logoLink = getEntryField(liveSiteSettings, "logoLink", "/", localePick);
+
+  // Feature flag — some demo brands aren't e-commerce, so editors can hide
+  // the cart icon. Defaults to true so pre-existing entries (without the
+  // field) behave exactly as before.
+  const enableCart = getEntryField<boolean>(
+    liveSiteSettings,
+    "enableCart",
+    true,
+    localePick
+  );
 
   // Get top links
   const headerTopLinks = getEntryFieldArray<Entry<any>>(
@@ -165,7 +261,7 @@ export function Header({ siteSettings }: HeaderProps) {
                 const rel = getEntryField(linkEntry, "rel", "", localePick);
                 return (
                   <a
-                    key={linkEntry.sys?.id || idx}
+                    key={`top-${idx}-${linkEntry.sys?.id ?? ""}`}
                     href={href}
                     className="hover:text-foreground transition-colors"
                     target={openInNewTab ? "_blank" : undefined}
@@ -194,19 +290,9 @@ export function Header({ siteSettings }: HeaderProps) {
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="w-80">
-                <nav className="flex flex-col gap-4 mt-8">
-                  {mainNavLinks.map((link) => (
-                    <a
-                      key={link.label}
-                      href={link.href}
-                      className="text-lg font-medium py-2 border-b border-border/50 hover:text-primary transition-colors"
-                      target={link.openInNewTab ? "_blank" : undefined}
-                      rel={link.rel}
-                      data-contentful-entry-id={link.entryId}
-                      data-contentful-field-id="label"
-                    >
-                      {link.label}
-                    </a>
+                <nav className="flex flex-col gap-1 mt-8">
+                  {mainNavTree.map((node, i) => (
+                    <MobileNavNode key={`mnav-${i}-${node.entryId}`} node={node} depth={0} />
                   ))}
                 </nav>
               </SheetContent>
@@ -267,7 +353,7 @@ export function Header({ siteSettings }: HeaderProps) {
                       const href = resolveNavLinkUrl(linkEntry, localePick);
                       const label = getEntryField(linkEntry, "label", "", localePick);
                       return (
-                        <DropdownMenuItem key={linkEntry.sys?.id || idx} asChild>
+                        <DropdownMenuItem key={`acct-${idx}-${linkEntry.sys?.id ?? ""}`} asChild>
                           <a
                             href={href}
                             data-contentful-entry-id={linkEntry.sys?.id}
@@ -288,16 +374,20 @@ export function Header({ siteSettings }: HeaderProps) {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <Button variant="ghost" size="icon" className="hidden sm:flex">
-                <Heart className="h-5 w-5" />
-              </Button>
+              {enableCart && (
+                <Button variant="ghost" size="icon" className="hidden sm:flex">
+                  <Heart className="h-5 w-5" />
+                </Button>
+              )}
 
-              <Button variant="ghost" size="icon" className="relative">
-                <ShoppingBag className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-accent text-[10px] font-medium flex items-center justify-center text-accent-foreground">
-                  2
-                </span>
-              </Button>
+              {enableCart && (
+                <Button variant="ghost" size="icon" className="relative">
+                  <ShoppingBag className="h-5 w-5" />
+                  <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-accent text-[10px] font-medium flex items-center justify-center text-accent-foreground">
+                    2
+                  </span>
+                </Button>
+              )}
             </div>
           </div>
 
@@ -320,24 +410,12 @@ export function Header({ siteSettings }: HeaderProps) {
       {/* Navigation */}
       <nav className="hidden md:block border-b border-border/50 ">
         <div className="containerx max-w-7xl mx-auto px-4">
-          <div className="flex items-center gap-8 py-3">
-            {mainNavLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="text-sm font-medium hover:text-primary transition-colors"
-                target={link.openInNewTab ? "_blank" : undefined}
-                rel={link.rel}
-                data-contentful-entry-id={link.entryId}
-                data-contentful-field-id="label"
-              >
-                {link.label}
-              </a>
-            ))}
+          <div className="flex items-center gap-4 py-3">
+            <SiteNav items={mainNavTree} />
             {headerPromoLink && (
               <a
                 href={resolveNavLinkUrl(headerPromoLink, localePick)}
-                className="text-sm font-medium text-accent hover:text-accent/80 transition-colors"
+                className="ml-4 text-sm font-medium text-accent hover:text-accent/80 transition-colors"
                 data-contentful-entry-id={headerPromoLink.sys?.id}
                 data-contentful-field-id="label"
               >

@@ -77,17 +77,6 @@
     }
   },
   {
-    "code": "nl",
-    "name": "Dutch",
-    "default": false,
-    "fallbackCode": "en-US",
-    "sys": {
-      "id": "033jWRybXGx2GNF2KjYA4y",
-      "type": "Locale",
-      "version": 1
-    }
-  },
-  {
     "code": "en-US",
     "name": "English (United States)",
     "default": true,

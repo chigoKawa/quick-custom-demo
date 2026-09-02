@@ -131,7 +131,10 @@ const Footer = ({ siteSettings }: FooterProps) => {
                 const IconComponent = iconName ? iconComponents[iconName] : Truck;
 
                 return (
-                  <div key={featureEntry.sys?.id || idx} className="flex items-center gap-3">
+                  <div
+                    key={`feat-${idx}-${featureEntry.sys?.id ?? ""}`}
+                    className="flex items-center gap-3"
+                  >
                     <div className="w-10 h-10 rounded-full bg-surface-inverse-foreground/10 flex items-center justify-center flex-shrink-0">
                       {IconComponent && <IconComponent className="h-4 w-4" />}
                     </div>
@@ -204,7 +207,7 @@ const Footer = ({ siteSettings }: FooterProps) => {
 
                   return (
                     <a
-                      key={linkEntry.sys?.id || idx}
+                      key={`social-${idx}-${linkEntry.sys?.id ?? ""}`}
                       href={href}
                       target={openInNewTab ? "_blank" : undefined}
                       rel={rel || (openInNewTab ? "noopener noreferrer" : undefined)}
@@ -223,10 +226,23 @@ const Footer = ({ siteSettings }: FooterProps) => {
           {/* Footer link columns */}
           {footerLinkColumns.map((columnEntry, idx) => {
             const title = getEntryField(columnEntry, "title", "", localePick);
-            const links = getEntryFieldArray<Entry<any>>(columnEntry, "links", localePick);
+            // Filter to items that look like resolved Entry references. When
+            // Contentful can't resolve a link at the fetched include depth
+            // (or a live-preview payload drops in bogus stubs), the array
+            // occasionally contains items whose sys points at the Space
+            // instead of an Entry — those collapse to duplicate keys.
+            const links = getEntryFieldArray<Entry<any>>(
+              columnEntry,
+              "links",
+              localePick
+            ).filter(
+              (l) =>
+                l?.sys?.id &&
+                (l?.sys?.type === "Entry" || l?.sys?.contentType || l?.fields)
+            );
 
             return (
-              <div key={columnEntry.sys?.id || idx}>
+              <div key={`col-${columnEntry.sys?.id ?? "x"}-${idx}`}>
                 <h4
                   className="font-medium mb-4"
                   data-contentful-entry-id={columnEntry.sys?.id}
@@ -246,8 +262,10 @@ const Footer = ({ siteSettings }: FooterProps) => {
                     const rel = getEntryField(linkEntry, "rel", "", localePick);
                     const href = resolveNavLinkUrl(linkEntry, localePick);
 
+                    // Positional key guarantees uniqueness regardless of the
+                    // sys.id shape we get back.
                     return (
-                      <li key={linkEntry.sys?.id || linkIdx}>
+                      <li key={`link-${idx}-${linkIdx}-${linkEntry.sys?.id ?? ""}`}>
                         <a
                           href={href}
                           target={openInNewTab ? "_blank" : undefined}
@@ -297,7 +315,7 @@ const Footer = ({ siteSettings }: FooterProps) => {
 
                   return (
                     <div
-                      key={paymentEntry.sys?.id || idx}
+                      key={`pay-${idx}-${paymentEntry.sys?.id ?? ""}`}
                       className="h-6 opacity-60"
                       data-contentful-entry-id={paymentEntry.sys?.id}
                       data-contentful-field-id="label"

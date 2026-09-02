@@ -14,7 +14,12 @@ import {
 } from "@/features/personalization/preview-loader";
 import { isPreviewEnabled } from "@/lib/utils";
 
-type Props = { children: ReactNode };
+type Props = {
+  children: ReactNode;
+  /** Skip the inner ContentfulLivePreviewProvider — useful when a child route
+   *  mounts its own (e.g. the mock app uses a locale-aware variant). */
+  skipLivePreviewWrapper?: boolean;
+};
 
 // Ninetailed localStorage key for profile data
 const NT_STORAGE_KEY = "ninetailed_profile";
@@ -122,7 +127,7 @@ function PageEventOnMount() {
   return null;
 }
 
-export default function AppProviders({ children }: Props) {
+export default function AppProviders({ children, skipLivePreviewWrapper = false }: Props) {
   const [experiences, setExperiences] = useState<unknown[]>([]);
   const [audiences, setAudiences] = useState<unknown[]>([]);
   const [previewLoading, setPreviewLoading] = useState(true); // Start true to block until we know preview status
@@ -334,13 +339,23 @@ export default function AppProviders({ children }: Props) {
         }
       }}
     >
-      <LivePreviewProviderWrapper locale={outerLocale} isPreviewEnabled={previewEnabled}>
-        <Suspense fallback={null}>
-          <ProfileErrorRecovery onReset={handleProfileReset} />
-          <PageEventOnMount />
-        </Suspense>
-        {children}
-      </LivePreviewProviderWrapper>
+      {skipLivePreviewWrapper ? (
+        <>
+          <Suspense fallback={null}>
+            <ProfileErrorRecovery onReset={handleProfileReset} />
+            <PageEventOnMount />
+          </Suspense>
+          {children}
+        </>
+      ) : (
+        <LivePreviewProviderWrapper locale={outerLocale} isPreviewEnabled={previewEnabled}>
+          <Suspense fallback={null}>
+            <ProfileErrorRecovery onReset={handleProfileReset} />
+            <PageEventOnMount />
+          </Suspense>
+          {children}
+        </LivePreviewProviderWrapper>
+      )}
     </NinetailedProvider>
   );
 }

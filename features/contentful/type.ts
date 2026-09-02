@@ -131,6 +131,10 @@ export interface IHeroModule extends Entry {
     internalTitle: EntryFields.Symbol;
     headline?: EntryFields.Symbol;
     subCopy?: EntryFields.Text;
+    /** Optional reference to a shared generalTopic. When set, its title/body
+     *  override headline/subCopy. Enables a single piece of content to drive
+     *  web hero + mobile app hero from one entry. */
+    topic?: IGeneralTopic;
     image?: EntryFields.EntryLink<ImageWithFocalPointSkeleton>;
     /** Managed by the Content Anchor app. Replaces imagePlacement. */
     textAnchor?: EntryFields.Object<TextAnchorValue>;
@@ -188,6 +192,7 @@ export interface ILandingPage extends Entry {
         | FormEmbedSkeleton
         | CalloutSkeleton
         | KbGroupSkeleton
+        | FaqModuleSkeleton
         | MultiItemModuleSkeleton
         | PropertyListingsSkeleton
         | InteractiveMapSkeleton
@@ -432,6 +437,47 @@ export type FormEmbedSkeleton = {
   fields: IFormEmbed["fields"];
 };
 
+// -----------------------------
+// FAQ content types
+// -----------------------------
+
+export interface IFaqItem extends Entry {
+  fields: {
+    internalName: EntryFields.Symbol;
+    question: EntryFields.Symbol;
+    answer: EntryFields.RichText;
+    /** Optional grouping label, e.g. "Shipping" — used to group items in the list layout. */
+    category?: EntryFields.Symbol;
+    actionButton?: IBaseButton;
+  };
+}
+
+export type FaqItemSkeleton = {
+  contentTypeId: "faqItem";
+  fields: IFaqItem["fields"];
+};
+
+export interface IFaqModule extends Entry {
+  fields: {
+    internalName: EntryFields.Symbol;
+    title?: EntryFields.Symbol;
+    subtitle?: EntryFields.Symbol;
+    items: EntryFields.Array<EntryFields.EntryLink<FaqItemSkeleton>>;
+    layout: EntryFields.Symbol<"accordion" | "two-column" | "list">;
+    /** Accordion only — when false, opening one item closes the others. */
+    allowMultipleOpen?: EntryFields.Boolean;
+    /** Emit a JSON-LD FAQPage script alongside the rendered section. */
+    enableStructuredData?: EntryFields.Boolean;
+    actionButton?: IBaseButton;
+    nt_experiences?: Entry<EntrySkeletonType>[];
+  };
+}
+
+export type FaqModuleSkeleton = {
+  contentTypeId: "faqModule";
+  fields: IFaqModule["fields"];
+};
+
 export interface IKbGroup extends Entry {
   fields: {
     name: EntryFields.Symbol;
@@ -466,7 +512,7 @@ export interface IMultiItemModule extends Entry {
     subtitle?: EntryFields.Symbol;
     items: EntryFields.Array<
       EntryFields.EntryLink<
-        HeroModuleSkeleton | BlogPostPageSkeleton | LandingPageSkeleton | LogoSkeleton | CampaignSkeleton | CalloutSkeleton | CtaSkeleton
+        HeroModuleSkeleton | BlogPostPageSkeleton | LandingPageSkeleton | LogoSkeleton | CampaignSkeleton | CalloutSkeleton | CtaSkeleton | GeneralTopicSkeleton
       >
     >;
     layout: EntryFields.Symbol<"carousel" | "grid" | "strip" | "list" | "value-prop">;
@@ -524,6 +570,7 @@ export interface IProductStory extends Entry {
         | ShelfModuleSkeleton
         | ProductCatalogSkeleton
         | FormEmbedSkeleton
+        | FaqModuleSkeleton
         | MultiItemModuleSkeleton
       >
     >;
@@ -535,6 +582,7 @@ export interface IProductStory extends Entry {
         | ProductCatalogSkeleton
         | FormEmbedSkeleton
         | KbGroupSkeleton
+        | FaqModuleSkeleton
         | MultiItemModuleSkeleton
       >
     >;
@@ -934,6 +982,157 @@ export interface IPersonalizedSection extends Entry<any> {
 export type PersonalizedSectionSkeleton = {
   contentTypeId: "personalizedSection";
   fields: IPersonalizedSection["fields"];
+};
+
+// -----------------------------
+// Mobile app content model
+// -----------------------------
+
+export type AppWidgetType =
+  | "latestTransactions"
+  | "accountSummary"
+  | "spendingByCategory"
+  | "exchangeRates"
+  | "savingsGoal"
+  | "cashbackProgress"
+  | "rateComparison"
+  | "cardControls"
+  | "investmentSnapshot"
+  | "billsDue";
+
+export type AppModuleType =
+  | "heroCard"
+  | "promoBanner"
+  | "quickActions"
+  | "featureTiles"
+  | "articleList"
+  | "faq"
+  | "supportCTA"
+  | "banner"
+  | "widget"
+  | "notificationList";
+
+export interface IAppWidget extends Entry<any> {
+  fields: {
+    internalName: EntryFields.Symbol;
+    widgetType: EntryFields.Symbol<AppWidgetType>;
+    title?: EntryFields.Symbol;
+    emptyStateCopy?: EntryFields.Text;
+    microcopySet?: EntryFields.Array<IMicrocopy>;
+    config?: EntryFields.Object<JsonObject>;
+    dataSource?: EntryFields.Symbol<"mock" | "api">;
+  };
+}
+
+export type AppWidgetSkeleton = {
+  contentTypeId: "appWidget";
+  fields: IAppWidget["fields"];
+};
+
+export interface IAppModule extends Entry<any> {
+  fields: {
+    internalName: EntryFields.Symbol;
+    moduleType: EntryFields.Symbol<AppModuleType>;
+    topic?: IGeneralTopic;
+    topics?: EntryFields.Array<IGeneralTopic>;
+    articles?: Entry<EntrySkeletonType>[];
+    kbCategories?: Entry<EntrySkeletonType>[];
+    buttons?: EntryFields.Array<IBaseButton>;
+    widget?: IAppWidget;
+    notifications?: Entry<EntrySkeletonType>[];
+    variant?: EntryFields.Symbol<"default" | "emphasized" | "compact">;
+    emphasis?: EntryFields.Symbol<
+      "none" | "accent" | "brand" | "danger" | "success" | "warning"
+    >;
+    imageStyle?: EntryFields.Symbol<"square" | "wide" | "round" | "none">;
+    ctaStyle?: EntryFields.Symbol<"primary" | "secondary" | "ghost" | "link">;
+    icon?: EntryFields.Symbol;
+    microcopySet?: EntryFields.Array<IMicrocopy>;
+    nt_experiences?: Entry<EntrySkeletonType>[];
+  };
+}
+
+export type AppModuleSkeleton = {
+  contentTypeId: "appModule";
+  fields: IAppModule["fields"];
+};
+
+export interface IAppNavItem extends Entry<any> {
+  fields: {
+    internalName: EntryFields.Symbol;
+    labelMicrocopy?: IMicrocopy;
+    fallbackLabel: EntryFields.Symbol;
+    icon?: EntryFields.Symbol;
+    screen?: IAppScreen;
+    order?: EntryFields.Integer;
+  };
+}
+
+export type AppNavItemSkeleton = {
+  contentTypeId: "appNavItem";
+  fields: IAppNavItem["fields"];
+};
+
+export interface IAppNavigation extends Entry<any> {
+  fields: {
+    internalName: EntryFields.Symbol;
+    items?: EntryFields.Array<IAppNavItem>;
+  };
+}
+
+export type AppNavigationSkeleton = {
+  contentTypeId: "appNavigation";
+  fields: IAppNavigation["fields"];
+};
+
+export interface IAppScreen extends Entry<any> {
+  fields: {
+    internalName: EntryFields.Symbol;
+    screenKey: EntryFields.Symbol;
+    title?: EntryFields.Symbol;
+    platform?: EntryFields.Symbol<"both" | "ios" | "android">;
+    modules?: EntryFields.Array<IAppModule>;
+    flags?: EntryFields.Array<IAppFlag>;
+    navigation?: IAppNavigation;
+    nt_experiences?: Entry<EntrySkeletonType>[];
+    minAppVersion?: EntryFields.Symbol;
+  };
+}
+
+export type AppScreenSkeleton = {
+  contentTypeId: "appScreen";
+  fields: IAppScreen["fields"];
+};
+
+export type AppFlagSeverity = "info" | "success" | "warning" | "error" | "promo";
+
+export interface IAppFlag extends Entry<any> {
+  fields: {
+    internalName: EntryFields.Symbol;
+    /** UPPER_SNAKE identifier the code can branch on (e.g. MAINTENANCE_2026_06). */
+    code: EntryFields.Symbol;
+    /** Ninetailed Custom Variable Flag key. The mock app calls
+     *  `useFlag(flagKey, defaultValue)` and renders the bar when the
+     *  resolved value is truthy. In Ninetailed: create an Experience →
+     *  Custom Flag (Boolean) → enter this key → set baseline=false and
+     *  variants=true for the target audiences. */
+    flagKey: EntryFields.Symbol;
+    /** Fallback value used while Ninetailed is loading or the flag is
+     *  not defined. Typically `false` (hide the bar). */
+    defaultValue?: EntryFields.Boolean;
+    severity: EntryFields.Symbol<AppFlagSeverity>;
+    title: EntryFields.Symbol;
+    body?: EntryFields.Text;
+    dismissable?: EntryFields.Boolean;
+    validFrom?: EntryFields.Date;
+    validTo?: EntryFields.Date;
+    button?: IBaseButton;
+  };
+}
+
+export type AppFlagSkeleton = {
+  contentTypeId: "appFlag";
+  fields: IAppFlag["fields"];
 };
 
 // -----------------------------

@@ -1,0 +1,14 @@
+{
+  "name": "Custom Flag Manager",
+  "src": "app/ctf-apps/custom-flag-manager/page.tsx",
+  "locations": [
+    {
+      "location": "app-config",
+      "src": "app/ctf-apps/custom-flag-manager/locations/config-screen.tsx"
+    },
+    {
+      "location": "page",
+      "src": "app/ctf-apps/custom-flag-manager/locations/flag-registry-page.tsx"
+    }
+  ]
+}

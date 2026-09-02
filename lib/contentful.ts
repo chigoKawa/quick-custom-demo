@@ -3,18 +3,25 @@ import type { EntryCollection, EntrySkeletonType, Entry, CreateClientParams } fr
 import { parseTimelinePreviewToken } from "@contentful/timeline-preview";
 import { toJsonSafe } from "./json-safe";
 
+/**
+ * The configured Contentful environment. Never hardcode an environment name —
+ * import this (or pass an explicit request-scoped override) so the same code
+ * can be pointed at any demo environment via `NEXT_PUBLIC_CTF_ENVIRONMENT`.
+ */
+export const DEFAULT_CTF_ENVIRONMENT =
+  process.env.NEXT_PUBLIC_CTF_ENVIRONMENT || "master";
+
 const client = createClient({
   space: process.env.NEXT_PUBLIC_CTF_SPACE_ID!,
   accessToken: process.env.NEXT_PUBLIC_CTF_DELIVERY_TOKEN!,
-    environment: process.env.NEXT_PUBLIC_CTF_ENVIRONMENT || "master",
-
+  environment: DEFAULT_CTF_ENVIRONMENT,
 });
 
 const previewClient = createClient({
   space: process.env.NEXT_PUBLIC_CTF_SPACE_ID!,
   accessToken: process.env.NEXT_PUBLIC_CTF_PREVIEW_TOKEN!,
   host: "preview.contentful.com",
-  environment: process.env.NEXT_PUBLIC_CTF_ENVIRONMENT || "master",
+  environment: DEFAULT_CTF_ENVIRONMENT,
 });
 
 const deliveryClientByEnv = new Map<string, ReturnType<typeof createClient>>();
@@ -41,10 +48,7 @@ function getPreviewClient(
   timelineToken?: string | null,
   environmentId?: string | null
 ): ReturnType<typeof createClient> {
-  const environment =
-    environmentId ||
-    process.env.NEXT_PUBLIC_CTF_ENVIRONMENT ||
-    "master";
+  const environment = environmentId || DEFAULT_CTF_ENVIRONMENT;
 
   // If only the environment differs (no timeline), use the per-env cache.
   if (!timelineToken) {
@@ -194,7 +198,8 @@ export const getEntriesInEnvironment = async <T extends EntrySkeletonType>(
   params: {
     options: unknown;
     isPreviewEnabled?: boolean;
-    environment: string;
+    /** Optional override; defaults to the configured environment. */
+    environment?: string;
   }
 ): Promise<Entry<T>[]> => {
   try {
@@ -213,7 +218,7 @@ export const getEntriesInEnvironment = async <T extends EntrySkeletonType>(
     }
 
     const clientInstance = getClientForEnvironment({
-      environment: params.environment,
+      environment: params.environment || DEFAULT_CTF_ENVIRONMENT,
       preview: Boolean(params.isPreviewEnabled),
     });
 

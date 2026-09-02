@@ -1,0 +1,906 @@
+[
+  {
+    "id": "gmg-no-mans-sky",
+    "title": "No Man's Sky",
+    "slug": "no-mans-sky",
+    "description": "No Man's Sky on PC, Steam Deck Verified via Steam. A action, adventure title published by Hello Games. Released 12 August 2016. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 11.2,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/cb4b97ae1abb42d7b891f0f09e0c77a0/965e8f41178543528b5e43d7eaf218f2.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "adventure",
+      "no-man-s-sky",
+      "sale",
+      "bestseller"
+    ],
+    "stock": 1924,
+    "rating": 9.3,
+    "reviewCount": 7074,
+    "metadata": {
+      "brand": "Hello Games",
+      "articleNumber": "GMG-13872",
+      "type": "PC Game",
+      "platform": "PC, Steam Deck Verified",
+      "drm": "Steam",
+      "franchise": "No Man's Sky",
+      "releaseDate": "12 August 2016",
+      "steamAppId": "275850",
+      "originalPrice": 27.99
+    }
+  },
+  {
+    "id": "gmg-metal-gear-solid-master-collection-vol-2",
+    "title": "METAL GEAR SOLID: MASTER COLLECTION Vol.2",
+    "slug": "metal-gear-solid-master-collection-vol-2",
+    "description": "METAL GEAR SOLID: MASTER COLLECTION Vol.2 on PC via Steam. Part of the Metal Gear series. A action, adventure title published by Konami Digital Entertainment. Released 27 August 2026. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 38.49,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/a0e9217991f34de2b9d1c2d7d46cbece/04c3ddfd771246efba10c59bd845e8c3.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "adventure",
+      "metal-gear",
+      "sale",
+      "bestseller"
+    ],
+    "stock": 368,
+    "rating": 8.5,
+    "reviewCount": 6618,
+    "metadata": {
+      "brand": "Konami Digital Entertainment",
+      "articleNumber": "GMG-57777",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Steam",
+      "franchise": "Metal Gear",
+      "releaseDate": "27 August 2026",
+      "steamAppId": "3859630",
+      "originalPrice": 49.99
+    }
+  },
+  {
+    "id": "gmg-the-blood-of-dawnwalker",
+    "title": "The Blood of Dawnwalker",
+    "slug": "the-blood-of-dawnwalker",
+    "description": "The Blood of Dawnwalker on PC via Steam. A action, adventure, rpg title published by BANDAI NAMCO Entertainment. Released 03 September 2026. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 59.49,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/2c065d3206f049d2928894e929fe85a7/b696dd84fc814ec388903f90954bd127.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "adventure",
+      "the-blood-of-dawnwalker",
+      "sale",
+      "bestseller"
+    ],
+    "stock": 940,
+    "rating": 9.3,
+    "reviewCount": 6890,
+    "metadata": {
+      "brand": "BANDAI NAMCO Entertainment",
+      "articleNumber": "GMG-55288",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Steam",
+      "franchise": "The Blood of Dawnwalker",
+      "releaseDate": "03 September 2026",
+      "steamAppId": "3751260",
+      "originalPrice": 69.99
+    }
+  },
+  {
+    "id": "gmg-onimusha-way-of-the-sword",
+    "title": "Onimusha: Way of the Sword",
+    "slug": "onimusha-way-of-the-sword",
+    "description": "Onimusha: Way of the Sword on PC via Steam. A action, rpg, adventure title published by Capcom. Released 04 September 2026. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 52.99,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/0646aacce06844139c5414b742b16edf/bc9da7245a5c4f6fb67ad3a57901ddd6.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "rpg",
+      "onimusha-way-of-the-sword",
+      "bestseller"
+    ],
+    "stock": 634,
+    "rating": 8.7,
+    "reviewCount": 5984,
+    "metadata": {
+      "brand": "Capcom",
+      "articleNumber": "GMG-54853",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Steam",
+      "franchise": "Onimusha: Way of the Sword",
+      "releaseDate": "04 September 2026",
+      "steamAppId": "2638890"
+    }
+  },
+  {
+    "id": "gmg-no-more-room-in-hell-2",
+    "title": "No More Room in Hell 2",
+    "slug": "no-more-room-in-hell-2",
+    "description": "No More Room in Hell 2 on PC via Steam. Part of the No More Room in Hell series. A action, indie title published by Torn Banner Studios. Released 11 August 2026. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 9.42,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/945141b02b3d464c87a326cfe0ddeb0b/63280c70a52a4b03b9cdc45dfbf2b5a8.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "indie",
+      "no-more-room-in-hell",
+      "sale",
+      "new-release"
+    ],
+    "stock": 1444,
+    "rating": 9.3,
+    "reviewCount": 794,
+    "metadata": {
+      "brand": "Torn Banner Studios",
+      "articleNumber": "GMG-52033",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Steam",
+      "franchise": "No More Room in Hell",
+      "releaseDate": "11 August 2026",
+      "steamAppId": "292000",
+      "originalPrice": 14.49
+    }
+  },
+  {
+    "id": "gmg-final-fantasy-resonance",
+    "title": "FINAL FANTASY RESONANCE",
+    "slug": "final-fantasy-resonance",
+    "description": "FINAL FANTASY RESONANCE on PC via Steam. Part of the Final Fantasy series. A rpg title published by Square Enix. Released 22 October 2026. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 49.99,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/9a0a8a2336ed4973a8dc345e5033f886/48d148be2e7942cd98ec584052b48383.jpg"
+    ],
+    "category": "rpg",
+    "tags": [
+      "rpg",
+      "final-fantasy"
+    ],
+    "stock": 1683,
+    "rating": 8.6,
+    "reviewCount": 3683,
+    "metadata": {
+      "brand": "Square Enix",
+      "articleNumber": "GMG-58791",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Steam",
+      "franchise": "Final Fantasy",
+      "releaseDate": "22 October 2026",
+      "steamAppId": "3259780"
+    }
+  },
+  {
+    "id": "gmg-silent-hill-townfall",
+    "title": "SILENT HILL: Townfall",
+    "slug": "silent-hill-townfall",
+    "description": "SILENT HILL: Townfall on PC via Steam. Part of the Silent Hill series. A action, adventure title published by Konami Digital Entertainment. Released 24 September 2026. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 37.49,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/f02da1a782d043bc8d5e6bbe48d0ca0b/d3af2207195243ddbf562800ca8e29d3.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "adventure",
+      "silent-hill",
+      "sale"
+    ],
+    "stock": 1580,
+    "rating": 9.1,
+    "reviewCount": 2180,
+    "metadata": {
+      "brand": "Konami Digital Entertainment",
+      "articleNumber": "GMG-58947",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Steam",
+      "franchise": "Silent Hill",
+      "releaseDate": "24 September 2026",
+      "steamAppId": "1636440",
+      "originalPrice": 49.99
+    }
+  },
+  {
+    "id": "gmg-persona-4-revival",
+    "title": "Persona 4 Revival",
+    "slug": "persona-4-revival",
+    "description": "Persona 4 Revival on PC via Steam. Part of the Persona 4 series. A adventure, rpg title published by SEGA. Released 18 February 2027. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 60.89,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/841c0c6077974c888aedab7f7c27dd48/7b56f186e67b4d2eb27cd43a3840bdd3.jpg"
+    ],
+    "category": "adventure",
+    "tags": [
+      "adventure",
+      "rpg",
+      "persona-4",
+      "sale"
+    ],
+    "stock": 1079,
+    "rating": 8.8,
+    "reviewCount": 2429,
+    "metadata": {
+      "brand": "SEGA",
+      "articleNumber": "GMG-58773",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Steam",
+      "franchise": "Persona 4",
+      "releaseDate": "18 February 2027",
+      "steamAppId": "2963950",
+      "originalPrice": 69.99
+    }
+  },
+  {
+    "id": "gmg-castlevania-belmonts-curse",
+    "title": "Castlevania: Belmont\u2019s Curse",
+    "slug": "castlevania-belmonts-curse",
+    "description": "Castlevania: Belmont\u2019s Curse on PC via Steam. Part of the Castlevania series. A action, rpg title published by Konami Digital Entertainment. Released 15 October 2026. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 22.49,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/33c8281f256a4d068407f72c4e9ca0b1/dbe22bb1d7fd431eb10c9dc35a82306e.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "rpg",
+      "castlevania",
+      "sale",
+      "bestseller"
+    ],
+    "stock": 1522,
+    "rating": 9.3,
+    "reviewCount": 6622,
+    "metadata": {
+      "brand": "Konami Digital Entertainment",
+      "articleNumber": "GMG-58870",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Steam",
+      "franchise": "Castlevania",
+      "releaseDate": "15 October 2026",
+      "steamAppId": "4231820",
+      "originalPrice": 29.99
+    }
+  },
+  {
+    "id": "gmg-warhammer-40000-dawn-of-war-iv",
+    "title": "Warhammer 40,000: Dawn of War IV",
+    "slug": "warhammer-40000-dawn-of-war-iv",
+    "description": "Warhammer 40,000: Dawn of War IV on PC via Steam. A action, strategy title published by Deep Silver. Released 03 December 2026. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 53.99,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/a61a4fece1ce4e6fbd5bc372b444c6c6/466c9fc4e80f48f5a2d052ce702878e7.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "strategy",
+      "warhammer-40-000-dawn-of-war-iv",
+      "sale",
+      "bestseller"
+    ],
+    "stock": 1301,
+    "rating": 9.4,
+    "reviewCount": 7551,
+    "metadata": {
+      "brand": "Deep Silver",
+      "articleNumber": "GMG-58457",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Steam",
+      "franchise": "Warhammer 40,000: Dawn of War IV",
+      "releaseDate": "03 December 2026",
+      "steamAppId": "2272360",
+      "originalPrice": 59.99
+    }
+  },
+  {
+    "id": "gmg-stalker-2-cost-of-hope",
+    "title": "S.T.A.L.K.E.R. 2: Cost of Hope",
+    "slug": "stalker-2-cost-of-hope",
+    "description": "S.T.A.L.K.E.R. 2: Cost of Hope on PC via Steam. Part of the S.T.A.L.K.E.R. series. A action, rpg, adventure title published by GSC Game World. Released 20 August 2026. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 21.99,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/be0fbbbf6ba34be9ab70ba45e7fd45d2/9a2fa6356e6c4966a122b0a51bdcaadf.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "rpg",
+      "s-t-a-l-k-e-r"
+    ],
+    "stock": 363,
+    "rating": 9.2,
+    "reviewCount": 913,
+    "metadata": {
+      "brand": "GSC Game World",
+      "articleNumber": "GMG-57919",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Steam",
+      "franchise": "S.T.A.L.K.E.R.",
+      "releaseDate": "20 August 2026",
+      "steamAppId": "3765020"
+    }
+  },
+  {
+    "id": "gmg-phantom-blade-zero",
+    "title": "Phantom Blade Zero",
+    "slug": "phantom-blade-zero",
+    "description": "Phantom Blade Zero on PC via Steam. A action, rpg title published by S GAME Publishing. Released 29 October 2026. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 59.99,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/c1ee4eb7ea0849cb8a143416557bbbf9/61417608964b4a429bd759f1f7650cc5.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "rpg",
+      "phantom-blade-zero"
+    ],
+    "stock": 414,
+    "rating": 8.9,
+    "reviewCount": 1914,
+    "metadata": {
+      "brand": "S GAME Publishing",
+      "articleNumber": "GMG-59579",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Steam",
+      "franchise": "Phantom Blade Zero",
+      "releaseDate": "29 October 2026",
+      "steamAppId": "4115450"
+    }
+  },
+  {
+    "id": "gmg-hell-let-loose-vietnam",
+    "title": "Hell Let Loose: Vietnam",
+    "slug": "hell-let-loose-vietnam",
+    "description": "Hell Let Loose: Vietnam on PC via Steam. Part of the Hell Let Loose series. A action, massively multiplayer, simulation title published by Team 17. Released 13 August 2026. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 20.99,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/77fde7a7ad12466184923e2048397e10/ab6868f21b474ae680be59284d69b92d.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "massively multiplayer",
+      "hell-let-loose"
+    ],
+    "stock": 227,
+    "rating": 8.8,
+    "reviewCount": 3877,
+    "metadata": {
+      "brand": "Team 17",
+      "articleNumber": "GMG-56698",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Steam",
+      "franchise": "Hell Let Loose",
+      "releaseDate": "13 August 2026",
+      "steamAppId": "3079210"
+    }
+  },
+  {
+    "id": "gmg-marvel-tokon-fighting-souls",
+    "title": "MARVEL T\u014dkon: Fighting Souls",
+    "slug": "marvel-tokon-fighting-souls",
+    "description": "MARVEL T\u014dkon: Fighting Souls on PC via Steam. A action, casual title published by Playstation Publishing LLC. Released 06 August 2026. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 53.99,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/a82eb5e167604378a548dbc62bea8915/9a497f98065b491f8c74b9acccd0e2d4.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "casual",
+      "marvel-t-kon-fighting-souls",
+      "sale"
+    ],
+    "stock": 395,
+    "rating": 8.8,
+    "reviewCount": 3545,
+    "metadata": {
+      "brand": "Playstation Publishing LLC",
+      "articleNumber": "GMG-55578",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Steam",
+      "franchise": "MARVEL T\u014dkon: Fighting Souls",
+      "releaseDate": "06 August 2026",
+      "steamAppId": "3787240",
+      "originalPrice": 59.99
+    }
+  },
+  {
+    "id": "gmg-tomb-raider-legend",
+    "title": "Tomb Raider: Legend",
+    "slug": "tomb-raider-legend",
+    "description": "Tomb Raider: Legend on PC via Steam. Part of the Tomb Raider series. A action, adventure title published by Crystal Dynamics. Released 07 April 2006. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 0.56,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/bf896932338d43bd862b297981a65f37/e6ad9507feea440b9ad2db85f4b152fc.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "adventure",
+      "tomb-raider",
+      "sale"
+    ],
+    "stock": 1299,
+    "rating": 9.2,
+    "reviewCount": 3549,
+    "metadata": {
+      "brand": "Crystal Dynamics",
+      "articleNumber": "GMG-983",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Steam",
+      "franchise": "Tomb Raider",
+      "releaseDate": "07 April 2006",
+      "steamAppId": "7000",
+      "originalPrice": 3.99
+    }
+  },
+  {
+    "id": "gmg-tomb-raider-underworld",
+    "title": "Tomb Raider: Underworld",
+    "slug": "tomb-raider-underworld",
+    "description": "Tomb Raider: Underworld on PC via Steam. Part of the Tomb Raider series. A action, mac title published by Crystal Dynamics. Released 21 November 2008. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 0.55,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/c8091cd0aa1944d9b30f1500108ba1f6/3eea13bbfd474a49a619c2af270b2a0f.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "mac",
+      "tomb-raider",
+      "sale"
+    ],
+    "stock": 1436,
+    "rating": 8.5,
+    "reviewCount": 4286,
+    "metadata": {
+      "brand": "Crystal Dynamics",
+      "articleNumber": "GMG-984",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Steam",
+      "franchise": "Tomb Raider",
+      "releaseDate": "21 November 2008",
+      "steamAppId": "8140",
+      "originalPrice": 4.99
+    }
+  },
+  {
+    "id": "gmg-double-dragon-gaiden-rise-of-the-dragons",
+    "title": "Double Dragon Gaiden: Rise Of The Dragons",
+    "slug": "double-dragon-gaiden-rise-of-the-dragons",
+    "description": "Double Dragon Gaiden: Rise Of The Dragons on PC via Steam. A action, casual, adventure title published by Maximum Entertainment. Released 27 July 2023. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 2.5,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/0a0df78aae014909bf605dcbcab22f39/f6f3d6149e074d559f8a9b57c1fd1ba6.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "casual",
+      "double-dragon-gaiden-rise-of-the-dragons",
+      "sale",
+      "bestseller"
+    ],
+    "stock": 475,
+    "rating": 9.6,
+    "reviewCount": 7925,
+    "metadata": {
+      "brand": "Maximum Entertainment",
+      "articleNumber": "GMG-49013",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Steam",
+      "franchise": "Double Dragon Gaiden: Rise Of The Dragons",
+      "releaseDate": "27 July 2023",
+      "steamAppId": "1967260",
+      "originalPrice": 24.99
+    }
+  },
+  {
+    "id": "gmg-unbeatable",
+    "title": "UNBEATABLE",
+    "slug": "unbeatable",
+    "description": "UNBEATABLE on PC via Steam. A adventure title published by Playstack Ltd. Released 09 December 2025. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 11.19,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/38495fa0dd424413a86c05df931c5bfb/2436f658bafb417a8afe7ddd5e466f89.jpg"
+    ],
+    "category": "adventure",
+    "tags": [
+      "adventure",
+      "unbeatable",
+      "sale"
+    ],
+    "stock": 1620,
+    "rating": 8.9,
+    "reviewCount": 4470,
+    "metadata": {
+      "brand": "Playstack Ltd",
+      "articleNumber": "GMG-54859",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Steam",
+      "franchise": "UNBEATABLE",
+      "releaseDate": "09 December 2025",
+      "steamAppId": "2240620",
+      "originalPrice": 13.99
+    }
+  },
+  {
+    "id": "gmg-peak",
+    "title": "PEAK",
+    "slug": "peak",
+    "description": "PEAK on PC, Steam Deck Verified via Steam. A action, adventure, indie title published by Landfall Publishing AB. Released 16 May 2025. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 2.22,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/2cac520c156d47a689a8158d47327649/b8e5553e63d3468fbf4932589de2310d.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "adventure",
+      "peak",
+      "sale"
+    ],
+    "stock": 1073,
+    "rating": 8.8,
+    "reviewCount": 1673,
+    "metadata": {
+      "brand": "Landfall Publishing AB",
+      "articleNumber": "GMG-57808",
+      "type": "PC Game",
+      "platform": "PC, Steam Deck Verified",
+      "drm": "Steam",
+      "franchise": "PEAK",
+      "releaseDate": "16 May 2025",
+      "steamAppId": "3527290",
+      "originalPrice": 4.49
+    }
+  },
+  {
+    "id": "gmg-light-no-fire",
+    "title": "Light No Fire",
+    "slug": "light-no-fire",
+    "description": "Light No Fire on PC via Steam. A action, adventure title published by Hello Games. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 39.99,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/d9d0b36cae0947179778edfc36e838b6/f079568eb1e4430c872b4315f2b03c26.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "adventure",
+      "light-no-fire"
+    ],
+    "stock": 56,
+    "rating": 9.1,
+    "reviewCount": 2556,
+    "metadata": {
+      "brand": "Hello Games",
+      "articleNumber": "GMG-49750",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Steam",
+      "franchise": "Light No Fire",
+      "releaseDate": "To be announced",
+      "steamAppId": "2719590"
+    }
+  },
+  {
+    "id": "gmg-kingmakers",
+    "title": "Kingmakers",
+    "slug": "kingmakers",
+    "description": "Kingmakers on PC via Steam. A action, strategy, simulation title published by tinyBuild Games. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 34.99,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/3937dff5ad9347f6bcbd3019ab7ae1a3/9e12ff649b414afb9b228d99554076f9.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "strategy",
+      "kingmakers",
+      "bestseller"
+    ],
+    "stock": 346,
+    "rating": 9.3,
+    "reviewCount": 8146,
+    "metadata": {
+      "brand": "tinyBuild Games",
+      "articleNumber": "GMG-50346",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Steam",
+      "franchise": "Kingmakers",
+      "releaseDate": "Coming soon",
+      "steamAppId": "2109770"
+    }
+  },
+  {
+    "id": "gmg-hogwarts-legacy",
+    "title": "Hogwarts Legacy",
+    "slug": "hogwarts-legacy",
+    "description": "Hogwarts Legacy on PC, Steam Deck Verified via Steam. A action, adventure, rpg title published by Warner Bros Interactive Entertainment. Released 10 February 2023. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 59.99,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/6a8a200f88f5416aa08b0754d343c401/2716c34ac5274e5b94c00e58a1a6d36e.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "adventure",
+      "hogwarts-legacy"
+    ],
+    "stock": 1574,
+    "rating": 9.1,
+    "reviewCount": 1624,
+    "metadata": {
+      "brand": "Warner Bros Interactive Entertainment",
+      "articleNumber": "GMG-44633",
+      "type": "PC Game",
+      "platform": "PC, Steam Deck Verified",
+      "drm": "Steam",
+      "franchise": "Hogwarts Legacy",
+      "releaseDate": "10 February 2023",
+      "steamAppId": "990080"
+    }
+  },
+  {
+    "id": "gmg-red-dead-redemption-2",
+    "title": "Red Dead Redemption 2",
+    "slug": "red-dead-redemption-2",
+    "description": "Red Dead Redemption 2 on PC via Epic Games. Part of the Red Dead series. A action, adventure title published by Rockstar Games. Released 05 November 2019. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 59.99,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/d5811458e1394d6d84ea09378631b0b7/85a9edaf1e0640b6826f020a92a9c0b0.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "adventure",
+      "red-dead"
+    ],
+    "stock": 1618,
+    "rating": 8.7,
+    "reviewCount": 2868,
+    "metadata": {
+      "brand": "Rockstar Games",
+      "articleNumber": "GMG-16565",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Epic Games",
+      "franchise": "Red Dead",
+      "releaseDate": "05 November 2019"
+    }
+  },
+  {
+    "id": "gmg-starfield",
+    "title": "Starfield",
+    "slug": "starfield",
+    "description": "Starfield on PC via Steam. A rpg title published by Bethesda Softworks. Released 06 September 2023. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 41.99,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/79e2cec2ec8c469e934a0705264d39e2/f1362d5f364843fba3b76592f4ef94d4.jpg"
+    ],
+    "category": "rpg",
+    "tags": [
+      "rpg",
+      "starfield",
+      "sale"
+    ],
+    "stock": 208,
+    "rating": 8.7,
+    "reviewCount": 4208,
+    "metadata": {
+      "brand": "Bethesda Softworks",
+      "articleNumber": "GMG-19612",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Steam",
+      "franchise": "Starfield",
+      "releaseDate": "06 September 2023",
+      "steamAppId": "1716740",
+      "originalPrice": 69.99
+    }
+  },
+  {
+    "id": "gmg-black-myth-wukong",
+    "title": "Black Myth: Wukong",
+    "slug": "black-myth-wukong",
+    "description": "Black Myth: Wukong on PC via Steam. A action, rpg, adventure title published by Game Science. Released 20 August 2024. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 59.99,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/11e23b76b82d4d399f7933b4d645e09e/41102a46142b4b06b6cfdd6d61069a47.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "rpg",
+      "black-myth-wukong",
+      "bestseller"
+    ],
+    "stock": 1934,
+    "rating": 9.1,
+    "reviewCount": 6684,
+    "metadata": {
+      "brand": "Game Science",
+      "articleNumber": "GMG-52371",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Steam",
+      "franchise": "Black Myth: Wukong",
+      "releaseDate": "20 August 2024",
+      "steamAppId": "2358720"
+    }
+  },
+  {
+    "id": "gmg-doom-the-dark-ages",
+    "title": "DOOM: The Dark Ages",
+    "slug": "doom-the-dark-ages",
+    "description": "DOOM: The Dark Ages on PC via Steam. Part of the DOOM series. A action title published by Bethesda Softworks. Released 15 May 2025. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 14.19,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/6707e1812d3442f5a5a9128eb9abca38/3a3e0837e4b0497cb3e841eec62b67eb.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "doom",
+      "sale",
+      "bestseller"
+    ],
+    "stock": 1245,
+    "rating": 9.2,
+    "reviewCount": 5412,
+    "metadata": {
+      "brand": "Bethesda Softworks",
+      "articleNumber": "GMG-57102",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Steam",
+      "franchise": "DOOM",
+      "releaseDate": "15 May 2025",
+      "steamAppId": "3017860",
+      "originalPrice": 69.99
+    }
+  },
+  {
+    "id": "gmg-helldivers-2",
+    "title": "HELLDIVERS\u2122 2",
+    "slug": "helldivers-2",
+    "description": "HELLDIVERS\u2122 2 on PC via Steam. Part of the HELLDIVERS\u2122 series. A action title published by Playstation Publishing LLC. Released 08 February 2024. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 39.99,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/51e05bcc074d4bf885d4c1d24784d8ab/49e1887fc1fd433e91ec5db7e3b0bb76.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "helldivers",
+      "bestseller"
+    ],
+    "stock": 830,
+    "rating": 8.5,
+    "reviewCount": 8130,
+    "metadata": {
+      "brand": "Playstation Publishing LLC",
+      "articleNumber": "GMG-47893",
+      "type": "PC Game",
+      "platform": "PC",
+      "drm": "Steam",
+      "franchise": "HELLDIVERS\u2122",
+      "releaseDate": "08 February 2024",
+      "steamAppId": "553850"
+    }
+  },
+  {
+    "id": "gmg-the-outlast-trials",
+    "title": "The Outlast Trials",
+    "slug": "the-outlast-trials",
+    "description": "The Outlast Trials on PC, Steam Deck Verified via Steam. Part of the Outlast series. A action, indie, adventure title published by Red Barrels. Released 05 March 2024. Instant digital delivery from Green Man Gaming \u2014 activate on your platform and start playing.",
+    "price": 18.49,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/fde233ebe72948449b257692772c0c4f/3720313e67b24faeba9c05c57194a228.jpg"
+    ],
+    "category": "action",
+    "tags": [
+      "action",
+      "indie",
+      "outlast"
+    ],
+    "stock": 560,
+    "rating": 9.1,
+    "reviewCount": 1760,
+    "metadata": {
+      "brand": "Red Barrels",
+      "articleNumber": "GMG-48486",
+      "type": "PC Game",
+      "platform": "PC, Steam Deck Verified",
+      "drm": "Steam",
+      "franchise": "Outlast",
+      "releaseDate": "05 March 2024",
+      "steamAppId": "1304930"
+    }
+  },
+  {
+    "id": "gmg-gift-card",
+    "title": "Green Man Gaming Gift Card",
+    "slug": "gift-card",
+    "description": "Green Man Gaming Gift Card. Digital gift cards starting at $10, redeemable across thousands of PC games, DLC, and bundles on Green Man Gaming. Delivered by email.",
+    "price": 10.0,
+    "currency": "USD",
+    "images": [
+      "https://images.greenmangaming.com/fdbe008a60d844c08cbd633e81f83dfb/f68c31ad99984f9ab6f525170a1ce0df.svg"
+    ],
+    "category": "gift-cards",
+    "tags": [
+      "gifting",
+      "gift-card",
+      "digital"
+    ],
+    "stock": 9999,
+    "rating": 9.1,
+    "reviewCount": 412,
+    "metadata": {
+      "brand": "Green Man Gaming",
+      "articleNumber": "GMG-GIFTCARD",
+      "type": "Digital Gift Card",
+      "minimumValue": "$10"
+    }
+  }
+]

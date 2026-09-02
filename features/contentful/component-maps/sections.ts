@@ -13,6 +13,7 @@ import PersonalizedMultiItemModule from "../components/multi-item-module/persona
 import PersonalizedPropertyListings from "../components/property-listings/personalized-property-listings";
 import PersonalizedInteractiveMap from "../components/interactive-map/personalized-interactive-map";
 import PersonalizedSection from "../components/personalized-section/personalized-section";
+import PersonalizedFaqModule from "../components/faq-module/personalized-faq-module";
 
 // Centralized component map for landing page sections
 export const sectionsComponentMap: Record<string, FC<any>> = {
@@ -29,4 +30,5 @@ export const sectionsComponentMap: Record<string, FC<any>> = {
   propertyListings: PersonalizedPropertyListings,
   interactiveMap: PersonalizedInteractiveMap,
   personalizedSection: PersonalizedSection,
+  faqModule: PersonalizedFaqModule,
 } as const;

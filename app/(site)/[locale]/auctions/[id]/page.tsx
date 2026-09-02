@@ -21,7 +21,6 @@ export default async function AuctionPage({ params, searchParams }: Props) {
   const allAuctions = await getEntriesInEnvironment<AuctionSkeleton>({
     options: { content_type: "auction", include: 3, locale },
     isPreviewEnabled: isPreview,
-    environment: "christies",
   }) as unknown as IAuction[];
 
   // Find the entry whose externalAuctionId snapshot matches the URL id param

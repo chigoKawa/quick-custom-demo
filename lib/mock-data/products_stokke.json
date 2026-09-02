@@ -1,0 +1,542 @@
+[
+  {
+    "id": "stokke-tripp-trapp-chair",
+    "title": "Tripp Trapp® Chair",
+    "slug": "tripp-trapp-chair",
+    "description": "Tripp Trapp® Chair from Stokke. The iconic chair that grows with the child — tested and trusted for over 50 years for safety, durability, and timeless Scandinavian design. Ergonomic seating at every stage from toddler to adult. Use from birth with the Newborn Set and from 6 months with the Baby Set (sold separately).",
+    "price": 199.2,
+    "currency": "USD",
+    "images": [
+      "https://www.stokke.com/dw/image/v2/AAQF_PRD/on/demandware.static/-/Sites-stokke-master-catalog/default/dw114905b3/images/inriverimages/mainview/TrippTrapp_Chair_Natural_240717-4934_eCom.jpg"
+    ],
+    "category": "high-chairs",
+    "tags": [
+      "stokke",
+      "newborn",
+      "nursery",
+      "feeding",
+      "tripp-trapp"
+    ],
+    "stock": 68,
+    "rating": 4.8,
+    "reviewCount": 4931,
+    "metadata": {
+      "brand": "Stokke",
+      "articleNumber": "TT03",
+      "type": "Tripp Trapp® Chair",
+      "color": "Natural",
+      "originalPrice": 249.0,
+      "warranty": "7 years",
+      "ageRange": "Newborn to adult"
+    }
+  },
+  {
+    "id": "stokke-tripp-trapp-high-chair-newborn-set-tray",
+    "title": "Tripp Trapp® High Chair with Newborn Set and Tray",
+    "slug": "tripp-trapp-high-chair-newborn-set-tray",
+    "description": "Tripp Trapp® High Chair with Newborn Set and Tray from Stokke. Complete bundle including chair, Newborn Set, Baby Set, harness, and tray. Brings your child to the table from day one and adapts seamlessly from newborn through toddler years.",
+    "price": 439.2,
+    "currency": "USD",
+    "images": [
+      "https://www.stokke.com/dw/image/v2/AAQF_PRD/on/demandware.static/-/Sites-stokke-master-catalog/default/dw2ef12c06/images/inriverimages/mainview/TrippTrapp_Natural_BS_Cush_NordicGrey_CLOSE_US_240718-5687_eCom.jpg"
+    ],
+    "category": "high-chairs",
+    "tags": [
+      "stokke",
+      "newborn",
+      "nursery",
+      "feeding",
+      "tripp-trapp",
+      "bundle"
+    ],
+    "stock": 42,
+    "rating": 4.8,
+    "reviewCount": 4908,
+    "metadata": {
+      "brand": "Stokke",
+      "articleNumber": "TT-COMPLETE",
+      "type": "Tripp Trapp® High Chair Bundle",
+      "color": "Natural",
+      "originalPrice": 602.0,
+      "warranty": "7 years",
+      "ageRange": "From birth"
+    }
+  },
+  {
+    "id": "stokke-tripp-trapp-high-chair-baby-set",
+    "title": "Tripp Trapp® High Chair with Baby Set²",
+    "slug": "tripp-trapp-high-chair-baby-set",
+    "description": "Tripp Trapp® High Chair with Baby Set² from Stokke. Two-in-one solution bringing your baby to the dining table from 6 months. Includes the iconic Tripp Trapp chair and Baby Set² for secure, ergonomic seating as your child grows.",
+    "price": 279.2,
+    "currency": "USD",
+    "images": [
+      "https://www.stokke.com/dw/image/v2/AAQF_PRD/on/demandware.static/-/Sites-stokke-master-catalog/default/dw64da5cf0/images/inriverimages/mainview/TrippTrapp-Natural_BabySet_Storage_US_240718-4498_eCom.jpg"
+    ],
+    "category": "high-chairs",
+    "tags": [
+      "stokke",
+      "feeding",
+      "tripp-trapp",
+      "bundle"
+    ],
+    "stock": 55,
+    "rating": 4.8,
+    "reviewCount": 4931,
+    "metadata": {
+      "brand": "Stokke",
+      "articleNumber": "TT-BS",
+      "type": "Tripp Trapp® with Baby Set²",
+      "color": "Natural",
+      "originalPrice": 354.0,
+      "warranty": "7 years",
+      "ageRange": "From 6 months"
+    }
+  },
+  {
+    "id": "stokke-clikk-high-chair",
+    "title": "Stokke® Clikk™ High Chair",
+    "slug": "clikk-high-chair",
+    "description": "Stokke® Clikk™ High Chair from Stokke. The easy-to-use high chair made for more time together. Assembles completely tool-free in under one minute, includes tray, and is effortless to clean and carry everywhere.",
+    "price": 151.2,
+    "currency": "USD",
+    "images": [
+      "https://www.stokke.com/dw/image/v2/AAQF_PRD/on/demandware.static/-/Sites-stokke-master-catalog/default/dw527b57db/images/inriverimages/mainview/Global_Clikk-25_StokkeCom_PDP_Product-baby-closeup_GlacierGreen_938x1072px.jpg"
+    ],
+    "category": "high-chairs",
+    "tags": [
+      "stokke",
+      "feeding",
+      "travel",
+      "clikk"
+    ],
+    "stock": 89,
+    "rating": 4.6,
+    "reviewCount": 404,
+    "metadata": {
+      "brand": "Stokke",
+      "articleNumber": "5521",
+      "type": "Clikk™ High Chair",
+      "color": "Glacier Green",
+      "originalPrice": 189.0,
+      "warranty": "3 years",
+      "ageRange": "6 months to 3 years"
+    }
+  },
+  {
+    "id": "stokke-steps-high-chair",
+    "title": "Stokke® Steps™ High Chair",
+    "slug": "steps-high-chair",
+    "description": "Stokke® Steps™ High Chair from Stokke. The comfortable all-rounder that adapts seamlessly with your child from baby to pre-teen. Sturdy design with included tray offers seating comfort for your child and daily convenience for the family.",
+    "price": 199.2,
+    "currency": "USD",
+    "images": [
+      "https://www.stokke.com/dw/image/v2/AAQF_PRD/on/demandware.static/-/Sites-stokke-master-catalog/default/dw9b9311c5/images/inriverimages/mainview/StepsHighChair_WarmBrown_Seat-BS_Tray-Black_Pos1_1-1_eCom.webp"
+    ],
+    "category": "high-chairs",
+    "tags": [
+      "stokke",
+      "feeding",
+      "steps"
+    ],
+    "stock": 47,
+    "rating": 4.5,
+    "reviewCount": 122,
+    "metadata": {
+      "brand": "Stokke",
+      "articleNumber": "STEPS01",
+      "type": "Steps™ High Chair",
+      "color": "Warm Brown",
+      "originalPrice": 249.0,
+      "warranty": "3 years",
+      "ageRange": "6 months to 10 years"
+    }
+  },
+  {
+    "id": "stokke-nomi-chair",
+    "title": "Nomi® Chair",
+    "slug": "nomi-chair",
+    "description": "Nomi® Chair from Stokke. The chair that inspires active sitting. Flexible design promotes healthy posture at every age with seamless, tool-free adjustment and an easy-to-move frame suitable from newborn to adult.",
+    "price": 343.2,
+    "currency": "USD",
+    "images": [
+      "https://www.stokke.com/dw/image/v2/AAQF_PRD/on/demandware.static/-/Sites-stokke-master-catalog/default/dw2d77b71a/images/inriverimages/mainview/Nomi_Oak-Grey_BS_US-Hrn-Ext_5426.jpg"
+    ],
+    "category": "high-chairs",
+    "tags": [
+      "stokke",
+      "newborn",
+      "feeding",
+      "nomi"
+    ],
+    "stock": 34,
+    "rating": 4.7,
+    "reviewCount": 90,
+    "metadata": {
+      "brand": "Stokke",
+      "articleNumber": "NM01",
+      "type": "Nomi® Chair",
+      "color": "Oak Grey",
+      "originalPrice": 429.0,
+      "warranty": "7 years",
+      "ageRange": "Newborn to adult"
+    }
+  },
+  {
+    "id": "stokke-yoyo3-stroller-6-months",
+    "title": "YOYO³ stroller from 6 months",
+    "slug": "yoyo3-stroller-6-months",
+    "description": "YOYO³ stroller from 6 months from Stokke. Versatile, ultra-compact and lightweight stroller that folds and unfolds in seconds. Cabin-bag compatible with best-in-class maneuverability for city life and travel.",
+    "price": 319.36,
+    "currency": "USD",
+    "images": [
+      "https://www.stokke.com/dw/image/v2/AAQF_PRD/on/demandware.static/-/Sites-stokke-master-catalog/default/dw350f0f4b/images/inriverimages/mainview/YOYO3_6PLUS_Black_BlackFrame_3-4_0432.jpg"
+    ],
+    "category": "strollers",
+    "tags": [
+      "stokke",
+      "travel",
+      "yoyo",
+      "stroller"
+    ],
+    "stock": 61,
+    "rating": 4.7,
+    "reviewCount": 675,
+    "metadata": {
+      "brand": "Stokke",
+      "articleNumber": "YOYO3-6M",
+      "type": "YOYO³ Stroller",
+      "color": "Black",
+      "originalPrice": 499.0,
+      "warranty": "2 years",
+      "ageRange": "6 months to 4 years"
+    }
+  },
+  {
+    "id": "stokke-yoyo3-stroller-newborn-pack",
+    "title": "YOYO³ Stroller with Newborn Pack and 6+ Months Color Pack",
+    "slug": "yoyo3-stroller-newborn-pack",
+    "description": "YOYO³ Stroller with Newborn Pack and 6+ Months Color Pack from Stokke. All-in-one foldable stroller solution ready from birth. Includes newborn pack and 6+ color pack for seamless transitions from first day to toddler.",
+    "price": 519.2,
+    "currency": "USD",
+    "images": [
+      "https://www.stokke.com/dw/image/v2/AAQF_PRD/on/demandware.static/-/Sites-stokke-master-catalog/default/dw8996f4f0/images/inriverimages/mainview/YOYO_3in1_Bundle_NewbornPack_Ecom.jpg"
+    ],
+    "category": "strollers",
+    "tags": [
+      "stokke",
+      "newborn",
+      "travel",
+      "yoyo",
+      "stroller",
+      "bundle"
+    ],
+    "stock": 38,
+    "rating": 4.7,
+    "reviewCount": 675,
+    "metadata": {
+      "brand": "Stokke",
+      "articleNumber": "YOYO3-NB",
+      "type": "YOYO³ Stroller Bundle",
+      "originalPrice": 748.0,
+      "warranty": "2 years",
+      "ageRange": "From birth to 4 years"
+    }
+  },
+  {
+    "id": "stokke-yoyo3-from-newborn-to-toddler",
+    "title": "YOYO³ from newborn to toddler",
+    "slug": "yoyo3-from-newborn-to-toddler",
+    "description": "YOYO³ from newborn to toddler from Stokke. Ultra-lightweight all-in-one stroller that folds in a flash, carries over the shoulder, and is carry-on compatible. Car seat adapters allow compatible seats to clip onto the YOYO³ frame easily.",
+    "price": 415.36,
+    "currency": "USD",
+    "images": [
+      "https://www.stokke.com/dw/image/v2/AAQF_PRD/on/demandware.static/-/Sites-stokke-master-catalog/default/dw3ebaff53/images/inriverimages/mainview/USCA_YOYO3-Newborn-Bundle-Taupe_938x1072px.jpg"
+    ],
+    "category": "strollers",
+    "tags": [
+      "stokke",
+      "newborn",
+      "travel",
+      "yoyo",
+      "stroller"
+    ],
+    "stock": 29,
+    "rating": 5.0,
+    "reviewCount": 4,
+    "metadata": {
+      "brand": "Stokke",
+      "articleNumber": "676300",
+      "type": "YOYO³ Stroller Bundle",
+      "color": "Taupe",
+      "originalPrice": 649.0,
+      "warranty": "2 years",
+      "ageRange": "From birth to 4 years"
+    }
+  },
+  {
+    "id": "stokke-yoyo-6-plus-color-pack",
+    "title": "YOYO® 6+ color pack",
+    "slug": "yoyo-6-plus-color-pack",
+    "description": "YOYO® 6+ color pack from Stokke. Replacement or upgrade 6+ seat pack for your YOYO³ stroller. Refresh your stroller style or swap configurations as your child grows.",
+    "price": 150.0,
+    "currency": "USD",
+    "images": [
+      "https://www.stokke.com/dw/image/v2/AAQF_PRD/on/demandware.static/-/Sites-stokke-master-catalog/default/dw822491a8/images/inriverimages/mainview/YOYO_RivieraMonaco_FrameShadow_251219-5606_eCom.jpg"
+    ],
+    "category": "strollers",
+    "tags": [
+      "stokke",
+      "travel",
+      "yoyo",
+      "accessories"
+    ],
+    "stock": 112,
+    "rating": 4.7,
+    "reviewCount": 675,
+    "metadata": {
+      "brand": "Stokke",
+      "articleNumber": "648116",
+      "type": "YOYO® 6+ Color Pack",
+      "color": "Riviera Monaco",
+      "ageRange": "6 months to 4 years"
+    }
+  },
+  {
+    "id": "stokke-yoyo-car-seat-adapters",
+    "title": "YOYO® car seat adapters",
+    "slug": "yoyo-car-seat-adapters",
+    "description": "YOYO® car seat adapters from Stokke. Compatible with various car seats including Maxi-Cosi, Cybex, Britax, and BeSafe models. Clip your infant car seat onto the YOYO³ frame for seamless travel transitions.",
+    "price": 47.2,
+    "currency": "USD",
+    "images": [
+      "https://www.stokke.com/dw/image/v2/AAQF_PRD/on/demandware.static/-/Sites-stokke-master-catalog/default/dw1a57fa25/images/inriverimages/mainview/YOYO%202%20-%20BZ10205-03%20CAR%20SEAT%20ADAPTERS%20L%20-%20WEB_eCom.jpg"
+    ],
+    "category": "strollers",
+    "tags": [
+      "stokke",
+      "travel",
+      "yoyo",
+      "accessories"
+    ],
+    "stock": 156,
+    "rating": 4.6,
+    "reviewCount": 128,
+    "metadata": {
+      "brand": "Stokke",
+      "articleNumber": "6555",
+      "type": "YOYO® Car Seat Adapters",
+      "originalPrice": 59.0,
+      "size": "Size L"
+    }
+  },
+  {
+    "id": "stokke-sleepi-mini-crib-mattress",
+    "title": "Stokke® Sleepi™ Mini Crib with Mattress",
+    "slug": "sleepi-mini-crib-mattress",
+    "description": "Stokke® Sleepi™ Mini Crib with Mattress from Stokke. The crib that grows with the child — compact oval design with lockable swivel wheels, height-adjustable base, and maximum air circulation for comfortable newborn sleep from 0 to 6 months.",
+    "price": 674.1,
+    "currency": "USD",
+    "images": [
+      "https://www.stokke.com/dw/image/v2/AAQF_PRD/on/demandware.static/-/Sites-stokke-master-catalog/default/dwbe9f3f10/images/inriverimages/mainview/Sleepi-Mini_WarmBrown_Mattress_Rod_221202-5067_US_eCom.jpg"
+    ],
+    "category": "nursery",
+    "tags": [
+      "stokke",
+      "newborn",
+      "nursery",
+      "sleepi",
+      "sleeping"
+    ],
+    "stock": 31,
+    "rating": 4.6,
+    "reviewCount": 109,
+    "metadata": {
+      "brand": "Stokke",
+      "articleNumber": "6006",
+      "type": "Sleepi™ Mini Crib",
+      "color": "Warm Brown",
+      "originalPrice": 749.0,
+      "warranty": "3 years",
+      "ageRange": "0 to 6 months"
+    }
+  },
+  {
+    "id": "stokke-sleepi-mini-bed-bundle",
+    "title": "Stokke® Sleepi™ Mini Bed, Mattress, Draperod, & Sheet",
+    "slug": "sleepi-mini-bed-bundle",
+    "description": "Stokke® Sleepi™ Mini Bed, Mattress, Draperod, & Sheet from Stokke. Complete newborn sleep bundle with mini crib, drape rod, mini mattress, and fitted sheet. Designed for closeness with breathable airflow and easy room-to-room mobility.",
+    "price": 723.1,
+    "currency": "USD",
+    "images": [
+      "https://www.stokke.com/dw/image/v2/AAQF_PRD/on/demandware.static/-/Sites-stokke-master-catalog/default/dw6e806e85/images/inriverimages/mainview/SleepiMini_Natural_Mattress_Canopy_5067_US_eCom.jpg"
+    ],
+    "category": "nursery",
+    "tags": [
+      "stokke",
+      "newborn",
+      "nursery",
+      "sleepi",
+      "sleeping",
+      "bundle"
+    ],
+    "stock": 26,
+    "rating": 4.6,
+    "reviewCount": 109,
+    "metadata": {
+      "brand": "Stokke",
+      "articleNumber": "SLEEPI-MINI-BDL",
+      "type": "Sleepi™ Mini Bundle",
+      "color": "Natural",
+      "warranty": "3 years",
+      "ageRange": "0 to 6 months"
+    }
+  },
+  {
+    "id": "stokke-sleepi-convertible-crib-mattress",
+    "title": "Sleepi™ Convertible Crib with Mattress (0-5 years)",
+    "slug": "sleepi-convertible-crib-mattress",
+    "description": "Sleepi™ Convertible Crib with Mattress from Stokke. Full-size oval crib that grows from infant to toddler bed up to 5 years. Four adjustable base heights, removable side panel, and FSC-certified materials for years of safe, comfortable sleep.",
+    "price": 999.0,
+    "currency": "USD",
+    "images": [
+      "https://www.stokke.com/dw/image/v2/AAQF_PRD/on/demandware.static/-/Sites-stokke-master-catalog/default/dw10d3d749/images/inriverimages/mainview/Sleepi-Bed_Natural_Closed_Mattress_5046_eCom.jpg"
+    ],
+    "category": "nursery",
+    "tags": [
+      "stokke",
+      "nursery",
+      "sleepi",
+      "sleeping"
+    ],
+    "stock": 19,
+    "rating": 4.5,
+    "reviewCount": 84,
+    "metadata": {
+      "brand": "Stokke",
+      "articleNumber": "SLEEPI-BED",
+      "type": "Sleepi™ Convertible Crib",
+      "color": "Natural",
+      "originalPrice": 1099.0,
+      "warranty": "3 years",
+      "ageRange": "0 to 5 years"
+    }
+  },
+  {
+    "id": "stokke-flexi-bath-x-large-newborn-support",
+    "title": "Stokke® Flexi Bath® X-Large with newborn support",
+    "slug": "flexi-bath-x-large-newborn-support",
+    "description": "Stokke® Flexi Bath® X-Large with newborn support from Stokke. Foldable family-size baby bath with included newborn support insert. Space-saving design folds flat for storage and travel while providing a safe, ergonomic bathing experience.",
+    "price": 74.25,
+    "currency": "USD",
+    "images": [
+      "https://www.stokke.com/dw/image/v2/AAQF_PRD/on/demandware.static/-/Sites-stokke-master-catalog/default/dwec331f13/images/inriverimages/mainview/FlexiBath-XL_SandyBeige_NewbornSupport_231220-3095_eCom.jpg"
+    ],
+    "category": "bath",
+    "tags": [
+      "stokke",
+      "newborn",
+      "bath",
+      "flexi-bath"
+    ],
+    "stock": 94,
+    "rating": 4.7,
+    "reviewCount": 465,
+    "metadata": {
+      "brand": "Stokke",
+      "articleNumber": "6397",
+      "type": "Flexi Bath® X-Large",
+      "color": "Sandy Beige",
+      "originalPrice": 82.5,
+      "size": "X-Large"
+    }
+  },
+  {
+    "id": "stokke-flexi-bath-stand-newborn-bundle",
+    "title": "Stokke® Flexi Bath®, Stand & Newborn Support Bundle",
+    "slug": "flexi-bath-stand-newborn-bundle",
+    "description": "Stokke® Flexi Bath®, Stand & Newborn Support Bundle from Stokke. Complete bathing set with foldable Flexi Bath, ergonomic stand, and newborn support. Elevates bath time for parents while keeping baby secure and comfortable.",
+    "price": 151.2,
+    "currency": "USD",
+    "images": [
+      "https://www.stokke.com/dw/image/v2/AAQF_PRD/on/demandware.static/-/Sites-stokke-master-catalog/default/dw6bfd639e/images/inriverimages/mainview/FlexiBath_SoftMint_NewbornSupp_onStand_231220-3096_eCom.jpg"
+    ],
+    "category": "bath",
+    "tags": [
+      "stokke",
+      "newborn",
+      "bath",
+      "flexi-bath",
+      "bundle"
+    ],
+    "stock": 67,
+    "rating": 4.7,
+    "reviewCount": 465,
+    "metadata": {
+      "brand": "Stokke",
+      "articleNumber": "FLEXI-BDL",
+      "type": "Flexi Bath® Bundle",
+      "color": "Soft Mint",
+      "originalPrice": 189.0,
+      "warranty": "3 years"
+    }
+  },
+  {
+    "id": "stokke-limas-carrier-flex",
+    "title": "Stokke® Limas™ Carrier Flex",
+    "slug": "limas-carrier-flex",
+    "description": "Stokke® Limas™ Carrier Flex from Stokke. Ergonomic baby carrier with flexible waist belt and padded shoulder straps for comfortable front and back carrying. Designed for closeness and even weight distribution from newborn through toddler.",
+    "price": 159.2,
+    "currency": "USD",
+    "images": [
+      "https://www.stokke.com/dw/image/v2/AAQF_PRD/on/demandware.static/-/Sites-stokke-master-catalog/default/dw6b91d7f7/images/inriverimages/mainview/CrossCategory_LimitedEdition-Sticker_LimasFlex-Alesund_eCom.jpg"
+    ],
+    "category": "baby-carriers",
+    "tags": [
+      "stokke",
+      "newborn",
+      "travel",
+      "limas",
+      "baby-carrier"
+    ],
+    "stock": 73,
+    "rating": 4.6,
+    "reviewCount": 103,
+    "metadata": {
+      "brand": "Stokke",
+      "articleNumber": "625616",
+      "type": "Limas™ Carrier Flex",
+      "color": "Alesund",
+      "originalPrice": 199.0,
+      "ageRange": "Newborn to toddler"
+    }
+  },
+  {
+    "id": "stokke-yoga-baby-bouncer-swing",
+    "title": "Yoga™ Baby Bouncer & Swing",
+    "slug": "yoga-baby-bouncer-swing",
+    "description": "Yoga™ Baby Bouncer & Swing from Stokke. Premium ergonomic bouncer with FSC-certified beechwood base, newborn insert, and 5-point harness. Offers both bounce and sway motion to soothe or stimulate your baby from birth up to 11 kg.",
+    "price": 299.0,
+    "currency": "USD",
+    "images": [
+      "https://www.stokke.com/dw/image/v2/AAQF_PRD/on/demandware.static/-/Sites-stokke-master-catalog/default/dw639da711/images/inriverimages/mainview/StokkeYoga_Bouncer_LightSand_Low_Inlay_ToyHanger_US_240923-8287_eCom.jpg"
+    ],
+    "category": "bouncers",
+    "tags": [
+      "stokke",
+      "newborn",
+      "bouncer",
+      "yoga"
+    ],
+    "stock": 48,
+    "rating": 4.5,
+    "reviewCount": 79,
+    "metadata": {
+      "brand": "Stokke",
+      "articleNumber": "YOGA-BNC",
+      "type": "Yoga™ Bouncer & Swing",
+      "color": "Light Sand",
+      "warranty": "3 years",
+      "ageRange": "Birth to 11 kg"
+    }
+  }
+]

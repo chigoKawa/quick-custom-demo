@@ -10,6 +10,11 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  {
+    // Contentful App Function compiled bundles are generated / minified —
+    // never lint them.
+    ignores: ["app/ctf-apps/*/build/**"],
+  },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
     rules: {

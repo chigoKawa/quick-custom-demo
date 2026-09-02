@@ -15,6 +15,7 @@
 
 import { Locale, getI18nConfig } from "@/i18n-config";
 import { getEntries } from "@/lib/contentful";
+import { SiteScopeError } from "@/lib/site-scope";
 import ContentfulLandingPage from "@/features/contentful/components/contentful-landing-page";
 import ContentfulBlogPage from "@/features/contentful/components/contentful-blog-page";
 import {
@@ -75,7 +76,10 @@ async function tryContentType<S extends { contentTypeId: string; fields: Record<
       environmentId
     );
     if (byFullPath[0]) return byFullPath[0];
-  } catch {
+  } catch (error) {
+    // A site-scope misconfiguration means we don't know whose page this is;
+    // falling through to the slug attempt would only mask it.
+    if (error instanceof SiteScopeError) throw error;
     // fall through
   }
 
@@ -93,7 +97,8 @@ async function tryContentType<S extends { contentTypeId: string; fields: Record<
       environmentId
     );
     if (bySlug[0]) return bySlug[0];
-  } catch {
+  } catch (error) {
+    if (error instanceof SiteScopeError) throw error;
     // fall through
   }
 
@@ -113,6 +118,14 @@ async function resolvePageEntry(
   environmentId?: string | null
 ): Promise<ResolvedPage | undefined> {
   if (pathSegments.length < 2) return undefined;
+
+  // `_next`, `.well-known` and any dotted path are excluded from the middleware
+  // matcher, so they never get a locale rewrite — Next still matches them here
+  // with `locale` bound to the first URL segment. Forwarding that to Contentful
+  // as `query.locale` is a guaranteed 400 ("Unknown locale: _next"). An
+  // unrecognised locale segment is a 404, not a content lookup.
+  const { locales } = await getI18nConfig();
+  if (!locales.includes(locale)) return undefined;
 
   const fullPath = "/" + pathSegments.join("/");
   const lastSlug = pathSegments[pathSegments.length - 1];
@@ -230,7 +243,12 @@ export async function generateStaticParams() {
       false
     )
       .then((r) => r as IBlogPostPage[])
-      .catch(() => [] as IBlogPostPage[]),
+      .catch((error) => {
+        // Tolerate a missing/empty blogPost type, but never a site-scope
+        // misconfiguration — that would silently prebuild an incomplete site.
+        if (error instanceof SiteScopeError) throw error;
+        return [] as IBlogPostPage[];
+      }),
   ]);
 
   const allEntries = [...landingPages, ...blogPosts];

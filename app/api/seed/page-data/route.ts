@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getEntries } from "@/lib/contentful";
+import { unscoped } from "@/lib/site-scope";
 import type { EntrySkeletonType, Entry } from "contentful";
 
 export const dynamic = "force-dynamic";
 
-const PAGE_SLUG_DEFAULT = process.env.NEXT_PUBLIC_HOMEPAGE_SLUG || "home";
+const PAGE_SLUG_DEFAULT = process.env.NEXT_PUBLIC_CTF_HOMEPAGE_SLUG || "home";
 
 const PERSONALIZED_CONTENT_TYPES = new Set([
   "heroBanner",
@@ -59,13 +60,15 @@ export async function GET(request: NextRequest) {
   const locale = searchParams.get("locale") || "en-US";
 
   try {
+    // Dev seeding tool: resolves a page by slug regardless of which site owns
+    // it, so a demo can be seeded from any brand's content.
     const entries = await getEntries<EntrySkeletonType>(
-      {
+      unscoped({
         content_type: "landingPage",
         "fields.slug": slug,
         include: 5,
         locale,
-      },
+      }),
       false
     );
 

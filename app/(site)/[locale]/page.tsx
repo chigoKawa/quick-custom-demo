@@ -9,12 +9,11 @@ import { resolvePreviewMode } from "@/lib/preview";
 import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provider-wrapper";
 import { fetchRelatedBlogPosts } from "@/lib/related-stories";
 import { requireValidActiveMarket } from "@/lib/markets";
+import { getHomePageSlug } from "@/lib/site-settings";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-// Get the homepage slug from environment variables
-const PAGE_SLUG = process.env.NEXT_PUBLIC_HOMEPAGE_SLUG! || "home";
 const INCLUDES_COUNT = 6;
 
 type Props = {
@@ -27,14 +26,31 @@ type Props = {
 export default async function IndexPage({ params, searchParams }: Props) {
   const { locale } = await params;
 
+  // `_next`, `.well-known` and dotted paths are excluded from the middleware
+  // matcher, so they arrive here with `locale` bound to the first URL segment.
+  // Passing that to Contentful as `query.locale` is a guaranteed 400
+  // ("Unknown locale: .well-known"). An unrecognised locale segment is a 404.
+  const { locales: supportedLocales } = await getI18nConfig();
+  if (!supportedLocales.includes(locale)) notFound();
+
   const resolvedSearchParams = await searchParams;
   const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSearchParams);
   await requireValidActiveMarket({ isPreview, bypassInPreview: true });
 
+  // Which landing page `/` renders: `site.homePageSlug` in site mode, else
+  // NEXT_PUBLIC_CTF_HOMEPAGE_SLUG, else "home". Resolved per request because it
+  // reads Contentful in site mode.
+  const pageSlug = await getHomePageSlug({
+    locale,
+    preview: isPreview,
+    timelineToken,
+    environmentId,
+  });
+
   const entries = await getEntries<LandingPageSkeleton>(
     {
       content_type: "landingPage",
-      "fields.slug": PAGE_SLUG,
+      "fields.slug": pageSlug,
       include: INCLUDES_COUNT,
       locale,
     },
@@ -74,10 +90,24 @@ export async function generateMetadata(
   const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(sp);
   const { locale } = await params;
 
+  // `_next`, `.well-known` and dotted paths are excluded from the middleware
+  // matcher, so they arrive here with `locale` bound to the first URL segment.
+  // Passing that to Contentful as `query.locale` is a guaranteed 400
+  // ("Unknown locale: .well-known"). An unrecognised locale segment is a 404.
+  const { locales: supportedLocales } = await getI18nConfig();
+  if (!supportedLocales.includes(locale)) return {};
+
+  const pageSlug = await getHomePageSlug({
+    locale,
+    preview: isPreview,
+    timelineToken,
+    environmentId,
+  });
+
   const entries = await getEntries<LandingPageSkeleton>(
     {
       content_type: "landingPage",
-      "fields.slug": PAGE_SLUG,
+      "fields.slug": pageSlug,
       include: INCLUDES_COUNT,
       locale,
     },

@@ -41,6 +41,13 @@ export default async function IndexPage({ params, searchParams }: Props) {
 
   const { locale, slug } = await params;
 
+  // `_next`, `.well-known` and dotted paths are excluded from the middleware
+  // matcher, so they arrive here with `locale` bound to the first URL segment.
+  // Passing that to Contentful as `query.locale` is a guaranteed 400
+  // ("Unknown locale: _next"). An unrecognised locale segment is a 404.
+  const { locales: supportedLocales } = await getI18nConfig();
+  if (!supportedLocales.includes(locale)) notFound();
+
   let landingPage: ILandingPage | undefined;
   let blogPost: IBlogPostPage | undefined;
 
@@ -113,6 +120,13 @@ export async function generateMetadata(
   const resolvedSp = await searchParams;
   const { isPreview, timelineToken, environmentId } = await resolvePreviewMode(resolvedSp);
   const { locale, slug } = await params;
+
+  // `_next`, `.well-known` and dotted paths are excluded from the middleware
+  // matcher, so they arrive here with `locale` bound to the first URL segment.
+  // Passing that to Contentful as `query.locale` is a guaranteed 400
+  // ("Unknown locale: _next"). An unrecognised locale segment is a 404.
+  const { locales: supportedLocales } = await getI18nConfig();
+  if (!supportedLocales.includes(locale)) return {};
 
   let pageEntry: ILandingPage | IBlogPostPage | undefined;
   try {

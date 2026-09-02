@@ -25,6 +25,17 @@ type Props = {
 const NT_STORAGE_KEY = "ninetailed_profile";
 
 /**
+ * Module-level (not per-component) guard for profile error recovery.
+ *
+ * Recovery remounts <NinetailedProvider> via its `key`, which destroys and
+ * recreates every component inside it — so a useRef/useState guard held by a
+ * child is wiped by the very action it is meant to gate, and a single failing
+ * request can loop forever. This flag lives outside the React tree so it
+ * survives remounts and caps recovery at one attempt per page load.
+ */
+let profileRecoveryAttempted = false;
+
+/**
  * Wipe Ninetailed profile data from browser storage so the SDK
  * creates a fresh anonymous profile on next mount.
  *
@@ -69,15 +80,14 @@ function clearNinetailedStorage(force = false) {
  */
 function ProfileErrorRecovery({ onReset }: { onReset: () => void }) {
   const { reset } = useNinetailed();
-  const hasReset = useRef(false);
 
   // Expose a one-shot reset that the parent can trigger via onError
   useEffect(() => {
     if (typeof window === "undefined") return;
-    // Stash reset function on window so the onError callback can reach it
+    // Stash reset function on window so the onError callback can reach it.
+    // The caller owns the attempt guard (profileRecoveryAttempted) — it must
+    // not live here, since this component is remounted by the recovery itself.
     (window as any).__nt_reset = async () => {
-      if (hasReset.current) return;
-      hasReset.current = true;
       console.warn("[Ninetailed] Resetting profile via SDK reset()…");
       try {
         await reset();
@@ -180,30 +190,50 @@ export default function AppProviders({ children, skipLivePreviewWrapper = false 
   }, []);
 
   // SDK-level error handler: passed to <NinetailedProvider onError>.
-  // When the Experience API returns a 404 (stale profile), we call
-  // reset() via the ProfileErrorRecovery child to get a fresh profile.
+  // A 404 on a profile request usually means the locally stored profile is
+  // stale, which one reset() fixes. But recovery remounts the provider and
+  // reset() itself issues a profile request — so if the 404 has a cause reset
+  // cannot fix (e.g. a clientId/environment that does not exist), retrying
+  // reproduces the failure and loops. Hence: at most one attempt per page
+  // load, then stop and say what to check.
   const handleNinetailedError = useCallback(
     (error: string | Error, ...args: unknown[]) => {
       const msg = [String(error), ...args.map(String)].join(" ");
       console.warn("[Ninetailed] SDK error:", msg);
 
-      const is404 =
-        msg.includes("404") || msg.includes("[404]") || msg.includes("not retryable");
+      const is404 = msg.includes("404");
       const isProfileIssue =
         msg.includes("Update Profile") ||
         msg.includes("Profile request failed") ||
         msg.includes("request failed");
 
-      if (is404 && isProfileIssue) {
-        // Try SDK reset() first (set up by ProfileErrorRecovery)
-        const sdkReset = (window as any).__nt_reset;
-        if (typeof sdkReset === "function") {
-          sdkReset();
-        } else {
-          // Fallback: manual wipe + remount
-          clearNinetailedStorage();
-          setTimeout(() => setProviderKey((k) => k + 1), 150);
-        }
+      if (!is404 || !isProfileIssue) return;
+
+      if (profileRecoveryAttempted) {
+        // Already tried once this page load — a second attempt would repeat
+        // the same failing request. Surface the likely cause instead.
+        console.error(
+          "[Ninetailed] Profile request still failing after reset — giving up for this page load. " +
+            "Check that NEXT_PUBLIC_NINETAILED_CLIENT_ID and NEXT_PUBLIC_NINETAILED_ENVIRONMENT " +
+            "name an organization/environment that exists. Note NEXT_PUBLIC_* values are inlined " +
+            "at build time, so changing them requires a rebuild/redeploy.",
+          {
+            clientId: process.env.NEXT_PUBLIC_NINETAILED_CLIENT_ID,
+            environment: process.env.NEXT_PUBLIC_NINETAILED_ENVIRONMENT,
+          }
+        );
+        return;
+      }
+      profileRecoveryAttempted = true;
+
+      // Try SDK reset() first (set up by ProfileErrorRecovery)
+      const sdkReset = (window as any).__nt_reset;
+      if (typeof sdkReset === "function") {
+        sdkReset();
+      } else {
+        // Fallback: manual wipe + remount
+        clearNinetailedStorage();
+        setTimeout(() => setProviderKey((k) => k + 1), 150);
       }
     },
     []

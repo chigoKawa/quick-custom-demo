@@ -1,4 +1,5 @@
 import { getEntriesInEnvironment, getEntries } from "@/lib/contentful";
+import { unscoped } from "@/lib/site-scope";
 import { getI18nConfig } from "@/i18n-config";
 import {
   AppScreenSkeleton,
@@ -87,25 +88,25 @@ export async function loadAppData(opts: {
   const fetchAllScreens = environmentId
     ? () =>
         getEntriesInEnvironment<AppScreenSkeleton>({
-          options: {
+          options: unscoped({
             content_type: "appScreen",
             locale,
             include: 5,
             limit: 50,
             order: ["fields.screenKey"],
-          },
+          }),
           isPreviewEnabled: isPreview,
           environment: environmentId,
         })
     : () =>
         getEntries<AppScreenSkeleton>(
-          {
+          unscoped({
             content_type: "appScreen",
             locale,
             include: 5,
             limit: 50,
             order: ["fields.screenKey"],
-          },
+          }),
           isPreview,
           null,
           null
@@ -114,23 +115,23 @@ export async function loadAppData(opts: {
   const fetchSupplementalMicrocopy = environmentId
     ? () =>
         getEntriesInEnvironment<MicrocopySkeleton>({
-          options: {
+          options: unscoped({
             content_type: "microcopy",
             "fields.key[match]": "app.",
             locale,
             limit: 500,
-          },
+          }),
           isPreviewEnabled: isPreview,
           environment: environmentId,
         })
     : () =>
         getEntries<MicrocopySkeleton>(
-          {
+          unscoped({
             content_type: "microcopy",
             "fields.key[match]": "app.",
             locale,
             limit: 500,
-          },
+          }),
           isPreview,
           null,
           null

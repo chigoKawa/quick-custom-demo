@@ -7,7 +7,10 @@ const ENVIRONMENT_ID =
   process.env.NEXT_PUBLIC_CTF_ENVIRONMENT ||
   process.env.CONTENTFUL_ENVIRONMENT ||
   "master";
-const MANAGEMENT_TOKEN = process.env.CONTENTFUL_MANAGEMENT_TOKEN;
+// CTF_MANAGEMENT_TOKEN first: CONTENTFUL_MANAGEMENT_TOKEN is also present in
+// some .env files but is the stale name there and 401s.
+const MANAGEMENT_TOKEN =
+  process.env.CTF_MANAGEMENT_TOKEN || process.env.CONTENTFUL_MANAGEMENT_TOKEN;
 
 function requireEnv(name, value) {
   if (!value || typeof value !== "string") {
@@ -16,7 +19,7 @@ function requireEnv(name, value) {
 }
 
 function buildClient() {
-  requireEnv("CONTENTFUL_MANAGEMENT_TOKEN", MANAGEMENT_TOKEN);
+  requireEnv("CTF_MANAGEMENT_TOKEN", MANAGEMENT_TOKEN);
   requireEnv("NEXT_PUBLIC_CTF_SPACE_ID", SPACE_ID);
 
   return createClient(

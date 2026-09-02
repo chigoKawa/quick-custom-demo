@@ -1,4 +1,5 @@
 import { getEntries } from "@/lib/contentful";
+import { unscoped } from "@/lib/site-scope";
 import { mapLandingPageToProps } from "@/lib/contentful-mappers";
 import type { ILandingPage, LandingPageSkeleton } from "@/features/contentful/type";
 
@@ -35,7 +36,9 @@ const fetchLandingPage: PreviewFetcher = async ({ entryId, slug, locale, isPrevi
     return null;
   }
 
-  const entries = await getEntries<LandingPageSkeleton>(query, isPreview);
+  // The platform preview harness previews whatever entry an editor opened,
+  // which may belong to any site in the space.
+  const entries = await getEntries<LandingPageSkeleton>(unscoped(query), isPreview);
   const raw = entries[0] as ILandingPage | undefined;
   if (!raw) return null;
 

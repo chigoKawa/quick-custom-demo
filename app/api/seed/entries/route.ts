@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getEntries } from "@/lib/contentful";
+import { unscoped } from "@/lib/site-scope";
 import type { EntrySkeletonType, Entry } from "contentful";
 
 export const dynamic = "force-dynamic";
@@ -52,7 +53,10 @@ export async function GET(request: NextRequest) {
       query["fields.metricEventName"] = metricEventName;
     }
 
-    const entries = await getEntries<EntrySkeletonType>(query, false);
+    // Dev seeding tool: the allowlist above is mostly section-level types that
+    // have no `site` reference, and the point of the tool is to see everything
+    // in the space. Reads across all sites on purpose.
+    const entries = await getEntries<EntrySkeletonType>(unscoped(query), false);
 
     const items = entries.map((e) => {
       const f = e.fields as Record<string, unknown>;

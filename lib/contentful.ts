@@ -2,6 +2,12 @@ import { createClient } from "contentful";
 import type { EntryCollection, EntrySkeletonType, Entry, CreateClientParams } from "contentful";
 import { parseTimelinePreviewToken } from "@contentful/timeline-preview";
 import { toJsonSafe } from "./json-safe";
+import {
+  applySiteScope,
+  assertSingleResolverMatch,
+  resolverKey,
+  SiteScopeError,
+} from "./site-scope";
 
 /**
  * The configured Contentful environment. Never hardcode an environment name —
@@ -128,20 +134,36 @@ export const getEntries = async <T extends EntrySkeletonType>(
       });
       return [];
     }
+    // Single chokepoint for optional site (brand) scoping. A no-op unless
+    // SITE_ID is set; throws rather than serving another brand's content when a
+    // content type is unclassified. Deliberately outside the try/catch's silent
+    // `return []` path — see the rethrow in the catch block below.
+    const scopedOptions = applySiteScope(options as Record<string, unknown>);
+
     const clientInstance = isPreviewEnabled
       ? getPreviewClient(timelineToken, environmentId)
       : environmentId
         ? getClientForEnvironment({ environment: environmentId, preview: false })
         : client;
     const entries: EntryCollection<T> = await clientInstance.getEntries<T>(
-      options as Record<string, unknown>
+      scopedOptions
     );
+    // In site mode, a URL that resolves to more than one entry is a modelling
+    // error, not something to silently pick a winner for. Inert when scoping is
+    // off. `total` counts all matches regardless of `limit`, so this costs no
+    // extra request and changes nothing about what the caller receives.
+    const key = resolverKey(scopedOptions);
+    if (key) assertSingleResolverMatch(key, scopedOptions, entries.total);
     // Defensive: SDK link resolution can produce true circular references
     // (e.g. Ninetailed A/B baseline ↔ experiment). Normalize to a JSON-safe
     // graph so any downstream serialization (RSC props, Live Preview, Ninetailed
     // preview) never throws "Converting circular structure to JSON".
     return toJsonSafe(entries.items);
   } catch (error) {
+    // A misconfigured site scope must never degrade into an empty page: an
+    // unclassified content type means we don't know whose content it is.
+    if (error instanceof SiteScopeError) throw error;
+
     // When an explicit environment doesn't exist (404 on Environment resource),
     // fall back to the default environment so the page still renders.
     if (environmentId && isEnvironmentNotFound(error)) {
@@ -152,12 +174,22 @@ export const getEntries = async <T extends EntrySkeletonType>(
         const fallbackClient = isPreviewEnabled
           ? getPreviewClient(timelineToken)
           : client;
+        const fallbackOptions = applySiteScope(
+          options as Record<string, unknown>
+        );
         const fallbackEntries: EntryCollection<T> =
-          await fallbackClient.getEntries<T>(
-            options as Record<string, unknown>
+          await fallbackClient.getEntries<T>(fallbackOptions);
+        const fallbackKey = resolverKey(fallbackOptions);
+        if (fallbackKey) {
+          assertSingleResolverMatch(
+            fallbackKey,
+            fallbackOptions,
+            fallbackEntries.total
           );
+        }
         return toJsonSafe(fallbackEntries.items);
       } catch (fallbackError) {
+        if (fallbackError instanceof SiteScopeError) throw fallbackError;
         console.error(
           "[Contentful] Default environment fallback also failed:",
           fallbackError
@@ -176,12 +208,22 @@ export const getEntries = async <T extends EntrySkeletonType>(
         const fallbackClient = environmentId
           ? getClientForEnvironment({ environment: environmentId, preview: true })
           : previewClient;
+        const fallbackOptions = applySiteScope(
+          options as Record<string, unknown>
+        );
         const fallbackEntries: EntryCollection<T> =
-          await fallbackClient.getEntries<T>(
-            options as Record<string, unknown>
+          await fallbackClient.getEntries<T>(fallbackOptions);
+        const fallbackKey = resolverKey(fallbackOptions);
+        if (fallbackKey) {
+          assertSingleResolverMatch(
+            fallbackKey,
+            fallbackOptions,
+            fallbackEntries.total
           );
+        }
         return toJsonSafe(fallbackEntries.items);
       } catch (fallbackError) {
+        if (fallbackError instanceof SiteScopeError) throw fallbackError;
         console.error(
           "[Contentful] Standard preview fallback also failed:",
           fallbackError
@@ -217,16 +259,23 @@ export const getEntriesInEnvironment = async <T extends EntrySkeletonType>(
       return [];
     }
 
+    const scopedOptions = applySiteScope(
+      params.options as Record<string, unknown>
+    );
+
     const clientInstance = getClientForEnvironment({
       environment: params.environment || DEFAULT_CTF_ENVIRONMENT,
       preview: Boolean(params.isPreviewEnabled),
     });
 
     const entries: EntryCollection<T> = await clientInstance.getEntries<T>(
-      params.options as Record<string, unknown>
+      scopedOptions
     );
+    const key = resolverKey(scopedOptions);
+    if (key) assertSingleResolverMatch(key, scopedOptions, entries.total);
     return toJsonSafe(entries.items);
   } catch (error) {
+    if (error instanceof SiteScopeError) throw error;
     console.error("Error fetching entries from Contentful:", error);
     return [];
   }
@@ -278,8 +327,10 @@ export const getAllPageSlugs = async <T extends EntrySkeletonType>(
       return [];
     }
 
+    const scopedOptions = applySiteScope(options);
+
     const entries: EntryCollection<T> = await clientInstance.getEntries<T>(
-      options
+      scopedOptions
     );
     const totalPages = entries?.total;
     const limit = entries.limit as number;
@@ -288,7 +339,7 @@ export const getAllPageSlugs = async <T extends EntrySkeletonType>(
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       const slugs = await clientInstance.getEntries<T>({
-        ...options,
+        ...scopedOptions,
         skip: page * entries.limit,
         limit: entries.limit,
         select: "fields.slug",
@@ -301,6 +352,7 @@ export const getAllPageSlugs = async <T extends EntrySkeletonType>(
 
     return allSlugs;
   } catch (error) {
+    if (error instanceof SiteScopeError) throw error;
     console.error("Error fetching entries from Contentful:", error);
     return [];
   }

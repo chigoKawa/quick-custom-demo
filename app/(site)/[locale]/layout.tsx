@@ -2,6 +2,7 @@ import PersonalizedSiteSettings from "@/features/personalization/personalized-si
 import CouponAlert from "@/features/personalization/coupon-alert";
 import { SiteChromeLocaleProvider } from "@/features/site-chrome-locale";
 import { getSiteSettings } from "@/lib/site-settings";
+import { SiteScopeError } from "@/lib/site-scope";
 import { themeToCSS } from "@/lib/theme";
 import { draftMode, headers } from "next/headers";
 import { getI18nConfig, type Locale } from "@/i18n-config";
@@ -37,6 +38,11 @@ export default async function LocaleLayout({
       environmentId || undefined
     );
   } catch (error) {
+    // A site-scope misconfiguration must not degrade quietly: rendering every
+    // page with no nav, logo or theme looks like a content problem and would
+    // send someone hunting through Contentful. A transient fetch failure still
+    // degrades to bare chrome, which is the long-standing behaviour.
+    if (error instanceof SiteScopeError) throw error;
     console.error("Failed to fetch site settings:", error);
   }
 

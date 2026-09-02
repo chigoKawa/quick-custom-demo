@@ -1,4 +1,5 @@
 import { getEntries } from "./contentful";
+import { getSiteScope, SiteScopeError, unscoped } from "./site-scope";
 import type { Entry, Asset, EntrySkeletonType } from "contentful";
 
 // Type definitions for site settings
@@ -83,9 +84,36 @@ export interface HeaderNavigationSkeleton {
   };
 }
 
+export interface SiteSkeleton {
+  contentTypeId: "site";
+  fields: {
+    internalName: string;
+    siteSettings: Entry<SiteSettingsSkeleton>;
+    domain?: string;
+    defaultLocale?: string;
+    /** Slug of the `landingPage` this site serves at `/`. Optional: when blank
+     *  the home route falls back to NEXT_PUBLIC_CTF_HOMEPAGE_SLUG, then "home",
+     *  which is what every single-site demo already does. Set it per brand when
+     *  two sites in one space both need a home page — `landingPage.slug` is
+     *  unique space-wide, so the brands need distinct slugs (e.g. "home" and
+     *  "home-acme"). The slug never appears in the URL; `/` renders it. */
+    homePageSlug?: string;
+  };
+}
+
 /**
- * Fetch the site settings entry from Contentful
- * Assumes there's only one siteSettings entry (singleton pattern)
+ * Fetch the site settings entry from Contentful.
+ *
+ * Two resolution paths, chosen by whether site scoping is on:
+ *
+ *  - Single-site (the default): siteSettings is a singleton. Oldest entry wins,
+ *    which is the behaviour every existing demo already depends on.
+ *  - Site-scoped: the `site` entry named by SITE_ID owns the settings, so we
+ *    fetch that entry and follow its required `siteSettings` reference. There is
+ *    no hardcoded default site id and no fallback to the singleton — falling
+ *    back would hand one brand another brand's logo, theme and navigation,
+ *    which is exactly the failure this mode exists to prevent. A missing or
+ *    unresolvable site throws.
  */
 export async function getSiteSettings(
   locale?: string,
@@ -93,6 +121,17 @@ export async function getSiteSettings(
   timelineToken?: string | null,
   environmentId?: string | null
 ): Promise<Entry<SiteSettingsSkeleton> | null> {
+  const scope = getSiteScope();
+
+  if (scope.mode === "site") {
+    return getSiteSettingsForSite(scope.siteId, {
+      locale,
+      preview,
+      timelineToken,
+      environmentId,
+    });
+  }
+
   // include:5 resolves siteSettings → nav → navLinkColumn → navLink → target page (slug).
   // nt_experiences are stripped at the live-preview boundary, not at fetch time.
   const query: Record<string, unknown> = {
@@ -111,6 +150,63 @@ export async function getSiteSettings(
   );
 
   return entries[0] || null;
+}
+
+async function getSiteSettingsForSite(
+  siteId: string,
+  opts: {
+    locale?: string;
+    preview?: boolean;
+    timelineToken?: string | null;
+    environmentId?: string | null;
+  }
+): Promise<Entry<SiteSettingsSkeleton>> {
+  // include:6 — one hop for site → siteSettings, then the same five levels the
+  // singleton path resolves (nav → navLinkColumn → navLink → target page).
+  const query: Record<string, unknown> = {
+    content_type: "site",
+    "sys.id": siteId,
+    include: 6,
+    limit: 1,
+  };
+  if (opts.locale) {
+    query.locale = opts.locale;
+  }
+
+  // `site` is not itself site-owned — it is the thing being selected — so it is
+  // fetched by id without a site filter.
+  const sites = await getEntries<SiteSkeleton>(
+    unscoped(query),
+    opts.preview || false,
+    opts.timelineToken,
+    opts.environmentId
+  );
+
+  const site = sites[0];
+  if (!site) {
+    throw new SiteScopeError(
+      `[site-scope] SITE_ID="${siteId}" does not resolve to a published \`site\` ` +
+        `entry in this environment. Create the site entry, publish it, or unset ` +
+        `SITE_ID to run this deployment as a single-site demo.`
+    );
+  }
+
+  const settings = site.fields?.siteSettings as unknown as
+    | Entry<SiteSettingsSkeleton>
+    | undefined;
+
+  // `siteSettings` is required on `site`, so an unresolved reference here means
+  // the linked entry is unpublished (Delivery API drops the link rather than
+  // returning a stub).
+  if (!settings?.fields) {
+    throw new SiteScopeError(
+      `[site-scope] Site "${siteId}" has no resolvable \`siteSettings\`. The ` +
+        `linked siteSettings entry is most likely unpublished. Refusing to fall ` +
+        `back to another site's settings.`
+    );
+  }
+
+  return settings;
 }
 
 export type LocaleFieldPick = { locale?: string; defaultLocale?: string };
@@ -257,4 +353,72 @@ export function getAssetUrl(
   const url = 'url' in file ? String(file.url) : null;
 
   return url ? (url.startsWith('//') ? `https:${url}` : url) : null;
+}
+
+/**
+ * Resolve the slug of the landing page this deployment serves at `/`.
+ *
+ * Tiers, highest priority first:
+ *  1. `site.homePageSlug` — site mode only, when the field is filled in. This is
+ *     what lets two brands in one space each have a home page: `landingPage.slug`
+ *     is unique space-wide, so brand B uses a distinct slug ("home-acme") while
+ *     still rendering at `/`.
+ *  2. `NEXT_PUBLIC_CTF_HOMEPAGE_SLUG`
+ *  3. `"home"`
+ *
+ * Tiers 2 and 3 are not a cross-brand leak: in site mode `applySiteScope` adds
+ * `fields.site.sys.id` to every landingPage query, so a fallback slug still
+ * resolves inside this brand. A brand with no matching page 404s rather than
+ * borrowing another brand's home page.
+ *
+ * Fetch cost is one `site` entry with `select` pinned to two Symbol fields —
+ * `include` is omitted so the settings tree is not dragged along.
+ */
+export async function getHomePageSlug(opts?: {
+  locale?: string;
+  preview?: boolean;
+  timelineToken?: string | null;
+  environmentId?: string | null;
+}): Promise<string> {
+  const configured = process.env.NEXT_PUBLIC_CTF_HOMEPAGE_SLUG || "home";
+  const scope = getSiteScope();
+  if (scope.mode !== "site") return configured;
+
+  const query: Record<string, unknown> = {
+    content_type: "site",
+    "sys.id": scope.siteId,
+    select: "sys.id,fields.internalName,fields.homePageSlug",
+    limit: 1,
+  };
+  if (opts?.locale) {
+    query.locale = opts.locale;
+  }
+
+  // `site` is the thing being selected, not site-owned content, so it is
+  // fetched by id without a site filter.
+  const sites = await getEntries<SiteSkeleton>(
+    unscoped(query),
+    opts?.preview || false,
+    opts?.timelineToken,
+    opts?.environmentId
+  );
+
+  const site = sites[0];
+  if (!site) {
+    // Same failure the layout reports, but the home route can hit it first.
+    throw new SiteScopeError(
+      `[site-scope] SITE_ID="${scope.siteId}" does not resolve to a published ` +
+        `\`site\` entry in this environment. Create the site entry, publish it, ` +
+        `or unset SITE_ID to run this deployment as a single-site demo.`
+    );
+  }
+
+  // `select` narrows the returned field set, so read it back the same way the
+  // siteSettings link is read above rather than trusting the skeleton type.
+  const slug = site.fields?.homePageSlug as unknown as string | undefined;
+  if (typeof slug === "string" && slug.trim().length > 0) {
+    return slug.trim();
+  }
+
+  return configured;
 }

@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Entry, EntryFields, Asset, EntrySkeletonType } from "contentful";
+// Type-only: `SiteSkeleton` lives next to `SiteSettingsSkeleton`, which it
+// references. `import type` is erased at compile time, so this pulls no
+// server-side module into a client bundle.
+import type { SiteSkeleton } from "@/lib/site-settings";
 
 type JsonObject = { [key: string]: any };
 
@@ -7,6 +11,12 @@ export interface IMicrocopy extends Entry {
   fields: {
     key: EntryFields.Symbol;
     value: EntryFields.Symbol;
+    /**
+     * Which brand (site) owns this entry. Optional and unset in single-site
+     * demos; read by the query filter in lib/site-scope.ts, never by a
+     * component.
+     */
+    site?: EntryFields.EntryLink<SiteSkeleton>;
   };
 }
 
@@ -202,6 +212,12 @@ export interface ILandingPage extends Entry {
     seoMetadata?: ISeo;
     parent?: EntryFields.EntryLink<LandingPageSkeleton>;
     fullPath?: EntryFields.Symbol;
+    /**
+     * Which brand (site) owns this entry. Optional and unset in single-site
+     * demos; read by the query filter in lib/site-scope.ts, never by a
+     * component.
+     */
+    site?: EntryFields.EntryLink<SiteSkeleton>;
   };
 }
 
@@ -238,6 +254,12 @@ export interface IBlogPostPage extends Entry {
     seoMetadata?: ISeo;
     parent?: EntryFields.EntryLink<LandingPageSkeleton | BlogPostPageSkeleton>;
     fullPath?: EntryFields.Symbol;
+    /**
+     * Which brand (site) owns this entry. Optional and unset in single-site
+     * demos; read by the query filter in lib/site-scope.ts, never by a
+     * component.
+     */
+    site?: EntryFields.EntryLink<SiteSkeleton>;
   };
 }
 
@@ -260,6 +282,12 @@ export interface ICategoryPage extends Entry {
     >;
     content?: EntryFields.Array<Entry<EntrySkeletonType>>;
     seoMetadata?: ISeo;
+    /**
+     * Which brand (site) owns this entry. Optional and unset in single-site
+     * demos; read by the query filter in lib/site-scope.ts, never by a
+     * component.
+     */
+    site?: EntryFields.EntryLink<SiteSkeleton>;
   };
 }
 
@@ -589,6 +617,12 @@ export interface IProductStory extends Entry {
     storyAngle?: EntryFields.Array<EntryFields.Symbol>;
     seoMetadata?: ISeo;
     nt_experiences?: Entry<EntrySkeletonType>[];
+    /**
+     * Which brand (site) owns this entry. Optional and unset in single-site
+     * demos; read by the query filter in lib/site-scope.ts, never by a
+     * component.
+     */
+    site?: EntryFields.EntryLink<SiteSkeleton>;
   };
 }
 
@@ -657,6 +691,12 @@ export interface IPmsPropertyEntry extends Entry<any> {
     /** Optional curated offers — rendered instead of (or in addition to) the PMS offers. */
     offers?: EntryFields.Array<EntryFields.EntryLink<GeneralTopicSkeleton>>;
     bodySections?: EntryFields.Array<EntryFields.EntryLink<EntrySkeletonType>>;
+    /**
+     * Which brand (site) owns this entry. Optional and unset in single-site
+     * demos; read by the query filter in lib/site-scope.ts, never by a
+     * component.
+     */
+    site?: EntryFields.EntryLink<SiteSkeleton>;
   };
 }
 
@@ -813,6 +853,12 @@ export interface IProductCategory extends Entry<any> {
     sections?: Entry<any>[];
     seoMetadata?: Entry<any>;
     nt_experiences?: Entry<any>[];
+    /**
+     * Which brand (site) owns this entry. Optional and unset in single-site
+     * demos; read by the query filter in lib/site-scope.ts, never by a
+     * component.
+     */
+    site?: EntryFields.EntryLink<SiteSkeleton>;
   };
 }
 
@@ -841,6 +887,12 @@ export interface ICampaign extends Entry<any> {
     bottomSections?: Entry<any>[];
     seoMetadata?: Entry<any>;
     nt_experiences?: Entry<any>[];
+    /**
+     * Which brand (site) owns this entry. Optional and unset in single-site
+     * demos; read by the query filter in lib/site-scope.ts, never by a
+     * component.
+     */
+    site?: EntryFields.EntryLink<SiteSkeleton>;
   };
 }
 
@@ -942,6 +994,12 @@ export interface IAuction extends Entry<any> {
     images?: Asset[];
     topSections?: Entry<any>[];
     bottomSections?: Entry<any>[];
+    /**
+     * Which brand (site) owns this entry. Optional and unset in single-site
+     * demos; read by the query filter in lib/site-scope.ts, never by a
+     * component.
+     */
+    site?: EntryFields.EntryLink<SiteSkeleton>;
   };
 }
 
@@ -1159,6 +1217,12 @@ export interface IRedirect extends Entry {
     statusCode: EntryFields.Integer;
     status: EntryFields.Symbol<RedirectStatus>;
     notes?: EntryFields.Text;
+    /**
+     * Which brand (site) owns this entry. Optional and unset in single-site
+     * demos; read by the query filter in lib/site-scope.ts, never by a
+     * component.
+     */
+    site?: EntryFields.EntryLink<SiteSkeleton>;
   };
 }
 

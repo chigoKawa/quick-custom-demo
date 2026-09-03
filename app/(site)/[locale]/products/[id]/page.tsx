@@ -5,6 +5,13 @@ import { IntegrationFactory } from "@/lib/integrations/core/integration-factory"
 import type { ICommerceIntegration } from "@/lib/integrations/commerce/commerce.interface";
 import { AddToCartButton } from "./add-to-cart-button";
 
+// The catalogue is resolved from Contentful with a short TTL, so this route
+// must not be captured in the full route cache — a cached render would keep
+// serving stale products long after the TTL expired. Matches the sibling
+// category route.
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 function formatPrice(price: number, currency?: string): string {
   const c = (currency ?? "NOK").toUpperCase();
   try {

@@ -1,0 +1,740 @@
+[
+  {
+    "id": "dna-apple-iphone-16e-5g-256gb-white",
+    "title": "Apple iPhone 16e 5G — 256GB, White",
+    "slug": "apple-iphone-16e-5g-256gb-white",
+    "description": "Apple iPhone 16e 5G from Apple, available through DNA’s online store in Finland. It is built around Apple's A18 chip and a 6.1-inch OLED display. Comes with DNA’s standard warranty and the option of interest-free payment plans of up to 36 months.",
+    "price": 599.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Phones/Apple/OPM2792_Apple_iPhone16e_white_image1.png"
+    ],
+    "category": "smartphones",
+    "tags": [
+      "phones",
+      "apple",
+      "5g"
+    ],
+    "stock": 1880,
+    "rating": 8.5,
+    "reviewCount": 2665,
+    "metadata": {
+      "brand": "Apple",
+      "articleNumber": "DNA-IPH16E-256-WHT",
+      "type": "Smartphone",
+      "storage": "256 GB",
+      "color": "White",
+      "connectivity": "5G",
+      "releaseYear": "2026"
+    }
+  },
+  {
+    "id": "dna-honor-x5c-plus-64gb-cyan",
+    "title": "HONOR X5c Plus — 64GB, Cyan",
+    "slug": "honor-x5c-plus-64gb-cyan",
+    "description": "HONOR X5c Plus from HONOR, available through DNA’s online store in Finland. It is an entry-level everyday phone with a large battery for all-day use. Comes with DNA’s standard warranty and the option of interest-free payment plans of up to 36 months.",
+    "price": 79.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Phones/Honor/OPM3171_HONOR_X5c-Plus_Cyan_image1.png"
+    ],
+    "category": "smartphones",
+    "tags": [
+      "phones",
+      "honor",
+      "4g",
+      "sale"
+    ],
+    "stock": 4068,
+    "rating": 8.7,
+    "reviewCount": 6445,
+    "metadata": {
+      "brand": "HONOR",
+      "articleNumber": "DNA-HONORX5CPLUS-64-CYN",
+      "type": "Smartphone",
+      "storage": "64 GB",
+      "color": "Cyan",
+      "connectivity": "4G",
+      "releaseYear": "2026",
+      "originalPrice": 99.0
+    }
+  },
+  {
+    "id": "dna-realme-c100-5g-64gb-sprouting-green",
+    "title": "realme C100 5G — 64GB, Sprouting Green",
+    "slug": "realme-c100-5g-64gb-sprouting-green",
+    "description": "realme C100 5G from realme, available through DNA’s online store in Finland. It is a budget-friendly 5G phone aimed at first-time smartphone buyers. Comes with DNA’s standard warranty and the option of interest-free payment plans of up to 36 months.",
+    "price": 149.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Phones/Realme/OPM3464_Realme_C100-5G_SproutingGreen_image1.png"
+    ],
+    "category": "smartphones",
+    "tags": [
+      "phones",
+      "realme",
+      "5g"
+    ],
+    "stock": 1735,
+    "rating": 9.2,
+    "reviewCount": 7720,
+    "metadata": {
+      "brand": "realme",
+      "articleNumber": "DNA-REALMEC100-64-GRN",
+      "type": "Smartphone",
+      "storage": "64 GB",
+      "color": "Sprouting Green",
+      "connectivity": "5G",
+      "releaseYear": "2026"
+    }
+  },
+  {
+    "id": "dna-honor-600-5g-orange",
+    "title": "HONOR 600 5G — Orange",
+    "slug": "honor-600-5g-orange",
+    "description": "HONOR 600 5G from HONOR, available through DNA’s online store in Finland. It is a slim mid-range flagship with a large curved AMOLED display. Comes with DNA’s standard warranty and the option of interest-free payment plans of up to 36 months.",
+    "price": 599.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Phones/Honor/OPM3433_Honor_600-5G_Orange_image1.png"
+    ],
+    "category": "smartphones",
+    "tags": [
+      "phones",
+      "honor",
+      "5g"
+    ],
+    "stock": 8991,
+    "rating": 8.6,
+    "reviewCount": 3868,
+    "metadata": {
+      "brand": "HONOR",
+      "articleNumber": "DNA-HONOR600-5G-ORG",
+      "type": "Smartphone",
+      "storage": "512 GB",
+      "color": "Orange",
+      "connectivity": "5G",
+      "releaseYear": "2026"
+    }
+  },
+  {
+    "id": "dna-samsung-galaxy-a27-5g-128gb-blue",
+    "title": "Samsung Galaxy A27 5G — 128GB, Blue",
+    "slug": "samsung-galaxy-a27-5g-128gb-blue",
+    "description": "Samsung Galaxy A27 5G from Samsung, available through DNA’s online store in Finland. It is a mid-range Galaxy A model with a bright AMOLED screen and long software support. Comes with DNA’s standard warranty and the option of interest-free payment plans of up to 36 months.",
+    "price": 299.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Phones/Samsung/OPM3583_Samsung_Galaxy-A27-5G_Blue_image1.png"
+    ],
+    "category": "smartphones",
+    "tags": [
+      "phones",
+      "samsung",
+      "5g"
+    ],
+    "stock": 576,
+    "rating": 8.5,
+    "reviewCount": 2203,
+    "metadata": {
+      "brand": "Samsung",
+      "articleNumber": "DNA-GALAXYA27-128-BLU",
+      "type": "Smartphone",
+      "storage": "128 GB",
+      "color": "Blue",
+      "connectivity": "5G",
+      "releaseYear": "2026"
+    }
+  },
+  {
+    "id": "dna-motorola-moto-g06-pantone-tapestry-blue",
+    "title": "Motorola Moto G06 — Pantone Tapestry Blue",
+    "slug": "motorola-moto-g06-pantone-tapestry-blue",
+    "description": "Motorola Moto G06 from Motorola, available through DNA’s online store in Finland. It is an affordable everyday phone with a Pantone colour-matched finish. Comes with DNA’s standard warranty and the option of interest-free payment plans of up to 36 months.",
+    "price": 149.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Phones/Motorola/OPM3219_Motorola_G06_Tapestry_image1.png"
+    ],
+    "category": "smartphones",
+    "tags": [
+      "phones",
+      "motorola",
+      "4g"
+    ],
+    "stock": 3867,
+    "rating": 9.1,
+    "reviewCount": 629,
+    "metadata": {
+      "brand": "Motorola",
+      "articleNumber": "DNA-MOTOG06-BLU",
+      "type": "Smartphone",
+      "storage": "128 GB",
+      "color": "Pantone Tapestry Blue",
+      "connectivity": "4G",
+      "releaseYear": "2026"
+    }
+  },
+  {
+    "id": "dna-realme-gt-8-pro-5g-256gb-urban-blue",
+    "title": "realme GT 8 Pro 5G — 256GB, Urban Blue",
+    "slug": "realme-gt-8-pro-5g-256gb-urban-blue",
+    "description": "realme GT 8 Pro 5G from realme, available through DNA’s online store in Finland. It is realme's flagship contender with a Snapdragon 8 Elite Gen 5 chip and a 200MP camera system. Comes with DNA’s standard warranty and the option of interest-free payment plans of up to 36 months.",
+    "price": 899.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Phones/Realme/OPM3464_Realme_GT-8-Pro_UrbanBlue_image1.png"
+    ],
+    "category": "smartphones",
+    "tags": [
+      "phones",
+      "realme",
+      "5g"
+    ],
+    "stock": 9251,
+    "rating": 8.7,
+    "reviewCount": 5735,
+    "metadata": {
+      "brand": "realme",
+      "articleNumber": "DNA-REALMEGT8PRO-256-BLU",
+      "type": "Smartphone",
+      "storage": "256 GB",
+      "color": "Urban Blue",
+      "connectivity": "5G",
+      "releaseYear": "2026"
+    }
+  },
+  {
+    "id": "dna-zte-nubia-a57-black",
+    "title": "ZTE nubia A57 — Black",
+    "slug": "zte-nubia-a57-black",
+    "description": "ZTE nubia A57 from ZTE, available through DNA’s online store in Finland. It is a no-frills, low-cost phone for basic calling, messaging and browsing. Comes with DNA’s standard warranty and the option of interest-free payment plans of up to 36 months.",
+    "price": 139.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Phones/Nubia/OPM3591_Nubia_A57_DuskBlack_image1.png"
+    ],
+    "category": "smartphones",
+    "tags": [
+      "phones",
+      "zte",
+      "4g",
+      "sale"
+    ],
+    "stock": 8984,
+    "rating": 9.0,
+    "reviewCount": 4091,
+    "metadata": {
+      "brand": "ZTE",
+      "articleNumber": "DNA-NUBIAA57-BLK",
+      "type": "Smartphone",
+      "storage": "128 GB",
+      "color": "Black",
+      "connectivity": "4G",
+      "releaseYear": "2026",
+      "originalPrice": 189.0
+    }
+  },
+  {
+    "id": "dna-honor-400-5g-gold",
+    "title": "HONOR 400 5G — Gold",
+    "slug": "honor-400-5g-gold",
+    "description": "HONOR 400 5G from HONOR, available through DNA’s online store in Finland. It is a camera-focused mid-ranger with a metallic gold finish. Comes with DNA’s standard warranty and the option of interest-free payment plans of up to 36 months.",
+    "price": 349.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Phones/Honor/OPM2953_Honor_400-5G_gold_image1.png"
+    ],
+    "category": "smartphones",
+    "tags": [
+      "phones",
+      "honor",
+      "5g"
+    ],
+    "stock": 9710,
+    "rating": 8.8,
+    "reviewCount": 7533,
+    "metadata": {
+      "brand": "HONOR",
+      "articleNumber": "DNA-HONOR400-5G-GLD",
+      "type": "Smartphone",
+      "storage": "256 GB",
+      "color": "Gold",
+      "connectivity": "5G",
+      "releaseYear": "2026"
+    }
+  },
+  {
+    "id": "dna-samsung-galaxy-z-flip8-5g-256gb-cream",
+    "title": "Samsung Galaxy Z Flip8 5G — 256GB, Cream",
+    "slug": "samsung-galaxy-z-flip8-5g-256gb-cream",
+    "description": "Samsung Galaxy Z Flip8 5G from Samsung, available through DNA’s online store in Finland. It is Samsung's latest foldable flip phone with a compact, pocketable form factor. Comes with DNA’s standard warranty and the option of interest-free payment plans of up to 36 months.",
+    "price": 1369.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Phones/Samsung/OPM3447_Samsung_Galaxy-Z-Flip8_Cream_image1.png"
+    ],
+    "category": "smartphones",
+    "tags": [
+      "phones",
+      "samsung",
+      "5g"
+    ],
+    "stock": 162,
+    "rating": 9.3,
+    "reviewCount": 1719,
+    "metadata": {
+      "brand": "Samsung",
+      "articleNumber": "DNA-GALAXYZFLIP8-256-CRM",
+      "type": "Smartphone",
+      "storage": "256 GB",
+      "color": "Cream",
+      "connectivity": "5G",
+      "releaseYear": "2026"
+    }
+  },
+  {
+    "id": "dna-garmin-fenix-8-amoled-47mm-black",
+    "title": "Garmin Fenix 8 AMOLED — 47mm, Black",
+    "slug": "garmin-fenix-8-amoled-47mm-black",
+    "description": "Garmin Fenix 8 AMOLED from Garmin, available through DNA’s online store in Finland. It is a rugged multisport watch built for serious outdoor training and navigation. Comes with DNA’s standard warranty and the option of interest-free payment plans of up to 36 months.",
+    "price": 879.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Accessories/Garmin/OPM2401_Garmin_Fenix-8-Amoled-47mm_Black_image1.png"
+    ],
+    "category": "smart-watches",
+    "tags": [
+      "wearables",
+      "garmin"
+    ],
+    "stock": 6980,
+    "rating": 8.9,
+    "reviewCount": 1685,
+    "metadata": {
+      "brand": "Garmin",
+      "articleNumber": "DNA-GARMINFENIX8-47-BLK",
+      "type": "Smartwatch",
+      "caseSize": "47 mm",
+      "color": "Black",
+      "connectivity": "GPS",
+      "batteryLife": "Up to 16 days"
+    }
+  },
+  {
+    "id": "dna-apple-watch-series-10-gps-46mm-jet-black-aluminum-sport-band",
+    "title": "Apple Watch Series 10 — GPS, 46mm, Jet Black Aluminum, Sport Band",
+    "slug": "apple-watch-series-10-gps-46mm-jet-black-aluminum-sport-band",
+    "description": "Apple Watch Series 10 from Apple, available through DNA’s online store in Finland. It is Apple's thinnest Watch yet, with a wide OLED display and full health tracking. Comes with DNA’s standard warranty and the option of interest-free payment plans of up to 36 months.",
+    "price": 299.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Accessories/Apple/OPM2431_Apple_WatchSeries10-GPS-46mm_JetBlackAluminumSportBand_image1.png"
+    ],
+    "category": "smart-watches",
+    "tags": [
+      "wearables",
+      "apple"
+    ],
+    "stock": 3583,
+    "rating": 9.6,
+    "reviewCount": 3169,
+    "metadata": {
+      "brand": "Apple",
+      "articleNumber": "DNA-AWSERIES10-46-JBLK",
+      "type": "Smartwatch",
+      "caseSize": "46 mm",
+      "color": "Jet Black",
+      "connectivity": "GPS",
+      "batteryLife": "Up to 18 hours"
+    }
+  },
+  {
+    "id": "dna-honor-watch-fit-active-black",
+    "title": "HONOR Watch Fit Active — Black",
+    "slug": "honor-watch-fit-active-black",
+    "description": "HONOR Watch Fit Active from HONOR, available through DNA’s online store in Finland. It is a light, slim fitness watch with over 100 sport modes and always-on display support. Comes with DNA’s standard warranty and the option of interest-free payment plans of up to 36 months.",
+    "price": 129.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Accessories/Honor/OPM3354_HONOR_WatchFitActive_black_image1.png"
+    ],
+    "category": "smart-watches",
+    "tags": [
+      "wearables",
+      "honor"
+    ],
+    "stock": 1730,
+    "rating": 8.6,
+    "reviewCount": 1204,
+    "metadata": {
+      "brand": "HONOR",
+      "articleNumber": "DNA-HONORWATCHFITACTIVE-BLK",
+      "type": "Smartwatch",
+      "caseSize": "42 mm",
+      "color": "Black",
+      "connectivity": "Bluetooth",
+      "batteryLife": "Up to 23 days"
+    }
+  },
+  {
+    "id": "dna-huawei-watch-gt5-pro-46mm-black",
+    "title": "Huawei Watch GT5 Pro — 46mm, Black",
+    "slug": "huawei-watch-gt5-pro-46mm-black",
+    "description": "Huawei Watch GT5 Pro from Huawei, available through DNA’s online store in Finland. It is a titanium-framed AMOLED sports watch with detailed training and recovery metrics. Comes with DNA’s standard warranty and the option of interest-free payment plans of up to 36 months.",
+    "price": 269.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Accessories/Huawei/OPM2641_Huawei_GT5Pro-alykello-46mm_Black_image1.png"
+    ],
+    "category": "smart-watches",
+    "tags": [
+      "wearables",
+      "huawei",
+      "sale"
+    ],
+    "stock": 5937,
+    "rating": 9.4,
+    "reviewCount": 5357,
+    "metadata": {
+      "brand": "Huawei",
+      "articleNumber": "DNA-HUAWEIGT5PRO-46-BLK",
+      "type": "Smartwatch",
+      "caseSize": "46 mm",
+      "color": "Black",
+      "connectivity": "GPS",
+      "batteryLife": "Up to 14 days",
+      "originalPrice": 329.0
+    }
+  },
+  {
+    "id": "dna-garmin-forerunner-165-light-gray",
+    "title": "Garmin Forerunner 165 — Light Gray",
+    "slug": "garmin-forerunner-165-light-gray",
+    "description": "Garmin Forerunner 165 from Garmin, available through DNA’s online store in Finland. It is a lightweight AMOLED running watch aimed at everyday training. Comes with DNA’s standard warranty and the option of interest-free payment plans of up to 36 months.",
+    "price": 239.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Accessories/Garmin/OPM2101_Garmin_Forerunner-165-juoksukello_MistGray_image1.png"
+    ],
+    "category": "smart-watches",
+    "tags": [
+      "wearables",
+      "garmin"
+    ],
+    "stock": 4389,
+    "rating": 9.4,
+    "reviewCount": 6389,
+    "metadata": {
+      "brand": "Garmin",
+      "articleNumber": "DNA-GARMINFR165-GRY",
+      "type": "Smartwatch",
+      "caseSize": "43 mm",
+      "color": "Light Gray",
+      "connectivity": "GPS",
+      "batteryLife": "Up to 11 days"
+    }
+  },
+  {
+    "id": "dna-suunto-vertical-black-sand",
+    "title": "Suunto Vertical — Black Sand",
+    "slug": "suunto-vertical-black-sand",
+    "description": "Suunto Vertical from Suunto, available through DNA’s online store in Finland. It is a long-battery-life expedition watch with five-satellite GPS and a built-in barometer. Comes with DNA’s standard warranty and the option of interest-free payment plans of up to 36 months.",
+    "price": 399.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Accessories/Suunto/OPM1650_Suunto_VerticalSportWatch_BlackSand_image1.png"
+    ],
+    "category": "smart-watches",
+    "tags": [
+      "wearables",
+      "suunto"
+    ],
+    "stock": 7583,
+    "rating": 9.1,
+    "reviewCount": 7967,
+    "metadata": {
+      "brand": "Suunto",
+      "articleNumber": "DNA-SUUNTOVERTICAL-BLKSAND",
+      "type": "Smartwatch",
+      "caseSize": "49 mm",
+      "color": "Black Sand",
+      "connectivity": "GPS",
+      "batteryLife": "Up to 30 days"
+    }
+  },
+  {
+    "id": "dna-sony-wf-1000xm5-gray",
+    "title": "Sony WF-1000XM5 — Gray",
+    "slug": "sony-wf-1000xm5-gray",
+    "description": "Sony WF-1000XM5 from Sony, available through DNA’s online store in Finland. It is Sony's flagship noise-cancelling earbuds with AI-tuned ANC. Comes with DNA’s standard warranty and the option of interest-free payment plans of up to 36 months.",
+    "price": 269.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Accessories/Sony/OPM1767_Sony_WF-1000XM5-vastamelu-nappikuulokkeet-laimake_White_image1.png"
+    ],
+    "category": "wireless-headphones",
+    "tags": [
+      "audio",
+      "sony"
+    ],
+    "stock": 6257,
+    "rating": 8.6,
+    "reviewCount": 2813,
+    "metadata": {
+      "brand": "Sony",
+      "articleNumber": "DNA-SONYWF1000XM5-GRY",
+      "type": "Wireless Headphones",
+      "color": "Gray",
+      "connectivity": "Bluetooth",
+      "noiseCancelling": "Yes",
+      "batteryLife": "8h (24h with case)"
+    }
+  },
+  {
+    "id": "dna-apple-airpods-pro-3-standard",
+    "title": "Apple AirPods Pro 3 — Standard",
+    "slug": "apple-airpods-pro-3-standard",
+    "description": "Apple AirPods Pro 3 from Apple, available through DNA’s online store in Finland. It is Apple's latest earbuds with twice the active noise cancellation of the previous generation. Comes with DNA’s standard warranty and the option of interest-free payment plans of up to 36 months.",
+    "price": 249.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Accessories/Apple/OPM3147_Apple_Airpods-Pro-3_Null_image1.png"
+    ],
+    "category": "wireless-headphones",
+    "tags": [
+      "audio",
+      "apple"
+    ],
+    "stock": 5981,
+    "rating": 9.1,
+    "reviewCount": 6183,
+    "metadata": {
+      "brand": "Apple",
+      "articleNumber": "DNA-AIRPODSPRO3",
+      "type": "Wireless Headphones",
+      "color": "White",
+      "connectivity": "Bluetooth",
+      "noiseCancelling": "Yes",
+      "batteryLife": "Up to 8 hours"
+    }
+  },
+  {
+    "id": "dna-samsung-galaxy-buds3-white",
+    "title": "Samsung Galaxy Buds3 — White",
+    "slug": "samsung-galaxy-buds3-white",
+    "description": "Samsung Galaxy Buds3 from Samsung, available through DNA’s online store in Finland. It is Samsung's open-fit true wireless earbuds tuned for all-day comfort. Comes with DNA’s standard warranty and the option of interest-free payment plans of up to 36 months.",
+    "price": 179.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Accessories/Samsung/OPM2294_Samsung_Galaxy-Buds3-langattomat-vastamelukuulokkeet_White_image1.png"
+    ],
+    "category": "wireless-headphones",
+    "tags": [
+      "audio",
+      "samsung"
+    ],
+    "stock": 1195,
+    "rating": 8.6,
+    "reviewCount": 2278,
+    "metadata": {
+      "brand": "Samsung",
+      "articleNumber": "DNA-GALAXYBUDS3-WHT",
+      "type": "Wireless Headphones",
+      "color": "White",
+      "connectivity": "Bluetooth",
+      "noiseCancelling": "Yes",
+      "batteryLife": "Up to 30h with case"
+    }
+  },
+  {
+    "id": "dna-jbl-tour-pro-3-latte",
+    "title": "JBL Tour Pro 3 — Latte",
+    "slug": "jbl-tour-pro-3-latte",
+    "description": "JBL Tour Pro 3 from JBL, available through DNA’s online store in Finland. It is premium earbuds with adaptive noise cancellation and a smart charging case display. Comes with DNA’s standard warranty and the option of interest-free payment plans of up to 36 months.",
+    "price": 299.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Accessories/JBL/OPM2919_JBL_Tour-Pro-3_Latte_image1.png"
+    ],
+    "category": "wireless-headphones",
+    "tags": [
+      "audio",
+      "jbl"
+    ],
+    "stock": 4797,
+    "rating": 9.6,
+    "reviewCount": 7418,
+    "metadata": {
+      "brand": "JBL",
+      "articleNumber": "DNA-JBLTOURPRO3-LATTE",
+      "type": "Wireless Headphones",
+      "color": "Latte",
+      "connectivity": "Bluetooth",
+      "noiseCancelling": "Yes",
+      "batteryLife": "Up to 44h with case"
+    }
+  },
+  {
+    "id": "dna-marshall-major-iv-standard",
+    "title": "Marshall Major IV — Standard",
+    "slug": "marshall-major-iv-standard",
+    "description": "Marshall Major IV from Marshall, available through DNA’s online store in Finland. It is on-ear headphones with Marshall's signature look and multi-day wireless playback. Comes with DNA’s standard warranty and the option of interest-free payment plans of up to 36 months.",
+    "price": 139.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Accessories/Marshall/OPM1552_Marshall_Major_null_image1.png"
+    ],
+    "category": "wireless-headphones",
+    "tags": [
+      "audio",
+      "marshall"
+    ],
+    "stock": 3870,
+    "rating": 9.5,
+    "reviewCount": 3525,
+    "metadata": {
+      "brand": "Marshall",
+      "articleNumber": "DNA-MARSHALLMAJOR4",
+      "type": "Wireless Headphones",
+      "color": "Black",
+      "connectivity": "Bluetooth",
+      "noiseCancelling": "No",
+      "batteryLife": "Up to 80 hours"
+    }
+  },
+  {
+    "id": "dna-soundcore-space-a40-white",
+    "title": "Soundcore Space A40 — White",
+    "slug": "soundcore-space-a40-white",
+    "description": "Soundcore Space A40 from Soundcore, available through DNA’s online store in Finland. It is budget-friendly ANC earbuds with adaptive environment sensing. Comes with DNA’s standard warranty and the option of interest-free payment plans of up to 36 months.",
+    "price": 109.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Accessories/Soundcore/OPM3279_Soundcore_Space-A40_White_image1.png"
+    ],
+    "category": "wireless-headphones",
+    "tags": [
+      "audio",
+      "soundcore"
+    ],
+    "stock": 4610,
+    "rating": 9.0,
+    "reviewCount": 7245,
+    "metadata": {
+      "brand": "Soundcore",
+      "articleNumber": "DNA-SOUNDCORESPACEA40-WHT",
+      "type": "Wireless Headphones",
+      "color": "White",
+      "connectivity": "Bluetooth",
+      "noiseCancelling": "Yes",
+      "batteryLife": "Up to 50h with case"
+    }
+  },
+  {
+    "id": "dna-jbl-live-770nc-white",
+    "title": "JBL Live 770NC — White",
+    "slug": "jbl-live-770nc-white",
+    "description": "JBL Live 770NC from JBL, available through DNA’s online store in Finland. It is over-ear headphones with JBL Spatial Sound and four-mic adaptive ANC. Comes with DNA’s standard warranty and the option of interest-free payment plans of up to 36 months.",
+    "price": 179.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Accessories/JBL/OPM2039_JBL_LIVE-770-vastamelukuulokkeet_White_image1.png"
+    ],
+    "category": "wireless-headphones",
+    "tags": [
+      "audio",
+      "jbl"
+    ],
+    "stock": 6033,
+    "rating": 8.7,
+    "reviewCount": 3322,
+    "metadata": {
+      "brand": "JBL",
+      "articleNumber": "DNA-JBLLIVE770NC-WHT",
+      "type": "Wireless Headphones",
+      "color": "White",
+      "connectivity": "Bluetooth",
+      "noiseCancelling": "Yes",
+      "batteryLife": "Up to 50 hours"
+    }
+  },
+  {
+    "id": "dna-dbramante1928-roskilde-tan",
+    "title": "dbramante1928 Roskilde (Tan)",
+    "slug": "dbramante1928-roskilde-tan",
+    "description": "dbramante1928 Roskilde from dbramante1928 for the Samsung Galaxy S24 Ultra. A slim leather folio case with card storage. Sold through DNA’s online store with DNA’s standard return policy.",
+    "price": 1.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Accessories/dbramante1928/OPM2030_DBRAMANTE1928_ROSKILDE-GALAXY-S24-ULTRA_Tan_image1.png"
+    ],
+    "category": "phone-cases",
+    "tags": [
+      "accessories",
+      "dbramante1928"
+    ],
+    "stock": 3488,
+    "rating": 9.2,
+    "reviewCount": 6161,
+    "metadata": {
+      "brand": "dbramante1928",
+      "articleNumber": "DNA-DBRAMANTEROSKILDE-S24U-TAN",
+      "type": "Phone Case",
+      "color": "Tan",
+      "material": "Leather"
+    }
+  },
+  {
+    "id": "dna-apple-silicone-case-violet",
+    "title": "Apple Silicone Case (Violet)",
+    "slug": "apple-silicone-case-violet",
+    "description": "Apple Silicone Case from Apple for the Apple iPhone 14 Plus. Apple's own soft-touch silicone case with a microfibre lining. Sold through DNA’s online store with DNA’s standard return policy.",
+    "price": 1.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Accessories/Apple/OPM1250_Apple_SiliconeCase-iPhone14-Plus_violet_image1.png"
+    ],
+    "category": "phone-cases",
+    "tags": [
+      "accessories",
+      "apple"
+    ],
+    "stock": 1225,
+    "rating": 9.2,
+    "reviewCount": 1813,
+    "metadata": {
+      "brand": "Apple",
+      "articleNumber": "DNA-APPLESILICONECASE-IP14PLUS-VIO",
+      "type": "Phone Case",
+      "color": "Violet",
+      "material": "Silicone"
+    }
+  },
+  {
+    "id": "dna-screenor-bumper-transparent",
+    "title": "Screenor Bumper (Transparent)",
+    "slug": "screenor-bumper-transparent",
+    "description": "Screenor Bumper from Screenor for the Apple iPhone 12 / 12 Pro. A clear bumper case with shock-absorbing edges and a hard, glossy back. Sold through DNA’s online store with DNA’s standard return policy.",
+    "price": 1.0,
+    "currency": "EUR",
+    "images": [
+      "https://res.cloudinary.com/dnaoyj/w_800,h_800,f_png,c_pad/Assets/play/Products/Accessories/Screenor/Screenor_Bumper-AppleiPhone12-12Pro_Transparent_image1.png"
+    ],
+    "category": "phone-cases",
+    "tags": [
+      "accessories",
+      "screenor"
+    ],
+    "stock": 8807,
+    "rating": 9.3,
+    "reviewCount": 1750,
+    "metadata": {
+      "brand": "Screenor",
+      "articleNumber": "DNA-SCREENORBUMPER-IP1212PRO-CLR",
+      "type": "Phone Case",
+      "color": "Transparent",
+      "material": "TPU"
+    }
+  }
+]

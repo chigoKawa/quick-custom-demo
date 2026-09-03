@@ -8,7 +8,7 @@ import type {
   CartItem,
   Order,
 } from './commerce.interface';
-import { loadMockData } from '../core/config-loader';
+import { resolveCatalogCached } from './catalog-source';
 
 /**
  * Mock Commerce Adapter
@@ -18,22 +18,51 @@ export class MockCommerceAdapter extends BaseIntegration implements ICommerceInt
   private products: Product[] = [];
   private carts: Map<string, Cart> = new Map();
   private orders: Map<string, Order> = new Map();
+  private catalogLoaded = false;
+  private catalogOrigin: string | null = null;
 
   async initialize(): Promise<void> {
     await super.initialize();
 
-    // Load mock product data
-    try {
-      this.products = await loadMockData<Product[]>('products.json');
-  
-      this.log('info', `Loaded ${this.products.length} mock products`);
-    } catch (error) {
-      this.log('warn', 'No mock products file found, using empty catalog');
-      this.products = [];
+    // The catalogue is deliberately NOT loaded here. IntegrationFactory caches
+    // this instance in a module-level Map for the life of the server process and
+    // calls initialize() once, so anything read here would be frozen until the
+    // next deploy — which is exactly the problem the Contentful-backed catalogue
+    // is meant to fix. Loaded lazily by ensureCatalog() instead.
+  }
+
+  /**
+   * Populate `this.products` from the resolved catalogue.
+   *
+   * Cheap after the first call: resolveCatalogCached() holds the result for a
+   * short TTL, so editing siteSettings.mockProducts shows up on the next reload
+   * without a redeploy, and a page with several product shelves does not fetch
+   * once per shelf.
+   */
+  private async ensureCatalog(): Promise<void> {
+    const result = await resolveCatalogCached({
+      fixtureFile: this.config.fixtureFile as string | undefined,
+      catalogTtlMs: this.config.catalogTtlMs as number | undefined,
+      onLog: (level, message) => this.log(level, message, ''),
+    });
+
+    this.products = result.products;
+
+    const origin =
+      result.origin === 'contentful'
+        ? 'siteSettings.mockProducts'
+        : `fixture ${result.fixtureFile}`;
+
+    // Log the source once per change, not once per request.
+    if (!this.catalogLoaded || this.catalogOrigin !== origin) {
+      this.log('info', `Loaded ${this.products.length} mock products from ${origin}`, '');
+      this.catalogLoaded = true;
+      this.catalogOrigin = origin;
     }
   }
 
   async getProducts(filters?: ProductFilters): Promise<Product[]> {
+    await this.ensureCatalog();
     await this.simulateLatency();
 
     let filtered = [...this.products];
@@ -102,6 +131,7 @@ export class MockCommerceAdapter extends BaseIntegration implements ICommerceInt
   }
 
   async getCategories(): Promise<ProductCategory[]> {
+    await this.ensureCatalog();
     await this.simulateLatency();
 
     const counts = new Map<string, number>();
@@ -125,6 +155,7 @@ export class MockCommerceAdapter extends BaseIntegration implements ICommerceInt
   }
 
   async getProduct(id: string): Promise<Product | null> {
+    await this.ensureCatalog();
     await this.simulateLatency();
 
     const product = this.products.find((p) => p.id === id);
@@ -132,6 +163,7 @@ export class MockCommerceAdapter extends BaseIntegration implements ICommerceInt
   }
 
   async addToCart(item: CartItem): Promise<Cart> {
+    await this.ensureCatalog();
     await this.simulateLatency();
 
     // Use session-based cart ID (in real app, this would come from session)
@@ -182,6 +214,7 @@ export class MockCommerceAdapter extends BaseIntegration implements ICommerceInt
   }
 
   async removeFromCart(cartId: string, productId: string): Promise<Cart> {
+    await this.ensureCatalog();
     await this.simulateLatency();
 
     const cart = this.carts.get(cartId);
@@ -198,6 +231,7 @@ export class MockCommerceAdapter extends BaseIntegration implements ICommerceInt
   }
 
   async updateCartItem(cartId: string, productId: string, quantity: number): Promise<Cart> {
+    await this.ensureCatalog();
     await this.simulateLatency();
 
     const cart = this.carts.get(cartId);

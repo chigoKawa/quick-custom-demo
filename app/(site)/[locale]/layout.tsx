@@ -51,6 +51,7 @@ export default async function LocaleLayout({
   return (
     <SiteChromeLocaleProvider locale={locale} defaultLocale={defaultLocale}>
       {themeCSS && <style dangerouslySetInnerHTML={{ __html: themeCSS }} />}
+      
       <PersonalizedSiteSettings key={locale} siteSettings={siteSettings}>
         <CouponAlert />
         {children}

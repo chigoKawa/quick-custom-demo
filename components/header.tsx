@@ -245,14 +245,15 @@ export function Header({ siteSettings }: HeaderProps) {
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       {/* Top bar */}
       <div className="border-b border-border/50">
+      
         <div className="container max-w-7xl mx-auto px-4 py-2">
           
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             {t("nav.shippingNote") ? (
               <p>{t("nav.shippingNote")}</p>
             ) : (
-              <Skeleton className="h-4 w-48" />
-            )}
+              <div className="h-4 w-48" />
+            )} 
             <div className="hidden md:flex items-center gap-6">
               {headerTopLinks.map((linkEntry, idx) => {
                 const href = resolveNavLinkUrl(linkEntry, localePick);

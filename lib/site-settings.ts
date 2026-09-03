@@ -25,6 +25,12 @@ export interface SiteSettingsSkeleton {
     themeSecondary?: string;
     themeAccent?: string;
     theme?: import("./theme").SiteTheme;
+    /** Per-space mock product catalogue. Lets each brand/deployment carry
+     *  its own demo products instead of every branch shipping the same
+     *  `lib/mock-data/products.json`. Read as `unknown` and validated at
+     *  the edge — the field is a free-form Object, so nothing about its
+     *  shape is guaranteed by Contentful. */
+    mockProducts?: unknown;
     /** Feature flag — when false, hides the shopping cart icon in the site
      *  header. Not every demo customer is an e-commerce brand. Defaults to
      *  true when the field is absent (backward compat for entries that
@@ -421,4 +427,95 @@ export async function getHomePageSlug(opts?: {
   }
 
   return configured;
+}
+
+/**
+ * Read the raw `mockProducts` value off the active site's settings entry.
+ *
+ * Returns `undefined` when the field is absent, blank, or unreachable — the
+ * caller is expected to fall back to a fixture file. Validation of the value's
+ * *shape* is deliberately NOT done here: this module knows about Contentful,
+ * not about the commerce `Product` contract.
+ *
+ * Deliberately fetched with `include: 0` and **no `select`**. A `select` naming
+ * `fields.mockProducts` returns HTTP 422 `UnknownField` in any environment where
+ * the field has not been added yet, which would make every product request pay a
+ * doomed round-trip; omitting the key costs ~2.5 KB more and simply yields
+ * `undefined` instead. `include: 0` still drops the whole nav/asset tree, so this
+ * is ~25 KB against the ~50 KB the layout's `include: 5` fetch already pays.
+ */
+export async function getMockProductsFromSettings(opts?: {
+  locale?: string;
+  preview?: boolean;
+  timelineToken?: string | null;
+  environmentId?: string | null;
+}): Promise<unknown | undefined> {
+  const scope = getSiteScope();
+
+  let settings: Entry<SiteSettingsSkeleton> | undefined;
+
+  if (scope.mode === "site") {
+    // Two hops: `select` cannot coexist with `include`, so resolve the link id
+    // first and then read the settings entry directly.
+    const siteQuery: Record<string, unknown> = {
+      content_type: "site",
+      "sys.id": scope.siteId,
+      select: "sys.id,fields.internalName,fields.siteSettings",
+      limit: 1,
+    };
+    if (opts?.locale) siteQuery.locale = opts.locale;
+
+    // `site` is the thing being selected, not site-owned content, so it is
+    // fetched by id without a site filter.
+    const sites = await getEntries<SiteSkeleton>(
+      unscoped(siteQuery),
+      opts?.preview || false,
+      opts?.timelineToken,
+      opts?.environmentId
+    );
+
+    const link = sites[0]?.fields?.siteSettings as unknown as
+      | { sys?: { id?: string } }
+      | undefined;
+    const settingsId = link?.sys?.id;
+    if (!settingsId) return undefined;
+
+    const settingsQuery: Record<string, unknown> = {
+      content_type: "siteSettings",
+      "sys.id": settingsId,
+      include: 0,
+      limit: 1,
+    };
+    if (opts?.locale) settingsQuery.locale = opts.locale;
+
+    const found = await getEntries<SiteSettingsSkeleton>(
+      settingsQuery,
+      opts?.preview || false,
+      opts?.timelineToken,
+      opts?.environmentId
+    );
+    settings = found[0];
+  } else {
+    // Singleton path. `order: sys.createdAt` + `limit: 1` is the same
+    // oldest-wins tiebreak `getSiteSettings` uses, so the catalogue cannot come
+    // from a different entry than the theme when a space holds several.
+    const query: Record<string, unknown> = {
+      content_type: "siteSettings",
+      include: 0,
+      order: "sys.createdAt",
+      limit: 1,
+    };
+    if (opts?.locale) query.locale = opts.locale;
+
+    const found = await getEntries<SiteSettingsSkeleton>(
+      query,
+      opts?.preview || false,
+      opts?.timelineToken,
+      opts?.environmentId
+    );
+    settings = found[0];
+  }
+
+  if (!settings) return undefined;
+  return settings.fields?.mockProducts;
 }

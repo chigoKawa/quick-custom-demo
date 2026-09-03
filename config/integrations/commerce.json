@@ -6,6 +6,7 @@
       "enabled": true,
       "useMock": true,
       "fixtureFile": "products.json",
+      "catalogTtlMs": 60000,
       "simulateLatency": true,
       "latencyRange": [200, 500]
     },

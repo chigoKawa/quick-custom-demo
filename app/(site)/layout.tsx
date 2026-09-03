@@ -18,7 +18,9 @@ export default async function Layout({
   return (
     <MarketProvider marketCode={marketCode}>
       <AppProviders>
+
         <DemoPanel markets={markets} i18nLocales={locales} />
+
         {children}
       </AppProviders>
     </MarketProvider>

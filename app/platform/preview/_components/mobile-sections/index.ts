@@ -9,6 +9,7 @@ import MobileFormEmbed from "./mobile-form-embed";
 import MobileRichContent from "./mobile-rich-content";
 import MobileMultiItemModule from "./mobile-multi-item-module";
 import MobileKbGroup from "./mobile-kb-group";
+import MobileFaqModule from "./mobile-faq-module";
 
 /**
  * Mobile-optimized component map for landing page sections.
@@ -26,4 +27,5 @@ export const mobileSectionsComponentMap: Record<string, FC<any>> = {
   richContentModule: MobileRichContent,
   multiItemModule: MobileMultiItemModule,
   kbGroup: MobileKbGroup,
+  faqModule: MobileFaqModule,
 };

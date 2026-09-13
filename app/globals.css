@@ -170,6 +170,81 @@
   }
 }
 
+/* ---------------------------------------------------------------------------
+ * Digital-signage motion (in-store preview only)
+ *
+ * Real retail screens are never static — the two near-universal treatments are
+ * a slow Ken Burns pan/zoom on the imagery and a travelling accent light around
+ * the bezel. Both are implemented with `transform` and `background-position`
+ * only, so they run on the compositor and cost no layout or paint work: a
+ * signage mockup may sit open on a second monitor all day.
+ * ------------------------------------------------------------------------- */
+
+/* Ken Burns: a slow pan with a gentle zoom, reversing so it never jump-cuts.
+   The image is over-scaled by the component so there is room to travel. */
+@keyframes signage-ken-burns {
+  0% {
+    transform: scale(1.08) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.16) translate3d(-2.2%, -1.6%, 0);
+  }
+  100% {
+    transform: scale(1.08) translate3d(0, 0, 0);
+  }
+}
+
+/* Bezel light: a conic highlight rotated around the frame. Animating a custom
+   property would repaint every frame, so a rotating over-sized gradient layer
+   is used instead — transform-only, and masked to the frame edge by the
+   component's padding + border-radius. */
+@keyframes signage-bezel-sweep {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Screen sheen: a faint diagonal reflection drifting across the glass. Sells
+   "powered on" without competing with the content. */
+@keyframes signage-sheen {
+  0% {
+    transform: translate3d(-60%, 0, 0);
+  }
+  100% {
+    transform: translate3d(160%, 0, 0);
+  }
+}
+
+.signage-ken-burns {
+  animation: signage-ken-burns 28s ease-in-out infinite;
+  will-change: transform;
+}
+
+.signage-bezel-sweep {
+  animation: signage-bezel-sweep 6s linear infinite;
+  will-change: transform;
+}
+
+.signage-sheen {
+  /* Long, eased cycle with a pause between passes: a reflection that sweeps
+     constantly reads as a glitch, one that drifts occasionally reads as glass. */
+  animation: signage-sheen 14s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  will-change: transform;
+}
+
+/* Accessibility + battery: stop all signage motion when the viewer asks for
+   reduced motion. The mockup stays legible — it just holds still. */
+@media (prefers-reduced-motion: reduce) {
+  .signage-ken-burns,
+  .signage-bezel-sweep,
+  .signage-sheen {
+    animation: none !important;
+  }
+}
+
 /* Hide scrollbar for horizontal scroll areas (mobile preview, carousels) */
 .scrollbar-hide {
   -ms-overflow-style: none;

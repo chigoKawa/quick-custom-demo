@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { Smartphone, RotateCcw } from "lucide-react";
+import ChannelSwitcher from "./channel-switcher";
+import EnsurePreviewParam from "./ensure-preview-param";
 
 type DeviceConfig = {
   name: string;
@@ -39,9 +41,22 @@ type Props = {
   children: React.ReactNode;
   title?: string;
   contentTypeId?: string;
+  /** Params forwarded to the channel switcher. Optional — omitted on error states. */
+  previewType?: string;
+  entryId?: string;
+  slug?: string;
+  locale?: string;
 };
 
-export default function MobilePreviewShell({ children, title, contentTypeId }: Props) {
+export default function MobilePreviewShell({
+  children,
+  title,
+  contentTypeId,
+  previewType,
+  entryId,
+  slug,
+  locale = "en-US",
+}: Props) {
   const [deviceKey, setDeviceKey] = useState<string>("iphone-15");
   const device = DEVICES[deviceKey];
 
@@ -52,8 +67,9 @@ export default function MobilePreviewShell({ children, title, contentTypeId }: P
 
   return (
     <div className="min-h-screen bg-neutral-900 flex flex-col">
+      <EnsurePreviewParam />
       {/* Toolbar */}
-      <div className="flex items-center justify-between px-4 py-3 bg-neutral-800 border-b border-neutral-700 shrink-0">
+      <div className="flex items-center justify-between gap-4 px-4 py-3 bg-neutral-800 border-b border-neutral-700 shrink-0">
         <div className="flex items-center gap-3">
           <Smartphone className="h-5 w-5 text-neutral-400" />
           <div>
@@ -74,6 +90,14 @@ export default function MobilePreviewShell({ children, title, contentTypeId }: P
         </div>
 
         <div className="flex items-center gap-2">
+          <ChannelSwitcher
+            channel="mobile"
+            type={previewType}
+            entryId={entryId}
+            slug={slug}
+            locale={locale}
+          />
+
           {/* Device selector */}
           <select
             value={deviceKey}

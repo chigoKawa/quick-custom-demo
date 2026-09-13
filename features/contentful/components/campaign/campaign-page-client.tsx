@@ -9,25 +9,21 @@ import {
 import { cn } from "@/lib/utils";
 import type { ICampaign, IProductCategory } from "../../type";
 import ContentfulLandingPage from "../contentful-landing-page";
+import FeaturedProductShowcase from "./featured-product-showcase";
+import {
+  formatProductPrice,
+  resolveCampaignProducts,
+  type CampaignProduct,
+} from "@/lib/campaign-products";
 
-interface ProductData {
-  id: string;
-  title: string;
-  price: number;
-  currency?: string;
-  image?: string;
-  sku?: string;
-  category?: string;
-}
-
-function formatPrice(price: number, currency?: string): string {
-  const c = (currency ?? "NOK").toUpperCase();
-  try {
-    return new Intl.NumberFormat(undefined, { style: "currency", currency: c, minimumFractionDigits: 2 }).format(price);
-  } catch {
-    return `${c} ${price.toFixed(2)}`;
-  }
-}
+/**
+ * Product shape and price formatting are shared with the mobile and in-store
+ * surfaces via lib/campaign-products.ts, so all three render identically.
+ * `price` is optional there (a snapshot may omit it); the carousel below only
+ * renders products that have one.
+ */
+type ProductData = CampaignProduct;
+const formatPrice = formatProductPrice;
 
 interface CampaignPageClientProps {
   entry: ICampaign;
@@ -56,15 +52,20 @@ export default function CampaignPageClient({
   const active = isCampaignActive(entry);
   const heroComponent = entry.fields.heroComponent;
   const promoTitle = entry.fields.promoTitle;
+  // The compact promo unit. Renders through the real section map (cta is
+  // registered there), so imagePlacement / variant / backgroundColor behave as
+  // authored. Previously destructured away and never rendered on web, which is
+  // why the tile showed on mobile/in-store but not here.
+  const promoTileComponent = entry.fields.promoTileComponent;
   const targetCategories = (entry.fields.targetCategories ?? []) as IProductCategory[];
   const topSections = Array.isArray(entry.fields.topSections) ? entry.fields.topSections : [];
   const bottomSections = Array.isArray(entry.fields.bottomSections) ? entry.fields.bottomSections : [];
 
-  const productsData = entry.fields.targetProducts as {
-    selectionMode?: string;
-    selectedProducts?: ProductData[];
-  } | null;
-  const targetedProducts: ProductData[] = productsData?.selectedProducts ?? [];
+  // Reads both `selectedProduct` (single mode) and `selectedProducts` (multiple).
+  // The previous local read only handled the plural key, so single-product
+  // campaigns rendered no products at all.
+  const targetedProducts: ProductData[] = resolveCampaignProducts(entry);
+  const featuredProduct = targetedProducts.length === 1 ? targetedProducts[0] : null;
 
   const validTo = entry.fields.validTo ? new Date(entry.fields.validTo) : null;
 
@@ -129,6 +130,21 @@ export default function CampaignPageClient({
     });
   }, [categoryIdsKey]);
 
+  // Only a resolved entry can render; an unresolvable link comes back as a bare
+  // { sys } stub with no contentType for the section map to dispatch on.
+  const promoTileLanding =
+    promoTileComponent && (promoTileComponent as { fields?: unknown }).fields
+      ? ({
+          ...entry,
+          fields: {
+            internalName: `${entry.fields.internalName}-promo-tile`,
+            title: entry.fields.name,
+            slug: entry.fields.slug,
+            sections: [promoTileComponent],
+          },
+        } as any)
+      : null;
+
   const heroLanding = heroComponent
     ? { ...entry, fields: { internalName: entry.fields.internalName, title: entry.fields.name, slug: entry.fields.slug, sections: [heroComponent] } } as any
     : null;
@@ -143,6 +159,14 @@ export default function CampaignPageClient({
 
   return (
     <>
+      {/* Featured product leads the page — a campaign that names one product is
+          about that product, which is how the in-store display treats it too. */}
+      {featuredProduct && (
+        <div {...(inspectorProps({ fieldId: "targetProducts" }) as object)}>
+          <FeaturedProductShowcase product={featuredProduct} variant="web" />
+        </div>
+      )}
+
       {/* Hero */}
       {heroLanding && <ContentfulLandingPage entry={heroLanding} />}
 
@@ -178,11 +202,21 @@ export default function CampaignPageClient({
         )}
       </section>
 
+      {/* Promo tile — sits with the promoTitle it shares an editorial voice with,
+          ahead of the body sections. */}
+      {promoTileLanding && (
+        <div {...(inspectorProps({ fieldId: "promoTileComponent" }) as object)}>
+          <ContentfulLandingPage entry={promoTileLanding} />
+        </div>
+      )}
+
       {/* Top sections */}
       {topLanding && <ContentfulLandingPage entry={topLanding} />}
 
-      {/* Featured products carousel */}
-      {targetedProducts.length > 0 && (
+      {/* Featured products carousel — only for 2+. A single product is already
+          shown as the showcase at the top of the page, and one card in a
+          scroller reads as unfinished. */}
+      {targetedProducts.length > 1 && (
         <div {...(inspectorProps({ fieldId: "targetProducts" }) as any)}>
           <ProductCarousel
             products={targetedProducts}
@@ -365,7 +399,7 @@ function ProductCarousel({ products, title, viewAllHref, locale }: ProductCarous
                     <h3 className="font-semibold text-sm md:text-base line-clamp-2 group-hover:text-primary transition-colors leading-snug mb-2">
                       {product.title}
                     </h3>
-                    {product.price > 0 && (
+                    {typeof product.price === "number" && product.price > 0 && (
                       <p className="text-lg font-bold text-primary">
                         {formatPrice(product.price, product.currency)}
                       </p>

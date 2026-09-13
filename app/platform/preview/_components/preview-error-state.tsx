@@ -11,9 +11,21 @@ type Props = {
     slug?: string;
     supportedTypes?: string[];
   };
+  /**
+   * Preview channel segment, used in the example URL and copy. Defaults to
+   * "mobile" so existing call sites are unaffected.
+   */
+  channel?: string;
+  /** Content type used in the example URL. */
+  exampleType?: string;
 };
 
-export default function PreviewErrorState({ type, details }: Props) {
+export default function PreviewErrorState({
+  type,
+  details,
+  channel = "mobile",
+  exampleType = "landingPage",
+}: Props) {
   return (
     <div className="flex flex-col items-center justify-center h-full p-6 text-center bg-neutral-50">
       <AlertCircle className="h-10 w-10 text-neutral-400 mb-4" />
@@ -32,9 +44,9 @@ export default function PreviewErrorState({ type, details }: Props) {
           <div className="bg-white border rounded-lg p-3 text-left text-xs font-mono text-neutral-600 max-w-xs w-full">
             <p className="text-neutral-400 mb-1">Example:</p>
             <p className="break-all">
-              /platform/preview/mobile
+              /platform/preview/{channel}
               <br />
-              ?type=landingPage
+              ?type={exampleType}
               <br />
               &entryId=abc123
               <br />
@@ -53,7 +65,7 @@ export default function PreviewErrorState({ type, details }: Props) {
             <code className="px-1 py-0.5 bg-neutral-200 rounded text-xs font-mono">
               {details?.type || "unknown"}
             </code>{" "}
-            is not supported for mobile preview yet.
+            is not supported for {channel} preview yet.
           </p>
           {details?.supportedTypes && details.supportedTypes.length > 0 && (
             <div className="bg-white border rounded-lg p-3 text-left text-xs max-w-xs w-full">

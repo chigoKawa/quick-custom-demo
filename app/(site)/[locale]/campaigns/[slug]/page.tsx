@@ -7,7 +7,8 @@ import { getEntries } from "@/lib/contentful";
 import { resolvePreviewMode } from "@/lib/preview";
 import type { CampaignSkeleton, ICampaign } from "@/features/contentful/type";
 import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provider-wrapper";
-import CampaignPageClient from "@/features/contentful/components/campaign/campaign-page-client";
+import PersonalizedCampaign from "@/features/contentful/components/campaign/personalized-campaign";
+import CampaignExperienceRenderer from "@/features/contentful/components/campaign/campaign-experience-renderer";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -51,10 +52,15 @@ export default async function CampaignPage({ params, searchParams }: Props) {
 
   return (
     <LivePreviewProviderWrapper locale={locale} isPreviewEnabled={isPreview}>
-      <CampaignPageClient
+      {/* Campaign-level personalization: the campaign's nt_experiences replace
+          the whole entry per audience, so this must wrap the page rather than
+          any individual section. The validity gate above applies to the
+          baseline only — once past it, the winning variant renders. */}
+      <PersonalizedCampaign
         entry={entry}
         locale={locale}
         isPreview={isPreview}
+        renderer={CampaignExperienceRenderer}
       />
     </LivePreviewProviderWrapper>
   );

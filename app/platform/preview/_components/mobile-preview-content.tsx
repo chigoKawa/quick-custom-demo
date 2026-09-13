@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import type { ILandingPage } from "@/features/contentful/type";
+import type { ICampaign, ILandingPage } from "@/features/contentful/type";
+import AppProviders from "@/features/app-providers";
 import LivePreviewProviderWrapper from "@/features/contentful/live-preview-provider-wrapper";
+import PersonalizedCampaign from "@/features/contentful/components/campaign/personalized-campaign";
 import MobileLandingPage from "./mobile-landing-page";
+import { MobileCampaignExperienceRenderer } from "./mobile-campaign";
 
 type Props = {
   contentTypeId: string;
@@ -16,6 +19,10 @@ type Props = {
  * Renders the appropriate Contentful component inside the mobile preview shell,
  * wrapped with Live Preview provider for inspector mode + live updates.
  *
+ * Campaigns additionally need NinetailedProvider (campaign-level personalization
+ * calls useNinetailed via <Experience>), which AppProviders mounts — along with
+ * its own ContentfulLivePreviewProvider, so the two paths differ in wrapping.
+ *
  * Add new content type renderers here as they become supported.
  */
 export default function MobilePreviewContent({
@@ -24,6 +31,21 @@ export default function MobilePreviewContent({
   locale,
   isPreview,
 }: Props) {
+  if (contentTypeId === "campaign") {
+    return (
+      <AppProviders skipLivePreviewWrapper>
+        <LivePreviewProviderWrapper locale={locale} isPreviewEnabled={isPreview}>
+          <PersonalizedCampaign
+            entry={entry as ICampaign}
+            locale={locale}
+            isPreview={isPreview}
+            renderer={MobileCampaignExperienceRenderer}
+          />
+        </LivePreviewProviderWrapper>
+      </AppProviders>
+    );
+  }
+
   return (
     <LivePreviewProviderWrapper locale={locale} isPreviewEnabled={isPreview}>
       <ContentRenderer contentTypeId={contentTypeId} entry={entry} />

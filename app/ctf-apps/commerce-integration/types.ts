@@ -40,6 +40,9 @@ export type ProductCatalogFieldValue = {
     id: string;
     title: string;
     price: number;
+    /** From Product.currency upstream. Optional: entries snapshotted before this
+     *  was persisted have no currency, and consumers fall back. */
+    currency?: string;
     image?: string;
     sku?: string;
     category?: string;
@@ -49,6 +52,7 @@ export type ProductCatalogFieldValue = {
     id: string;
     title: string;
     price: number;
+    currency?: string;
     image?: string;
     sku?: string;
     category?: string;

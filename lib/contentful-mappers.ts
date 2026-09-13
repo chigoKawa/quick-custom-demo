@@ -1,4 +1,4 @@
-import type { IBlogPostPage, ILandingPage } from "@/features/contentful/type";
+import type { IBlogPostPage, ICampaign, ILandingPage } from "@/features/contentful/type";
 import { toJsonSafe } from "./json-safe";
 
 /**
@@ -12,5 +12,9 @@ export function mapLandingPageToProps(entry: ILandingPage): ILandingPage {
 }
 
 export function mapBlogPostToProps(entry: IBlogPostPage): IBlogPostPage {
+  return toJsonSafe(entry);
+}
+
+export function mapCampaignToProps(entry: ICampaign): ICampaign {
   return toJsonSafe(entry);
 }

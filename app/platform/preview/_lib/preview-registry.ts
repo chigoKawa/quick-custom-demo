@@ -1,7 +1,12 @@
 import { getEntries } from "@/lib/contentful";
 import { unscoped } from "@/lib/site-scope";
-import { mapLandingPageToProps } from "@/lib/contentful-mappers";
-import type { ILandingPage, LandingPageSkeleton } from "@/features/contentful/type";
+import { mapCampaignToProps, mapLandingPageToProps } from "@/lib/contentful-mappers";
+import type {
+  CampaignSkeleton,
+  ICampaign,
+  ILandingPage,
+  LandingPageSkeleton,
+} from "@/features/contentful/type";
 
 const INCLUDES_COUNT = 6;
 
@@ -50,11 +55,46 @@ const fetchLandingPage: PreviewFetcher = async ({ entryId, slug, locale, isPrevi
 };
 
 /**
+ * Fetch a campaign entry by entryId or slug, serialize it for client boundary.
+ *
+ * Mirrors `fetchLandingPage`, including the deliberate `unscoped()` read: the
+ * harness previews whatever entry an editor opened, which may belong to any
+ * site. (The public campaign route at app/(site)/[locale]/campaigns/[slug] is
+ * site-scoped on purpose — that asymmetry is intentional.)
+ */
+const fetchCampaign: PreviewFetcher = async ({ entryId, slug, locale, isPreview }) => {
+  const query: Record<string, unknown> = {
+    content_type: "campaign",
+    include: INCLUDES_COUNT,
+    locale,
+  };
+
+  if (entryId) {
+    query["sys.id"] = entryId;
+  } else if (slug) {
+    query["fields.slug"] = slug;
+  } else {
+    return null;
+  }
+
+  const entries = await getEntries<CampaignSkeleton>(unscoped(query), isPreview);
+  const raw = entries[0] as ICampaign | undefined;
+  if (!raw) return null;
+
+  return {
+    contentTypeId: "campaign",
+    entry: mapCampaignToProps(raw),
+    title: (raw.fields?.name as string) || (raw.fields?.internalName as string) || "Campaign",
+  };
+};
+
+/**
  * Registry mapping content type IDs to their fetcher functions.
  * Add new content types here as they become supported.
  */
 const registry: Record<string, PreviewFetcher> = {
   landingPage: fetchLandingPage,
+  campaign: fetchCampaign,
 };
 
 /**

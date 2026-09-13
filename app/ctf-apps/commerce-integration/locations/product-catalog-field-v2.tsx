@@ -309,6 +309,9 @@ export default function ProductCatalogField() {
         id: product.id,
         title: product.title,
         price: product.price,
+        // Persist the provider's currency so every surface formats the price the
+        // same way. Product.currency is required upstream, so it is always here.
+        currency: product.currency,
         image: product.images?.[0],
         sku: product.sku,
         category: product.category,

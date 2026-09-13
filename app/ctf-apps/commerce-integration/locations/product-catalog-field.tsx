@@ -98,6 +98,7 @@ export default function ProductCatalogField() {
           id: product.id,
           title: product.title,
           price: product.price,
+          currency: product.currency,
           image: product.images[0],
         },
       ];

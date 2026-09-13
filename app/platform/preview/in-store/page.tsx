@@ -1,12 +1,15 @@
 import { getI18nConfig } from "@/i18n-config";
 import { resolvePreviewEntry, supportedTypes } from "../_lib/preview-registry";
-import MobilePreviewShell from "../_components/mobile-preview-shell";
-import MobilePreviewContent from "../_components/mobile-preview-content";
+import InStorePreviewShell from "../_components/in-store-preview-shell";
+import InStorePreviewContent from "../_components/in-store-preview-content";
 import PreviewErrorState from "../_components/preview-error-state";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const fetchCache = "force-no-store";
+
+/** Content types this channel can render (a subset of the registry's). */
+const IN_STORE_TYPES = ["campaign"];
 
 type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -17,7 +20,7 @@ function str(val: string | string[] | undefined): string | undefined {
   return val;
 }
 
-export default async function MobilePreviewPage({ searchParams }: Props) {
+export default async function InStorePreviewPage({ searchParams }: Props) {
   const sp = await searchParams;
 
   const type = str(sp.type);
@@ -35,30 +38,33 @@ export default async function MobilePreviewPage({ searchParams }: Props) {
   // Missing required params
   if (!type) {
     return (
-      <MobilePreviewShell>
-        <PreviewErrorState type="missing-params" />
-      </MobilePreviewShell>
+      <InStorePreviewShell locale={locale}>
+        <PreviewErrorState type="missing-params" channel="in-store" exampleType="campaign" />
+      </InStorePreviewShell>
     );
   }
 
-  // Unsupported content type
-  if (!supportedTypes.includes(type)) {
+  // Unsupported content type. Checked against this channel's own list, not the
+  // whole registry — landingPage resolves fine but has no in-store rendering.
+  if (!supportedTypes.includes(type) || !IN_STORE_TYPES.includes(type)) {
     return (
-      <MobilePreviewShell>
+      <InStorePreviewShell locale={locale}>
         <PreviewErrorState
           type="unsupported-type"
-          details={{ type, supportedTypes }}
+          channel="in-store"
+          exampleType="campaign"
+          details={{ type, supportedTypes: IN_STORE_TYPES }}
         />
-      </MobilePreviewShell>
+      </InStorePreviewShell>
     );
   }
 
   // Need at least entryId or slug
   if (!entryId && !slug) {
     return (
-      <MobilePreviewShell>
-        <PreviewErrorState type="missing-params" />
-      </MobilePreviewShell>
+      <InStorePreviewShell locale={locale}>
+        <PreviewErrorState type="missing-params" channel="in-store" exampleType="campaign" />
+      </InStorePreviewShell>
     );
   }
 
@@ -73,17 +79,19 @@ export default async function MobilePreviewPage({ searchParams }: Props) {
 
   if (!result) {
     return (
-      <MobilePreviewShell>
+      <InStorePreviewShell locale={locale}>
         <PreviewErrorState
           type="not-found"
+          channel="in-store"
+          exampleType="campaign"
           details={{ type, entryId, slug }}
         />
-      </MobilePreviewShell>
+      </InStorePreviewShell>
     );
   }
 
   return (
-    <MobilePreviewShell
+    <InStorePreviewShell
       title={result.title}
       contentTypeId={result.contentTypeId}
       previewType={type}
@@ -91,12 +99,12 @@ export default async function MobilePreviewPage({ searchParams }: Props) {
       slug={slug}
       locale={locale}
     >
-      <MobilePreviewContent
+      <InStorePreviewContent
         contentTypeId={result.contentTypeId}
         entry={result.entry}
         locale={locale}
         isPreview={isPreview}
       />
-    </MobilePreviewShell>
+    </InStorePreviewShell>
   );
 }

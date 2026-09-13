@@ -1,7 +1,7 @@
 import { getI18nConfig } from "@/i18n-config";
 import { resolvePreviewEntry, supportedTypes } from "../_lib/preview-registry";
-import MobilePreviewShell from "../_components/mobile-preview-shell";
-import MobilePreviewContent from "../_components/mobile-preview-content";
+import WebPreviewShell from "../_components/web-preview-shell";
+import WebPreviewContent from "../_components/web-preview-content";
 import PreviewErrorState from "../_components/preview-error-state";
 
 export const dynamic = "force-dynamic";
@@ -17,7 +17,14 @@ function str(val: string | string[] | undefined): string | undefined {
   return val;
 }
 
-export default async function MobilePreviewPage({ searchParams }: Props) {
+/** Public path the entry would live at, shown in the mock address bar. */
+function publicPath(type: string, locale: string, slug?: string, entryId?: string): string {
+  const ref = slug || entryId || "…";
+  if (type === "campaign") return `/${locale}/campaigns/${ref}`;
+  return `/${locale}/${ref}`;
+}
+
+export default async function WebPreviewPage({ searchParams }: Props) {
   const sp = await searchParams;
 
   const type = str(sp.type);
@@ -27,42 +34,39 @@ export default async function MobilePreviewPage({ searchParams }: Props) {
   const isPreview = true; // always use Preview API in this route
 
 
-  // Resolve locale
   const { locales, defaultLocale } = await getI18nConfig();
   const locale =
     localeParam && locales.includes(localeParam) ? localeParam : defaultLocale;
 
-  // Missing required params
   if (!type) {
     return (
-      <MobilePreviewShell>
-        <PreviewErrorState type="missing-params" />
-      </MobilePreviewShell>
+      <WebPreviewShell locale={locale}>
+        <PreviewErrorState type="missing-params" channel="web" exampleType="campaign" />
+      </WebPreviewShell>
     );
   }
 
-  // Unsupported content type
   if (!supportedTypes.includes(type)) {
     return (
-      <MobilePreviewShell>
+      <WebPreviewShell locale={locale}>
         <PreviewErrorState
           type="unsupported-type"
+          channel="web"
+          exampleType="campaign"
           details={{ type, supportedTypes }}
         />
-      </MobilePreviewShell>
+      </WebPreviewShell>
     );
   }
 
-  // Need at least entryId or slug
   if (!entryId && !slug) {
     return (
-      <MobilePreviewShell>
-        <PreviewErrorState type="missing-params" />
-      </MobilePreviewShell>
+      <WebPreviewShell locale={locale}>
+        <PreviewErrorState type="missing-params" channel="web" exampleType="campaign" />
+      </WebPreviewShell>
     );
   }
 
-  // Fetch entry
   const result = await resolvePreviewEntry({
     type,
     entryId,
@@ -73,30 +77,34 @@ export default async function MobilePreviewPage({ searchParams }: Props) {
 
   if (!result) {
     return (
-      <MobilePreviewShell>
+      <WebPreviewShell locale={locale}>
         <PreviewErrorState
           type="not-found"
+          channel="web"
+          exampleType="campaign"
           details={{ type, entryId, slug }}
         />
-      </MobilePreviewShell>
+      </WebPreviewShell>
     );
   }
 
   return (
-    <MobilePreviewShell
+    <WebPreviewShell
       title={result.title}
       contentTypeId={result.contentTypeId}
       previewType={type}
       entryId={entryId}
       slug={slug}
       locale={locale}
+      path={publicPath(type, locale, slug, entryId)}
     >
-      <MobilePreviewContent
+      <WebPreviewContent
         contentTypeId={result.contentTypeId}
         entry={result.entry}
         locale={locale}
+        defaultLocale={defaultLocale}
         isPreview={isPreview}
       />
-    </MobilePreviewShell>
+    </WebPreviewShell>
   );
 }

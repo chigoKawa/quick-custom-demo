@@ -30,10 +30,15 @@ import {
 import type { FieldAppSDK, DialogAppSDK } from "@contentful/app-sdk";
 import { locations } from "@contentful/app-sdk";
 import { useSDK } from "@contentful/react-apps-toolkit";
-import React, { useEffect, useState, useCallback } from "react";
+import {
+  loadCatalog,
+  filterProducts,
+  deriveCategories,
+  type CatalogOrigin,
+} from "../lib/catalog-client";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import type { Product, ProductCategory } from "@/lib/integrations/commerce/commerce.interface";
 import type { ProductCatalogFieldValue } from "../types";
-import { fetchWithTimeout } from "../utils";
 
 const SELECTION_MODES: ProductCatalogFieldValue["selectionMode"][] = [
   "single",
@@ -46,6 +51,38 @@ const MODE_LABELS: Record<ProductCatalogFieldValue["selectionMode"], string> = {
   multiple: "Multiple products",
   category: "Product category",
 };
+
+/**
+ * Tells the editor when the picker is showing the deployment's bundled sample
+ * catalogue instead of this space's own. Without it, an editor in a space that
+ * has no `siteSettings.mockProducts` silently sees another brand's products.
+ */
+function CatalogFallbackNote({
+  origin,
+  warning,
+}: {
+  origin: CatalogOrigin | null;
+  warning: string | null;
+}) {
+  if (origin !== "fallback") return null;
+
+  return (
+    <Box marginBottom="spacingM">
+      <Note variant="warning" title="Showing sample products">
+        <Text as="p">
+          This space has no <code>siteSettings.mockProducts</code>, so the
+          deployment&apos;s bundled sample catalogue is being shown. Selections still
+          save normally.
+        </Text>
+        {warning && (
+          <Text as="p" fontColor="gray700" style={{ marginTop: 8 }}>
+            {warning}
+          </Text>
+        )}
+      </Note>
+    </Box>
+  );
+}
 
 function readInitialValue(value: unknown): ProductCatalogFieldValue {
   if (!value || typeof value !== "object") {
@@ -107,6 +144,16 @@ export default function ProductCatalogField() {
   const [categoriesLoading, setCategoriesLoading] = useState(false);
   const [loading, setLoading] = useState(isDialog);
   const [error, setError] = useState<string | null>(null);
+  // Where the catalogue came from, surfaced so an editor is never silently
+  // shown another brand's products.
+  const [catalogOrigin, setCatalogOrigin] = useState<CatalogOrigin | null>(null);
+  const [catalogWarning, setCatalogWarning] = useState<string | null>(null);
+  /**
+   * The installing space's catalogue, read once via sdk.cma and then filtered
+   * in memory. Held in a ref so typing in the search box re-filters without
+   * re-hitting the CMA.
+   */
+  const catalogRef = useRef<Product[] | null>(null);
   const [tempSelection, setTempSelection] = useState<string[]>(() => {
     if (isDialog) {
       const params = (sdk as DialogAppSDK).parameters?.invocation as {
@@ -135,93 +182,76 @@ export default function ProductCatalogField() {
     [fieldSdk, isSymbolField]
   );
 
-  const loadProducts = useCallback(async (query?: string) => {
-    setLoading(true);
-    setError(null);
+  /**
+   * Ensure the installing space's catalogue is loaded, reading it at most once.
+   *
+   * Previously this hit /api/integrations/products, which resolves from the
+   * DEPLOYMENT's Contentful credentials — so the picker showed the deployment's
+   * products no matter which space the app was installed in. sdk.cma is scoped
+   * to the installing space, needs no configuration, and works anywhere.
+   */
+  const ensureCatalog = useCallback(async (): Promise<Product[]> => {
+    if (catalogRef.current) return catalogRef.current;
 
-    try {
-      const params = new URLSearchParams();
-      params.set("limit", "20");
-      if (query) {
-        params.set("search", query);
-      }
+    const result = await loadCatalog(sdk as unknown as Parameters<typeof loadCatalog>[0]);
+    catalogRef.current = result.products;
+    setCatalogOrigin(result.origin);
+    setCatalogWarning(result.warning ?? null);
+    return result.products;
+  }, [sdk]);
 
-      const result = await fetchWithTimeout<{ products: Product[] }>(
-        `/api/integrations/products?${params.toString()}`,
-        {},
-        8000
-      );
+  const loadProducts = useCallback(
+    async (query?: string) => {
+      setLoading(true);
+      setError(null);
 
-      if (!result.ok) {
-        setError(result.error);
+      try {
+        const all = await ensureCatalog();
+        // Search is applied here, not server-side: the API route never read the
+        // `search` param, so the box did nothing before this.
+        setProducts(filterProducts(all, { search: query, limit: 20 }));
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Unknown error");
         setProducts([]);
-        return;
+      } finally {
+        setLoading(false);
       }
-
-      setProducts(result.data.products);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Unknown error");
-      setProducts([]);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    [ensureCatalog]
+  );
 
   const loadCategories = useCallback(async () => {
     setCategoriesLoading(true);
-    setError(null);
+    // Note: deliberately does NOT clear `error` — it used to, which let a
+    // category load wipe a product error message.
     try {
-      const result = await fetchWithTimeout<{ categories: ProductCategory[] }>(
-        "/api/integrations/categories",
-        {},
-        8000,
-      );
-      if (!result.ok) {
-        setError(result.error);
-        setCategories([]);
-        return;
-      }
-      setCategories(result.data.categories);
+      const all = await ensureCatalog();
+      // Derived by grouping on product.category: the catalogue JSON has no
+      // categories key.
+      setCategories(deriveCategories(all));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");
       setCategories([]);
     } finally {
       setCategoriesLoading(false);
     }
-  }, []);
+  }, [ensureCatalog]);
 
   useEffect(() => {
     sdk.window.startAutoResizer();
   }, [sdk]);
 
-  // Load products when component mounts in dialog mode
   useEffect(() => {
     if (isDialog) {
-      const fetchProducts = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-          const params = new URLSearchParams();
-          params.set("limit", "20");
-          const result = await fetchWithTimeout<{ products: Product[] }>(
-            `/api/integrations/products?${params.toString()}`,
-            {},
-            8000
-          );
-          if (!result.ok) {
-            setError(result.error);
-            setProducts([]);
-          } else {
-            setProducts(result.data.products);
-          }
-        } catch (err) {
-          setError(err instanceof Error ? err.message : "Unknown error");
-          setProducts([]);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchProducts();
+      // Dialog opens straight into the picker.
+      void loadProducts();
+    } else {
+      // Field view: resolve the catalogue on mount so the fallback notice is
+      // accurate before the editor opens the picker. Cheap — one CMA read,
+      // cached in catalogRef for the dialog to reuse.
+      void ensureCatalog().catch(() => {
+        /* loadCatalog already degrades to the fallback; nothing to do here. */
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -380,6 +410,7 @@ export default function ProductCatalogField() {
   if (isDialog) {
     return (
       <Box padding="spacingL">
+        <CatalogFallbackNote origin={catalogOrigin} warning={catalogWarning} />
         <Box marginBottom="spacingM">
           <Flex gap="spacingS" alignItems="center">
             <Box style={{ flex: "1 1 auto", minWidth: 0 }}>
@@ -471,6 +502,7 @@ export default function ProductCatalogField() {
   // ─── Field view ────────────────────────────────────────────────────
   return (
     <Box>
+      <CatalogFallbackNote origin={catalogOrigin} warning={catalogWarning} />
       {/* Mode toggle — hidden for Symbol fields (locked to category) */}
       {!isSymbolField && (
         <Box marginBottom="spacingM">

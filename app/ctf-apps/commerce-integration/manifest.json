@@ -4,15 +4,11 @@
   "locations": [
     {
       "location": "app-config",
-      "src": "app/ctf-apps/commerce-integration/locations/config-screen.tsx"
+      "src": "app/ctf-apps/commerce-integration/page.tsx"
     },
     {
       "location": "entry-field",
-      "src": "app/ctf-apps/commerce-integration/locations/product-catalog-field.tsx"
-    },
-    {
-      "location": "entry-sidebar",
-      "src": "app/ctf-apps/commerce-integration/locations/commerce-sidebar.tsx"
+      "src": "app/ctf-apps/commerce-integration/page.tsx"
     }
   ]
 }

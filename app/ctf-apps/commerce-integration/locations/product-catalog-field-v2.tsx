@@ -40,6 +40,9 @@ import React, { useEffect, useState, useCallback, useRef } from "react";
 import type { Product, ProductCategory } from "@/lib/integrations/commerce/commerce.interface";
 import type { ProductCatalogFieldValue } from "../types";
 
+/** Products per page in the picker dialog. 20 fits the 5-column grid as 4 rows. */
+const DIALOG_PAGE_SIZE = 20;
+
 const SELECTION_MODES: ProductCatalogFieldValue["selectionMode"][] = [
   "single",
   "multiple",
@@ -154,6 +157,8 @@ export default function ProductCatalogField() {
    * re-hitting the CMA.
    */
   const catalogRef = useRef<Product[] | null>(null);
+  /** Zero-based page index for the dialog grid. */
+  const [page, setPage] = useState(0);
   const [tempSelection, setTempSelection] = useState<string[]>(() => {
     if (isDialog) {
       const params = (sdk as DialogAppSDK).parameters?.invocation as {
@@ -200,6 +205,13 @@ export default function ProductCatalogField() {
     return result.products;
   }, [sdk]);
 
+  /**
+   * Load the catalogue and apply the search term. `products` holds every match,
+   * not a page — the grid slices it below, so paging costs no extra work and a
+   * catalogue larger than one page is fully reachable. (It used to be capped at
+   * a hardcoded 20, carried over from the old API query, which silently hid the
+   * rest of the catalogue.)
+   */
   const loadProducts = useCallback(
     async (query?: string) => {
       setLoading(true);
@@ -209,7 +221,7 @@ export default function ProductCatalogField() {
         const all = await ensureCatalog();
         // Search is applied here, not server-side: the API route never read the
         // `search` param, so the box did nothing before this.
-        setProducts(filterProducts(all, { search: query, limit: 20 }));
+        setProducts(filterProducts(all, { search: query }));
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unknown error");
         setProducts([]);
@@ -308,8 +320,18 @@ export default function ProductCatalogField() {
   );
 
   const handleSearch = useCallback(() => {
+    setPage(0);
     loadProducts(searchQuery);
   }, [searchQuery, loadProducts]);
+
+  // Filter as the editor types. The catalogue is already in memory, so this is
+  // a synchronous re-filter — no need to make them press Enter.
+  useEffect(() => {
+    if (!isDialog) return;
+    if (!catalogRef.current) return; // initial load handles the first paint
+    setPage(0);
+    setProducts(filterProducts(catalogRef.current, { search: searchQuery }));
+  }, [searchQuery, isDialog]);
 
   const handleSelectProduct = useCallback(
     (productId: string) => {
@@ -406,6 +428,13 @@ export default function ProductCatalogField() {
       ? !!selectedProduct
       : selectedProducts.length > 0;
 
+  // Page slice for the dialog grid. `products` is the full match set, so the
+  // selection handlers still see every product regardless of which page is shown.
+  const pageCount = Math.max(1, Math.ceil(products.length / DIALOG_PAGE_SIZE));
+  const currentPage = Math.min(page, pageCount - 1);
+  const pageStart = currentPage * DIALOG_PAGE_SIZE;
+  const visibleProducts = products.slice(pageStart, pageStart + DIALOG_PAGE_SIZE);
+
   // ─── Dialog mode ───────────────────────────────────────────────────
   if (isDialog) {
     return (
@@ -416,7 +445,7 @@ export default function ProductCatalogField() {
             <Box style={{ flex: "1 1 auto", minWidth: 0 }}>
               <TextInput
                 value={searchQuery}
-                placeholder="Search products by title, SKU, or category…"
+                placeholder="Search products by title, category, tag or article number…"
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") handleSearch();
@@ -455,18 +484,60 @@ export default function ProductCatalogField() {
           {!loading && !error && products.length === 0 && (
             <EmptyState
               title="No products found"
-              description="Try a different search term."
+              description={
+                searchQuery
+                  ? `Nothing matches “${searchQuery}”.`
+                  : "This space has no products in siteSettings.mockProducts."
+              }
             />
           )}
 
           {!loading && !error && products.length > 0 && (
             <ProductGrid
-              products={products}
+              products={visibleProducts}
               selectedIds={tempSelection}
               onToggle={handleSelectProduct}
             />
           )}
         </Box>
+
+        {/* Pager — only when there is more than one page to move between. */}
+        {!loading && !error && pageCount > 1 && (
+          <Flex
+            marginTop="spacingM"
+            alignItems="center"
+            justifyContent="space-between"
+            gap="spacingS"
+          >
+            <Text fontColor="gray600" fontSize="fontSizeS">
+              {`Showing ${pageStart + 1}\u2013${Math.min(
+                pageStart + DIALOG_PAGE_SIZE,
+                products.length
+              )} of ${products.length}`}
+            </Text>
+            <Flex alignItems="center" gap="spacingS">
+              <Button
+                variant="secondary"
+                size="small"
+                isDisabled={currentPage === 0}
+                onClick={() => setPage((n) => Math.max(0, n - 1))}
+              >
+                Previous
+              </Button>
+              <Text fontColor="gray600" fontSize="fontSizeS">
+                {`Page ${currentPage + 1} of ${pageCount}`}
+              </Text>
+              <Button
+                variant="secondary"
+                size="small"
+                isDisabled={currentPage >= pageCount - 1}
+                onClick={() => setPage((n) => Math.min(pageCount - 1, n + 1))}
+              >
+                Next
+              </Button>
+            </Flex>
+          </Flex>
+        )}
 
         <Flex
           justifyContent="space-between"
